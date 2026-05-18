@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /css/
-Disallow: /js/
 
 Sitemap: https://www.markratcliffemoving.co.uk/sitemap.xml
