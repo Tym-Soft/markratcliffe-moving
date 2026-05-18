@@ -2493,7 +2493,7 @@ html { scroll-behavior: smooth; }
 .hp-header .inner-title-wrapper,
 .hp-header .lp-hero-cell,
 .hp-header .h-hero-wrap {
-  background: rgba(10, 37, 64, 0.58) !important;
+  background: rgba(77, 46, 143, 0.85) !important;  /* brand purple #4d2e8f */
   backdrop-filter: blur(10px) saturate(120%);
   -webkit-backdrop-filter: blur(10px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -2553,7 +2553,7 @@ html { scroll-behavior: smooth; }
 .hp-header > h1,
 .hp-header > .hero-image-heading {
   display: inline-block !important;
-  background: rgba(10, 37, 64, 0.58);
+  background: rgba(77, 46, 143, 0.85);  /* brand purple #4d2e8f */
   backdrop-filter: blur(10px) saturate(120%);
   -webkit-backdrop-filter: blur(10px) saturate(120%);
   padding: 1.25rem 2rem !important;
