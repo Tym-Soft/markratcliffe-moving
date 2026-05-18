@@ -1102,3 +1102,76 @@ footer.mr-footer .current-year,
 footer.mr-footer span {
   color: rgba(255,255,255,0.92) !important;
 }
+
+/* =========================================================
+   MEGAMENU — AREAS COVERED dropdown
+   ========================================================= */
+.dropdown.mega-areas .dropdown-list.mega-menu {
+  width: min(95vw, 980px) !important;
+  max-width: 95vw;
+  padding: 1.6rem 1.75rem !important;
+  background: #2a1262 !important;
+  border-radius: 6px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.35);
+  left: 50%;
+  transform: translateX(-50%);
+}
+.dropdown.mega-areas .dropdown-list.mega-menu.w--open {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem 1.75rem;
+}
+.mega-col { display: flex; flex-direction: column; }
+.mega-col .mega-h {
+  color: #FFC107 !important;
+  font-size: 0.7rem !important;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  margin: 0 0 0.6rem 0 !important;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+  font-weight: 700;
+}
+.mega-col a {
+  display: block !important;
+  color: #fff !important;
+  font-size: 0.85rem !important;
+  padding: 0.35rem 0 !important;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  text-transform: none !important;
+  border-left: 2px solid transparent;
+  padding-left: 0.5rem !important;
+}
+.mega-col a:hover { color: #FFC107 !important; border-left-color: #FFC107; background: transparent !important; }
+
+@media (max-width: 991px) {
+  .dropdown.mega-areas .dropdown-list.mega-menu {
+    width: 100% !important;
+    max-width: 100%;
+    left: 0; transform: none;
+    padding: 0.5rem 0 !important;
+    box-shadow: none;
+  }
+  .dropdown.mega-areas .dropdown-list.mega-menu.w--open {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .mega-col { padding: 0.5rem 1.25rem; }
+  .mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }
+}
+
+/* =========================================================
+   SITE-WIDE FOOTER WITH EVERY LIVE PAGE
+   ========================================================= */
+.mr-footer-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important; }
+.mr-footer-list li { line-height: 1.7; }
+.mr-footer-sub-title {
+  color: #FFC107 !important;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  margin: 0.8rem 0 0.2rem;
+  font-weight: 600;
+  display: block;
+}
