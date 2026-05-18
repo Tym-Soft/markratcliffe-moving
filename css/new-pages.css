@@ -1079,12 +1079,20 @@ body { padding-top: 78px; }
   padding-left: 0 !important;
 }
 /* Pill buttons sitting on the gold band: dark purple background, white text.
+   Belt-and-braces — every plausible selector that targets this button.
    The body color cascade was bleeding into them via the rule above. */
+a.top-bar-quote,
+.top-bar-quote,
+.online-quote-section a,
 .online-quote-section .top-bar-quote,
+.online-quote-section a.top-bar-quote,
 .online-quote-section a.button,
 .online-quote-section a.w-button,
-.top-bar-wrapper .top-bar-quote {
+.online-quote-section .oq-1 a,
+.top-bar-wrapper .top-bar-quote,
+.top-bar-wrapper a.top-bar-quote {
   color: #fff !important;
+  background-color: #220b50 !important;
 }
 
 /* Footer copyright spans were rgba(255,255,255,0.65) — bump to 0.92 for AA on dark */
