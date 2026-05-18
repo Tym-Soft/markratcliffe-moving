@@ -593,28 +593,31 @@ img {
     padding: 0.95rem 0.5rem;
     color: #fff !important;
     text-decoration: none !important;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.15);
+    background: #C8A876;
+    border: 1px solid #C8A876;
     border-radius: 10px;
     font-weight: 600;
     font-size: 0.85rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
   }
   .mob-menu-contact a:hover,
   .mob-menu-contact a:focus {
-    background: rgba(255,193,7,0.15);
+    background: #D6B274;
     border-color: #D6B274;
-    color: #D6B274 !important;
+    color: #fff !important;
     transform: translateY(-1px);
   }
   .mob-menu-contact svg {
     width: 26px; height: 26px;
     fill: currentColor;
   }
-  .mob-menu-contact a.is-call    { background: rgba(231,76,60,0.18); border-color: rgba(231,76,60,0.4); }
-  .mob-menu-contact a.is-email   { background: rgba(255,193,7,0.10); border-color: rgba(255,193,7,0.30); }
+  .mob-menu-contact a.is-call    { background: #C8A876; border-color: #C8A876; }
+  .mob-menu-contact a.is-email   { background: #3a226d; border-color: #C8A876; }
+  .mob-menu-contact a.is-email:hover,
+  .mob-menu-contact a.is-email:focus { background: #4d2e8f; border-color: #D6B274; }
 }
 
 /* =========================================================
