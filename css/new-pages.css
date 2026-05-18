@@ -2040,3 +2040,101 @@ html { scroll-behavior: smooth; }
   color: var(--brand-bronze-light) !important;
   border-color: var(--brand-navy) !important;
 }
+
+/* =========================================================
+   CARDS — uniform grids + dark-navy hover (site-wide)
+   ========================================================= */
+
+/* No-orphans grids: explicit column counts per card count */
+.hp-usp-grid { grid-template-columns: repeat(3, 1fr) !important; }
+.hp-services-grid { grid-template-columns: repeat(4, 1fr) !important; }
+.hp-test-grid { grid-template-columns: repeat(3, 1fr) !important; }
+.hp-fleet-grid { grid-template-columns: repeat(4, 1fr) !important; }
+
+@media (max-width: 1100px) {
+  .hp-usp-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .hp-services-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .hp-test-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .hp-fleet-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 600px) {
+  .hp-usp-grid,
+  .hp-services-grid,
+  .hp-test-grid,
+  .hp-fleet-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Force every card in a row to the same height */
+.hp-usp-grid .hp-usp,
+.hp-services-grid .hp-service-card,
+.hp-areas-grid .hp-area-region,
+.hp-test-grid .hp-test {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Area cards: same dark-navy hover as the service cards */
+.hp-area-region {
+  transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.hp-area-region:hover {
+  background: var(--brand-navy) !important;
+  border-color: var(--brand-navy) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -22px rgba(10,37,64,0.45);
+}
+.hp-area-region h3 { transition: color .25s ease; }
+.hp-area-region p { transition: color .25s ease; }
+.hp-area-region:hover h3 { color: var(--brand-bronze-light) !important; }
+.hp-area-region:hover p { color: rgba(255,255,255,0.85) !important; }
+.hp-area-region:hover .hp-area-link {
+  color: var(--brand-bronze-light) !important;
+}
+
+/* Same dark-navy hover for the .np-card system used on every other page */
+.np-card {
+  transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease, color .25s ease !important;
+}
+.np-card:hover {
+  background: var(--brand-navy) !important;
+  border-color: var(--brand-navy) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -22px rgba(10,37,64,0.45) !important;
+}
+.np-card h3,
+.np-card p,
+.np-card li,
+.np-card a {
+  transition: color .25s ease;
+}
+.np-card:hover h3 { color: var(--brand-bronze-light) !important; }
+.np-card:hover p,
+.np-card:hover li { color: rgba(255,255,255,0.88) !important; }
+.np-card:hover a { color: var(--brand-bronze-light) !important; }
+.np-card:hover strong { color: #fff !important; }
+
+/* .np-grid-2 / .np-grid-3 — also enforce no-orphan layout */
+.np-grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
+.np-grid-3 { grid-template-columns: repeat(3, 1fr) !important; }
+@media (max-width: 900px) {
+  .np-grid-2, .np-grid-3 { grid-template-columns: 1fr !important; }
+}
+
+/* Equal-height children in those np grids */
+.np-grid-2 > *, .np-grid-3 > * { height: 100%; }
+
+/* Region tile cards on areas-covered.html also get a darker hover */
+.ac-town {
+  transition: transform .15s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
+}
+.ac-town:hover {
+  background: var(--brand-navy) !important;
+  border-color: var(--brand-navy) !important;
+}
+.ac-town:hover .ac-town-name { color: var(--brand-bronze-light) !important; }
+.ac-town:hover .ac-icon {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(200,168,118,0.5) !important;
+  color: var(--brand-bronze-light) !important;
+}
