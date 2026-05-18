@@ -2135,6 +2135,18 @@ html { scroll-behavior: smooth; }
 .hp-area-region:hover .hp-area-link {
   color: var(--brand-bronze-light) !important;
 }
+.hp-area-region h3 a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+.hp-area-region:hover h3 a {
+  color: var(--brand-bronze-light) !important;
+}
+
+/* Anchor targets on /areas-covered/ — keep the heading clear of the sticky nav */
+#east-sussex, #west-sussex, #surrey, #kent {
+  scroll-margin-top: 110px;
+}
 
 /* Same dark-navy hover for the .np-card system used on every other page.
    Selectors are listed at multiple specificity levels so they win regardless
