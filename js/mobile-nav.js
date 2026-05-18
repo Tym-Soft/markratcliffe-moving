@@ -64,7 +64,7 @@
       h.setAttribute('tabindex', '0');
       h.setAttribute('aria-expanded', 'false');
       function toggleCol(e) {
-        if (window.innerWidth > 991) return; // desktop: keep grid layout
+        // Accordion behaviour applies on desktop AND mobile now
         e.preventDefault();
         e.stopPropagation();
         var col = h.parentElement;

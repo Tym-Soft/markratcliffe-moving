@@ -1407,3 +1407,109 @@ html { scroll-behavior: smooth; }
     padding-bottom: 0.85rem !important;
   }
 }
+
+/* =========================================================
+   MEGAMENU ACCORDION MODE (desktop + mobile)
+   Region headings collapsed by default; click to drop down cities.
+   Single open at a time.
+   ========================================================= */
+.dropdown.mega-areas .dropdown-list.mega-menu,
+.dropdown.mega-services .dropdown-list.mega-menu {
+  /* Override the 5-column grid — switch to vertical accordion */
+  display: none;
+  grid-template-columns: none !important;
+  width: min(95vw, 640px) !important;
+  max-width: 95vw;
+  padding: 0.5rem 0 !important;
+  background: var(--brand-navy) !important;
+  border-radius: 8px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: column;
+  gap: 0 !important;
+}
+.dropdown.mega-areas .dropdown-list.mega-menu.w--open,
+.dropdown.mega-services .dropdown-list.mega-menu.w--open {
+  display: flex !important;
+}
+
+/* Each region becomes a full-width accordion row */
+.mega-col {
+  width: 100%;
+  padding: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: block !important;
+  flex-direction: unset !important;
+}
+.mega-col:last-child {
+  border-bottom: none;
+}
+.mega-col .mega-h {
+  cursor: pointer;
+  margin: 0 !important;
+  padding: 0.95rem 1.5rem !important;
+  border: none !important;
+  width: 100%;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center;
+  user-select: none;
+  color: var(--brand-bronze-light) !important;
+  font-family: "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase;
+  background: transparent;
+  transition: background 0.15s ease;
+}
+.mega-col .mega-h::after {
+  content: "+";
+  font-size: 1.5rem;
+  font-weight: 200;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+.mega-col[data-open="true"] .mega-h {
+  background: rgba(200, 168, 118, 0.08) !important;
+}
+.mega-col[data-open="true"] .mega-h::after {
+  content: "−";
+}
+.mega-col .mega-h:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Children are anchors (the city links). Hide by default. */
+.mega-col > a {
+  display: none !important;
+  padding: 0.45rem 1.5rem 0.45rem 2.25rem !important;
+  border-left: 2px solid transparent !important;
+  color: rgba(255,255,255,0.9) !important;
+  font-size: 0.88rem;
+}
+.mega-col[data-open="true"] > a {
+  display: block !important;
+}
+.mega-col[data-open="true"] > a:last-child {
+  padding-bottom: 0.9rem !important;
+}
+.mega-col > a:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--brand-bronze-light) !important;
+  border-left-color: var(--brand-bronze) !important;
+}
+
+/* On mobile, panel takes full width */
+@media (max-width: 991px) {
+  .dropdown.mega-areas .dropdown-list.mega-menu,
+  .dropdown.mega-services .dropdown-list.mega-menu {
+    width: 100% !important;
+    max-width: 100%;
+    left: 0;
+    transform: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
