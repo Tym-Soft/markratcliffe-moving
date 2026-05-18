@@ -16,16 +16,13 @@ __pycache__/
 # Local PHP server log
 /tmp/php-server.log
 
-# === SENSITIVE — never commit ===
-# Admin credentials (plaintext password)
+# === Not deployed to GitHub Pages — local-only tools ===
+# PHP admin panel (won't run on GH Pages — kept locally for dev only)
+/admin-portal-xK7p9q/
+/data/
+
+# Local backup of the admin config + leads
 ADMIN_CREDENTIALS.txt
-
-# Admin config (contains bcrypt-hashed password — still safer not to share)
-www.markratcliffemoving.co.uk/data/config.json
-
-# Live form submissions / lead capture (if you ever add a DB or log file)
-www.markratcliffemoving.co.uk/data/leads.json
-www.markratcliffemoving.co.uk/data/submissions/
 
 # Local environment overrides
 .env
