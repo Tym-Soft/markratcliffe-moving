@@ -117,11 +117,12 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
 }
 .np-hero::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(180deg, rgba(10,37,64,0.78) 0%, rgba(10,37,64,0.86) 100%);
+  /* Lighter overlay so the underlying image shows through clearly */
+  background: linear-gradient(180deg, rgba(10,37,64,0.55) 0%, rgba(10,37,64,0.68) 100%);
 }
 .np-hero-bg {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; opacity: 0.32; z-index: -2;
+  object-fit: cover; opacity: 0.85; z-index: -2;
   pointer-events: none;
 }
 .np-hero-inner {
@@ -242,9 +243,19 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
 .np-cta-block p { color: rgba(255,255,255,0.92); max-width: 700px; margin: 0 auto 1.5rem; }
 .np-cta-row { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
 
-.np-breadcrumb { padding: 0.85rem 1.5rem; font-size: 0.9rem; color: var(--np-muted); border-bottom: 1px solid var(--np-border); }
-.np-breadcrumb a { color: var(--np-primary); text-decoration: none; }
-.np-breadcrumb a:hover { text-decoration: underline; }
+/* Breadcrumb sits in the navy band immediately above the hero — no white gap */
+.np-breadcrumb {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+  background: #0A2540;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+.np-breadcrumb a { color: rgba(255,255,255,0.92); text-decoration: none; font-weight: 500; }
+.np-breadcrumb a:hover { color: #D6B274; text-decoration: none; }
 
 .np-footer-map { width: 100%; height: 360px; background: #061A2E; line-height: 0; }
 .np-footer-map iframe { width: 100%; height: 100%; display: block; border: 0; }
