@@ -7,8 +7,8 @@
 }
 
 :root {
-  --midnight-blue: #220b50;
-  --goldenrod: #d4af37;
+  --midnight-blue: #0A2540;
+  --goldenrod: #C8A876;
   --medium-sea-green: #25c485;
 }
 
@@ -22,26 +22,26 @@
 }
 
 h1 {
-  color: #220b50;
+  color: #0A2540;
   margin: 0 0 10px;
   font-family: Montserrat, sans-serif;
 }
 
 h2 {
-  color: #220b50;
+  color: #0A2540;
   margin-top: 0;
   margin-bottom: 10px;
   font-family: Montserrat, sans-serif;
 }
 
 h3 {
-  color: #220b50;
+  color: #0A2540;
   margin: 0 0 10px;
   font-family: Montserrat, sans-serif;
 }
 
 h4, h5, h6 {
-  color: #220b50;
+  color: #0A2540;
   margin: 10px 0;
   font-family: Montserrat, sans-serif;
 }
@@ -90,7 +90,7 @@ figcaption {
 .button {
   color: #fff;
   text-align: center;
-  background-color: #d4af37;
+  background-color: #C8A876;
   border-radius: 10px;
   padding: 14px 26px;
   font-family: Montserrat, sans-serif;
@@ -100,11 +100,11 @@ figcaption {
 }
 
 .button:hover {
-  background-color: #220b50;
+  background-color: #0A2540;
 }
 
 .button.dark:hover {
-  color: #d4af37;
+  color: #C8A876;
   background-color: #fff;
 }
 
@@ -113,8 +113,8 @@ figcaption {
 }
 
 .header {
-  background-color: #220b50;
-  background-image: linear-gradient(#220b50, #fff);
+  background-color: #0A2540;
+  background-image: linear-gradient(#0A2540, #fff);
   margin-top: 60px;
   padding-left: 20px;
   padding-right: 20px;
@@ -129,7 +129,7 @@ figcaption {
 
 .section.green {
   background-color: #f2f7f6;
-  border-top-color: #220b50;
+  border-top-color: #0A2540;
 }
 
 .section.grey-bg {
@@ -164,7 +164,7 @@ figcaption {
 .navigation {
   z-index: 10;
   background-color: #fff;
-  border-top: 8px solid #d4af37;
+  border-top: 8px solid #C8A876;
   padding: 33px 19px 38px;
   position: fixed;
   box-shadow: 0 0 0 1px #0000000d, 0 2px 3px #0000003b;
@@ -201,7 +201,7 @@ figcaption {
 }
 
 .journal-entry.extras2 {
-  background-color: #220b50;
+  background-color: #0A2540;
 }
 
 .journal-entry.extras2:hover {
@@ -256,13 +256,13 @@ figcaption {
 }
 
 .logo_font {
-  color: #d4af37;
+  color: #C8A876;
   font-family: Great Vibes, cursive;
   font-size: 49px;
 }
 
 .logo_subfont {
-  color: #d4af37;
+  color: #C8A876;
   font-family: Montserrat, sans-serif;
   font-size: 26px;
   font-weight: 400;
@@ -284,7 +284,7 @@ figcaption {
 }
 
 .contact {
-  color: #220b50;
+  color: #0A2540;
   text-align: right;
   font-size: 18px;
   line-height: 28px;
@@ -301,7 +301,7 @@ figcaption {
 }
 
 .phonelink {
-  color: #220b50;
+  color: #0A2540;
   text-decoration: none;
 }
 
@@ -313,7 +313,7 @@ figcaption {
 }
 
 .sig {
-  color: #220b50;
+  color: #0A2540;
   margin-top: 15px;
   font-family: Great Vibes, cursive;
   font-size: 41px;
@@ -346,7 +346,7 @@ figcaption {
 }
 
 ._1200-wrapper.welcome-quote {
-  color: #220b50;
+  color: #0A2540;
   margin-top: 30px;
   font-family: Montserrat, sans-serif;
   font-size: 24px;
@@ -369,7 +369,7 @@ figcaption {
 }
 
 .gold {
-  color: #d4af37;
+  color: #C8A876;
 }
 
 .gold.shadow {
@@ -496,7 +496,7 @@ figcaption {
 }
 
 .navlink.w--current {
-  color: #d4af37;
+  color: #C8A876;
 }
 
 .navlink.dropdown {
@@ -508,7 +508,7 @@ figcaption {
 
 .brand {
   background-color: var(--midnight-blue);
-  color: #d4af37;
+  color: #C8A876;
   background-image: url('../images/Mark-Ratcliffe.svg');
   background-position: 101%;
   background-repeat: no-repeat;
@@ -631,7 +631,7 @@ figcaption {
 }
 
 .test {
-  color: #d4af37;
+  color: #C8A876;
   text-shadow: 1px 1px 6px #000;
   font-family: Great Vibes, cursive;
   font-size: 72px;
@@ -661,7 +661,7 @@ figcaption {
 }
 
 .contact-info-wrapper {
-  background-color: #220b50;
+  background-color: #0A2540;
   flex: 1;
   padding: 15px;
 }
@@ -689,7 +689,7 @@ figcaption {
 
 .online-quote-section {
   color: #fff;
-  background-color: #d4af37;
+  background-color: #C8A876;
   padding: 20px;
   font-family: Open Sans, sans-serif;
   font-size: 18px;
@@ -900,7 +900,7 @@ figcaption {
 
 .top-bar-wrapper {
   color: #fff;
-  background-color: #d4af37;
+  background-color: #C8A876;
   align-items: center;
   padding: 10px 20px;
   display: flex;
@@ -1438,7 +1438,7 @@ figcaption {
 }
 
 .half-width-lb-wrap.welcome-quote {
-  color: #220b50;
+  color: #0A2540;
   margin-top: 30px;
   font-family: Montserrat, sans-serif;
   font-size: 24px;
@@ -1531,11 +1531,11 @@ html.w-mod-js [data-ix="fade-in-on-scroll"] {
   }
 
   .navlink {
-    color: #d4af37;
+    color: #C8A876;
   }
 
   .brand {
-    color: #d4af37;
+    color: #C8A876;
     width: 100%;
     padding-left: 20px;
     font-family: Great Vibes, cursive;
@@ -1554,7 +1554,7 @@ html.w-mod-js [data-ix="fade-in-on-scroll"] {
   }
 
   .nav-menu {
-    background-color: #220b50;
+    background-color: #0A2540;
     padding-right: 0;
   }
 
@@ -1625,7 +1625,7 @@ html.w-mod-js [data-ix="fade-in-on-scroll"] {
   }
 
   .dropdown-toggle {
-    color: #d4af37;
+    color: #C8A876;
   }
 }
 
@@ -1691,7 +1691,7 @@ html.w-mod-js [data-ix="fade-in-on-scroll"] {
   }
 
   .nav-menu {
-    background-color: #220b50;
+    background-color: #0A2540;
   }
 
   .footer-a {
@@ -1751,7 +1751,7 @@ html.w-mod-js [data-ix="fade-in-on-scroll"] {
   .mob-con-1 {
     color: #fff;
     text-align: center;
-    background-color: #d4af37;
+    background-color: #C8A876;
     width: 50%;
     padding: 20px 10px;
     font-size: 19px;
