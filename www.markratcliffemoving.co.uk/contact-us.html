@@ -257,12 +257,24 @@
   <!-- Full-width form section -->
   <section class="cu-form-section">
     <div class="cu-form-inner">
+      <div id="cu-thanks" class="cu-thanks" hidden role="status" aria-live="polite">
+        <strong>Thank you — your enquiry is on its way.</strong>
+        We'll come back to you with a written quote within one working hour during office hours.
+      </div>
       <div class="cu-form-card">
         <p class="cu-card-eyebrow">No obligation · Reply within 1 hour</p>
         <h2 class="cu-form-heading">About Your Move</h2>
         <p class="cu-lede">Tell us a few details and we'll come back to you with a written, no-obligation quote. Already know what you need? Call us on <a href="tel:01323848008">01323 848 008</a>.</p>
 
-        <form class="cu-form" action="mailto:mark@markratcliffemoving.co.uk" method="post" enctype="text/plain">
+        <form class="cu-form" action="https://formsubmit.co/mark@markratcliffemoving.co.uk" method="POST">
+          <!-- FormSubmit settings -->
+          <input type="hidden" name="_subject" value="New quote request — Mark Ratcliffe Moving">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="true">
+          <input type="hidden" name="_next" value="https://www.markratcliffemoving.co.uk/contact-us.html?sent=1">
+          <input type="hidden" name="_autoresponse" value="Thank you for your enquiry. We've received your details and one of our team will get back to you within one working hour. — Mark Ratcliffe Moving &amp; Storage">
+          <!-- Honeypot anti-spam -->
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
           <fieldset class="cu-fieldset">
             <legend>Your details</legend>
             <div class="cu-row cu-row-2">
@@ -645,6 +657,18 @@
   .cu-testimonial-banner cite { display: block; font-style: normal; font-weight: 700; color: #FFC107; font-size: 0.95rem; margin-bottom: 0.5rem; }
   .cu-testimonial-banner cite span { color: rgba(255,255,255,0.65); font-weight: 400; font-size: 0.78rem; margin-left: 0.4rem; text-transform: uppercase; letter-spacing: 0.08em; }
   .cu-testimonial-banner .cu-testimonial-stars { color: #FFC107; font-size: 1.1rem; letter-spacing: 0.15em; }
+
+  .cu-thanks {
+    background: linear-gradient(135deg, #f7f5fb, #fff);
+    border: 2px solid #220b50;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #1f1f1f;
+    line-height: 1.5;
+    box-shadow: 0 12px 30px -16px rgba(34,11,80,0.25);
+  }
+  .cu-thanks strong { display: block; color: #220b50; font-size: 1.1rem; margin-bottom: 0.35rem; }
 </style>
   <footer class="mr-footer" role="contentinfo">
     <div class="mr-footer-map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2523.049709930351!2d0.29392331613135825!3d50.77465207183167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47df7392bfec7151%3A0xf536886de6399c2e!2sMark+Ratcliffe+Moving+%26+Storage+Ltd!5e0!3m2!1sen!2suk!4v1549285879259" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen="" loading="lazy" title="Mark Ratcliffe Moving &amp; Storage Ltd — Lower Dicker location map"></iframe></div>
@@ -732,8 +756,8 @@
         <img src="images/bs-8564-2-removals-storage-accreditation.webp" width="70" height="115" alt="BS 8564 quality accreditation" loading="lazy">
         <img src="images/apg-approved-payment-guarantee-uk-domestic.webp" width="75" height="89" alt="APG Approved Payment Guarantee" loading="lazy">
         <img src="images/ima-international-movers-association-logo.webp" width="80" height="56" alt="International Movers Association" loading="lazy">
-        <img src="images/UK---Thai-Movers-Logo.webp" width="120" height="34" alt="UK to Thai Movers Group" loading="lazy">
-        <img src="images/FHIO-Logo-01.webp" width="120" height="40" alt="FHIO accredited member" loading="lazy">
+        <img src="images/uk-thai-movers-group-logo.webp" width="120" height="34" alt="UK to Thai Movers Group" loading="lazy">
+        <img src="images/fhio-accredited-member-logo.webp" width="120" height="40" alt="FHIO accredited member" loading="lazy">
       </div>
 
       <div class="mr-footer-bottom">
@@ -765,5 +789,14 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
   <script defer src="js/mobile-nav.js"></script>
+  <script>
+    // Show the thank-you banner when FormSubmit redirects back with ?sent=1
+    (function () {
+      if (new URLSearchParams(window.location.search).get('sent') === '1') {
+        var t = document.getElementById('cu-thanks');
+        if (t) { t.hidden = false; t.scrollIntoView({behavior:'smooth', block:'start'}); }
+      }
+    })();
+  </script>
 </body>
 </html>

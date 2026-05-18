@@ -216,6 +216,9 @@ function save_page($slug, $data, $old_slug = null, $is_blog = false) {
     $html_path = html_path_for_slug($slug, $is_blog);
     apply_edits_to_html($html_path, $data);
 
+    // Keep sitemap.xml in sync
+    regenerate_sitemap();
+
     return true;
 }
 
@@ -277,6 +280,90 @@ function write_redirect_stub($from_url, $to_url) {
     file_put_contents($path, $stub);
 }
 
+// ---------------- Sitemap regeneration ----------------
+
+/**
+ * Rebuild sitemap.xml from the current page + blog JSON store.
+ * Called automatically after every save_page() / create_new_page().
+ * Only emits URLs for HTML files that actually exist on disk so
+ * the sitemap never points at a missing or stale page.
+ */
+function regenerate_sitemap() {
+    $entries = [];
+
+    // Homepage — always included if it exists
+    if (file_exists(SITE_ROOT . '/index.html')) {
+        $entries[] = [
+            'loc' => BASE_URL . '/',
+            'lastmod' => date('Y-m-d', filemtime(SITE_ROOT . '/index.html')),
+            'changefreq' => 'weekly',
+            'priority' => '1.0',
+        ];
+    }
+
+    // Static pages from the admin JSON store
+    foreach (glob(PAGES_DIR . '/*.json') as $f) {
+        $d = load_json($f);
+        if (empty($d['slug'])) continue;
+        $slug = $d['slug'];
+        if ($slug === 'index') continue; // already added above
+        $html = SITE_ROOT . '/' . $slug . '.html';
+        if (!file_exists($html)) continue;
+        $lastmod = !empty($d['last_updated'])
+            ? substr($d['last_updated'], 0, 10)
+            : date('Y-m-d', filemtime($html));
+        $entries[] = [
+            'loc' => BASE_URL . '/' . $slug . '.html',
+            'lastmod' => $lastmod,
+            'changefreq' => 'monthly',
+            'priority' => '0.8',
+        ];
+    }
+
+    // Blog posts
+    foreach (glob(BLOG_DIR . '/*.json') as $f) {
+        $d = load_json($f);
+        if (empty($d['slug'])) continue;
+        $slug = $d['slug'];
+        $html = SITE_ROOT . '/blog/' . $slug . '.html';
+        if (!file_exists($html)) continue;
+        $lastmod = !empty($d['last_updated'])
+            ? substr($d['last_updated'], 0, 10)
+            : date('Y-m-d', filemtime($html));
+        $entries[] = [
+            'loc' => BASE_URL . '/blog/' . $slug . '.html',
+            'lastmod' => $lastmod,
+            'changefreq' => 'monthly',
+            'priority' => '0.6',
+        ];
+    }
+
+    // De-duplicate on loc + sort
+    $seen = [];
+    $unique = [];
+    foreach ($entries as $e) {
+        if (isset($seen[$e['loc']])) continue;
+        $seen[$e['loc']] = true;
+        $unique[] = $e;
+    }
+    usort($unique, function ($a, $b) { return strcmp($a['loc'], $b['loc']); });
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    foreach ($unique as $e) {
+        $xml .= "  <url>\n";
+        $xml .= "    <loc>" . htmlspecialchars($e['loc'], ENT_XML1) . "</loc>\n";
+        $xml .= "    <lastmod>" . $e['lastmod'] . "</lastmod>\n";
+        $xml .= "    <changefreq>" . $e['changefreq'] . "</changefreq>\n";
+        $xml .= "    <priority>" . $e['priority'] . "</priority>\n";
+        $xml .= "  </url>\n";
+    }
+    $xml .= '</urlset>' . "\n";
+
+    file_put_contents(SITE_ROOT . '/sitemap.xml', $xml);
+    return count($unique);
+}
+
 // ---------------- New page creation ----------------
 
 function create_new_page($slug, $title, $description, $h1, $intro, $is_blog = false) {
@@ -316,6 +403,9 @@ function create_new_page($slug, $title, $description, $h1, $intro, $is_blog = fa
         'created' => date('Y-m-d H:i:s'),
         'last_updated' => date('Y-m-d H:i:s'),
     ]);
+
+    // Keep sitemap.xml in sync
+    regenerate_sitemap();
 
     return [true, $html_path];
 }

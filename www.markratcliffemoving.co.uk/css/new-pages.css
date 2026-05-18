@@ -11,6 +11,7 @@
 .ac-btn, .ac-btn-primary, .ac-btn-secondary,
 .top-bar-quote,
 a.button, a.w-button, .button.w-button,
+.button.dark, .button.dark.spc-1, .button.medium-margin-top,
 .mr-cta, .mr-btn-primary, .mr-btn-secondary {
   display: inline-flex !important;
   align-items: center;
