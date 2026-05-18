@@ -290,7 +290,7 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
 
 .mr-footer-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 2rem;
   padding-bottom: 2.5rem;
   border-bottom: 1px solid rgba(255,255,255,0.12);
@@ -1107,7 +1107,7 @@ footer.mr-footer span {
    MEGAMENU — AREAS COVERED dropdown
    ========================================================= */
 .dropdown.mega-areas .dropdown-list.mega-menu, .dropdown.mega-services .dropdown-list.mega-menu {
-  width: min(95vw, 980px) !important;
+  width: min(98vw, 1200px) !important;
   max-width: 95vw;
   padding: 1.6rem 1.75rem !important;
   background: #143656 !important;
@@ -1118,7 +1118,7 @@ footer.mr-footer span {
 }
 .dropdown.mega-areas .dropdown-list.mega-menu.w--open, .dropdown.mega-services .dropdown-list.mega-menu.w--open {
   display: grid !important;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 0.25rem 1.75rem;
 }
 .mega-col { display: flex; flex-direction: column; }
