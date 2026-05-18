@@ -7,7 +7,7 @@
 }
 
 :root {
-  --midnight-blue: #0A2540;
+  --midnight-blue: #4d2e8f;
   --goldenrod: #C8A876;
   --medium-sea-green: #25c485;
 }
@@ -22,26 +22,26 @@
 }
 
 h1 {
-  color: #0A2540;
+  color: #4d2e8f;
   margin: 0 0 10px;
   font-family: Montserrat, sans-serif;
 }
 
 h2 {
-  color: #0A2540;
+  color: #4d2e8f;
   margin-top: 0;
   margin-bottom: 10px;
   font-family: Montserrat, sans-serif;
 }
 
 h3 {
-  color: #0A2540;
+  color: #4d2e8f;
   margin: 0 0 10px;
   font-family: Montserrat, sans-serif;
 }
 
 h4, h5, h6 {
-  color: #0A2540;
+  color: #4d2e8f;
   margin: 10px 0;
   font-family: Montserrat, sans-serif;
 }
@@ -100,7 +100,7 @@ figcaption {
 }
 
 .button:hover {
-  background-color: #0A2540;
+  background-color: #4d2e8f;
 }
 
 .button.dark:hover {
@@ -113,8 +113,8 @@ figcaption {
 }
 
 .header {
-  background-color: #0A2540;
-  background-image: linear-gradient(#0A2540, #fff);
+  background-color: #4d2e8f;
+  background-image: linear-gradient(#4d2e8f, #fff);
   margin-top: 60px;
   padding-left: 20px;
   padding-right: 20px;
@@ -129,7 +129,7 @@ figcaption {
 
 .section.green {
   background-color: #f2f7f6;
-  border-top-color: #0A2540;
+  border-top-color: #4d2e8f;
 }
 
 .section.grey-bg {
@@ -201,7 +201,7 @@ figcaption {
 }
 
 .journal-entry.extras2 {
-  background-color: #0A2540;
+  background-color: #4d2e8f;
 }
 
 .journal-entry.extras2:hover {
@@ -284,7 +284,7 @@ figcaption {
 }
 
 .contact {
-  color: #0A2540;
+  color: #4d2e8f;
   text-align: right;
   font-size: 18px;
   line-height: 28px;
@@ -301,7 +301,7 @@ figcaption {
 }
 
 .phonelink {
-  color: #0A2540;
+  color: #4d2e8f;
   text-decoration: none;
 }
 
@@ -313,7 +313,7 @@ figcaption {
 }
 
 .sig {
-  color: #0A2540;
+  color: #4d2e8f;
   margin-top: 15px;
   font-family: Great Vibes, cursive;
   font-size: 41px;
@@ -346,7 +346,7 @@ figcaption {
 }
 
 ._1200-wrapper.welcome-quote {
-  color: #0A2540;
+  color: #4d2e8f;
   margin-top: 30px;
   font-family: Montserrat, sans-serif;
   font-size: 24px;
@@ -661,7 +661,7 @@ figcaption {
 }
 
 .contact-info-wrapper {
-  background-color: #0A2540;
+  background-color: #4d2e8f;
   flex: 1;
   padding: 15px;
 }
@@ -1438,7 +1438,7 @@ figcaption {
 }
 
 .half-width-lb-wrap.welcome-quote {
-  color: #0A2540;
+  color: #4d2e8f;
   margin-top: 30px;
   font-family: Montserrat, sans-serif;
   font-size: 24px;
@@ -1554,7 +1554,7 @@ html.w-mod-js [data-ix="fade-in-on-scroll"] {
   }
 
   .nav-menu {
-    background-color: #0A2540;
+    background-color: #4d2e8f;
     padding-right: 0;
   }
 
@@ -1691,7 +1691,7 @@ html.w-mod-js [data-ix="fade-in-on-scroll"] {
   }
 
   .nav-menu {
-    background-color: #0A2540;
+    background-color: #4d2e8f;
   }
 
   .footer-a {
