@@ -2092,27 +2092,44 @@ html { scroll-behavior: smooth; }
   color: var(--brand-bronze-light) !important;
 }
 
-/* Same dark-navy hover for the .np-card system used on every other page */
+/* Same dark-navy hover for the .np-card system used on every other page.
+   Selectors are listed at multiple specificity levels so they win regardless
+   of whether the card sits in a plain .np-section or in .np-section-soft. */
 .np-card {
-  transition: transform .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease, color .25s ease !important;
-}
-.np-card:hover {
-  background: var(--brand-navy) !important;
-  border-color: var(--brand-navy) !important;
-  transform: translateY(-3px);
-  box-shadow: 0 18px 40px -22px rgba(10,37,64,0.45) !important;
+  transition: transform .25s ease, background .25s ease, background-color .25s ease, border-color .25s ease, box-shadow .25s ease, color .25s ease !important;
 }
 .np-card h3,
 .np-card p,
 .np-card li,
-.np-card a {
-  transition: color .25s ease;
+.np-card a,
+.np-card strong { transition: color .25s ease; }
+
+/* Background flip — needs higher specificity than .np-section.np-section-soft .np-card */
+.np-card:hover,
+.np-section .np-card:hover,
+.np-section.np-section-soft .np-card:hover,
+.np-inner .np-card:hover {
+  background: #0A2540 !important;
+  background-color: #0A2540 !important;
+  border-color: #0A2540 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -22px rgba(10,37,64,0.45) !important;
 }
-.np-card:hover h3 { color: var(--brand-bronze-light) !important; }
+.np-card:hover h3,
+.np-section .np-card:hover h3,
+.np-section.np-section-soft .np-card:hover h3 { color: #D6B274 !important; }
 .np-card:hover p,
-.np-card:hover li { color: rgba(255,255,255,0.88) !important; }
-.np-card:hover a { color: var(--brand-bronze-light) !important; }
-.np-card:hover strong { color: #fff !important; }
+.np-card:hover li,
+.np-section .np-card:hover p,
+.np-section .np-card:hover li,
+.np-section.np-section-soft .np-card:hover p,
+.np-section.np-section-soft .np-card:hover li { color: rgba(255,255,255,0.92) !important; }
+.np-card:hover a,
+.np-section .np-card:hover a,
+.np-section.np-section-soft .np-card:hover a { color: #D6B274 !important; }
+.np-card:hover strong,
+.np-section .np-card:hover strong,
+.np-section.np-section-soft .np-card:hover strong { color: #fff !important; }
 
 /* .np-grid-2 / .np-grid-3 — also enforce no-orphan layout */
 .np-grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
