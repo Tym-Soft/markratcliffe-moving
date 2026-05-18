@@ -707,16 +707,17 @@
       font-size: 0.92rem; text-align: center; font-style: italic;
     }
     /* Editorial layout — image floats inside the text so paragraphs wrap
-       around it and the body continues full-width once they clear it. */
+       around it and the body continues full-width once they clear it.
+       Body inherits .th-wide width so its left+right edges align with the
+       feature images above and below. */
     .th-case-body {
       margin: 2rem 0;
-      max-width: 880px;
     }
     .th-case-body::after { content: ""; display: block; clear: both; }
     .th-side-image {
       float: left;
-      width: 300px;
-      margin: 0.25rem 1.75rem 1rem 0;
+      width: 380px;
+      margin: 0.4rem 2rem 1.2rem 0;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 10px 30px -16px rgba(10,37,64,0.25);
