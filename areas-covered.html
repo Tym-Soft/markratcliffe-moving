@@ -955,51 +955,69 @@
     .ac-srv-btn-intl.is-active     { background: #0A2540; color: #fff; border-color: #0A2540; }
 
     /* Service icons under each town name */
-    .ac-icons { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+    .ac-icons { display: flex; gap: 0.3rem; flex-wrap: wrap; }
     .ac-icon {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 34px; height: 34px; border-radius: 50%;
+      width: 24px; height: 24px; border-radius: 50%;
       text-decoration: none;
       border: 1.5px solid;
-      transition: transform .15s, box-shadow .15s, background .15s, color .15s;
+      transition: transform .15s, background .15s, color .15s;
     }
-    .ac-icon svg { width: 18px; height: 18px; }
+    .ac-icon svg { width: 13px; height: 13px; }
     /* Each icon colour-codes its service type without ever showing the word */
-    .ac-icon-removals  { color: #0A2540;       border-color: rgba(34,11,80,0.25); background: rgba(34,11,80,0.06); }
-    .ac-icon-manvan    { color: #8a6e15;       border-color: rgba(212,175,55,0.45); background: rgba(212,175,55,0.10); }
-    .ac-icon-storage   { color: #3a1a7a;       border-color: rgba(58,26,122,0.30); background: rgba(58,26,122,0.07); }
-    .ac-icon-intl      { color: #3a1a7a;       border-color: rgba(58,26,122,0.35); background: rgba(58,26,122,0.08); }
-    .ac-icon:hover, .ac-icon:focus {
-      transform: translateY(-2px); outline: none;
-      box-shadow: 0 8px 16px -8px rgba(34,11,80,0.4);
-    }
+    .ac-icon-removals  { color: #0A2540; border-color: rgba(10,37,64,0.25); background: rgba(10,37,64,0.06); }
+    .ac-icon-manvan    { color: #8a6e15; border-color: rgba(200,168,118,0.55); background: rgba(200,168,118,0.12); }
+    .ac-icon-storage   { color: #3a1a7a; border-color: rgba(58,26,122,0.30); background: rgba(58,26,122,0.07); }
+    .ac-icon-intl      { color: #143656; border-color: rgba(20,54,86,0.35); background: rgba(20,54,86,0.08); }
+    .ac-icon:hover, .ac-icon:focus { transform: scale(1.1); outline: none; }
     .ac-icon-removals:hover  { background: #0A2540; color: #fff; }
-    .ac-icon-manvan:hover    { background: #C8A876; color: #1f1f1f; }
+    .ac-icon-manvan:hover    { background: #C8A876; color: #fff; }
     .ac-icon-storage:hover   { background: #3a1a7a; color: #fff; }
-    .ac-icon-intl:hover      { background: #0A2540; color: #fff; }
+    .ac-icon-intl:hover      { background: #143656; color: #fff; }
 
     /* Region sections */
-    .ac-region { padding: 3rem 1.5rem 2rem; background: #fff; }
+    .ac-region { padding: 2.5rem 1.5rem 1.5rem; background: #fff; }
     .ac-region:nth-of-type(odd) { background: #fafaff; }
-    .ac-region-inner { max-width: 1200px; margin: 0 auto; }
+    .ac-region-inner { max-width: 1240px; margin: 0 auto; }
     .ac-region-head { display: flex; align-items: baseline; justify-content: space-between;
-      gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;
-      padding-bottom: 1rem; border-bottom: 2px solid rgba(212,175,55,0.4); }
-    .ac-region-title { color: #0A2540; font-size: clamp(1.6rem, 2.5vw, 2.1rem);
-      font-weight: 700; margin: 0; letter-spacing: -0.01em; }
-    .ac-region-meta { color: #5a5a6a; font-size: 0.85rem;
+      gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+      padding-bottom: 0.85rem; border-bottom: 2px solid rgba(200,168,118,0.45); }
+    .ac-region-title { color: #0A2540; font-size: clamp(1.4rem, 2.4vw, 2rem);
+      font-weight: 600; margin: 0; letter-spacing: -0.01em;
+      font-family: "Fraunces", serif; }
+    .ac-region-meta { color: #5a5a6a; font-size: 0.78rem;
       text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; margin: 0; }
 
-    /* Town grid */
-    .ac-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1rem; }
-    .ac-town { background: #fff; border: 1px solid #e0dceb; border-radius: 12px;
-      padding: 1.1rem 1.25rem; transition: transform .2s, box-shadow .2s, border-color .2s; }
-    .ac-town:hover { transform: translateY(-2px);
-      box-shadow: 0 14px 30px -20px rgba(34,11,80,0.3); border-color: rgba(34,11,80,0.25); }
-    .ac-town-name { color: #0A2540 !important; font-size: 1.15rem !important;
-      font-weight: 700 !important; margin: 0 0 0.6rem !important; letter-spacing: -0.01em; }
+    /* Compact town tiles — horizontal layout: name on left, icons on right */
+    .ac-towns { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.55rem; }
+    .ac-town {
+      background: #fff; border: 1px solid #e8e3f0; border-radius: 8px;
+      padding: 0.55rem 0.85rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0.6rem;
+      transition: border-color .15s, box-shadow .15s, transform .15s;
+    }
+    .ac-town:hover {
+      border-color: #0A2540;
+      box-shadow: 0 6px 18px -10px rgba(10,37,64,0.3);
+      transform: translateY(-1px);
+    }
+    .ac-town-name {
+      color: #0A2540 !important; font-size: 0.9rem !important;
+      font-weight: 600 !important; margin: 0 !important; letter-spacing: -0.005em;
+      font-family: "Inter", sans-serif !important;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      flex: 1 1 auto; min-width: 0;
+    }
     .ac-services { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+    /* Mobile: single column with slightly more breathing room */
+    @media (max-width: 540px) {
+      .ac-towns { grid-template-columns: 1fr; gap: 0.45rem; }
+      .ac-town { padding: 0.7rem 0.95rem; }
+      .ac-town-name { font-size: 0.95rem !important; }
+    }
 
     .ac-empty { max-width: 600px; margin: 2rem auto; padding: 1.25rem;
       background: #fff; border: 1px dashed #e0dceb; border-radius: 10px;
