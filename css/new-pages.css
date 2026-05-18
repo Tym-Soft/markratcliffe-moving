@@ -2471,3 +2471,59 @@ html { scroll-behavior: smooth; }
   /* pill background already provides a backdrop, so a softer drop */
   text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
 }
+
+/* =========================================================
+   HERO TEXT BACKDROP — frosted-glass card behind the headline
+   Sits inside the hero so the image stays edge-to-edge but the text
+   has a contrast surface that works on any background.
+   ========================================================= */
+.hp-hero-inner,
+.np-hero-inner {
+  background: rgba(10, 37, 64, 0.58) !important;
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 2.75rem 2.75rem 2.5rem !important;
+  box-shadow: 0 30px 80px -30px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 600px) {
+  .hp-hero-inner,
+  .np-hero-inner {
+    padding: 2rem 1.5rem 1.75rem !important;
+    border-radius: 14px;
+  }
+}
+
+/* Now that the text sits on a navy panel, the heavy drop-shadow can be
+   softened — the panel does the contrast work. */
+.hp-hero-h1,
+.np-hero h1 {
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35) !important;
+}
+
+/* Legacy .hp-header pages have no inner wrapper, so put the backdrop
+   directly on the H1 (and its companion subhead/headings). */
+.hp-header h1,
+.hp-header .hero-image-heading {
+  display: inline-block !important;
+  background: rgba(10, 37, 64, 0.58);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  padding: 1rem 2rem 1.1rem !important;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 60px -25px rgba(0,0,0,0.5);
+}
+.hp-header h2,
+.hp-header h2.white,
+.hp-header .hero-image-subhead {
+  display: inline-block !important;
+  background: rgba(10, 37, 64, 0.48);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.45rem 1rem !important;
+  border-radius: 8px;
+  margin-top: 0.75rem !important;
+}
