@@ -1164,7 +1164,9 @@ footer.mr-footer span {
 /* =========================================================
    SITE-WIDE FOOTER WITH EVERY LIVE PAGE
    ========================================================= */
-.mr-footer-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important; }
+.mr-footer-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 2rem; }
+@media (max-width: 991px) { .mr-footer-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+@media (max-width: 600px) { .mr-footer-grid { grid-template-columns: 1fr !important; } }
 .mr-footer-list li { line-height: 1.7; }
 .mr-footer-sub-title {
   color: #D6B274 !important;
