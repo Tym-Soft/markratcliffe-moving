@@ -117,12 +117,12 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
 }
 .np-hero::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
-  /* Lighter overlay so the underlying image shows through clearly */
-  background: linear-gradient(180deg, rgba(10,37,64,0.55) 0%, rgba(10,37,64,0.68) 100%);
+  /* Halved again — image is the focal point; navy is just enough for text contrast */
+  background: linear-gradient(180deg, rgba(10,37,64,0.27) 0%, rgba(10,37,64,0.34) 100%);
 }
 .np-hero-bg {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; opacity: 0.85; z-index: -2;
+  object-fit: cover; opacity: 0.95; z-index: -2;
   pointer-events: none;
 }
 .np-hero-inner {
@@ -1557,11 +1557,12 @@ html { scroll-behavior: smooth; }
 .hp-hero-bg { position: absolute; inset: 0; z-index: -1; }
 .hp-hero-bg img {
   width: 100%; height: 100%; object-fit: cover;
-  opacity: 0.32;
+  opacity: 0.95;
 }
 .hp-hero::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(180deg, rgba(10,37,64,0.78) 0%, rgba(10,37,64,0.86) 100%);
+  /* Halved overlay — image shows clearly while text stays readable */
+  background: linear-gradient(180deg, rgba(10,37,64,0.32) 0%, rgba(10,37,64,0.42) 100%);
 }
 .hp-hero-inner {
   max-width: 980px; text-align: center;
