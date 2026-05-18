@@ -2172,6 +2172,20 @@ html { scroll-behavior: smooth; }
 .np-section .np-card:hover strong,
 .np-section.np-section-soft .np-card:hover strong { color: #fff !important; }
 
+/* Stat-card helpers — readable on both white default and purple hover bg */
+.np-card .np-stat { font-size: 3rem; font-weight: 700; color: var(--np-primary, #4d2e8f); line-height: 1; transition: color .25s ease; }
+.np-card .np-stat-label { color: var(--np-muted, #6b7280); transition: color .25s ease; }
+.np-card .np-stat-stars { color: #FFC107; font-size: 1.3rem; letter-spacing: 0.1em; margin: 0.5rem 0; }
+.np-card:hover .np-stat,
+.np-section .np-card:hover .np-stat,
+.np-section.np-section-soft .np-card:hover .np-stat { color: #D6B274 !important; }
+.np-card:hover .np-stat-label,
+.np-section .np-card:hover .np-stat-label,
+.np-section.np-section-soft .np-card:hover .np-stat-label { color: rgba(255,255,255,0.92) !important; }
+.np-card:hover .np-stat-stars,
+.np-section .np-card:hover .np-stat-stars,
+.np-section.np-section-soft .np-card:hover .np-stat-stars { color: #FFC107 !important; }
+
 /* .np-grid-2 / .np-grid-3 — also enforce no-orphan layout */
 .np-grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
 .np-grid-3 { grid-template-columns: repeat(3, 1fr) !important; }
