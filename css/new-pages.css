@@ -1106,7 +1106,7 @@ footer.mr-footer span {
 /* =========================================================
    MEGAMENU — AREAS COVERED dropdown
    ========================================================= */
-.dropdown.mega-areas .dropdown-list.mega-menu {
+.dropdown.mega-areas, .dropdown.mega-services .dropdown-list.mega-menu {
   width: min(95vw, 980px) !important;
   max-width: 95vw;
   padding: 1.6rem 1.75rem !important;
@@ -1116,7 +1116,7 @@ footer.mr-footer span {
   left: 50%;
   transform: translateX(-50%);
 }
-.dropdown.mega-areas .dropdown-list.mega-menu.w--open {
+.dropdown.mega-areas, .dropdown.mega-services .dropdown-list.mega-menu.w--open {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.25rem 1.75rem;
@@ -1146,14 +1146,14 @@ footer.mr-footer span {
 .mega-col a:hover { color: #D6B274 !important; border-left-color: #D6B274; background: transparent !important; }
 
 @media (max-width: 991px) {
-  .dropdown.mega-areas .dropdown-list.mega-menu {
+  .dropdown.mega-areas, .dropdown.mega-services .dropdown-list.mega-menu {
     width: 100% !important;
     max-width: 100%;
     left: 0; transform: none;
     padding: 0.5rem 0 !important;
     box-shadow: none;
   }
-  .dropdown.mega-areas .dropdown-list.mega-menu.w--open {
+  .dropdown.mega-areas, .dropdown.mega-services .dropdown-list.mega-menu.w--open {
     grid-template-columns: 1fr;
     gap: 0;
   }
@@ -1301,7 +1301,7 @@ h1, h2, h3,
 .np-faq summary { font-family: "Inter", sans-serif !important; font-weight: 600 !important; color: var(--brand-navy) !important; }
 
 /* Megamenu — refresh to navy + bronze headings */
-.dropdown.mega-areas .dropdown-list.mega-menu {
+.dropdown.mega-areas, .dropdown.mega-services .dropdown-list.mega-menu {
   background: var(--brand-navy) !important;
 }
 .mega-col .mega-h {
@@ -1352,11 +1352,11 @@ html { scroll-behavior: smooth; }
    Each region heading collapses/expands its cities on mobile.
    ========================================================= */
 @media (max-width: 991px) {
-  .dropdown.mega-areas .dropdown-list.mega-menu {
+  .dropdown.mega-areas, .dropdown.mega-services .dropdown-list.mega-menu {
     padding: 0 !important;
     background: var(--brand-navy) !important;
   }
-  .dropdown.mega-areas .dropdown-list.mega-menu.w--open {
+  .dropdown.mega-areas, .dropdown.mega-services .dropdown-list.mega-menu.w--open {
     display: block !important;
   }
   .mega-col {
