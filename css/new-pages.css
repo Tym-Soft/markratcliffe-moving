@@ -1058,14 +1058,16 @@ body { padding-top: 78px; }
    Switching the text in these blocks to brand purple #220b50
    on the same gold gives ~7.5:1 — passes AAA.
    ========================================================= */
+/* Text directly on the gold background → brand purple.
+   Buttons (.top-bar-quote, .button, .w-button) keep their own dark fill + white text. */
 .top-bar-wrapper,
 .top-bar-wrapper .tb-link,
 .top-bar-wrapper .tb-link div,
 .top-bar-wrapper .banner-script,
 .online-quote-section,
-.online-quote-section a,
+.online-quote-section > div,
+.online-quote-section > div > div,
 .online-quote-section p,
-.online-quote-section div,
 .online-quote-section h1,
 .online-quote-section h2,
 .online-quote-section h3 {
@@ -1075,6 +1077,14 @@ body { padding-top: 78px; }
   /* white phone/email icons no longer contrast on the recolored text — drop them */
   background-image: none !important;
   padding-left: 0 !important;
+}
+/* Pill buttons sitting on the gold band: dark purple background, white text.
+   The body color cascade was bleeding into them via the rule above. */
+.online-quote-section .top-bar-quote,
+.online-quote-section a.button,
+.online-quote-section a.w-button,
+.top-bar-wrapper .top-bar-quote {
+  color: #fff !important;
 }
 
 /* Footer copyright spans were rgba(255,255,255,0.65) — bump to 0.92 for AA on dark */
