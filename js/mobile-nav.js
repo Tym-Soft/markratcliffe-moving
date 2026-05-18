@@ -54,6 +54,37 @@
         if (t) t.setAttribute('aria-expanded', 'false');
       });
     });
+
+    // --- Mobile megamenu accordion ---
+    // Each .mega-col is collapsible on mobile via clicking its .mega-h header.
+    document.querySelectorAll('.mega-col .mega-h').forEach(function (h) {
+      if (h.__mrnAcc) return;
+      h.__mrnAcc = true;
+      h.setAttribute('role', 'button');
+      h.setAttribute('tabindex', '0');
+      h.setAttribute('aria-expanded', 'false');
+      function toggleCol(e) {
+        if (window.innerWidth > 991) return; // desktop: keep grid layout
+        e.preventDefault();
+        e.stopPropagation();
+        var col = h.parentElement;
+        var open = col.getAttribute('data-open') === 'true';
+        // Close sibling columns
+        col.parentElement.querySelectorAll('.mega-col').forEach(function (c) {
+          if (c !== col) {
+            c.setAttribute('data-open', 'false');
+            var hh = c.querySelector('.mega-h');
+            if (hh) hh.setAttribute('aria-expanded', 'false');
+          }
+        });
+        col.setAttribute('data-open', open ? 'false' : 'true');
+        h.setAttribute('aria-expanded', open ? 'false' : 'true');
+      }
+      h.addEventListener('click', toggleCol);
+      h.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') toggleCol(e);
+      });
+    });
   }
 
   if (document.readyState === 'loading') {
