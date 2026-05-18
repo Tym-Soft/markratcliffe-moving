@@ -1051,3 +1051,36 @@ body { padding-top: 78px; }
     text-decoration: none; font-weight: 700;
   }
 }
+
+/* =========================================================
+   WCAG CONTRAST FIXES
+   White-on-gold (#fff on #d4af37) fails AA (~1.97:1).
+   Switching the text in these blocks to brand purple #220b50
+   on the same gold gives ~7.5:1 — passes AAA.
+   ========================================================= */
+.top-bar-wrapper,
+.top-bar-wrapper .tb-link,
+.top-bar-wrapper .tb-link div,
+.top-bar-wrapper .banner-script,
+.online-quote-section,
+.online-quote-section a,
+.online-quote-section p,
+.online-quote-section div,
+.online-quote-section h1,
+.online-quote-section h2,
+.online-quote-section h3 {
+  color: #220b50 !important;
+}
+.top-bar-wrapper .tb-link {
+  /* white phone/email icons no longer contrast on the recolored text — drop them */
+  background-image: none !important;
+  padding-left: 0 !important;
+}
+
+/* Footer copyright spans were rgba(255,255,255,0.65) — bump to 0.92 for AA on dark */
+.mr-footer-bar small,
+.mr-footer-bottom a,
+footer.mr-footer .current-year,
+footer.mr-footer span {
+  color: rgba(255,255,255,0.92) !important;
+}
