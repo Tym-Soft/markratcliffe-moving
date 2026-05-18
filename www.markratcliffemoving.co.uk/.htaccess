@@ -1,0 +1,87 @@
+# =====================================================
+#  Mark Ratcliffe Moving — Apache rewrite rules
+# =====================================================
+# Notes:
+#   - Static .html pages serve directly from disk (no PHP needed).
+#   - PHP is only invoked when visiting /admin-portal-xK7p9q/.
+#   - The /data/ folder (JSON content store) is denied to the web.
+#   - Admin helper files (_lib.php, _auth.php, _layout.php) are denied directly.
+
+Options -Indexes
+ServerSignature Off
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Force HTTPS (uncomment after SSL is live)
+  # RewriteCond %{HTTPS} off
+  # RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Redirect www to non-www, or vice versa. Default: keep www.
+  # RewriteCond %{HTTP_HOST} !^www\. [NC]
+  # RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Deny direct browser access to the JSON content store
+<IfModule mod_authz_core.c>
+  <FilesMatch "\.(json|md|log)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "\.(json|md|log)$">
+    Order Allow,Deny
+    Deny from all
+  </FilesMatch>
+</IfModule>
+
+# Deny direct access to the entire /data/ directory
+<Directory "data">
+  Require all denied
+</Directory>
+RedirectMatch 404 ^/data(/.*)?$
+
+# Deny direct access to the admin's PHP helper files (underscore prefix)
+<FilesMatch "^_.*\.php$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order Allow,Deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Long-lived caching for static assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp        "access plus 6 months"
+  ExpiresByType image/png         "access plus 6 months"
+  ExpiresByType image/jpeg        "access plus 6 months"
+  ExpiresByType image/svg+xml     "access plus 6 months"
+  ExpiresByType text/css          "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/html         "access plus 1 hour"
+</IfModule>
+
+# Gzip compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Custom 404
+ErrorDocument 404 /404.html
+
+# (auto-managed by the admin — don't edit by hand)
+# === ADMIN REDIRECTS START ===
+
+Redirect 301 /testimonials.html /reviews.html
+# === ADMIN REDIRECTS END ===

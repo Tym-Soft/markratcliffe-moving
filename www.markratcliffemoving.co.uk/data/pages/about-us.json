@@ -1,0 +1,32 @@
+{
+  "slug": "about-us",
+  "filename": "about-us.html",
+  "type": "page",
+  "meta_title": "About Us",
+  "meta_description": "We offer a complete Removal Service for Domestic UK Removals. Local & National Removals please give us a call to discuss your moving requirements?",
+  "canonical_url": "https://www.markratcliffemoving.co.uk/about-us.html",
+  "og_image": "https://uploads-ssl.webflow.com/54f032c21ccd6c2e19dae5a7/61f2662bfe47bdb1b8e8c26e_About-OG-Image.jpg",
+  "h1": "About Us",
+  "intro_paragraph": "Mark Ratcliffe started in the Removals industry in 1982 with a second hand shop &amp; single Luton van in Hampden Park, Eastbourne. A.1. Removals was formed 01/01/1982. Building the business up through the 80&#x27;s and 90&#x27;s and specialising in overseas moving came a name change in 1995 to A.1. Worldwide Movers. A.1. Worldwide Movers was now the largest independent Mover in Sussex employing 28 full time staff, operating 11 trucks &amp; 4 trailers, two warehouses in Eastbourne totalling 26,000 sqft &amp; holding 750 warehouse containers.",
+  "hero": {
+    "src": "",
+    "kicker": ""
+  },
+  "sections": [
+    {
+      "heading": "Related pages on our site",
+      "kind": "text",
+      "body_html": "<h2>Related pages on our site</h2>\n        <ul class=\"np-related-list\">\n          <li><a href=\"areas-covered/removals-east-grinstead-moving-home-in-sussex.html\">Removals East Grinstead</a></li>\n          <li><a href=\"areas-covered/removals-epsom-surrey.html\">Removals Epsom</a></li>\n          <li><a href=\"areas-covered/removals-guildford.html\">Removals Guildford - Top Removal Companies in Guildford</a></li>\n          <li><a href=\"areas-covered/removals-lewes-moving-home-in-sussex.html\">Removals Lewes</a></li>\n          <li><a href=\"areas-covered/removals-newhaven-sussex.html\">Removals Newhaven</a></li>\n          <li><a href=\"areas-covered/removals-woking-surrey.html\">Removals Woking</a></li>\n        </ul>"
+    }
+  ],
+  "faqs": [],
+  "images": [
+    {
+      "src": "images/mark-BAR-in-frame.webp",
+      "alt": "",
+      "width": "",
+      "height": ""
+    }
+  ],
+  "raw_body": "</a>\n    <a href=\"mailto:markratcliffemoving@gmail.com\" class=\"mob-con-1 _2 w-inline-block\">\n      <div>EMAIL US</div>\n    </a>\n  </div>\n  \n  </div>\n  <div class=\"hp-header inner about-us\">\n    <div class=\"inner-title-wrapper\">\n      <h1 class=\"white\">About Us</h1>\n    </div>\n  </div>\n  <div class=\"section\">\n    <div class=\"_1200-wrapper\">\n      <div class=\"rt-block w-richtext\">\n        <figure style=\"max-width:50%\" class=\"w-richtext-align-floatright w-richtext-figure-type-image\">\n          <div><img src=\"images/mark-BAR-in-frame.webp\" loading=\"lazy\" alt=\"\"></div>\n        </figure>\n        <p>Mark Ratcliffe started in the Removals industry in 1982 with a second hand shop &amp; single Luton van in Hampden Park, Eastbourne. A.1. Removals was formed 01/01/1982. Building the business up through the 80&#x27;s and 90&#x27;s and specialising in overseas moving came a name change in 1995 to A.1. Worldwide Movers. A.1. Worldwide Movers was now the largest independent Mover in Sussex employing 28 full time staff, operating 11 trucks &amp; 4 trailers, two warehouses in Eastbourne totalling 26,000 sqft &amp; holding 750 warehouse containers.</p>\n        <p>A.1. was sold to its current owners in May 2006 &amp; continues to trade today. Going full circle Mark formed his 2nd Company &quot; The Small Moving Company &quot; in March 2007 with a single van &amp; second hand furniture shop again.</p>\n        <p>The sale of The Small Moving Company came in July 2014 to its current owner &amp; again continues to trade today. 3rd Moving Company formed 1st October 2014 &quot;Mark Ratcliffe Moving&quot; building success by still offering &quot; Good Old Fashioned Service &quot; at an affordable price and a budget for all, whether you have a single item to move across town, 1/2 bed flat or a 3/4 bed house across Eastbourne or anywhere else in the country.</p>\n        <p>Mark Ratcliffe Moving also offer Worldwide Services for small baggage shipments or complete households to over 200 countries and territories. Mark will always provide a personal tailored service for each and every move.</p>\n        <p>2020 see&#x27;s another move for the company into a brand new purpose built warehouse, on the A22 at Lower Dicker just north of Hailsham, East Sussex.<br>After just 4 months in our new state of the art country facility, we&#x27;ve now completed a secure strong room fit out for Moves in store on our mezzanine floor. While our ground floor comprises of a full Self Store fit out for clients who&#x27;d prefer to deposit their own goods with us and enjoy the benefit of access to their effects, 24 hours a day, 7 days a week via our digital door entry system.</p>\n      </div>\n    </div>\n  </div>\n  <section class=\"np-section np-related\" aria-label=\"Related pages\">\n      <div class=\"np-inner\">\n        <h2>Related pages on our site</h2>\n        <ul class=\"np-related-list\">\n          <li><a href=\"areas-covered/removals-east-grinstead-moving-home-in-sussex.html\">Removals East Grinstead</a></li>\n          <li><a href=\"areas-covered/removals-epsom-surrey.html\">Removals Epsom</a></li>\n          <li><a href=\"areas-covered/removals-guildford.html\">Removals Guildford - Top Removal Companies in Guildford</a></li>\n          <li><a href=\"areas-covered/removals-lewes-moving-home-in-sussex.html\">Removals Lewes</a></li>\n          <li><a href=\"areas-covered/removals-newhaven-sussex.html\">Removals Newhaven</a></li>\n          <li><a href=\"areas-covered/removals-woking-surrey.html\">Removals Woking</a></li>\n        </ul>\n      </div>\n    </section>\n  \n    \n    \n    \n</div>"
+}

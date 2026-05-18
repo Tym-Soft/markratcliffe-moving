@@ -1,0 +1,150 @@
+/* Mark Ratcliffe Admin — minimal, beginner-friendly UI */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  background: #f6f4fb;
+  color: #1f1f2e;
+  font-size: 15px;
+  line-height: 1.5;
+}
+a { color: #220b50; }
+
+.ab-topbar {
+  background: #220b50;
+  color: #fff;
+  padding: 0.85rem 1.25rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ab-brand { font-weight: 700; letter-spacing: 0.04em; }
+.ab-link { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.9rem; }
+.ab-link:hover { color: #fff; text-decoration: underline; }
+
+.ab-nav {
+  background: #fff;
+  border-bottom: 1px solid #e5e0f0;
+  padding: 0.5rem 1.25rem;
+  display: flex; gap: 0.25rem; flex-wrap: wrap;
+}
+.ab-nav a {
+  padding: 0.5rem 0.85rem;
+  text-decoration: none;
+  color: #4a3c70;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+.ab-nav a:hover { background: #f0eaf8; color: #220b50; }
+.ab-nav a.active { background: #220b50; color: #fff; }
+
+.ab-main {
+  max-width: 1100px;
+  margin: 1.5rem auto;
+  padding: 0 1.25rem 3rem;
+}
+
+.ab-h1 {
+  font-size: 1.65rem;
+  margin: 0 0 1.25rem;
+  color: #220b50;
+}
+h2.ab-h2 { font-size: 1.2rem; color: #220b50; margin: 1.5rem 0 0.75rem; }
+
+.ab-card {
+  background: #fff;
+  border: 1px solid #e5e0f0;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ab-flash {
+  background: #d4edda; color: #155724;
+  padding: 0.75rem 1rem; border-radius: 6px;
+  margin-bottom: 1rem; border-left: 4px solid #28a745;
+}
+.ab-flash-error { background: #f8d7da; color: #721c24; border-left-color: #dc3545; }
+
+table.ab-table {
+  width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04); margin-top: 0.5rem;
+}
+table.ab-table th, table.ab-table td {
+  padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #f0eaf8;
+}
+table.ab-table th { background: #f6f4fb; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b5d8f; }
+table.ab-table tr:last-child td { border-bottom: none; }
+table.ab-table tr:hover td { background: #faf8fd; }
+table.ab-table a { color: #220b50; text-decoration: none; font-weight: 600; }
+table.ab-table a:hover { text-decoration: underline; }
+table.ab-table .muted { color: #6b5d8f; font-size: 0.85rem; }
+
+.ab-form-row { margin-bottom: 1.1rem; }
+.ab-form-row label {
+  display: block; font-weight: 600; margin-bottom: 0.35rem;
+  color: #4a3c70; font-size: 0.95rem;
+}
+.ab-form-row small {
+  display: block; color: #6b5d8f; font-size: 0.85rem; margin-top: 0.25rem;
+}
+.ab-form-row .ab-charcount {
+  font-size: 0.8rem; color: #6b5d8f; float: right;
+}
+.ab-input, .ab-textarea {
+  width: 100%; padding: 0.6rem 0.75rem;
+  border: 1px solid #cfc7e0; border-radius: 5px;
+  font: inherit; font-size: 0.95rem;
+  background: #fff;
+}
+.ab-input:focus, .ab-textarea:focus { outline: none; border-color: #220b50; box-shadow: 0 0 0 3px rgba(34,11,80,0.1); }
+.ab-textarea { font-family: -apple-system, sans-serif; line-height: 1.6; min-height: 110px; resize: vertical; }
+.ab-textarea-large { min-height: 220px; }
+
+.ab-btn {
+  display: inline-block; padding: 0.65rem 1.4rem;
+  border-radius: 6px; font-weight: 600; cursor: pointer;
+  border: 1px solid transparent; font-size: 0.95rem;
+  text-decoration: none;
+}
+.ab-btn-primary { background: #220b50; color: #fff; }
+.ab-btn-primary:hover { background: #371478; }
+.ab-btn-secondary { background: #fff; color: #220b50; border-color: #220b50; }
+.ab-btn-danger { background: #dc3545; color: #fff; }
+.ab-btn-row { display: flex; gap: 0.5rem; align-items: center; margin-top: 1.5rem; }
+
+.ab-help {
+  background: #fffbea;
+  border: 1px solid #f4e6a8;
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  font-size: 0.92rem;
+  margin-bottom: 1.25rem;
+  color: #6b5e1c;
+}
+
+.ab-pill {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  background: #e5e0f0;
+  color: #4a3c70;
+}
+.ab-pill-new { background: #d4edda; color: #155724; }
+.ab-pill-blog { background: #d1ecf1; color: #0c5460; }
+
+.ab-login {
+  max-width: 360px;
+  margin: 4rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(34,11,80,0.1);
+}
+.ab-login h1 { text-align: center; color: #220b50; margin-top: 0; }
+
+.ab-alt-list { list-style: none; padding: 0; margin: 0; }
+.ab-alt-list li { padding: 0.5rem 0; border-bottom: 1px solid #f0eaf8; display: flex; align-items: center; gap: 0.75rem; }
+.ab-alt-list li img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; background: #f0eaf8; }
+.ab-alt-list li .img-info { flex: 1; }
+.ab-alt-list li .img-info code { font-size: 0.8rem; color: #6b5d8f; }
+.ab-alt-list li input { flex: 1; padding: 0.4rem 0.6rem; font-size: 0.9rem; border: 1px solid #cfc7e0; border-radius: 4px; }

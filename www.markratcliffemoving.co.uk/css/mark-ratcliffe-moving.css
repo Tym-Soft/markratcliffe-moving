@@ -1,0 +1,2250 @@
+@font-face {
+  font-family: Parisienne;
+  src: url('../fonts/Parisienne-Regular.ttf') format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --midnight-blue: #220b50;
+  --goldenrod: #d4af37;
+  --medium-sea-green: #25c485;
+}
+
+.w-layout-grid {
+  grid-row-gap: 16px;
+  grid-column-gap: 16px;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  display: grid;
+}
+
+h1 {
+  color: #220b50;
+  margin: 0 0 10px;
+  font-family: Montserrat, sans-serif;
+}
+
+h2 {
+  color: #220b50;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-family: Montserrat, sans-serif;
+}
+
+h3 {
+  color: #220b50;
+  margin: 0 0 10px;
+  font-family: Montserrat, sans-serif;
+}
+
+h4, h5, h6 {
+  color: #220b50;
+  margin: 10px 0;
+  font-family: Montserrat, sans-serif;
+}
+
+p {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-family: Open Sans, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 23px;
+}
+
+a {
+  text-decoration: underline;
+}
+
+ul {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-left: 40px;
+  font-family: Open Sans, sans-serif;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+img {
+  max-width: 100%;
+  display: inline-block;
+}
+
+figure {
+  margin-bottom: 10px;
+}
+
+figcaption {
+  text-align: center;
+  margin-top: 5px;
+  font-family: Open Sans, sans-serif;
+  font-weight: 400;
+}
+
+.button {
+  color: #fff;
+  text-align: center;
+  background-color: #d4af37;
+  border-radius: 10px;
+  padding: 14px 26px;
+  font-family: Montserrat, sans-serif;
+  text-decoration: none;
+  transition: all .35s;
+  display: inline-block;
+}
+
+.button:hover {
+  background-color: #220b50;
+}
+
+.button.dark:hover {
+  color: #d4af37;
+  background-color: #fff;
+}
+
+.button.dark.spc-1 {
+  margin-top: 10px;
+}
+
+.header {
+  background-color: #220b50;
+  background-image: linear-gradient(#220b50, #fff);
+  margin-top: 60px;
+  padding-left: 20px;
+  padding-right: 20px;
+  overflow: hidden;
+}
+
+.section {
+  text-align: center;
+  padding: 65px 20px;
+  overflow: hidden;
+}
+
+.section.green {
+  background-color: #f2f7f6;
+  border-top-color: #220b50;
+}
+
+.section.grey-bg {
+  background-color: #eee;
+}
+
+.section.mrm-thai-movers {
+  padding-top: 200px;
+}
+
+.nav-link {
+  color: #0d1254;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  margin-bottom: 8px;
+  font-family: Lato, sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  text-decoration: none;
+  display: block;
+}
+
+.nav-link:hover {
+  color: #0d1254;
+  text-decoration: underline;
+}
+
+.nav-link.w--current {
+  color: purple;
+}
+
+.navigation {
+  z-index: 10;
+  background-color: #fff;
+  border-top: 8px solid #d4af37;
+  padding: 33px 19px 38px;
+  position: fixed;
+  box-shadow: 0 0 0 1px #0000000d, 0 2px 3px #0000003b;
+}
+
+.logo {
+  color: #0d1254;
+  text-align: left;
+  text-transform: capitalize;
+  margin-bottom: 22px;
+  font-family: Open Sans, sans-serif;
+  font-size: 33px;
+  font-weight: 400;
+  line-height: 36px;
+}
+
+.align-right {
+  text-align: right;
+  padding-right: 25px;
+}
+
+.journal-entry {
+  color: #333;
+  border: 1px solid #dce6e4;
+  margin-bottom: 19px;
+  padding: 18px 20px;
+  text-decoration: none;
+  transition: background-color .3s;
+  display: block;
+}
+
+.journal-entry:hover {
+  background-color: #f2f7f6;
+}
+
+.journal-entry.extras2 {
+  background-color: #220b50;
+}
+
+.journal-entry.extras2:hover {
+  background-color: #3d439c;
+}
+
+.logo-link {
+  color: #333;
+  text-decoration: none;
+}
+
+.field {
+  border: 1px solid #d1e6dd;
+  height: 53px;
+  box-shadow: inset 0 1px #0000;
+}
+
+.field:focus {
+  border-color: #24c786;
+  box-shadow: inset 0 0 8px #0000;
+}
+
+.field.comments {
+  height: 101px;
+}
+
+.field.lp-text-field {
+  color: #fff;
+  background-color: #00000080;
+  font-family: Open Sans, sans-serif;
+}
+
+.field.lp-text-field:focus {
+  color: #fff;
+}
+
+.field.lp-text-field::placeholder {
+  color: #fff;
+  background-color: #0000;
+}
+
+.field.lp-text-field.message {
+  padding-bottom: 50px;
+}
+
+.success {
+  color: #000;
+  text-align: center;
+  text-shadow: none;
+  background-color: #e3e3e3;
+  padding: 47px;
+}
+
+.logo_font {
+  color: #d4af37;
+  font-family: Great Vibes, cursive;
+  font-size: 49px;
+}
+
+.logo_subfont {
+  color: #d4af37;
+  font-family: Montserrat, sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+}
+
+.footer {
+  background-color: #2e2e2e;
+  padding: 50px 20px;
+}
+
+.phone_contact {
+  color: #0d1254;
+  font-family: Lato, sans-serif;
+  font-size: 32px;
+}
+
+.contact_row {
+  margin-top: 50px;
+}
+
+.contact {
+  color: #220b50;
+  text-align: right;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.line {
+  background-color: #0d1254;
+  width: 100%;
+  height: 5px;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.phonelink {
+  color: #220b50;
+  text-decoration: none;
+}
+
+.extras {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 22px;
+}
+
+.sig {
+  color: #220b50;
+  margin-top: 15px;
+  font-family: Great Vibes, cursive;
+  font-size: 41px;
+  font-weight: 400;
+  position: static;
+}
+
+.div_testimonial {
+  text-align: center;
+  margin-top: 35px;
+}
+
+.testimonial-sub {
+  color: #636363;
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+  font-family: Open Sans, sans-serif;
+  font-size: 17px;
+}
+
+.medium-margin-top {
+  margin-top: 30px;
+}
+
+._1200-wrapper {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+._1200-wrapper.welcome-quote {
+  color: #220b50;
+  margin-top: 30px;
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+}
+
+._1200-wrapper.flex1 {
+  align-items: center;
+  display: flex;
+}
+
+._1200-wrapper.quote-flex {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+._1200-wrapper.opening-statement {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.gold {
+  color: #d4af37;
+}
+
+.gold.shadow {
+  text-shadow: 1px 1px 6px #000;
+}
+
+.center {
+  text-align: center;
+}
+
+.rt-block {
+  text-align: left;
+}
+
+.rt-block img {
+  background-color: #ddd;
+  border: 1px solid #e1e1e1;
+  border-radius: 3px;
+  padding: 10px;
+  box-shadow: 1px 6px 12px -4px #00000073;
+}
+
+.rt-block.man-van, .rt-block.man-van h2, .rt-block.man-van h3, .rt-block.man-van a, .rt-block a {
+  color: var(--midnight-blue);
+}
+
+.home-para-section {
+  background-image: linear-gradient(#00000080, #00000080), url('../images/Storage.webp');
+  background-position: 0 0, 0%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+  background-attachment: scroll, fixed;
+  padding: 100px 20px;
+}
+
+.home-para-section.vintage-movin-van {
+  background-color: var(--midnight-blue);
+  background-image: url('../images/mark-ratcliffe-1963-vintage-bedford-removal-van.webp');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.icon-wrapper {
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.cell-icon1 {
+  text-align: center;
+  width: 20%;
+  padding: 15px;
+}
+
+.white {
+  color: #fff;
+}
+
+.white.footer-title {
+  margin-bottom: 30px;
+}
+
+.white.reviews {
+  margin-bottom: 0;
+}
+
+.white.left {
+  text-align: left;
+}
+
+.white.home-img-caption {
+  text-transform: uppercase;
+}
+
+.header-1 {
+  float: left;
+  width: 50%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0;
+}
+
+.no-margin-top {
+  margin-top: 0;
+}
+
+.nav-section {
+  z-index: 1001;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 11px 14px #0000004f;
+}
+
+.navbar {
+  background-color: #fff;
+  justify-content: space-between;
+  display: flex;
+}
+
+.navlink {
+  color: var(--midnight-blue);
+  text-align: center;
+  flex: 0 auto;
+  justify-content: center;
+  align-items: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-family: Montserrat, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  transition: all .35s;
+}
+
+.navlink:hover {
+  color: #25c485;
+}
+
+.navlink.w--current {
+  color: #d4af37;
+}
+
+.navlink.dropdown {
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+
+.brand {
+  background-color: var(--midnight-blue);
+  color: #d4af37;
+  background-image: url('../images/Mark-Ratcliffe.svg');
+  background-position: 101%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  flex: 0 auto;
+  order: -1;
+  align-items: center;
+  padding: 10px 100px 10px 20px;
+  font-family: Great Vibes, cursive;
+  font-size: 40px;
+  display: flex;
+}
+
+.nav-menu {
+  float: none;
+  flex: 0 auto;
+  order: 1;
+  justify-content: flex-start;
+  align-items: center;
+  padding-right: 20px;
+  display: flex;
+}
+
+.footer-a {
+  float: left;
+  width: 30%;
+  padding: 10px;
+}
+
+.footer-a.b {
+  width: 23.333%;
+}
+
+.footer-a.c {
+  flex-direction: column;
+  align-items: flex-start;
+  width: 23.333%;
+}
+
+.footer-a.d {
+  width: 23.333%;
+}
+
+.footer-neg {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.footer-info-wrap {
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.info-icon-holder {
+  color: #fff;
+  background-image: url('../images/phone-white.svg');
+  background-position: 0;
+  background-repeat: no-repeat;
+  background-size: 15px;
+  padding-left: 30px;
+  font-family: Montserrat, sans-serif;
+}
+
+.info-icon-holder._2 {
+  background-image: url('../images/mobile-white.svg');
+  background-size: 11px;
+}
+
+.info-icon-holder._2._3 {
+  background-image: url('../images/email-white.svg');
+  background-size: 15px;
+}
+
+.info-icon-holder._2.quote {
+  background-image: url('../images/pound-sterling.svg');
+  background-size: 15px;
+}
+
+.info-icon-holder._2.insurance {
+  background-image: url('../images/house.svg');
+  background-size: 16px;
+}
+
+.divider {
+  background-color: #fff;
+  width: 25px;
+  height: 2px;
+  margin-top: 35px;
+  margin-bottom: 35px;
+}
+
+.hover-enlarge {
+  margin-bottom: 0;
+  transition: all .35s;
+}
+
+.hover-enlarge:hover {
+  transform: scale(1.2);
+}
+
+.hover-enlarge.fd-logo {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.footer-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+.header-2 {
+  float: left;
+  text-align: center;
+  width: 50%;
+  padding-top: 50px;
+}
+
+.test {
+  color: #d4af37;
+  text-shadow: 1px 1px 6px #000;
+  font-family: Great Vibes, cursive;
+  font-size: 72px;
+  font-weight: 400;
+  transform: rotate(-4deg);
+}
+
+.contact-wrapper {
+  display: flex;
+}
+
+.form-wrapper {
+  background-color: #f5f5f5;
+  width: 70%;
+  padding: 15px;
+}
+
+.form-wrapper.lp-pages {
+  background-color: #0000;
+  width: 100%;
+  padding: 0;
+}
+
+.form-wrapper.is-contact {
+  background-color: #fff;
+  padding: 0;
+}
+
+.contact-info-wrapper {
+  background-color: #220b50;
+  flex: 1;
+  padding: 15px;
+}
+
+.info-details {
+  margin-top: 40px;
+}
+
+.u-move-europe {
+  margin-left: 5px;
+}
+
+.red-link {
+  color: #e6001c;
+  text-decoration: none;
+}
+
+.red-link:hover {
+  text-decoration: underline;
+}
+
+.text-shadow {
+  text-shadow: 1px 1px 6px #000;
+}
+
+.online-quote-section {
+  color: #fff;
+  background-color: #d4af37;
+  padding: 20px;
+  font-family: Open Sans, sans-serif;
+  font-size: 18px;
+}
+
+.oq-1 {
+  margin-left: 15px;
+}
+
+.umove-badge {
+  object-fit: contain;
+  width: 20%;
+  max-width: 160px;
+  max-height: 180px;
+  margin-bottom: 25px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.hp-header {
+  color: #fff;
+  text-align: center;
+  background-image: linear-gradient(#00000080, #00000080), url('../images/mark-ratcliffe-sleeper-cab-removal-lorry.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+  background-attachment: scroll, fixed;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 220px 20px 50px;
+  display: flex;
+}
+
+.hp-header.inner {
+  text-shadow: 1px 1px 6px #000;
+  background-image: linear-gradient(#00000040, #00000040), url('../images/mark-ratcliffe-removal-fleet-vehicles-sussex.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+  justify-content: center;
+  align-items: center;
+  padding-top: 270px;
+  padding-bottom: 100px;
+}
+
+.hp-header.inner.testimonials {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/mark-ratcliffe-vans-front2.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+}
+
+.hp-header.inner.about-us {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/mark-ratcliffe-modern-removal-lorry-eastbourne.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+}
+
+.hp-header.inner.overseas {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/Brochure-pic-.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+  padding-top: 280px;
+}
+
+.hp-header.inner.contact {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/mark-ratcliffe-modern-removal-lorry-eastbourne.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+}
+
+.hp-header.inner.quote {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/mark-ratcliffe-removal-fleet-vehicles-sussex.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+}
+
+.hp-header.inner.man-van {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/Brochure-pic-.webp');
+  background-position: 0 0, 50% 100%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+}
+
+.hp-header.inner.areas-covered {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/mark-ratcliffe-vans-front2.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+  display: block;
+}
+
+.hp-header.inner.in-contact {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/mark-ratcliffe-sleeper-cab-removal-lorry.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+}
+
+.hp-header.inner.in-contact.thank-you {
+  background-image: linear-gradient(#00000080, #00000080), url('../images/mark-ratcliffe-sleeper-cab-removal-lorry.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+  height: 100vh;
+}
+
+.hp-header.inner.storage-inner {
+  background-image: linear-gradient(#0000, #0000), url('../images/mark-ratcliffe-crew-loading-piano-eastbourne.webp');
+  background-position: 0 0, 50%;
+  background-size: auto, cover;
+  padding-top: 300px;
+}
+
+.hp-header.inner.tcs {
+  background-image: linear-gradient(#0000, #0000), url('../images/mark-ratcliffe-vans-front2.webp');
+}
+
+.hp-header.inner.careers {
+  background-image: linear-gradient(#00000080, #00000080), url('../images/business-people-shaking-hands-meeting-room.webp');
+  background-position: 0 0, 50%;
+  background-size: auto, cover;
+  background-attachment: scroll, scroll;
+}
+
+.hp-header.inner.feedback {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/house.svg');
+  background-position: 0 0, 50%;
+  background-size: auto, cover;
+  background-attachment: scroll, scroll;
+}
+
+.hp-header.inner.thailand-brochure {
+  background-image: linear-gradient(#00000040, #00000040), url('../images/MRM-Thai-Movers.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+  background-attachment: scroll, fixed;
+}
+
+.h-hero-wrap {
+  width: 700px;
+}
+
+.mobile-contct {
+  display: none;
+}
+
+.hp-gallery {
+  text-align: center;
+  width: 100%;
+  margin-top: 35px;
+  margin-left: -15px;
+  margin-right: -15px;
+  display: flex;
+}
+
+.hp-gallery.van {
+  justify-content: center;
+  max-width: 1200px;
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hp-lightbox {
+  text-transform: uppercase;
+  width: 33.333%;
+  padding: 15px 15px 0;
+  text-decoration: none;
+}
+
+.hp-lightbox.van {
+  width: 25%;
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.lb-image {
+  object-fit: cover;
+  height: 300px;
+  transition: all .35s;
+  box-shadow: 8px 8px 20px #00000080;
+}
+
+.lb-image:hover {
+  transform: scale(1.1);
+}
+
+.lb-image.van {
+  height: 250px;
+}
+
+.moving-home {
+  margin-top: 25px;
+}
+
+.hero-image-heading {
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.top-bar-wrapper {
+  color: #fff;
+  background-color: #d4af37;
+  align-items: center;
+  padding: 10px 20px;
+  display: flex;
+}
+
+.tb-link {
+  color: #fff;
+  letter-spacing: 2px;
+  background-image: url('../images/phone-white.svg');
+  background-position: 0;
+  background-repeat: no-repeat;
+  background-size: 18px;
+  padding-left: 26px;
+  font-size: 17px;
+  text-decoration: none;
+  transition: all .35s;
+}
+
+.tb-link:hover {
+  color: var(--midnight-blue);
+}
+
+.tb-link.mob {
+  background-image: url('../images/mobile-white.svg');
+  background-size: 11px;
+  padding-left: 20px;
+}
+
+.tb-link.email {
+  background-image: url('../images/email-white.svg');
+  background-size: 18px;
+}
+
+.top-bar-quote {
+  background-color: var(--midnight-blue);
+  color: #fff;
+  background-image: url('../images/list.svg');
+  background-position: 24px;
+  background-repeat: no-repeat;
+  background-size: 15px;
+  border-radius: 3px;
+  padding: 10px 35px 10px 45px;
+  text-decoration: none;
+  transition: all .35s;
+}
+
+.top-bar-quote:hover {
+  background-color: #5f4496;
+}
+
+.contacts-in-top-wrapper {
+  grid-column-gap: 30px;
+  grid-row-gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+  align-items: center;
+  display: flex;
+}
+
+.areas-covered-flex {
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.areas-cell {
+  width: 33.333%;
+  padding-bottom: 25px;
+  padding-right: 50px;
+}
+
+.lp-hero-flex {
+  margin-left: -15px;
+  margin-right: -15px;
+  display: flex;
+}
+
+.lp-hero-cell {
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 50%;
+  padding: 15px;
+  display: flex;
+}
+
+.lp-h3 {
+  text-align: left;
+}
+
+.lp-h1 {
+  color: #fff;
+  text-align: left;
+}
+
+.lp-h5 {
+  color: #fff;
+}
+
+.error-message {
+  text-shadow: none;
+}
+
+.uk-moving {
+  margin-right: 25px;
+}
+
+.medium-margin-bottom {
+  margin-bottom: 25px;
+}
+
+.heading {
+  text-align: left;
+}
+
+.text-span-2 {
+  color: #f8f8f8;
+}
+
+.utility-page-wrap {
+  color: #fff;
+  background-image: linear-gradient(#00000080, #00000080), url('../images/mark-ratcliffe-sleeper-cab-removal-lorry.webp');
+  background-position: 0 0, 50%;
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  max-width: 100%;
+  height: 100vh;
+  max-height: 100%;
+  display: flex;
+}
+
+.utility-page-content {
+  text-align: center;
+  flex-direction: column;
+  width: 260px;
+  display: flex;
+}
+
+.utility-page-form {
+  flex-direction: column;
+  align-items: stretch;
+  display: flex;
+}
+
+.large-margin-bottom {
+  margin-bottom: 50px;
+}
+
+.hp-badges {
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+  display: flex;
+}
+
+.badge-box {
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  max-width: 400px;
+  max-height: 120px;
+  display: flex;
+}
+
+.badges-sub {
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
+  flex: 1;
+  justify-content: center;
+  display: flex;
+}
+
+.grid-cells {
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.grid-cells.overseas {
+  grid-template-rows: auto auto auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grid-cells.packaging {
+  grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.table-cell {
+  border: 1px solid #e1e1e1;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 15px;
+  font-size: 1.5em;
+  display: flex;
+}
+
+.quote-embed {
+  text-align: left;
+}
+
+.main-grid {
+  grid-column-gap: 32px;
+  grid-row-gap: 32px;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  display: grid;
+}
+
+.image-fill {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0%;
+}
+
+.lb-wrapper-fill {
+  width: 100%;
+  height: 200px;
+  position: relative;
+}
+
+.maps-wrapper {
+  align-items: stretch;
+  display: flex;
+}
+
+.google-map {
+  width: 100%;
+  height: 550px;
+}
+
+.area-of-work {
+  width: 35%;
+  height: 550px;
+  text-decoration: none;
+}
+
+.area-of-work-image {
+  object-fit: cover;
+  height: 100%;
+  transition: all .35s;
+}
+
+.area-of-work-image:hover {
+  filter: brightness(60%);
+}
+
+.aow-heading {
+  z-index: 10;
+  color: #fff;
+  margin-top: -55px;
+  margin-left: 30px;
+  position: relative;
+}
+
+.tcs-grid {
+  grid-column-gap: 24px;
+  grid-row-gap: 24px;
+  grid-template-rows: auto;
+}
+
+.pdf-wrapper {
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.pdf-cell {
+  border: 1px solid var(--midnight-blue);
+  color: #58595b;
+  text-align: center;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  text-decoration: none;
+  transition: all .28s;
+  display: flex;
+}
+
+.pdf-cell:hover {
+  opacity: .5;
+}
+
+.pdf-icon {
+  margin-top: 12px;
+}
+
+.vintage-van-sub {
+  color: #fff;
+  letter-spacing: 0;
+  font-family: Open Sans, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.van-title-flex {
+  align-items: center;
+  display: flex;
+}
+
+.small-margin-right {
+  margin-right: 20px;
+}
+
+.packaging-shop-images {
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 52px;
+  display: flex;
+}
+
+.packaging-shop-image {
+  width: 370px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.full-width-lb {
+  width: 100%;
+  height: 500px;
+  position: relative;
+}
+
+.full-width-image {
+  object-fit: cover;
+  border-radius: 3px;
+  width: 100%;
+  height: 500px;
+}
+
+.lb-caption {
+  color: #fff;
+  text-align: left;
+  background-color: #000000b3;
+  border-radius: 3px;
+  padding: 20px;
+  font-size: 16px;
+  position: absolute;
+  top: auto;
+  bottom: 20px;
+  left: 20px;
+}
+
+.mark-image {
+  object-fit: cover;
+  border-radius: 100%;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 20px;
+}
+
+.career-block {
+  text-align: left;
+  border-bottom: 1px solid #ececec;
+  margin-bottom: 50px;
+  padding-bottom: 50px;
+}
+
+.career-block.last {
+  border-bottom-style: none;
+}
+
+.job-application-form {
+  text-align: left;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 40px;
+  box-shadow: 14px 14px 60px #0000001a;
+}
+
+.application-form {
+  margin-top: 40px;
+  margin-bottom: 0;
+}
+
+.centre {
+  text-align: center;
+}
+
+.hidden-anchor {
+  margin-top: -200px;
+  padding-top: 200px;
+}
+
+.footer-accreditaion {
+  width: 65px;
+}
+
+.footer-accreditaion.first {
+  width: 70px;
+  margin-right: 16px;
+}
+
+.banner-script {
+  text-align: center;
+  text-wrap: balance;
+  margin-left: 31px;
+  margin-right: 31px;
+  font-family: Parisienne, sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.badge-image {
+  object-fit: contain;
+  height: 100%;
+}
+
+.badge-image.embed {
+  height: auto;
+}
+
+.fhio-wrap {
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
+  color: #acacac;
+  flex-direction: column;
+  margin-top: 24px;
+  padding-right: 24px;
+  font-size: 12px;
+  display: flex;
+}
+
+.fhio-image {
+  border-radius: 4px;
+}
+
+.footer-accred-wrap {
+  margin-top: 24px;
+}
+
+.parralax-section {
+  min-height: 50svh;
+}
+
+.parralax-section.thai-1 {
+  background-image: url('../images/MRM-Thai-Movers.webp');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.parralax-section.thai-2 {
+  background-image: url('../images/Brochure-pic-.webp');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.parralax-section.thai-3 {
+  background-image: url('../images/mark-ratcliffe-modern-removal-lorry-eastbourne.webp');
+  background-position: 50% 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.parralax-section.thai-4 {
+  background-image: url('../images/pad-wrapped-furniture-eastbourne-removals.webp');
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.text-wrap-balance {
+  text-wrap: balance;
+}
+
+.dropdown-navlink {
+  text-transform: uppercase;
+  border-bottom: 1px solid #d4d4d4;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  transition: all .28s;
+}
+
+.dropdown-navlink:hover {
+  background-color: var(--goldenrod);
+  color: #fff;
+}
+
+.dropdown-navlink.w--current {
+  background-color: var(--midnight-blue);
+  color: #fff;
+}
+
+.dropdown-list.w--open {
+  background-color: #fff;
+  border: 1px solid #d6d6d6;
+  top: 77px;
+}
+
+.dropdown-toggle {
+  padding-left: 0;
+  padding-right: 16px;
+}
+
+.icon {
+  margin-right: 0;
+}
+
+.share-wrapper {
+  grid-column-gap: 4px;
+  grid-row-gap: 4px;
+  color: #fff;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+
+.half-width-lb {
+  width: 50%;
+  height: 500px;
+  position: relative;
+}
+
+.half-width-lb-wrap {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+}
+
+.half-width-lb-wrap.welcome-quote {
+  color: #220b50;
+  margin-top: 30px;
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+}
+
+.half-width-lb-wrap.flex1 {
+  align-items: center;
+  display: flex;
+}
+
+.half-width-lb-wrap.quote-flex {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.half-width-lb-wrap.opening-statement {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.half-width-lb-wrap.medium-margin-top {
+  grid-column-gap: 2rem;
+  grid-row-gap: 2rem;
+}
+
+html.w-mod-js [data-ix="move-img"] {
+  opacity: 0;
+  transform: translate(-47px)scale(1.2)rotate(-25deg);
+}
+
+html.w-mod-js [data-ix="move-img-2"] {
+  opacity: 0;
+  transform: translate(47px)scale(1.2)rotate(25deg);
+}
+
+html.w-mod-js [data-ix="fade-in-on-scroll"] {
+  opacity: 0;
+}
+
+@media screen and (min-width: 1280px) {
+  .navlink {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .nav-menu {
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .header {
+    padding-bottom: 0;
+  }
+
+  .align-right {
+    padding-right: 10px;
+  }
+
+  .logo_font {
+    font-size: 36px;
+  }
+
+  .logo_subfont {
+    font-size: 19px;
+  }
+
+  .extras {
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  .rt-block figcaption {
+    font-size: 12px;
+  }
+
+  .home-para-section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .cell-icon1 {
+    width: 33.33%;
+  }
+
+  .navbar {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navlink {
+    color: #d4af37;
+  }
+
+  .brand {
+    color: #d4af37;
+    width: 100%;
+    padding-left: 20px;
+    font-family: Great Vibes, cursive;
+    font-size: 40px;
+  }
+
+  .menu-button {
+    text-align: right;
+    flex: none;
+    order: 1;
+  }
+
+  .menu-button.w--open {
+    color: var(--midnight-blue);
+    background-color: #0000;
+  }
+
+  .nav-menu {
+    background-color: #220b50;
+    padding-right: 0;
+  }
+
+  .footer-a {
+    width: 100%;
+  }
+
+  .footer-a.b, .footer-a.c, .footer-a.d {
+    width: 33.333%;
+  }
+
+  .test {
+    font-size: 64px;
+  }
+
+  .hp-header {
+    background-image: linear-gradient(to bottom, null, null), url('../images/mark-ratcliffe-modern-removal-lorry-eastbourne.webp');
+    background-attachment: scroll, scroll;
+  }
+
+  .lb-image.van {
+    height: 250px;
+  }
+
+  .top-bar-wrapper {
+    justify-content: center;
+  }
+
+  .tb-link {
+    letter-spacing: 0;
+    font-size: 13px;
+  }
+
+  .areas-cell {
+    width: 50%;
+  }
+
+  .badges-sub {
+    flex-wrap: wrap;
+  }
+
+  .main-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .google-map, .area-of-work {
+    height: 300px;
+  }
+
+  .pdf-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .packaging-shop-image {
+    width: 50%;
+  }
+
+  .lb-caption {
+    right: 20px;
+  }
+
+  .banner-script {
+    display: none;
+  }
+
+  .dropdown-navlink {
+    text-align: center;
+  }
+
+  .dropdown-toggle {
+    color: #d4af37;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  p {
+    text-align: left;
+  }
+
+  .section {
+    padding-top: 29px;
+    padding-bottom: 29px;
+  }
+
+  .section.mrm-thai-movers {
+    padding-top: 29px;
+  }
+
+  .navigation {
+    text-align: center;
+    background-color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: static;
+    box-shadow: 0 0 0 1px #0000;
+  }
+
+  .align-right {
+    text-align: left;
+  }
+
+  .logo_font {
+    font-size: 48px;
+  }
+
+  .logo_subfont {
+    font-size: 25px;
+  }
+
+  .footer {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+
+  .extras {
+    font-size: 21px;
+  }
+
+  ._1200-wrapper.quote-flex {
+    flex-direction: column;
+  }
+
+  .home-para-section {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+
+  .nav-section {
+    position: static;
+  }
+
+  .navbar {
+    justify-content: space-between;
+  }
+
+  .nav-menu {
+    background-color: #220b50;
+  }
+
+  .footer-a {
+    width: 100%;
+  }
+
+  .footer-a.b, .footer-a.c {
+    width: 50%;
+  }
+
+  .footer-a.d {
+    width: 100%;
+  }
+
+  .test {
+    font-size: 47px;
+  }
+
+  .contact-wrapper {
+    flex-direction: column;
+  }
+
+  .form-wrapper {
+    width: 100%;
+  }
+
+  .u-move-europe {
+    margin-top: 5px;
+  }
+
+  .oq-1 {
+    margin-top: 25px;
+    margin-bottom: 10px;
+  }
+
+  .hp-header, .hp-header.inner {
+    padding-top: 75px;
+    padding-bottom: 75px;
+  }
+
+  .hp-header.inner.overseas {
+    padding-top: 180px;
+  }
+
+  .hp-header.inner.storage-inner {
+    padding-top: 170px;
+  }
+
+  .h-hero-wrap {
+    width: auto;
+  }
+
+  .mobile-contct {
+    display: flex;
+  }
+
+  .mob-con-1 {
+    color: #fff;
+    text-align: center;
+    background-color: #d4af37;
+    width: 50%;
+    padding: 20px 10px;
+    font-size: 19px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .mob-con-1._2 {
+    background-color: var(--midnight-blue);
+  }
+
+  .hp-gallery.van {
+    flex-direction: row;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .hp-lightbox.van {
+    width: 100%;
+  }
+
+  .lb-image.van {
+    height: 150px;
+  }
+
+  .hero-image-heading {
+    font-size: 28px;
+  }
+
+  .areas-cell {
+    width: 100%;
+    padding-right: 0;
+  }
+
+  .lp-hero-flex {
+    flex-direction: column;
+  }
+
+  .lp-hero-cell {
+    width: 100%;
+  }
+
+  .hp-badges {
+    flex-direction: column;
+  }
+
+  .badge-box {
+    flex: 0 auto;
+    width: 30%;
+    margin-left: 0;
+  }
+
+  .badge-box.is-embed {
+    width: 100%;
+  }
+
+  .table-cell {
+    font-size: 1em;
+  }
+
+  .main-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  .area-of-work {
+    width: 45%;
+  }
+
+  .aow-heading {
+    font-size: 18px;
+  }
+
+  .packaging-shop-image {
+    width: 50%;
+  }
+
+  .full-width-lb, .full-width-image {
+    height: 300px;
+  }
+
+  .hidden-anchor {
+    margin-top: -50px;
+    padding-top: 50px;
+  }
+
+  .half-width-lb {
+    height: 300px;
+  }
+
+  .half-width-lb-wrap.quote-flex {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  h2, p {
+    text-align: left;
+  }
+
+  .navigation {
+    text-align: center;
+    width: 100%;
+  }
+
+  .logo_font {
+    font-size: 39px;
+  }
+
+  .logo_subfont {
+    font-size: 21px;
+  }
+
+  .phone_contact {
+    text-align: center;
+  }
+
+  .contact {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .extras, ._1200-wrapper.welcome-quote {
+    line-height: 26px;
+  }
+
+  ._1200-wrapper.flex1 {
+    flex-direction: column-reverse;
+  }
+
+  ._1200-wrapper.quote-flex {
+    text-align: center;
+  }
+
+  .rt-block img {
+    padding: 2px;
+  }
+
+  .rt-block figure {
+    width: 89vw;
+  }
+
+  .cell-icon1 {
+    width: 100%;
+  }
+
+  .header-1 {
+    width: 100%;
+    padding-top: 25px;
+    padding-bottom: 50px;
+  }
+
+  .brand {
+    flex: 0 auto;
+    width: 235.922px;
+    font-size: 28px;
+  }
+
+  .footer-a.b, .footer-a.c {
+    width: 100%;
+  }
+
+  .header-2 {
+    width: 100%;
+    padding-top: 25px;
+    padding-bottom: 0;
+  }
+
+  .umove-badge {
+    max-width: 90px;
+  }
+
+  .hp-header {
+    flex-direction: column;
+    height: auto;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .hp-header.inner {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .hp-header.inner.overseas {
+    padding-top: 70px;
+  }
+
+  .hp-header.inner.contact {
+    margin-top: 0;
+  }
+
+  .hp-header.inner.storage-inner {
+    padding-top: 70px;
+  }
+
+  .hp-gallery.van {
+    flex-direction: column;
+  }
+
+  .hp-lightbox {
+    width: 100%;
+  }
+
+  .hp-lightbox.van {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .hero-image-heading {
+    text-align: center;
+  }
+
+  .hp-badges {
+    flex-direction: column;
+  }
+
+  .badge-box.is-embed {
+    width: 100%;
+  }
+
+  .grid-cells {
+    overflow: auto;
+  }
+
+  .table-cell {
+    padding: 5px;
+    font-size: 3vw;
+  }
+
+  .main-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .maps-wrapper {
+    flex-direction: column;
+  }
+
+  .google-map, .area-of-work {
+    width: 100%;
+    height: 200px;
+  }
+
+  .area-of-work-image {
+    width: 100%;
+  }
+
+  .pdf-wrapper.medium-margin-top {
+    grid-template-columns: 1fr;
+  }
+
+  .vintage-van-sub {
+    text-align: left;
+  }
+
+  .van-title-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .packaging-shop-images {
+    flex-direction: column;
+  }
+
+  .packaging-shop-image {
+    width: 100%;
+    margin-bottom: 5px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .lb-caption {
+    font-size: 14px;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .half-width-lb-wrap.welcome-quote {
+    line-height: 26px;
+  }
+
+  .half-width-lb-wrap.flex1 {
+    flex-direction: column-reverse;
+  }
+
+  .half-width-lb-wrap.quote-flex {
+    text-align: center;
+  }
+}
+
+#w-node-_59f68b04-c2d0-46ab-9897-88251454dc7e-1638c04b, #w-node-_59f68b04-c2d0-46ab-9897-88251454dc81-1638c04b, #w-node-_59f68b04-c2d0-46ab-9897-88251454dc84-1638c04b {
+  justify-self: start;
+}
+
+#w-node-_59f68b04-c2d0-46ab-9897-88251454dc87-1638c04b {
+  grid-area: 2 / 1 / 3 / 2;
+  justify-self: start;
+}
+
+#w-node-_59f68b04-c2d0-46ab-9897-88251454dc8a-1638c04b, #w-node-_59f68b04-c2d0-46ab-9897-88251454dc8d-1638c04b, #w-node-_59f68b04-c2d0-46ab-9897-88251454dc90-1638c04b {
+  justify-self: start;
+}
+
+#w-node-_59f68b04-c2d0-46ab-9897-88251454dc93-1638c04b {
+  grid-area: 3 / 1 / 4 / 2;
+  justify-self: start;
+}
+
+#w-node-_59f68b04-c2d0-46ab-9897-88251454dc96-1638c04b, #w-node-_59f68b04-c2d0-46ab-9897-88251454dc99-1638c04b {
+  justify-self: start;
+}
+
+#w-node-_59f68b04-c2d0-46ab-9897-88251454dc9f-1638c04b {
+  grid-area: 4 / 1 / 5 / 2;
+  justify-self: start;
+}
+
+#w-node-_59f68b04-c2d0-46ab-9897-88251454dcab-1638c04b {
+  grid-area: span 1 / span 2 / span 1 / span 2;
+}
+
+#w-node-_59f68b04-c2d0-46ab-9897-88251454dcf1-1638c04b {
+  grid-area: 1 / 1 / 2 / 2;
+  justify-self: start;
+}
+
+#w-node-_8ef38098-67a8-63e5-2513-5e1abb94b791-1638c04b {
+  justify-self: start;
+}
+
+#w-node-_3f175401-42d7-ec12-4662-844b5ac3c501-bd38c04c {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  justify-self: start;
+}
+
+#w-node-fd25f56e-3ab4-dee1-f00a-74dc36b2b4b4-bd38c04c, #w-node-_0c70e3f7-acb2-e905-24f1-ab70ff4bba61-bd38c04c, #w-node-_245a59c9-6b86-cbfe-f025-b9b227f74bd8-bd38c04c {
+  justify-self: start;
+}
+
+#w-node-_0259927b-a588-e881-1428-e2a1d33969e5-bd38c04c {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  justify-self: start;
+}
+
+#w-node-_1a2b0746-8a0f-c670-8955-81e44c39752b-bd38c04c, #w-node-ef19361b-138a-1a9d-fe56-055fbd3e6a2b-bd38c04c, #w-node-_99df22bf-e708-493d-fa29-cd696db058cb-bd38c04c {
+  justify-self: start;
+}
+
+#w-node-c2d4b3d1-5851-245f-f8bd-eeb01be6ef91-bd38c04c {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  justify-self: start;
+}
+
+#w-node-daaa8ae0-bd0c-0ad8-be8b-2cd171a35622-bd38c04c, #w-node-_77fb3242-edbd-ce53-11c3-61b04a32b677-bd38c04c, #w-node-_21d6ece3-d097-0b1a-2409-59b5679c35ca-bd38c04c {
+  justify-self: start;
+}
+
+#w-node-a6bc9fe6-ec52-5350-efcd-bb05cc5f71a6-bd38c04c {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  justify-self: start;
+}
+
+#w-node-_1b28c123-4d86-a915-8b39-dca0ec5cd818-bd38c04c, #w-node-_321e79f8-e7d0-ad40-ed9c-5976413cc27f-bd38c04c, #w-node-_60e947b5-2e5f-2114-3437-129de3bfbc10-bd38c04c, #w-node-_523ad6d3-5f0b-b5d6-6868-c68824b78535-bd38c04c, #w-node-_21ba0a60-263a-d23c-cca4-2a2fbd3b3be9-bd38c04c, #w-node-_51766f2f-bc04-f522-5db8-83b33b7f1db2-bd38c04c, #w-node-_7fdfaec9-e58c-bc79-4baa-60ee45d115b7-bd38c04c {
+  justify-self: start;
+}
+
+#w-node-_50648518-e083-0e46-09cc-392293f18257-bd38c04c {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  justify-self: start;
+}
+
+#w-node-_092073da-4b51-882f-be7c-c341ffe0bd52-bd38c04c, #w-node-fb8e0888-a60b-9b2c-0e73-63cf360c0951-bd38c04c, #w-node-c0612d29-ab81-744e-65be-f404356e3192-bd38c04c, #w-node-_3048dd63-fd6c-2ecf-0e2b-d61f7934f3e5-bd38c04c, #w-node-_7bf0cc28-e379-9f36-2b88-484127565504-bd38c04c, #w-node-a518b4c7-c273-5e37-4f2b-9a7986aebca7-bd38c04c, #w-node-_2ca7f76a-9d79-b958-f6d7-8fa854457e5a-bd38c04c, #w-node-_7a2fe9ca-1c53-d01a-ed04-60ebf93f0ac4-bd38c04c, #w-node-_56431001-cae0-d6af-d02a-598f513b0539-bd38c04c, #w-node-_059eb7de-cf26-2c1d-dd22-ce525d117f7f-bd38c04c, #w-node-_5288862a-7882-db13-1f86-ad0edbaa79f1-bd38c04c {
+  justify-self: start;
+}
+
+#w-node-_0e847488-1424-0e41-caf3-631c5bae3f52-bd38c04c {
+  grid-area: span 2 / span 1 / span 2 / span 1;
+  justify-self: start;
+}
+
+#w-node-_31ebd83a-1983-42fa-aeeb-b8be9b8c7734-bd38c04c, #w-node-b538d8f1-7473-fdc2-c146-b03831be4f91-bd38c04c, #w-node-c05623ae-8926-fec9-1e23-f93f9b2cc3fe-bd38c04c, #w-node-_7c7b96e4-0b50-3639-e726-81b0719cfac1-bd38c04c, #w-node-_98fa0924-60dd-f41f-8d48-1391961a8482-bd38c04c, #w-node-_557e9ec8-f18a-5a6d-1ec5-57473cff01a6-bd38c04c {
+  justify-self: start;
+}
+
+#w-node-_29aa67b6-856e-b337-a7c6-27d3ce42a81a-bd38c04c {
+  grid-area: span 3 / span 1 / span 3 / span 1;
+  justify-self: start;
+}
+
+#w-node-e3f81855-0a37-f766-1d71-cbbf3a262d8a-bd38c04c, #w-node-d7ad912a-9b31-2f51-912f-cf80e3b50ce7-bd38c04c, #w-node-_5a1bb869-89e4-0690-c066-94a2d88afdf5-bd38c04c, #w-node-_6a38b393-3994-5f11-403a-40a7e16f1fa9-bd38c04c, #w-node-_5756b81c-a74d-bdb9-0deb-722c9ffd65e6-bd38c04c, #w-node-bbb97394-0344-22fa-aaa9-516e090416ad-bd38c04c, #w-node-fceb5197-7185-beda-d6cf-c106f8c9dd76-bd38c04c, #w-node-_0a7ac6f6-83d4-2103-e85c-238da91b26e3-bd38c04c, #w-node-_4d56928e-0ff1-1a54-94b9-1a74abed1878-bd38c04c {
+  justify-self: start;
+}
+
+#w-node-fda30247-4a2e-b634-6bd8-5dfe2d2aa464-bd38c04c {
+  grid-area: span 2 / span 1 / span 2 / span 1;
+  justify-self: start;
+}
+
+#w-node-_6bfc8ec2-6742-0a9c-b59c-37e2be8aa2a2-bd38c04c, #w-node-ccaac237-83fc-a492-3f1e-85b15386820d-bd38c04c, #w-node-_29174f10-237a-4711-886d-3bb7d2493600-bd38c04c, #w-node-b7e3d1a2-9201-c695-2fbd-9ed7fc637877-bd38c04c, #w-node-_4a2a2dc7-c63a-ab37-b48b-f61eefd23c8e-bd38c04c, #w-node-e0073dfd-e8eb-d838-7124-a6a344a53bfb-bd38c04c {
+  justify-self: start;
+}
+
+#w-node-_43698bf0-57f2-3ac7-0037-20b288d3976d-e438c04d {
+  grid-area: span 1 / span 8 / span 1 / span 8;
+}
+
+#w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1b0-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1b3-e438c04d {
+  justify-self: start;
+}
+
+#w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1b9-e438c04d {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  justify-self: start;
+}
+
+#w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1b6-e438c04d {
+  justify-self: start;
+}
+
+#w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1c5-e438c04d {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  justify-self: start;
+}
+
+#w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1bc-e438c04d {
+  justify-self: start;
+}
+
+#w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1d1-e438c04d {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  justify-self: start;
+}
+
+#w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1bf-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1c2-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1c8-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1cb-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1ce-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1d4-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1d7-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1da-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1e0-e438c04d, #w-node-c72aa13d-a283-5daa-cdb6-5ad161f4c1e4-e438c04d {
+  justify-self: start;
+}
+
+#w-node-a13ed2fe-5e85-74f3-7d4f-5f65c3e6bba0-e438c04d, #w-node-_31fa5334-dd17-0eff-744d-ab073df69a54-e438c04d, #w-node-_1169604e-0efe-6ab3-5e4c-287edd6002c7-e438c04d, #w-node-_3fc6e460-69e3-daf6-b7ba-d95a16f88fbc-e438c04d, #w-node-_4edec3d2-a2b0-5c51-508e-66564effd258-e438c04d, #w-node-_45571e9d-7438-a237-aa96-8063aa92ae8d-e438c04d, #w-node-_3744acbf-1a9d-8885-f09b-9f21537d5fb8-e438c04d, #w-node-_53c788b7-3d5c-9375-e97d-c56a7e15b421-e438c04d, #w-node-_3e9f372f-a0ff-1f7f-6f86-92240846443f-e438c04d, #w-node-_6803c043-7dd5-e224-cc18-fac20a3a0f19-e438c04d {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+  justify-self: start;
+}
+
+#w-node-_43698bf0-57f2-3ac7-0037-20b288d39780-e438c04d {
+  grid-area: span 1 / span 2 / span 1 / span 2;
+}
+
+#w-node-_43698bf0-57f2-3ac7-0037-20b288d3977a-e438c04d, #w-node-_43698bf0-57f2-3ac7-0037-20b288d3977d-e438c04d, #w-node-_618b6904-4b61-3d7a-da1a-de0f7bc0d801-e438c04d, #w-node-bd8b4c41-2cf7-e94b-35cd-1c58de56e759-e438c04d {
+  grid-area: span 1 / span 3 / span 1 / span 3;
+}
+
+#w-node-_43698bf0-57f2-3ac7-0037-20b288d39783-e438c04d, #w-node-c64189d8-2a91-4e11-281f-84798e2904c3-aaae4b12 {
+  grid-area: span 1 / span 2 / span 1 / span 2;
+}
+
+@media screen and (max-width: 991px) {
+  #w-node-_43698bf0-57f2-3ac7-0037-20b288d3976d-e438c04d {
+    grid-area: span 1 / span 6 / span 1 / span 6;
+  }
+
+  #w-node-_43698bf0-57f2-3ac7-0037-20b288d3977a-e438c04d {
+    grid-area: span 1 / span 4 / span 1 / span 4;
+  }
+
+  #w-node-_43698bf0-57f2-3ac7-0037-20b288d39783-e438c04d {
+    grid-area: span 1 / span 3 / span 1 / span 3;
+  }
+
+  #w-node-c64189d8-2a91-4e11-281f-84798e2904c3-aaae4b12 {
+    grid-area: span 1 / span 2 / span 1 / span 2;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  #w-node-_43698bf0-57f2-3ac7-0037-20b288d3976d-e438c04d {
+    grid-area: span 1 / span 4 / span 1 / span 4;
+  }
+
+  #w-node-_43698bf0-57f2-3ac7-0037-20b288d3977a-e438c04d, #w-node-_43698bf0-57f2-3ac7-0037-20b288d3977d-e438c04d, #w-node-_618b6904-4b61-3d7a-da1a-de0f7bc0d801-e438c04d, #w-node-bd8b4c41-2cf7-e94b-35cd-1c58de56e759-e438c04d, #w-node-_43698bf0-57f2-3ac7-0037-20b288d39783-e438c04d {
+    grid-area: span 1 / span 2 / span 1 / span 2;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  #w-node-_43698bf0-57f2-3ac7-0037-20b288d3976d-e438c04d, #w-node-_43698bf0-57f2-3ac7-0037-20b288d3977a-e438c04d, #w-node-_43698bf0-57f2-3ac7-0037-20b288d3977d-e438c04d, #w-node-_618b6904-4b61-3d7a-da1a-de0f7bc0d801-e438c04d, #w-node-bd8b4c41-2cf7-e94b-35cd-1c58de56e759-e438c04d {
+    grid-area: span 1 / span 2 / span 1 / span 2;
+  }
+}
+
+
+@font-face {
+  font-family: 'Parisienne';
+  src: url('../fonts/Parisienne-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

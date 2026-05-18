@@ -1,0 +1,1052 @@
+/* =========================================================
+   UNIFIED BUTTON SYSTEM — every CTA matches the pill shape
+   Primary  :  solid brand purple, white text
+   Secondary:  white fill, brand purple text + thin border
+   Both     :  full pill (border-radius 999px), uppercase, soft lift on hover
+   ========================================================= */
+.np-btn, .np-btn-primary, .np-btn-secondary,
+.tm-btn-primary, .tm-btn-ghost,
+.th-btn-primary, .th-btn-ghost,
+.cu-submit, .cu-btn-primary, .cu-btn-secondary,
+.ac-btn, .ac-btn-primary, .ac-btn-secondary,
+.top-bar-quote,
+a.button, a.w-button, .button.w-button,
+.mr-cta, .mr-btn-primary, .mr-btn-secondary {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 2rem !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  font-size: 0.92rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  border: 2px solid #220b50 !important;
+  background: #220b50 !important;
+  color: #fff !important;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease !important;
+  box-shadow: 0 8px 22px -12px rgba(34,11,80,0.45);
+  line-height: 1.2;
+  font-family: inherit;
+}
+.np-btn:hover, .np-btn-primary:hover,
+.tm-btn-primary:hover, .th-btn-primary:hover,
+.cu-submit:hover, .cu-btn-primary:hover,
+.ac-btn:hover, .ac-btn-primary:hover,
+.top-bar-quote:hover,
+a.button:hover, a.w-button:hover, .button.w-button:hover,
+.mr-cta:hover, .mr-btn-primary:hover {
+  background: #1a0840 !important;
+  border-color: #1a0840 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -14px rgba(34,11,80,0.6);
+}
+
+/* Secondary / ghost buttons — outlined */
+.np-btn-secondary, .tm-btn-ghost, .th-btn-ghost,
+.cu-btn-secondary, .ac-btn-secondary, .mr-btn-secondary {
+  background: #fff !important;
+  color: #220b50 !important;
+  border: 2px solid #220b50 !important;
+  box-shadow: 0 6px 18px -12px rgba(34,11,80,0.3);
+}
+.np-btn-secondary:hover, .tm-btn-ghost:hover, .th-btn-ghost:hover,
+.cu-btn-secondary:hover, .ac-btn-secondary:hover, .mr-btn-secondary:hover {
+  background: #220b50 !important;
+  color: #fff !important;
+  border-color: #220b50 !important;
+  transform: translateY(-2px);
+}
+
+/* When a secondary button sits on a DARK background (hero), invert to a translucent white outline */
+.np-hero .np-btn-secondary,
+.th-hero .th-btn-ghost,
+.tm-hero .tm-btn-ghost {
+  background: rgba(255,255,255,0.06) !important;
+  color: #fff !important;
+  border-color: rgba(255,255,255,0.5) !important;
+}
+.np-hero .np-btn-secondary:hover,
+.th-hero .th-btn-ghost:hover,
+.tm-hero .tm-btn-ghost:hover {
+  background: #fff !important;
+  color: #220b50 !important;
+  border-color: #fff !important;
+}
+
+/* Force the Webflow top-bar quote button (was bigger/sharper) into the pill */
+.top-bar-quote {
+  padding: 0.5rem 1.25rem !important;
+  font-size: 0.75rem !important;
+}
+
+/* Smaller-button modifier — for related-pages cards, in-content links etc. */
+.np-btn.is-sm, .tm-btn-primary.is-sm, .th-btn-primary.is-sm, .cu-btn-primary.is-sm {
+  padding: 0.6rem 1.3rem !important;
+  font-size: 0.8rem !important;
+}
+
+/* New-pages styles — sit on top of components.css + mark-ratcliffe-moving.css */
+:root {
+  --np-primary: #220b50;
+  --np-primary-light: #3a1a7a;
+  --np-accent: #220b50;
+  --np-bg-soft: #f7f5fb;
+  --np-text: #1f1f1f;
+  --np-muted: #5a5a6a;
+  --np-border: #e0dceb;
+}
+
+/* Hero now matches the homepage hp-header size and visual weight */
+.np-hero {
+  position: relative;
+  background: linear-gradient(rgba(34,11,80,0.65), rgba(34,11,80,0.65));
+  color: #fff;
+  padding: 7rem 1.5rem 6rem;
+  overflow: hidden;
+  text-align: center;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.np-hero-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; opacity: 0.32; z-index: 0;
+  pointer-events: none;
+}
+.np-hero-inner {
+  position: relative; z-index: 1;
+  max-width: 900px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center;
+}
+.np-kicker {
+  font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.16em;
+  opacity: 0.95; margin-bottom: 1rem;
+  background: rgba(255,255,255,0.1); padding: 0.4rem 1rem; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.np-hero h1 {
+  color: #fff;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  margin: 0 0 1.75rem;
+  max-width: 900px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.np-hero-cta { display: flex; gap: 0.85rem; flex-wrap: wrap; justify-content: center; }
+.np-hero .np-btn { font-size: 1.05rem; padding: 1rem 1.85rem; }
+@media (max-width: 600px) {
+  .np-hero { padding: 4.5rem 1.25rem 3.5rem; min-height: 50vh; }
+}
+
+.np-btn {
+  display: inline-block; padding: 0.85rem 1.6rem;
+  border-radius: 6px; font-weight: 600; text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.np-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+.np-btn-primary { background: #220b50; color: #fff; }
+.np-btn-secondary { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+.np-section .np-btn-secondary { background: #fff; color: var(--np-primary); border: 1px solid var(--np-primary); }
+
+.np-section { padding: 3rem 1.5rem; }
+.np-section + .np-section { padding-top: 0; }
+.np-section.np-section-soft { background: var(--np-bg-soft); }
+.np-inner { max-width: 1100px; margin: 0 auto; }
+.np-section h2 { color: var(--np-primary); font-size: clamp(1.5rem, 2.6vw, 2.1rem); margin: 0 0 1rem; }
+.np-section h3 { color: var(--np-primary); font-size: 1.2rem; margin: 1.5rem 0 0.5rem; }
+.np-section p, .np-section li { font-size: 1.05rem; line-height: 1.7; color: var(--np-text); }
+
+.np-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.np-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+
+.np-card { background: #fff; border: 1px solid var(--np-border); border-radius: 8px; padding: 1.25rem 1.4rem; }
+.np-card h3 { margin-top: 0; }
+.np-card-feature { border-left: 4px solid #d4af37; }
+
+.np-usp-list { list-style: none; padding: 0; margin: 1rem 0; }
+.np-usp-list li { padding-left: 1.75rem; position: relative; margin-bottom: 0.6rem; }
+.np-usp-list li::before {
+  content: "✓"; position: absolute; left: 0; top: 0;
+  color: var(--np-accent); font-weight: 700; font-size: 1.1rem;
+}
+
+.np-image-block { margin: 1.5rem 0; }
+.np-image-block img { width: 100%; height: auto; border-radius: 8px; display: block; }
+.np-image-block figcaption { font-size: 0.9rem; color: var(--np-muted); margin-top: 0.5rem; text-align: center; font-style: italic; }
+
+.np-figure-float { float: right; max-width: 360px; margin: 0 0 1rem 1.5rem; }
+.np-figure-float img { width: 100%; height: auto; border-radius: 8px; }
+@media (max-width: 640px) { .np-figure-float { float: none; margin: 1rem 0; max-width: 100%; } }
+
+.np-faq details,
+.np-faq-item {
+  background: #fff; border: 1px solid var(--np-border); border-radius: 6px;
+  padding: 0.85rem 1.1rem; margin-bottom: 0.65rem;
+}
+.np-faq summary,
+.np-faq-item > summary {
+  font-weight: 600; cursor: pointer; color: var(--np-primary);
+  font-size: 1.15rem; line-height: 1.5;
+}
+.np-faq summary::-webkit-details-marker,
+.np-faq-item > summary::-webkit-details-marker { display: none; }
+.np-faq summary::after,
+.np-faq-item > summary::after { content: "+"; float: right; font-weight: 400; font-size: 1.3rem; line-height: 1; }
+.np-faq details[open] summary::after,
+.np-faq-item[open] > summary::after { content: "−"; }
+.np-faq p,
+.np-faq-item > p {
+  margin-top: 0.75rem;
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.np-quote-block {
+  background: var(--np-bg-soft); border-left: 4px solid var(--np-primary);
+  padding: 1.25rem 1.5rem; border-radius: 6px; margin: 1.5rem 0;
+}
+.np-quote-block cite {
+  display: block; margin-top: 0.5rem; font-weight: 600; font-style: normal;
+  color: var(--np-muted);
+}
+
+.np-cta-block {
+  background: linear-gradient(135deg, var(--np-primary) 0%, var(--np-primary-light) 100%);
+  color: #fff; text-align: center;
+}
+.np-cta-block h2 { color: #fff; }
+.np-cta-block p { color: rgba(255,255,255,0.92); max-width: 700px; margin: 0 auto 1.5rem; }
+.np-cta-row { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+.np-breadcrumb { padding: 0.85rem 1.5rem; font-size: 0.9rem; color: var(--np-muted); border-bottom: 1px solid var(--np-border); }
+.np-breadcrumb a { color: var(--np-primary); text-decoration: none; }
+.np-breadcrumb a:hover { text-decoration: underline; }
+
+.np-footer-map { width: 100%; height: 360px; background: #1a0840; line-height: 0; }
+.np-footer-map iframe { width: 100%; height: 100%; display: block; border: 0; }
+.footer-map-wrapper { width: 100%; background: #fff; line-height: 0; border-top: 1px solid var(--np-border); }
+.footer-map { width: 100%; height: 360px; }
+.footer-map iframe { width: 100%; height: 100%; display: block; border: 0; }
+.np-footer { background: #1a0840; color: #ccc; padding: 3rem 1.5rem 2rem; }
+.np-footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+.np-footer-col h4 { color: #fff; margin: 0 0 0.75rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.np-footer-col p, .np-footer-col li { font-size: 0.95rem; line-height: 1.65; color: rgba(255,255,255,0.78); }
+.np-footer-list { list-style: none; padding: 0; margin: 0; }
+.np-footer-col a { color: rgba(255,255,255,0.85); text-decoration: none; }
+.np-footer-col a:hover { color: #fff; text-decoration: underline; }
+.np-footer-bottom { max-width: 1200px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15); text-align: center; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+.np-footer-bottom a { color: rgba(255,255,255,0.7); }
+
+.np-price-table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; }
+.np-price-table th, .np-price-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--np-border); }
+.np-price-table th { background: var(--np-bg-soft); color: var(--np-primary); }
+
+.np-blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+.np-blog-card { background: #fff; border: 1px solid var(--np-border); border-radius: 8px; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; }
+.np-blog-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(34,11,80,0.1); }
+.np-blog-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
+.np-blog-card-body { padding: 1.1rem 1.25rem; }
+.np-blog-card h3 { margin: 0 0 0.5rem; }
+.np-blog-card h3 a { color: var(--np-primary); text-decoration: none; }
+.np-blog-card-meta { font-size: 0.85rem; color: var(--np-muted); margin-bottom: 0.5rem; }
+
+.np-related { background: var(--np-bg-soft); }
+.np-related-list { list-style: none; padding: 0; margin: 0.75rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.65rem 1.25rem; }
+.np-related-list li { padding-left: 1.5rem; position: relative; font-size: 1.05rem; line-height: 1.6; }
+.np-related-list li::before { content: "→"; position: absolute; left: 0; top: 0; color: var(--np-accent); font-weight: 600; }
+.np-related-list a { color: var(--np-primary); text-decoration: none; }
+.np-related-list a:hover { text-decoration: underline; }
+
+/* =========================================================
+   Symmetrical site-wide footer (.mr-footer)
+   Map on top, 4 equal columns, accreditation row, copyright.
+   Stacks to 1 column on mobile.
+   ========================================================= */
+.mr-footer {
+  background: #1a0840;
+  color: rgba(255,255,255,0.88);
+  margin-top: 3rem;
+}
+.mr-footer-map {
+  width: 100%;
+  height: 320px;
+  line-height: 0;
+  background: #220b50;
+}
+.mr-footer-map iframe { width: 100%; height: 100%; display: block; border: 0; }
+
+.mr-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 1.5rem;
+}
+
+.mr-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+.mr-footer-col h4.mr-footer-title {
+  color: #FFC107;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255,193,7,0.3);
+}
+
+.mr-footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.85;
+}
+.mr-footer-list a {
+  color: rgba(255,255,255,0.82);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.mr-footer-list a:hover { color: #FFC107; }
+.mr-footer-list strong { color: #fff; }
+
+.mr-footer-contact li {
+  margin-bottom: 0.3rem;
+  font-size: 0.92rem;
+}
+.mr-footer-contact li:not(:last-child) a { font-weight: 600; }
+
+.mr-footer-bar {
+  background: rgba(255,193,7,0.1);
+  border-left: 3px solid #FFC107;
+  padding: 0.7rem 0.85rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.mr-footer-bar strong { color: #FFC107; }
+.mr-footer-bar small { color: rgba(255,255,255,0.65); font-size: 0.8rem; }
+
+/* Yoshki badge widget inside the footer "Contact & Visit" column — matches live site */
+.mr-footer-accred {
+  margin: 1rem 0 0.5rem;
+  background: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  max-width: 100%;
+  box-shadow: 0 4px 14px -8px rgba(0,0,0,0.4);
+}
+.mr-footer-accred iframe {
+  display: block;
+  width: 220px;
+  height: 86px;
+  max-width: 100%;
+}
+
+.mr-footer-social {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  transition: background 0.15s;
+}
+.mr-footer-social:hover { background: #FFC107; }
+.mr-footer-social img { width: 20px; height: 20px; }
+
+.mr-footer-accred {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.mr-footer-accred img {
+  height: auto;
+  max-height: 60px;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.mr-footer-bottom {
+  padding-top: 1.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+}
+.mr-footer-bottom p { margin: 0.35rem 0; }
+.mr-footer-bottom a { color: rgba(255,255,255,0.75); }
+.mr-footer-bottom a:hover { color: #FFC107; }
+.mr-footer-rating { font-style: italic; }
+
+/* Tablet — 2 columns */
+@media (max-width: 900px) {
+  .mr-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.5rem;
+  }
+}
+
+/* Mobile — single column */
+@media (max-width: 560px) {
+  .mr-footer-inner { padding: 2rem 1.25rem 1.25rem; }
+  .mr-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .mr-footer-map { height: 240px; }
+  .mr-footer-accred { gap: 1rem; padding: 1.25rem 0; }
+  .mr-footer-accred img { max-height: 48px; padding: 4px 8px; }
+}
+
+/* Unified professional footer additions */
+.footer-bar-no {
+  background: rgba(255,255,255,0.06);
+  padding: 0.6rem 0.75rem;
+  border-radius: 4px;
+  border-left: 3px solid #FFC107;
+  margin: 0.85rem 0;
+  font-size: 0.92rem;
+}
+.footer-bar-no strong { color: #FFC107; }
+.footer-bar-no small { color: rgba(255,255,255,0.7); font-size: 0.8rem; }
+.footer-accred-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  align-items: center;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.footer-accred-row img {
+  height: auto; max-width: 70px;
+  background: #fff;
+  border-radius: 4px;
+  padding: 4px 6px;
+}
+.footer-accred-row img:last-child { max-width: 110px; }
+
+/* Tighten footer link spacing */
+.footer-link { transition: color 0.15s; }
+.footer-link:hover { color: #FFC107; text-decoration: underline; }
+
+/* =========================================================
+   THAI MOVING SERVICES PAGE — editorial layout (tm-*)
+   ========================================================= */
+.tm-hero {
+  background: linear-gradient(160deg, #ffffff 0%, #f7f5fb 60%, #efe9f7 100%);
+  padding: 3.5rem 1.5rem 3rem;
+  text-align: center;
+  border-bottom: 1px solid #e0dceb;
+}
+.tm-hero-inner { max-width: 880px; margin: 0 auto; }
+.tm-hero-badges {
+  display: flex; gap: 1.5rem; justify-content: center; align-items: center;
+  margin-bottom: 1.5rem; flex-wrap: wrap;
+}
+.tm-hero-badges .tm-brand { max-width: 360px; height: auto; }
+.tm-hero-badges .tm-flags { max-width: 130px; height: auto; }
+.tm-hero h1 {
+  color: #220b50 !important;
+  font-size: clamp(1.85rem, 3.5vw, 2.6rem) !important;
+  font-weight: 700 !important;
+  margin: 0.25rem auto 1.4rem !important;
+  letter-spacing: -0.01em;
+  line-height: 1.18;
+}
+.tm-hero-cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin: 0.5rem 0 1.5rem; }
+.tm-btn-primary, .tm-btn-ghost {
+  display: inline-flex; align-items: center;
+  padding: 0.85rem 1.6rem; border-radius: 999px;
+  font-weight: 700; font-size: 0.9rem; text-decoration: none;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.tm-btn-primary { background: #220b50; color: #fff; }
+.tm-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -10px rgba(34,11,80,0.5); }
+.tm-btn-ghost { background: transparent; color: #220b50; border: 1.5px solid #220b50; }
+.tm-btn-ghost:hover { background: #220b50; color: #fff; }
+.tm-trust {
+  display: flex; gap: 0.5rem 2rem; justify-content: center; flex-wrap: wrap;
+  font-size: 0.85rem; color: #5a5a6a;
+  padding-top: 1rem; border-top: 1px solid #e0dceb; max-width: 720px; margin: 0 auto;
+}
+.tm-trust strong { color: #220b50; font-weight: 700; }
+
+.tm-section { padding: 4rem 1.5rem; background: #fff; }
+.tm-section-soft { background: #f7f5fb; }
+.tm-inner-narrow { max-width: 760px; margin: 0 auto; }
+.tm-inner-wide   { max-width: 1100px; margin: 0 auto; }
+.tm-eyebrow {
+  font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #d4af37; font-weight: 700; margin: 0 0 0.85rem;
+}
+.tm-headline {
+  color: #220b50;
+  font-size: clamp(1.4rem, 2.6vw, 2rem) !important;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 1.25rem;
+}
+.tm-prose p { font-size: 1.02rem; line-height: 1.75; color: #1f1f1f; margin: 0 0 1rem; }
+.tm-lede { font-size: 1.1rem; padding: 1rem 1.25rem; background: rgba(255,193,7,0.1); border-left: 3px solid #FFC107; border-radius: 4px; }
+
+.tm-grid-intro {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 3rem; align-items: start;
+}
+@media (max-width: 900px) { .tm-grid-intro { grid-template-columns: 1fr; gap: 2rem; } }
+.tm-intro-body p { font-size: 1.02rem; line-height: 1.75; color: #1f1f1f; margin: 0 0 1rem; }
+.tm-intro-body .tm-lede { margin-top: 1.25rem; }
+
+.tm-accred {
+  background: #fff; border: 1px solid #e0dceb; border-radius: 12px;
+  padding: 1.5rem; text-align: center; position: sticky; top: 130px;
+}
+@media (max-width: 900px) { .tm-accred { position: static; } }
+.tm-accred-eyebrow {
+  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #220b50; font-weight: 700; margin: 0 0 1rem;
+}
+.tm-accred-row { display: flex; gap: 1rem; justify-content: center; align-items: center; margin-bottom: 0.85rem; }
+.tm-accred-row img { max-width: 80px; height: auto; }
+.tm-accred-note { font-size: 0.85rem; color: #5a5a6a; line-height: 1.5; margin: 0; }
+
+/* Float figures inside case study still work (legacy rt-block) */
+.tm-case-study .rt-block figure { margin: 0.5rem 0 1rem 1.5rem; }
+.tm-case-study .rt-block .w-richtext-align-floatright { float: right; }
+.tm-case-study .rt-block .w-richtext-align-floatleft  { float: left;  margin: 0.5rem 1.5rem 1rem 0; }
+
+/* Ensure images keep their aspect ratio when constrained by parent width.
+   Without this, explicit HTML height attributes force a fixed pixel height
+   while max-width:100% squashes the width, producing tall/skinny renders. */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Call + email icon block inside the mobile nav menu
+   Hidden on desktop (top-bar already shows them) */
+.mob-menu-contact { display: none; }
+@media (max-width: 991px) {
+  .mob-menu-contact {
+    display: flex !important;
+    gap: 0.75rem;
+    padding: 1.1rem 1.25rem 1.25rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  .mob-menu-contact a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.95rem 0.5rem;
+    color: #fff !important;
+    text-decoration: none !important;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .mob-menu-contact a:hover,
+  .mob-menu-contact a:focus {
+    background: rgba(255,193,7,0.15);
+    border-color: #FFC107;
+    color: #FFC107 !important;
+    transform: translateY(-1px);
+  }
+  .mob-menu-contact svg {
+    width: 26px; height: 26px;
+    fill: currentColor;
+  }
+  .mob-menu-contact a.is-call    { background: rgba(231,76,60,0.18); border-color: rgba(231,76,60,0.4); }
+  .mob-menu-contact a.is-email   { background: rgba(255,193,7,0.10); border-color: rgba(255,193,7,0.30); }
+}
+
+/* =========================================================
+   STICKY + DARK-PURPLE NAV (site-wide)
+   Make the navigation stay visible while scrolling and remove
+   the legacy Webflow white background that was showing on mobile.
+   ========================================================= */
+.nav-section {
+  position: fixed !important;
+  top: 0; left: 0; right: 0;
+  z-index: 1001;
+  background: #220b50;       /* brand purple — covers any gap behind transparent children */
+  box-shadow: 0 11px 14px rgba(0,0,0,0.18);
+}
+/* Push page content down so it isn't hidden behind the fixed nav.
+   The nav is roughly 76-110px tall depending on top-bar visibility. */
+body { padding-top: 78px; }
+@media (min-width: 992px) { body { padding-top: 116px; } }
+
+/* The navbar itself was white by default — make it match the brand on every viewport */
+.navbar.w-nav,
+.navbar {
+  background-color: #220b50 !important;
+}
+
+/* Kill the duplicate logo — .brand had a CSS background-image of the logo
+   AND an <img> inside it. Remove the background so only the <img> shows. */
+.brand.w-nav-brand,
+.brand {
+  background-image: none !important;
+  padding: 8px 14px !important;
+}
+
+/* =========================================================
+   MOBILE DROPDOWN MENU — make the 3 sub-menus actually accessible
+   On mobile, Webflow's dropdown-list defaults to position:absolute
+   so it never shows when the menu is open. Force it to behave like
+   an accordion inline in the flow instead.
+   ========================================================= */
+@media (max-width: 991px) {
+  /* Each dropdown wrapper becomes block-level inside the nav */
+  .navbar .navlink.dropdown.w-dropdown,
+  .navbar .dropdown.w-dropdown {
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  }
+
+  /* The toggle row — full-width tap target with proper padding */
+  .navbar .dropdown-toggle.w-dropdown-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0.95rem 1.5rem !important;
+    width: 100% !important;
+    cursor: pointer;
+    color: #fff !important;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 1rem;
+  }
+  /* Hide Webflow's default icon position — put chevron at the right edge instead */
+  .navbar .dropdown-toggle.w-dropdown-toggle .w-icon-dropdown-toggle {
+    position: static !important;
+    margin: 0 !important;
+    order: 2;            /* place after the label */
+    color: #FFC107;
+    transition: transform .2s ease;
+    font-size: 1rem;
+  }
+  /* Rotate chevron when open */
+  .navbar .dropdown.w-dropdown.w--open .w-icon-dropdown-toggle {
+    transform: rotate(180deg);
+  }
+
+  /* The dropdown panel — inline accordion, NOT absolute.
+     Clean brand-purple panel, slightly lighter than the parent menu so it reads
+     as a subtle "nested" surface (no harsh black overlay). */
+  .navbar .dropdown-list.w-dropdown-list {
+    position: static !important;
+    display: none !important;
+    width: 100% !important;
+    background: #2a1262 !important;        /* slightly lighter than menu bg */
+    border-top: 1px solid rgba(255,193,7,0.18) !important;
+    box-shadow: none !important;
+    padding: 0.5rem 0 !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  /* Show the panel when Webflow toggles .w--open on the parent */
+  .navbar .dropdown.w-dropdown.w--open .dropdown-list.w-dropdown-list {
+    display: block !important;
+  }
+
+  /* Sub-item links — clean, compact, left-aligned with subtle hairline divider */
+  .navbar .dropdown-navlink.w-dropdown-link {
+    display: block !important;
+    padding: 0.85rem 1.5rem 0.85rem 2.25rem !important;
+    color: rgba(255,255,255,0.88) !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    text-align: left !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+    border-radius: 0 !important;
+    position: relative;
+  }
+  /* Soft gold left-edge accent on hover/focus for the active link */
+  .navbar .dropdown-navlink.w-dropdown-link::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background .15s ease;
+  }
+  .navbar .dropdown-navlink.w-dropdown-link:last-child { border-bottom: none !important; }
+  .navbar .dropdown-navlink.w-dropdown-link:hover,
+  .navbar .dropdown-navlink.w-dropdown-link:focus {
+    background: rgba(255,255,255,0.05) !important;
+    color: #FFC107 !important;
+  }
+  .navbar .dropdown-navlink.w-dropdown-link:hover::before,
+  .navbar .dropdown-navlink.w-dropdown-link:focus::before {
+    background: #FFC107;
+  }
+}
+
+/* Force readable WHITE link colours on the dark navbar (Webflow's defaults are dark, made them invisible on the new bg) */
+.navbar .navlink.w-nav-link,
+.navbar .nav-menu .w-nav-link,
+.navbar .dropdown.w-dropdown,
+.navbar .dropdown-toggle.w-dropdown-toggle,
+.navbar .dropdown-toggle.w-dropdown-toggle > div,
+.navbar .w-icon-dropdown-toggle {
+  color: #fff !important;
+}
+.navbar .navlink.w-nav-link:hover,
+.navbar .nav-menu .w-nav-link:hover,
+.navbar .dropdown-toggle.w-dropdown-toggle:hover,
+.navbar .dropdown-toggle.w-dropdown-toggle:hover > div {
+  color: #FFC107 !important;
+}
+/* Current-page link in gold */
+.navbar .navlink.w-nav-link.w--current { color: #FFC107 !important; }
+/* Dropdown panels still need a light surface so their text is readable */
+.navbar .dropdown-list.w-dropdown-list {
+  background: #1a0840 !important;
+}
+.navbar .dropdown-navlink.w-dropdown-link {
+  color: rgba(255,255,255,0.92) !important;
+}
+.navbar .dropdown-navlink.w-dropdown-link:hover {
+  color: #FFC107 !important;
+  background: rgba(255,255,255,0.05) !important;
+}
+
+/* Mobile hamburger button — flat, blends with the dark navbar */
+@media (max-width: 991px) {
+  .menu-button.w-nav-button {
+    background: transparent !important;
+    color: #fff !important;
+    padding: 0.85rem !important;
+    border-radius: 6px;
+  }
+  .menu-button.w-nav-button:hover,
+  .menu-button.w-nav-button.w--open {
+    background: rgba(255,255,255,0.08) !important;
+  }
+  .menu-button.w-nav-button .w-icon-nav-menu { color: #fff; }
+  /* Make sure the slide-down mobile menu overlay is also dark, not white */
+  .navbar .nav-menu.w-nav-menu,
+  .navbar .w-nav-overlay,
+  .navbar .w-nav-overlay .w-nav-menu {
+    background-color: #220b50 !important;
+    color: #fff !important;
+  }
+}
+
+/* Cleaned mobile menu — keep original Webflow .mobile-contct as on the live site.
+   The lead-gen experiments (mob-menu-* and mob-action-bar) have been removed
+   from the HTML; legacy styles below are kept as dead code in case any stragglers
+   remain, and are all set to display:none so they never render. */
+.mob-action-bar,
+.mob-menu-cta,
+.mob-menu-foot,
+.mob-menu-promo,
+.mob-menu-availability,
+.mob-menu-tiles,
+.mob-menu-postcode,
+.mob-menu-testimonial {
+  display: none !important;
+}
+
+/* =========================================================
+   LEGACY MOBILE LEAD-GEN MENU (unused after revert — kept inert)
+   Replaces the basic Webflow stack with a conversion-focused
+   panel: sticky CTA strip, trust badges, quick quote mini-form,
+   and inline-expanded service categories.
+   Active only at <= 991px (Webflow's data-collapse="medium").
+   ========================================================= */
+
+/* Floating mobile action bar (always visible at bottom on mobile) */
+.mob-action-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
+  display: none;
+  background: var(--np-primary);
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
+}
+.mob-action-bar a {
+  flex: 1; padding: 0.85rem 0.5rem; text-align: center;
+  color: #fff; text-decoration: none; font-weight: 600; font-size: 0.85rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+.mob-action-bar a:last-child { border-right: none; }
+.mob-action-bar a.is-primary { background: #220b50; }
+.mob-action-bar a.is-whatsapp { background: #25D366; }
+.mob-action-bar svg { width: 18px; height: 18px; fill: currentColor; }
+
+@media (max-width: 991px) {
+  .mob-action-bar { display: flex; }
+  body { padding-bottom: 64px; }   /* room for the action bar */
+}
+
+/* Style the Webflow mobile menu overlay when open */
+@media (max-width: 991px) {
+  .navbar.w-nav .w-nav-overlay,
+  .navbar.w-nav .nav-menu.w-nav-menu {
+    background: linear-gradient(180deg, #220b50 0%, #1a0840 100%) !important;
+    color: #fff;
+  }
+  .navbar.w-nav .nav-menu { padding: 0 !important; }
+  .navbar.w-nav .navlink.w-nav-link,
+  .navbar.w-nav .dropdown.w-dropdown {
+    color: #fff !important;
+    padding: 0.95rem 1.5rem !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    text-align: left !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em !important;
+  }
+  .navbar.w-nav .dropdown-toggle.w-dropdown-toggle {
+    padding: 0 !important; color: #fff !important;
+  }
+  .navbar.w-nav .dropdown-list.w-dropdown-list {
+    background: rgba(0,0,0,0.25) !important;
+  }
+  .navbar.w-nav .dropdown-navlink.w-dropdown-link {
+    color: rgba(255,255,255,0.85) !important;
+    padding: 0.7rem 2rem !important;
+    font-size: 0.95rem !important;
+  }
+  .navbar.w-nav .dropdown-navlink.w-dropdown-link:hover {
+    background: rgba(255,255,255,0.06) !important;
+    color: #fff !important;
+  }
+}
+
+/* Promotional banner at the very top of mobile menu */
+.mob-menu-promo {
+  display: none;
+  background: #FFC107;
+  color: #1a0840;
+  padding: 0.65rem 1rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+@media (max-width: 991px) { .mob-menu-promo { display: block; } }
+.mob-menu-promo strong { color: #c41818; }
+
+/* Service tiles — one-tap entry to top services */
+.mob-menu-tiles {
+  display: none;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  padding: 1rem 1rem 0.5rem;
+  background: rgba(255,255,255,0.04);
+}
+@media (max-width: 991px) { .mob-menu-tiles { display: grid; } }
+.mob-menu-tile {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(255,255,255,0.08);
+  color: #fff; text-decoration: none;
+  padding: 0.85rem 0.4rem; border-radius: 8px;
+  font-size: 0.78rem; font-weight: 600; line-height: 1.2;
+  text-align: center; gap: 0.4rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.15s;
+}
+.mob-menu-tile:hover, .mob-menu-tile:focus { background: rgba(255,255,255,0.14); }
+.mob-menu-tile svg { width: 26px; height: 26px; fill: #FFC107; }
+
+/* Postcode quick-routing */
+.mob-menu-postcode {
+  display: none;
+  padding: 1rem;
+  background: rgba(255,255,255,0.04);
+}
+@media (max-width: 991px) { .mob-menu-postcode { display: block; } }
+.mob-menu-postcode label {
+  display: block; font-size: 0.85rem; font-weight: 600;
+  color: rgba(255,255,255,0.95); margin-bottom: 0.5rem;
+}
+.mob-menu-postcode .pc-row { display: flex; gap: 0.5rem; }
+.mob-menu-postcode input {
+  flex: 1; padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.08);
+  color: #fff; border-radius: 6px;
+  font-size: 0.95rem; text-transform: uppercase;
+}
+.mob-menu-postcode input::placeholder { color: rgba(255,255,255,0.55); text-transform: none; }
+.mob-menu-postcode button {
+  background: #220b50; color: #fff;
+  border: none; border-radius: 6px;
+  padding: 0 1rem; font-weight: 700;
+  cursor: pointer;
+}
+
+/* Customer testimonial card in mobile menu */
+.mob-menu-testimonial {
+  display: none;
+  margin: 0 1rem 1rem;
+  background: rgba(255,255,255,0.08);
+  border-left: 3px solid #FFC107;
+  padding: 0.9rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.95);
+  line-height: 1.55;
+}
+@media (max-width: 991px) { .mob-menu-testimonial { display: block; } }
+.mob-menu-testimonial .stars { color: #FFC107; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+.mob-menu-testimonial cite { display: block; font-style: normal; font-weight: 600; margin-top: 0.4rem; opacity: 0.8; font-size: 0.78rem; }
+
+/* Live availability indicator */
+.mob-menu-availability {
+  display: none;
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.95);
+  background: rgba(0,200,83,0.12);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  text-align: center;
+}
+@media (max-width: 991px) { .mob-menu-availability { display: block; } }
+.mob-menu-availability::before {
+  content: "●"; color: #00C853; margin-right: 0.4rem;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* CTA + trust block injected into the mobile menu (above the standard links) */
+.mob-menu-cta {
+  display: none;
+  background: linear-gradient(135deg, #2a1060 0%, #1a0840 100%);
+  padding: 1.25rem 1.25rem 1rem;
+  color: #fff;
+  border-bottom: 2px solid #d4af37;
+}
+@media (max-width: 991px) { .mob-menu-cta { display: block; } }
+.mob-menu-cta__trust {
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+  font-size: 0.78rem; margin-bottom: 0.75rem;
+  color: rgba(255,255,255,0.92);
+}
+.mob-menu-cta__trust span {
+  background: rgba(255,255,255,0.08);
+  padding: 0.25rem 0.55rem; border-radius: 20px;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+}
+.mob-menu-cta__trust .star { color: #FFC107; }
+.mob-menu-cta__phone {
+  display: block; text-align: center;
+  background: #220b50; color: #fff;
+  padding: 0.95rem 1rem; border-radius: 8px;
+  font-size: 1.15rem; font-weight: 700; text-decoration: none;
+  margin-bottom: 0.6rem; box-shadow: 0 4px 14px rgba(58,26,122,0.35);
+}
+.mob-menu-cta__phone small {
+  display: block; font-size: 0.7rem; font-weight: 400;
+  opacity: 0.9; letter-spacing: 0.06em; margin-bottom: 0.15rem;
+}
+.mob-menu-cta__quote {
+  display: block; text-align: center;
+  background: #fff; color: var(--np-primary);
+  padding: 0.85rem 1rem; border-radius: 8px;
+  font-weight: 700; text-decoration: none; margin-bottom: 0.85rem;
+}
+.mob-menu-cta__form { display: flex; flex-direction: column; gap: 0.5rem; }
+.mob-menu-cta__form-title {
+  font-size: 0.85rem; font-weight: 600;
+  margin-bottom: 0.25rem; color: rgba(255,255,255,0.95);
+}
+.mob-menu-cta__form input {
+  width: 100%; padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.08);
+  color: #fff; border-radius: 6px;
+  font-size: 0.95rem;
+}
+.mob-menu-cta__form input::placeholder { color: rgba(255,255,255,0.55); }
+.mob-menu-cta__form button {
+  padding: 0.75rem 1rem; background: #FFC107; color: #1a0840;
+  border: none; border-radius: 6px; font-weight: 700; font-size: 0.95rem;
+  cursor: pointer; margin-top: 0.25rem;
+}
+
+/* Mobile menu footer block (contact at the bottom) */
+.mob-menu-foot {
+  display: none;
+  background: rgba(0,0,0,0.3);
+  padding: 1.25rem;
+  color: rgba(255,255,255,0.85);
+  font-size: 0.85rem;
+  text-align: center;
+}
+@media (max-width: 991px) { .mob-menu-foot { display: block; } }
+.mob-menu-foot a { color: #fff; }
+.mob-menu-foot strong { display: block; color: #FFC107; margin-top: 0.4rem; }
+
+/* Better hamburger button — bigger, branded */
+@media (max-width: 991px) {
+  .menu-button.w-nav-button {
+    background: var(--np-primary) !important;
+    color: #fff !important;
+    padding: 0.85rem !important;
+    border-radius: 6px;
+  }
+  .menu-button.w-nav-button .w-icon-nav-menu { color: #fff; }
+  .menu-button.w-nav-button.w--open { background: #220b50 !important; }
+}
+
+/* On mobile, surface the desktop top-bar "REQUEST A QUOTE" too */
+@media (max-width: 991px) {
+  .top-bar-wrapper.w-hidden-small.w-hidden-tiny {
+    display: flex !important;
+    flex-direction: column;
+    padding: 0.5rem;
+    background: var(--np-primary);
+  }
+  .top-bar-wrapper .contacts-in-top-wrapper { display: none; }
+  .top-bar-wrapper .banner-script { display: none; }
+  .top-bar-wrapper .top-bar-quote {
+    display: block; text-align: center;
+    background: #220b50; color: #fff;
+    padding: 0.55rem 1rem; border-radius: 6px;
+    text-decoration: none; font-weight: 700;
+  }
+}

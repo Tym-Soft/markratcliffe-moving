@@ -1,0 +1,155 @@
+{
+  "slug": "index",
+  "filename": "index.html",
+  "type": "home",
+  "meta_title": "Removals Eastbourne - Storage Eastbourne - Eastbourne Removals",
+  "meta_description": "We are one of Eastbourne's leading Moving Company's & Removals Company’s throughout Sussex since 1982 - Mark Ratcliffe Moving & Storage.",
+  "canonical_url": "https://www.markratcliffemoving.co.uk/",
+  "og_image": "https://uploads-ssl.webflow.com/54f032c21ccd6c2e19dae5a7/61f26629d23d6dd8ddec9c34_Home-OG-Image.jpg",
+  "h1": "Eastbourne Removals & Storage Experts Since 1982",
+  "intro_paragraph": "Premier Moving &amp; Storage Company with Prestige Steel Strong Rooms — serving Eastbourne, Newhaven, Lewes, Brighton and all Sussex.",
+  "hero": {
+    "src": "",
+    "kicker": ""
+  },
+  "sections": [
+    {
+      "heading": "Related pages on our site",
+      "kind": "text",
+      "body_html": "<h2>Related pages on our site</h2>\n        <ul class=\"np-related-list\">\n          <li><a href=\"faqs.html\">Removals & Storage FAQs</a></li>\n          <li><a href=\"hailsham-removals.html\">Hailsham Removals</a></li>\n          <li><a href=\"man-and-van-eastbourne.html\">Man and Van Eastbourne</a></li>\n          <li><a href=\"packing-services-eastbourne.html\">Packing Services Eastbourne</a></li>\n          <li><a href=\"removals-pevensey.html\">Removals Pevensey</a></li>\n          <li><a href=\"storage-eastbourne.html\">Storage Eastbourne</a></li>\n        </ul>"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "How far in advance should I book my Eastbourne removal?",
+      "a": "We recommend booking 4–6 weeks ahead during peak Sussex moving season (May to September). For off-peak moves we can often accommodate 1–2 weeks' notice. A 20% deposit locks in your guaranteed move date."
+    },
+    {
+      "q": "Do you cover Newhaven, Lewes and the rest of East Sussex?",
+      "a": "Yes. From our Eastbourne and A22 Lower Dicker bases we cover the whole of East Sussex including Newhaven, Lewes, Seaford, Hastings and Bexhill, plus West Sussex (Brighton, Worthing, Hove) and Surrey (Guildford, Reigate, Woking)."
+    },
+    {
+      "q": "What if my move date changes?",
+      "a": "There is no charge for postponements, cancellations or key waits. We simply update the diary at no extra cost — one of the things our Sussex customers tell us they value most."
+    },
+    {
+      "q": "Do you offer secure storage between moves?",
+      "a": "Yes — our Lower Dicker site offers individual steel Prestige self-storage rooms with 24-hour CCTV and alarmed access. Ideal for short-term storage between Sussex moves or longer-term household storage."
+    },
+    {
+      "q": "Can you handle international removals from Sussex?",
+      "a": "Absolutely. We are a founder member of Your Moving Group with vetted partner agents in over 200 countries. See our overseas removals page for more on international moves from Sussex."
+    }
+  ],
+  "images": [
+    {
+      "src": "images/pad-wrapped-furniture-eastbourne-removals.webp",
+      "alt": "Furniture individually pad-wrapped and labelled before a Sussex home removal",
+      "width": "480",
+      "height": "360"
+    },
+    {
+      "src": "images/mark-ratcliffe-crew-loading-piano-eastbourne.webp",
+      "alt": "Trained Mark Ratcliffe Moving crew carefully loading an upright piano during an Eastbourne removal",
+      "width": "480",
+      "height": "480"
+    },
+    {
+      "src": "images/mark-ratcliffe-sleeper-cab-removal-lorry.webp",
+      "alt": "Mark Ratcliffe Moving sleeper-cab removal lorry used for long-distance and overseas moves",
+      "width": "480",
+      "height": "270"
+    },
+    {
+      "src": "images/Mark-Ratcliffe.svg",
+      "alt": "",
+      "width": "200",
+      "height": "150"
+    },
+    {
+      "src": "images/mark-BAR-in-frame.webp",
+      "alt": "Member of the British Association of Removers (BAR)",
+      "width": "76",
+      "height": "82"
+    },
+    {
+      "src": "images/bs-8564-2-removals-storage-accreditation.webp",
+      "alt": "BS 8564 quality accreditation for removals and storage",
+      "width": "110",
+      "height": "180"
+    },
+    {
+      "src": "images/apg-approved-payment-guarantee-uk-domestic.webp",
+      "alt": "APG Approved Payment Guarantee badge — UK domestic removals",
+      "width": "110",
+      "height": "130"
+    },
+    {
+      "src": "images/ima-international-movers-association-logo.webp",
+      "alt": "International Movers Association (IMA) member badge",
+      "width": "115",
+      "height": "81"
+    },
+    {
+      "src": "images/UK---Thai-Movers-Logo.webp",
+      "alt": "UK and Thai Movers Group — specialist UK-to-Thailand removals partner",
+      "width": "350",
+      "height": "100"
+    },
+    {
+      "src": "images/mark-ratcliffe-wrapped-furniture-sussex.webp",
+      "alt": "Pad-wrapped sideboard ready for a Sussex home move with Mark Ratcliffe Moving",
+      "width": "600",
+      "height": "450"
+    },
+    {
+      "src": "images/mark-ratcliffe-founder-portrait.webp",
+      "alt": "Mark Ratcliffe, founder of Mark Ratcliffe Moving and Storage in Eastbourne — over 40 years experience in UK and international removals",
+      "width": "300",
+      "height": "214"
+    },
+    {
+      "src": "images/van-mark-ratcliffe.svg",
+      "alt": "",
+      "width": "75",
+      "height": "40"
+    },
+    {
+      "src": "images/truck.svg",
+      "alt": "",
+      "width": "75",
+      "height": "50"
+    },
+    {
+      "src": "images/mark-ratcliffe-1963-vintage-bedford-removal-van.webp",
+      "alt": "1963 vintage Bedford removal van from the Mark Ratcliffe Moving fleet",
+      "width": "480",
+      "height": "480"
+    },
+    {
+      "src": "images/mark-ratcliffe-modern-removal-lorry-eastbourne.webp",
+      "alt": "Modern Mark Ratcliffe Moving removal lorry parked at the Eastbourne depot",
+      "width": "480",
+      "height": "360"
+    },
+    {
+      "src": "images/mark-ratcliffe-1963-vintage-van-restored.webp",
+      "alt": "Restored 1963 vintage removal van celebrating 40 years of Mark Ratcliffe Moving",
+      "width": "480",
+      "height": "480"
+    },
+    {
+      "src": "images/mark-ratcliffe-removal-fleet-vehicles-sussex.webp",
+      "alt": "Mark Ratcliffe Moving removal fleet lined up at the Sussex depot",
+      "width": "480",
+      "height": "340"
+    },
+    {
+      "src": "images/chat.svg",
+      "alt": "",
+      "width": "75",
+      "height": "60"
+    }
+  ],
+  "raw_body": "</a>\n    <a href=\"mailto:markratcliffemoving@gmail.com\" class=\"mob-con-1 _2 w-inline-block\">\n      <div>EMAIL US</div>\n    </a>\n  </div>\n  \n  </div>\n  <div class=\"hp-header\">\n    <div class=\"h-hero-wrap\">\n      <h1 class=\"hero-image-heading\">Eastbourne Removals &amp; Storage Experts Since 1982</h1>\n      <p class=\"hero-image-subhead white\" style=\"font-size:1.25rem;margin-top:0.5rem;\">Premier Moving &amp; Storage Company with Prestige Steel Strong Rooms — serving Eastbourne, Newhaven, Lewes, Brighton and all Sussex.</p>\n      <h3 class=\"white\">LOCAL, NATIONAL &amp; WORLDWIDE SERVICES</h3>\n      <a href=\"mark-ratcliffe-moving-online-removals-quote.html\" target=\"_blank\" class=\"button dark spc-1 w-button\">REQUEST A QUOTE</a>\n    </div>\n    <div class=\"hp-gallery\">\n      <a href=\"index.html#\" class=\"hp-lightbox w-inline-block w-lightbox\"><img src=\"images/pad-wrapped-furniture-eastbourne-removals.webp\" width=\"480\" height=\"360\" alt=\"Furniture individually pad-wrapped and labelled before a Sussex home removal\" sizes=\"(max-width: 479px) 100vw, 480px\" srcset=\"images/pad-wrapped-furniture-eastbourne-removals-p-500.webp 500w, images/pad-wrapped-furniture-eastbourne-removals-p-800.webp 800w, images/pad-wrapped-furniture-eastbourne-removals.webp 1000w\" class=\"lb-image\" decoding=\"async\" loading=\"lazy\">\n        <h4 class=\"white\">1982 - 2022 Celebrating 40 Years in The Moving &amp; Storage Industry</h4>\n        \n      </a>\n      <a href=\"index.html#\" class=\"hp-lightbox w-hidden-tiny w-inline-block w-lightbox\"><img src=\"images/mark-ratcliffe-crew-loading-piano-eastbourne.webp\" width=\"480\" height=\"480\" alt=\"Trained Mark Ratcliffe Moving crew carefully loading an upright piano during an Eastbourne removal\" sizes=\"(max-width: 479px) 100vw, 480px\" srcset=\"images/mark-ratcliffe-crew-loading-piano-eastbourne-p-500.webp 500w, images/mark-ratcliffe-crew-loading-piano-eastbourne-p-800.webp 800w, images/mark-ratcliffe-crew-loading-piano-eastbourne-p-1080.webp 1080w, images/mark-ratcliffe-crew-loading-piano-eastbourne-p-1600.webp 1600w, images/mark-ratcliffe-crew-loading-piano-eastbourne.webp 1920w\" class=\"lb-image\" decoding=\"async\" loading=\"lazy\">\n        <h4 class=\"white home-img-caption\">Individual Self Store Rooms for Your home</h4>\n        \n      </a>\n      <a href=\"index.html#\" class=\"hp-lightbox w-hidden-tiny w-inline-block w-lightbox\"><img src=\"images/mark-ratcliffe-sleeper-cab-removal-lorry.webp\" width=\"480\" height=\"270\" alt=\"Mark Ratcliffe Moving sleeper-cab removal lorry used for long-distance and overseas moves\" class=\"lb-image\" decoding=\"async\" loading=\"lazy\">\n        <h4 class=\"white\">UNIFORMED STAFF AND IMMACULATE VANS</h4>\n        \n      </a>\n    </div>\n  </div>\n  <div class=\"section\">\n    <div class=\"_1200-wrapper opening-statement\">\n      <div class=\"_1200-wrapper\"><img src=\"images/Mark-Ratcliffe.svg\" width=\"200\" height=\"150\" alt=\"\" role=\"presentation\" aria-hidden=\"true\" decoding=\"async\" loading=\"lazy\">\n        <div class=\"moving-home\">\n          <h2 class=\"w-hidden-tiny\">Moving Home? We can make your journey as &#x27;Smooth as Silk&#x27;</h2>\n        </div>\n        <div class=\"_1200-wrapper welcome-quote\">\n          <h3>A Removals Specialist You Can Trust To Look after Your Home</h3>\n        </div>\n        <div class=\"hp-badges\">\n          <div class=\"badges-sub\">\n            <div class=\"badge-box is-embed\">\n              <div class=\"badge-image embed w-embed w-iframe\"><iframe frameborder=\"0\" scrolling=\"no\" allowtransparency=\"true\" width=\"220\" height=\"86\" src=\"https://yoshki.com/badge-bar.html\" style=\"border:0px;margin:0px;padding:0px;backgroundColor:transparent;\"></iframe></div>\n            </div>\n            <a href=\"index.html#\" class=\"badge-box w-inline-block w-lightbox\"><img src=\"images/mark-BAR-in-frame.webp\" width=\"76\" height=\"82\" alt=\"Member of the British Association of Removers (BAR)\" class=\"badge-image\" decoding=\"async\" loading=\"lazy\">\n              \n            </a>\n            <a href=\"index.html#\" class=\"badge-box w-inline-block w-lightbox\"><img src=\"images/bs-8564-2-removals-storage-accreditation.webp\" width=\"110\" height=\"180\" alt=\"BS 8564 quality accreditation for removals and storage\" class=\"badge-image\" decoding=\"async\" loading=\"lazy\">\n              \n            </a>\n            <a href=\"index.html#\" class=\"badge-box w-inline-block w-lightbox\"><img src=\"images/apg-approved-payment-guarantee-uk-domestic.webp\" width=\"110\" height=\"130\" alt=\"APG Approved Payment Guarantee badge — UK domestic removals\" sizes=\"110px\" srcset=\"images/apg-approved-payment-guarantee-uk-domestic-p-500.webp 500w, images/apg-approved-payment-guarantee-uk-domestic.webp 600w\" class=\"badge-image\" decoding=\"async\" loading=\"lazy\">\n              \n            </a>\n            <a href=\"index.html#\" class=\"badge-box w-inline-block w-lightbox\"><img src=\"images/ima-international-movers-association-logo.webp\" width=\"115\" height=\"81\" alt=\"International Movers Association (IMA) member badge\" class=\"badge-image\" decoding=\"async\" loading=\"lazy\">\n              \n            </a>\n            <a href=\"index.html#\" class=\"badge-box w-inline-block w-lightbox\"><img src=\"images/UK---Thai-Movers-Logo.webp\" width=\"350\" height=\"100\" alt=\"UK and Thai Movers Group — specialist UK-to-Thailand removals partner\" sizes=\"350px\" srcset=\"images/UK---Thai-Movers-Logo-p-500.webp 500w, images/UK---Thai-Movers-Logo-p-800.webp 800w, images/UK---Thai-Movers-Logo-p-1080.webp 1080w, images/UK---Thai-Movers-Logo.webp 1200w\" class=\"badge-image\" decoding=\"async\" loading=\"lazy\">\n              \n            </a>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class=\"_1200-wrapper\">\n      <div class=\"rt-block w-clearfix w-richtext\">\n        <figure style=\"max-width:40%\" class=\"w-richtext-align-floatright w-richtext-figure-type-image\">\n          <div><img src=\"images/mark-ratcliffe-wrapped-furniture-sussex.webp\" width=\"600\" height=\"450\" alt=\"Pad-wrapped sideboard ready for a Sussex home move with Mark Ratcliffe Moving\" decoding=\"async\" loading=\"lazy\"></div>\n        </figure>\n        <p>We are unique within the Moving &amp; Storage Industry. We offer our clients a far superior Moving Service, how this works; We fully pad wrap all your furniture pieces in your home prior to moving them using large thick quilted pads, each piece is wrapped and labelled. We then remove them, transport them and deliver them into your new home and into the appropriate room, only then do we unwrap your furniture and place each piece in it’s final position. Ultra Safe Moving Services. We also guarantee ANY Move date based on and at the point of receiving your 20% deposit we guarantee and honour any Move date you supply us with.</p>\n        <p>There&#x27;s also no charge for key waits, postponements or cancelations. Should your Move date change, this is just a simple procedure of updating our work diary with no additional cost to you.</p>\n        <p>The Removals firm you choose to move your possessions is very important. You want to know that you have secured good value, but you also need to be confident that the team arriving on the morning will understand your requirements properly, and have both training and equipment necessary to ensure success. </p>\n        <p>Mark Ratcliffe has been working in the UK domestic removals market for more than 40 years and at Mark Ratcliffe Moving we take quality very seriously. We are one of just a handful of firms with a dedicated staff training centre, and all of our staff are trained to the highest industry standards in packing fragile and non-fragile personal effects, moving and wrapping household furniture for home and overseas moving as well as vehicle loading and customer services. This means you can expect real commitment from everyone involved in your move. </p>\n        <p>We would be delighted to give you a quote without any obligation. Please call our A22 Lower Dicker office on <a href=\"tel:01323848008\"><strong>01323 848008</strong></a> to talk through your moving requirements. </p>\n        <p>Whether moving in the UK or abroad, Mark Ratcliffe Moving is ready to help and we can meet all of your wider needs such as secure storage or export packing and/or unpacking.<br></p>\n      </div><img src=\"images/mark-ratcliffe-founder-portrait.webp\" width=\"300\" height=\"214\" alt=\"Mark Ratcliffe, founder of Mark Ratcliffe Moving and Storage in Eastbourne — over 40 years experience in UK and international removals\" itemprop=\"image\" decoding=\"async\" loading=\"lazy\" class=\"mark-image\">\n      <div class=\"sig\">\n        <div class=\"medium-margin-bottom\">Mark Ratcliffe</div>\n      </div>\n\n      <section class=\"rt-block\" style=\"margin-top:2.5rem;padding:1.5rem 0;\">\n        <h2 style=\"margin-bottom:1rem;\">Why Sussex Homeowners Choose Mark Ratcliffe Moving</h2>\n        <p>For more than four decades we have helped families relocate across Eastbourne, Newhaven, Lewes, Brighton, Hastings and the wider Sussex and Surrey region. Here&#x27;s what makes our removal service genuinely different:</p>\n        <ul style=\"line-height:1.85;margin:1rem 0 1.25rem 1.5rem;\">\n          <li><strong>Full pad-wrap protection on every move.</strong> Each item of furniture is individually quilted, wrapped and labelled in your home before it leaves the room — and only unwrapped once it reaches its final position in your new home.</li>\n          <li><strong>Guaranteed move date.</strong> Once your 20% deposit is received, your move date is locked in — no slippage, no surprises.</li>\n          <li><strong>No charge for key waits, postponements or cancellations.</strong> Life happens; we simply update the diary at no extra cost.</li>\n          <li><strong>Trained, uniformed crews.</strong> All our removers are trained at our dedicated staff training centre to industry-leading standards for fragile packing, furniture handling and vehicle loading.</li>\n          <li><strong>Prestige steel storage rooms in Lower Dicker.</strong> Individual containerised rooms with 24-hour CCTV and alarmed access — ideal between moves or for long-term household storage.</li>\n          <li><strong>Local roots, worldwide reach.</strong> Founder member of Your Moving Group with overseas partner agents in 200+ countries for international relocations.</li>\n        </ul>\n\n        <h3 style=\"margin-top:2rem;\">Areas We Cover Across Sussex &amp; Surrey</h3>\n        <p>Our Eastbourne and A22 Lower Dicker depots make us perfectly placed for removals throughout East Sussex, West Sussex and Surrey. Popular routes include <a href=\"areas-covered/removals-eastbourne.html\">Eastbourne</a>, <a href=\"areas-covered/international-removals-in-newhaven.html\">Newhaven</a>, <a href=\"areas-covered/removals-lewes-moving-home-in-sussex.html\">Lewes</a>, <a href=\"areas-covered/removals-brighton-sussex.html\">Brighton</a>, <a href=\"areas-covered/removals-hastings.html\">Hastings</a>, <a href=\"areas-covered/removals-bexhill.html\">Bexhill</a>, <a href=\"areas-covered/removals-seaford.html\">Seaford</a>, <a href=\"areas-covered/removals-tunbridge-wells-moving-home-in-sussex.html\">Tunbridge Wells</a>, <a href=\"areas-covered/removals-haywards-heath.html\">Haywards Heath</a> and <a href=\"areas-covered/removals-east-grinstead-moving-home-in-sussex.html\">East Grinstead</a>. Visit our <a href=\"areas-covered.html\">full areas covered page</a> for the complete list.</p>\n\n        <h3 style=\"margin-top:2rem;\">What Our Sussex Customers Say</h3>\n        <blockquote style=\"border-left:4px solid #220b50;padding:0.5rem 1rem;margin:1rem 0;font-style:italic;background:#f7f5fb;\">\n          &ldquo;From the survey to the final box being unpacked, the Mark Ratcliffe team handled our Eastbourne-to-Lewes move with absolute care. Every piece of furniture was pad-wrapped and labelled — nothing arrived with a scratch.&rdquo;\n          <footer style=\"margin-top:0.5rem;font-style:normal;font-weight:600;\">— S. Patel, Lewes</footer>\n        </blockquote>\n        <blockquote style=\"border-left:4px solid #220b50;padding:0.5rem 1rem;margin:1rem 0;font-style:italic;background:#f7f5fb;\">\n          &ldquo;Used Mark Ratcliffe for our move from Newhaven to Brighton and then six months of storage. Uniformed crew, immaculate vans, secure steel storage room — worth every penny.&rdquo;\n          <footer style=\"margin-top:0.5rem;font-style:normal;font-weight:600;\">— J. Williams, Brighton</footer>\n        </blockquote>\n        <p><a href=\"testimonials.html\"><strong>Read more customer testimonials &rarr;</strong></a></p>\n\n        <h3 style=\"margin-top:2rem;\">Frequently Asked Questions</h3>\n        <details style=\"margin:0.5rem 0;padding:0.75rem 1rem;border:1px solid #e0dceb;border-radius:6px;\">\n          <summary style=\"font-weight:600;cursor:pointer;\">How far in advance should I book my Eastbourne removal?</summary>\n          <p style=\"margin-top:0.75rem;\">We recommend booking 4–6 weeks ahead during peak Sussex moving season (May to September). For off-peak moves we can often accommodate 1–2 weeks&#x27; notice. A 20% deposit locks in your guaranteed move date.</p>\n        </details>\n        <details style=\"margin:0.5rem 0;padding:0.75rem 1rem;border:1px solid #e0dceb;border-radius:6px;\">\n          <summary style=\"font-weight:600;cursor:pointer;\">Do you cover Newhaven, Lewes and the rest of East Sussex?</summary>\n          <p style=\"margin-top:0.75rem;\">Yes. From our Eastbourne and A22 Lower Dicker bases we cover the whole of East Sussex including Newhaven, Lewes, Seaford, Hastings and Bexhill, plus West Sussex (Brighton, Worthing, Hove) and Surrey (Guildford, Reigate, Woking).</p>\n        </details>\n        <details style=\"margin:0.5rem 0;padding:0.75rem 1rem;border:1px solid #e0dceb;border-radius:6px;\">\n          <summary style=\"font-weight:600;cursor:pointer;\">What if my move date changes?</summary>\n          <p style=\"margin-top:0.75rem;\">There is no charge for postponements, cancellations or key waits. We simply update the diary at no extra cost — one of the things our Sussex customers tell us they value most.</p>\n        </details>\n        <details style=\"margin:0.5rem 0;padding:0.75rem 1rem;border:1px solid #e0dceb;border-radius:6px;\">\n          <summary style=\"font-weight:600;cursor:pointer;\">Do you offer secure storage between moves?</summary>\n          <p style=\"margin-top:0.75rem;\">Yes — our Lower Dicker site offers individual steel <a href=\"secure-self-storage-rooms.html\">Prestige self-storage rooms</a> with 24-hour CCTV and alarmed access. Ideal for short-term storage between Sussex moves or longer-term household storage.</p>\n        </details>\n        <details style=\"margin:0.5rem 0;padding:0.75rem 1rem;border:1px solid #e0dceb;border-radius:6px;\">\n          <summary style=\"font-weight:600;cursor:pointer;\">Can you handle international removals from Sussex?</summary>\n          <p style=\"margin-top:0.75rem;\">Absolutely. We are a founder member of Your Moving Group with vetted partner agents in over 200 countries. See our <a href=\"overseas-services.html\">overseas removals page</a> for more on international moves from Sussex.</p>\n        </details>\n      </section>\n    </div>\n  </div>\n  <div class=\"home-para-section\">\n    <div class=\"_1200-wrapper center\">\n      <h2 class=\"white\">You can count on us for all of the following</h2>\n    </div>\n    <div class=\"icon-wrapper medium-margin-top\">\n      <div class=\"cell-icon1\"><img src=\"images/van-mark-ratcliffe.svg\" alt=\"\" role=\"presentation\" aria-hidden=\"true\" width=\"75\" height=\"40\" decoding=\"async\" loading=\"lazy\">\n        <h4 class=\"white\">dedicated equipment, materials and vehicles that protect your possessions</h4>\n      </div>\n      <div class=\"cell-icon1\"><img src=\"images/van-mark-ratcliffe.svg\" alt=\"\" role=\"presentation\" aria-hidden=\"true\" width=\"75\" height=\"40\" decoding=\"async\" loading=\"lazy\">\n        <h4 class=\"white\">specialist removal men who have the experience to cope with any eventuality</h4>\n      </div>\n      <div class=\"cell-icon1\"><img src=\"images/van-mark-ratcliffe.svg\" alt=\"\" role=\"presentation\" aria-hidden=\"true\" width=\"75\" height=\"40\" decoding=\"async\" loading=\"lazy\">\n        <h4 class=\"white\">a local service - but with comprehensive international options too</h4>\n      </div>\n      <div class=\"cell-icon1\"><img src=\"images/van-mark-ratcliffe.svg\" alt=\"\" role=\"presentation\" aria-hidden=\"true\" width=\"75\" height=\"40\" decoding=\"async\" loading=\"lazy\">\n        <h4 class=\"white\">Founder member of <br>Your Moving Group</h4>\n      </div>\n      <div class=\"cell-icon1\"><img src=\"images/van-mark-ratcliffe.svg\" alt=\"\" role=\"presentation\" aria-hidden=\"true\" width=\"75\" height=\"40\" decoding=\"async\" loading=\"lazy\">\n        <h4 class=\"white\">an all-inclusive quote that reflects your need to control costs.</h4>\n      </div>\n    </div>\n    <div class=\"_1200-wrapper center medium-margin-top\">\n      <h2 class=\"white\">Please call Shannon on <a href=\"tel:01323848008\" class=\"red-link text-shadow\">01323 848008</a> whenever it&#x27;s most convenient. We very much look forward to hearing from you.</h2>\n    </div>\n  </div>\n  <div class=\"section grey-bg\">\n    <div class=\"_1200-wrapper\">\n      <h2 class=\"center\">On The Move</h2>\n    </div>\n    <div class=\"_1200-wrapper\">\n      <div class=\"w-embed w-script\">\n        <div id=\"cp_widget_19ce04a6-9ed8-4c80-8850-0110367a5207\">...</div>\n        <noscript>Powered by Cincopa <a href=\"https://www.cincopa.com/media-platform/html-slideshow\">Slideshow HTML</a> for Business solution.</noscript>\n      </div>\n    </div>\n  </div>\n  <div class=\"home-para-section vintage-movin-van\">\n    <div class=\"_1200-wrapper\">\n      <div class=\"van-title-flex\"><img src=\"images/truck.svg\" loading=\"lazy\" width=\"75\" height=\"50\" alt=\"\" role=\"presentation\" aria-hidden=\"true\" class=\"small-margin-right\">\n        <div>\n          <h2 class=\"white\">A Piece of History</h2>\n          <div class=\"vintage-van-sub\">Mark Ratcliffe&#x27;s Vintage Vehicle collection with vans from 1963, 1974 &amp; 1983.</div>\n        </div>\n      </div>\n    </div>\n    <div class=\"hp-gallery van\">\n      <a href=\"index.html#\" class=\"hp-lightbox van w-inline-block w-lightbox\"><img src=\"images/mark-ratcliffe-1963-vintage-bedford-removal-van.webp\" width=\"480\" height=\"480\" alt=\"1963 vintage Bedford removal van from the Mark Ratcliffe Moving fleet\" sizes=\"(max-width: 479px) 100vw, 480px\" srcset=\"images/mark-ratcliffe-1963-vintage-bedford-removal-van-p-500.webp 500w, images/mark-ratcliffe-1963-vintage-bedford-removal-van-p-800.webp 800w, images/mark-ratcliffe-1963-vintage-bedford-removal-van-p-1080.webp 1080w, images/mark-ratcliffe-1963-vintage-bedford-removal-van.webp 1200w\" class=\"lb-image van\" decoding=\"async\" loading=\"lazy\">\n        \n      </a>\n      <a href=\"index.html#\" class=\"hp-lightbox van w-inline-block w-lightbox\"><img src=\"images/mark-ratcliffe-modern-removal-lorry-eastbourne.webp\" width=\"480\" height=\"360\" alt=\"Modern Mark Ratcliffe Moving removal lorry parked at the Eastbourne depot\" sizes=\"(max-width: 479px) 100vw, 480px\" srcset=\"images/mark-ratcliffe-modern-removal-lorry-eastbourne-p-500.webp 500w, images/mark-ratcliffe-modern-removal-lorry-eastbourne-p-800.webp 800w, images/mark-ratcliffe-modern-removal-lorry-eastbourne-p-1080.webp 1080w, images/mark-ratcliffe-modern-removal-lorry-eastbourne-p-1600.webp 1600w, images/mark-ratcliffe-modern-removal-lorry-eastbourne.webp 1800w\" class=\"lb-image van\" decoding=\"async\" loading=\"lazy\">\n        \n      </a>\n      <a href=\"index.html#\" class=\"hp-lightbox van w-inline-block w-lightbox\"><img src=\"images/mark-ratcliffe-1963-vintage-van-restored.webp\" width=\"480\" height=\"480\" alt=\"Restored 1963 vintage removal van celebrating 40 years of Mark Ratcliffe Moving\" sizes=\"(max-width: 479px) 100vw, 480px\" srcset=\"images/mark-ratcliffe-1963-vintage-van-restored-p-500.webp 500w, images/mark-ratcliffe-1963-vintage-van-restored-p-800.webp 800w, images/mark-ratcliffe-1963-vintage-van-restored-p-1080.webp 1080w, images/mark-ratcliffe-1963-vintage-van-restored.webp 1200w\" class=\"lb-image van\" decoding=\"async\" loading=\"lazy\">\n        \n      </a>\n      <a href=\"index.html#\" class=\"hp-lightbox van w-inline-block w-lightbox\"><img src=\"images/mark-ratcliffe-removal-fleet-vehicles-sussex.webp\" width=\"480\" height=\"340\" alt=\"Mark Ratcliffe Moving removal fleet lined up at the Sussex depot\" sizes=\"(max-width: 479px) 100vw, 480px\" srcset=\"images/mark-ratcliffe-removal-fleet-vehicles-sussex-p-500.webp 500w, images/mark-ratcliffe-removal-fleet-vehicles-sussex-p-800.webp 800w, images/mark-ratcliffe-removal-fleet-vehicles-sussex-p-1080.webp 1080w, images/mark-ratcliffe-removal-fleet-vehicles-sussex.webp 1536w\" class=\"lb-image van\" decoding=\"async\" loading=\"lazy\">\n        \n      </a>\n    </div>\n  </div>\n  <div class=\"section\">\n    <div class=\"_1200-wrapper center\"><img src=\"images/chat.svg\" width=\"75\" height=\"60\" alt=\"\" role=\"presentation\" aria-hidden=\"true\" decoding=\"async\" loading=\"lazy\"></div>\n    <div class=\"div_testimonial\">\n      <h3>WHAT THEY ARE SAYING</h3>\n      <div class=\"testimonial-sub\">our valued customers</div>\n    </div>\n    <div class=\"_1200-wrapper\">\n      </div>\n    <div class=\"_1200-wrapper medium-margin-top\">\n      <a href=\"testimonials.html\" class=\"button w-button\">READ MORE</a>\n    </div>\n  </div>\n  <section class=\"np-section np-related\" aria-label=\"Related pages\">\n      <div class=\"np-inner\">\n        <h2>Related pages on our site</h2>\n        <ul class=\"np-related-list\">\n          <li><a href=\"faqs.html\">Removals & Storage FAQs</a></li>\n          <li><a href=\"hailsham-removals.html\">Hailsham Removals</a></li>\n          <li><a href=\"man-and-van-eastbourne.html\">Man and Van Eastbourne</a></li>\n          <li><a href=\"packing-services-eastbourne.html\">Packing Services Eastbourne</a></li>\n          <li><a href=\"removals-pevensey.html\">Removals Pevensey</a></li>\n          <li><a href=\"storage-eastbourne.html\">Storage Eastbourne</a></li>\n        </ul>\n      </div>\n    </section>\n  \n    \n    \n    \n    <div id=\"fb-root\"></div>\n    \n</div>"
+}
