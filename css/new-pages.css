@@ -2922,6 +2922,12 @@ img, video, picture, svg {
 /* Polishing the .np-section.np-accred wrapper to match the brand-soft section */
 .np-section.np-accred { padding-top: 3.25rem; padding-bottom: 3.25rem; }
 
+/* Utility: hide an element on phones (used on the quote-page hero so the
+   form lands at the top of the viewport on mobile) */
+@media (max-width: 991px) {
+  .np-hide-mobile { display: none !important; }
+}
+
 /* =========================================================
    PHASE C — Table of Contents + closing CTA band
    ========================================================= */
