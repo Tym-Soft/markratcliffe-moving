@@ -419,11 +419,11 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
   padding-top: 1.5rem;
   text-align: center;
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.6);
+  color: #ffffff;
 }
-.mr-footer-bottom p { margin: 0.35rem 0; }
-.mr-footer-bottom a { color: rgba(255,255,255,0.75); }
-.mr-footer-bottom a:hover { color: #D6B274; }
+.mr-footer-bottom p { margin: 0.35rem 0; color: #ffffff; }
+.mr-footer-bottom a { color: #ffffff; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.4); }
+.mr-footer-bottom a:hover { color: #D6B274; text-decoration-color: #D6B274; }
 .mr-footer-rating { font-style: italic; }
 
 /* Tablet — 2 columns */
@@ -2598,4 +2598,94 @@ html { scroll-behavior: smooth; }
 .hp-header .inner-title-wrapper h1,
 .hp-header .lp-hero-cell h1 {
   text-shadow: 0 2px 8px rgba(0,0,0,0.35) !important;
+}
+
+/* =========================================================
+   MOBILE FEEL — readability, tap targets, floating call CTA
+   ========================================================= */
+
+/* Responsive images by default — never overflow their container */
+img, video, picture, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Phone-size readability — bump body + headings + paragraph density */
+@media (max-width: 600px) {
+  html { font-size: 17px; }                       /* lifts everything that uses rem */
+  body { line-height: 1.65; }
+  p, li { font-size: 1.05rem; line-height: 1.7; }
+  h1, .np-hero h1, .hp-hero-h1, .hp-header h1 { font-size: 2.1rem !important; line-height: 1.18 !important; }
+  h2 { font-size: 1.55rem !important; line-height: 1.22 !important; }
+  h3 { font-size: 1.2rem !important; line-height: 1.3 !important; }
+  .np-section, .hp-section, .hp-services, .hp-areas, .hp-testimonials,
+  .hp-fleet, .hp-accred, .hp-cta-band { padding-left: 1.1rem !important; padding-right: 1.1rem !important; }
+  .np-inner, .hp-inner { padding-left: 0 !important; padding-right: 0 !important; }
+  /* Cards a touch roomier */
+  .np-card, .hp-service-card, .hp-area-region, .hp-usp { padding: 1.25rem 1.1rem !important; }
+}
+
+/* Tap-target guarantee — every interactive element ≥ 48×48 on small screens.
+   Block-level CTAs use flex+center; nav and dropdown links use padding-based
+   min-height so they don't lose their original markers/arrows. */
+@media (max-width: 991px) {
+  /* Pure CTA buttons: full flex centring */
+  .np-btn, .hp-btn, button.np-btn, button.hp-btn,
+  .w-button, .button, .hp-area-link,
+  .mob-menu-contact a, .mob-con-1, .ac-icon {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Nav, dropdown and footer links: padding-based — keeps layout intact */
+  .navlink, .w-nav-link, .dropdown-list a,
+  .mr-footer-bottom a, .mr-footer a, .ftr-link,
+  .np-related-list a {
+    min-height: 48px;
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    line-height: 1.3;
+  }
+  /* FAQ summaries: padding only — preserve native disclosure marker */
+  summary { padding: 0.85rem 0.5rem; min-height: 48px; }
+}
+
+/* Floating Call CTA — mobile only. Renders as a round bronze pill bottom-right. */
+.fab-call {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 9990;
+  display: none;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.15rem 0.85rem 0.95rem;
+  background: #C8A876;
+  color: #fff !important;
+  text-decoration: none !important;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.28), 0 2px 6px rgba(0,0,0,0.18);
+  border: 2px solid #fff;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.fab-call:hover, .fab-call:focus {
+  background: #D6B274;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.32);
+}
+.fab-call svg { width: 22px; height: 22px; fill: currentColor; flex-shrink: 0; }
+.fab-call .fab-call-label { white-space: nowrap; }
+@media (max-width: 991px) {
+  .fab-call { display: inline-flex; }
+  /* Avoid covering the bottom-mounted mobile contact bar */
+  body.has-mobile-bar .fab-call { bottom: 5.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fab-call { transition: none; }
+  .fab-call:hover { transform: none; }
 }
