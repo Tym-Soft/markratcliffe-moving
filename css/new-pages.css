@@ -2668,17 +2668,18 @@ img, video, picture, svg {
   summary { padding: 0.85rem 0.5rem; min-height: 48px; }
 }
 
-/* Floating Call CTA — mobile only. Renders as a round bronze pill bottom-right. */
-.fab-call {
+/* Floating CTA pills — visible site-wide on every viewport.
+   .fab-call  bronze pill, bottom-right  (Call Now)
+   .fab-quote purple pill, bottom-left   (Request a Quote)              */
+.fab-call,
+.fab-quote {
   position: fixed;
-  right: 1rem;
   bottom: 1rem;
   z-index: 9990;
-  display: none;
+  display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  padding: 0.85rem 1.15rem 0.85rem 0.95rem;
-  background: #C8A876;
+  padding: 0.85rem 1.25rem 0.85rem 1rem;
   color: #fff !important;
   text-decoration: none !important;
   font-family: "Inter", sans-serif;
@@ -2689,22 +2690,31 @@ img, video, picture, svg {
   box-shadow: 0 8px 24px rgba(0,0,0,0.28), 0 2px 6px rgba(0,0,0,0.18);
   border: 2px solid #fff;
   transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
 }
-.fab-call:hover, .fab-call:focus {
-  background: #D6B274;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.32);
+.fab-call  { right: 1rem; background: #C8A876; }
+.fab-quote { left: 1rem;  background: #4d2e8f; }
+.fab-call:hover,  .fab-call:focus  { background: #D6B274; transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.32); }
+.fab-quote:hover, .fab-quote:focus { background: #3a226d; transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.32); }
+.fab-call svg, .fab-quote svg { width: 20px; height: 20px; fill: currentColor; flex-shrink: 0; }
+.fab-call .fab-call-label,
+.fab-quote .fab-quote-label { white-space: nowrap; }
+
+/* On narrow screens shorten the labels a touch and reduce padding so both
+   pills fit alongside each other without colliding. */
+@media (max-width: 480px) {
+  .fab-call, .fab-quote {
+    padding: 0.7rem 0.85rem;
+    font-size: 0.82rem;
+    bottom: 0.65rem;
+  }
+  .fab-call  { right: 0.65rem; }
+  .fab-quote { left: 0.65rem; }
 }
-.fab-call svg { width: 22px; height: 22px; fill: currentColor; flex-shrink: 0; }
-.fab-call .fab-call-label { white-space: nowrap; }
-@media (max-width: 991px) {
-  .fab-call { display: inline-flex; }
-  /* Avoid covering the bottom-mounted mobile contact bar */
-  body.has-mobile-bar .fab-call { bottom: 5.5rem; }
-}
+
 @media (prefers-reduced-motion: reduce) {
-  .fab-call { transition: none; }
-  .fab-call:hover { transform: none; }
+  .fab-call, .fab-quote { transition: none; }
+  .fab-call:hover, .fab-quote:hover { transform: none; }
 }
 
 /* =========================================================
