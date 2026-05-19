@@ -2,11 +2,12 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies the four build rules:
+Verifies the five build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
   4. blog/index.html lists every blog post, newest-first, capped at 9.
+  5. sitemap.xml contains a <url> for every indexable HTML page.
 
 Run from the site root:
     python3 tools/audit.py
@@ -114,6 +115,34 @@ def blog_post_meta(path: str) -> dict | None:
                 }
     return None
 
+BASE_URL = 'https://www.markratcliffemoving.co.uk'
+
+def indexable_pages(pages: list[str]) -> list[str]:
+    out = []
+    for p in pages:
+        try:
+            html = open(p, encoding='utf-8').read(4096)
+        except OSError:
+            continue
+        if is_redirect_stub(html): continue
+        m = re.search(r'<meta\s+name="robots"\s+content="([^"]+)"', html, re.I)
+        if m and 'noindex' in m.group(1).lower():
+            continue
+        out.append(p)
+    return out
+
+def sitemap_locs() -> set[str]:
+    try:
+        xml = open('sitemap.xml', encoding='utf-8').read()
+    except OSError:
+        return set()
+    return set(re.findall(r'<loc>([^<]+)</loc>', xml))
+
+def expected_loc(path: str) -> str:
+    if path == 'index.html':
+        return BASE_URL + '/'
+    return BASE_URL + '/' + path
+
 def audit():
     pages = all_pages()
     failures = {
@@ -122,6 +151,7 @@ def audit():
         'internal_links':        [],
         'blog_index_listing':    [],
         'blog_index_order':      [],
+        'sitemap':               [],
     }
 
     blog_posts = []
@@ -236,13 +266,37 @@ def audit():
          'newest-first ordering correct',
          failures['blog_index_order'])
 
+    # Rule 5 — sitemap covers every indexable page
+    indexable = indexable_pages(pages)
+    sitemap   = sitemap_locs()
+    missing = []
+    for p in indexable:
+        if expected_loc(p) not in sitemap:
+            missing.append(p)
+    if missing:
+        for m in missing:
+            failures['sitemap'].append(('missing', m))
+    extra = []
+    indexable_set = {expected_loc(p) for p in indexable}
+    for loc in sitemap:
+        if loc not in indexable_set:
+            extra.append(loc)
+    if extra:
+        for e in extra:
+            failures['sitemap'].append(('orphan ', e))
+    rule('Rule 5 — sitemap.xml covers every indexable page',
+         f'{len(indexable)} indexable pages all listed; {len(sitemap)} sitemap entries match',
+         failures['sitemap'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
         print('To regenerate the blog index after adding/removing posts:')
         print('    python3 tools/build-blog-index.py')
+        print('To regenerate the sitemap after adding/removing pages:')
+        print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all four content rules satisfied.')
+    print('PASS — all five content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
