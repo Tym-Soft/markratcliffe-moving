@@ -2951,12 +2951,22 @@ body:has(.menu-button.w-nav-button.w--open) .fab-quote {
   margin: 0.5rem 0 2rem;
   max-width: 720px;
 }
+.np-toc * {
+  /* defensive reset against any global underline / highlight bleed */
+  text-decoration: none !important;
+  text-decoration-color: transparent !important;
+  text-shadow: none !important;
+}
 .np-toc-toggle {
-  appearance: none;
-  background: none;
-  border: 0;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
   padding: 0;
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.5rem;
   font-family: "Inter", sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
@@ -2979,15 +2989,16 @@ body:has(.menu-button.w-nav-button.w--open) .fab-quote {
 }
 .np-toc.is-open .np-toc-toggle::after { transform: rotate(180deg); }
 .np-toc ol {
-  list-style: none;
+  list-style: none !important;
   padding: 0;
   margin: 0;
   counter-reset: tocn;
 }
 .np-toc li {
-  margin: 0.35rem 0;
+  margin: 0.4rem 0;
   line-height: 1.45;
   counter-increment: tocn;
+  background: transparent !important;
 }
 .np-toc li::before {
   content: counter(tocn, decimal-leading-zero) ".";
@@ -2997,15 +3008,27 @@ body:has(.menu-button.w-nav-button.w--open) .fab-quote {
   font-size: 0.78rem;
   margin-right: 0.55rem;
 }
-.np-toc a {
-  color: #4d2e8f;
-  text-decoration: none;
+.np-toc a,
+.np-toc a:link,
+.np-toc a:visited {
+  color: #4d2e8f !important;
+  text-decoration: none !important;
+  text-decoration-color: transparent !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  outline: none !important;
   font-size: 0.98rem;
-  border-bottom: 1px solid transparent;
-  transition: color 0.18s ease, border-color 0.18s ease;
+  transition: color 0.18s ease;
 }
 .np-toc a:hover,
-.np-toc a:focus { color: #C8A876; border-bottom-color: #C8A876; }
+.np-toc a:focus {
+  color: #C8A876 !important;
+  text-decoration: underline !important;
+  text-decoration-color: #C8A876 !important;
+  text-underline-offset: 3px;
+}
 
 /* Collapsed by default on mobile (the JS adds .is-open on desktop) */
 @media (max-width: 600px) {
