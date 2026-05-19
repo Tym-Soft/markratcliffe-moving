@@ -124,7 +124,9 @@ def main() -> int:
         meta = extract_meta(path)
         if meta: posts.append(meta)
 
-    posts.sort(key=lambda p: (p['date'], p['title']), reverse=True)
+    # Sort newest-first by datePublished, with the slug as a stable tiebreaker
+    # so this ordering matches tools/audit.py and stays deterministic.
+    posts.sort(key=lambda p: (p['date'] or '', p['slug'] or ''), reverse=True)
     visible = posts[:MAX_CARDS]
 
     grid_html = '<div class="np-blog-grid">\n' + '\n'.join(render_card(p) for p in visible) + '\n        </div>'
