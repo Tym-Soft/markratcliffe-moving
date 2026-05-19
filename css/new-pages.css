@@ -2723,6 +2723,17 @@ img, video, picture, svg {
   .fab-call:hover, .fab-quote:hover { transform: none; }
 }
 
+/* Hide the sticky FABs when the mobile nav menu is open — they sit at
+   z-index 9990 and were intercepting taps on the open menu's bottom
+   action row. JS toggles .nav-open on <body>; the :has() rule is a
+   capable-browser fallback that catches Webflow's .w--open state. */
+body.nav-open .fab-call,
+body.nav-open .fab-quote,
+body:has(.menu-button.w-nav-button.w--open) .fab-call,
+body:has(.menu-button.w-nav-button.w--open) .fab-quote {
+  display: none !important;
+}
+
 /* =========================================================
    ACTIVE PAGE STYLING — bronze marker on the current nav item
    ========================================================= */

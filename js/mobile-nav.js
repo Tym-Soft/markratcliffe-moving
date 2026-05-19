@@ -95,6 +95,32 @@
 })();
 
 /* ---------------------------------------------------------
+   Hamburger open-state — mirrors Webflow's .w--open onto <body>
+   so we can hide the sticky FABs while the menu is open (they
+   were intercepting taps on the menu's bottom action row).
+   --------------------------------------------------------- */
+(function () {
+  'use strict';
+  function bindOpenState() {
+    var btn = document.querySelector('.menu-button.w-nav-button');
+    if (!btn) return;
+    function sync() {
+      document.body.classList.toggle('nav-open', btn.classList.contains('w--open'));
+    }
+    sync();
+    var mo = new MutationObserver(sync);
+    mo.observe(btn, { attributes: true, attributeFilter: ['class'] });
+    btn.addEventListener('click', function () { setTimeout(sync, 50); });
+    btn.addEventListener('touchend', function () { setTimeout(sync, 50); });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindOpenState);
+  } else {
+    bindOpenState();
+  }
+})();
+
+/* ---------------------------------------------------------
    Sticky-header scroll state — adds .is-scrolled to .nav-section
    once the user has scrolled more than a few pixels.
    --------------------------------------------------------- */
