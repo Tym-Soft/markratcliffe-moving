@@ -155,3 +155,84 @@
     bind();
   }
 })();
+
+/* ---------------------------------------------------------
+   Auto Table of Contents — builds itself from page H2s and
+   mounts inside <aside class="np-toc-mount"></aside>.
+   Skips H2s that live inside marketing/secondary sections.
+   --------------------------------------------------------- */
+(function () {
+  'use strict';
+  function slugify(text) {
+    return text.toLowerCase()
+      .replace(/&[a-z]+;/g, ' ')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
+  // Sections we don't want in the TOC (they're page-furniture, not article content)
+  var SKIP_SELECTOR = '.np-toc, .np-toc-mount, .np-faq, .np-related, ' +
+                      '.np-cta-band, .hp-usps, .hp-process, .hp-testimonials, ' +
+                      '.hp-areas, .hp-fleet, .hp-accred, .hp-cta-band, ' +
+                      '.hp-blog-strip, .hp-services, .np-accred, ' +
+                      '.hp-section-head, .hp-test-grid';
+
+  function build() {
+    var mount = document.querySelector('.np-toc-mount');
+    if (!mount) return;
+    var h2s = document.querySelectorAll('h2');
+    var headings = [];
+    h2s.forEach(function (h) {
+      if (h.closest(SKIP_SELECTOR)) return;
+      if (!h.textContent.trim()) return;
+      headings.push(h);
+    });
+    if (headings.length < 3) {
+      mount.style.display = 'none';
+      return;
+    }
+    var used = {};
+    headings.forEach(function (h) {
+      if (!h.id) {
+        var base = slugify(h.textContent) || 'section';
+        var id = base, i = 2;
+        while (used[id] || document.getElementById(id)) {
+          id = base + '-' + i;
+          i++;
+        }
+        used[id] = true;
+        h.id = id;
+      }
+      // Give the H2 a scroll-offset so it lands clear of the sticky nav
+      h.style.scrollMarginTop = '110px';
+    });
+    var html  = '<nav class="np-toc" aria-label="On this page">';
+        html += '<button class="np-toc-toggle" type="button" aria-expanded="false">On this page</button>';
+        html += '<ol>';
+    headings.forEach(function (h) {
+      html += '<li><a href="#' + h.id + '">' + h.textContent + '</a></li>';
+    });
+        html += '</ol></nav>';
+    mount.innerHTML = html;
+
+    var toc = mount.querySelector('.np-toc');
+    var btn = mount.querySelector('.np-toc-toggle');
+    function setOpen(open) {
+      toc.classList.toggle('is-open', open);
+      if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    if (btn) {
+      btn.addEventListener('click', function () {
+        setOpen(!toc.classList.contains('is-open'));
+      });
+    }
+    // Open by default on tablet+, collapsed on phones (CSS-driven media)
+    setOpen(window.matchMedia('(min-width: 601px)').matches);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', build);
+  } else {
+    build();
+  }
+})();

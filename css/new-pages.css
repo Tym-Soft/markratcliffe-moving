@@ -2905,3 +2905,121 @@ img, video, picture, svg {
 
 /* Polishing the .np-section.np-accred wrapper to match the brand-soft section */
 .np-section.np-accred { padding-top: 3.25rem; padding-bottom: 3.25rem; }
+
+/* =========================================================
+   PHASE C — Table of Contents + closing CTA band
+   ========================================================= */
+.np-toc-mount { display: block; margin: 0; }
+.np-toc {
+  background: rgba(77, 46, 143, 0.04);
+  border-left: 3px solid #C8A876;
+  border-radius: 6px;
+  padding: 1.25rem 1.4rem;
+  margin: 0.5rem 0 2rem;
+  max-width: 720px;
+}
+.np-toc-toggle {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0 0 0.35rem;
+  font-family: "Inter", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #4d2e8f;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.np-toc-toggle::after {
+  content: "";
+  display: inline-block;
+  width: 0; height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #C8A876;
+  transition: transform 0.2s ease;
+}
+.np-toc.is-open .np-toc-toggle::after { transform: rotate(180deg); }
+.np-toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: tocn;
+}
+.np-toc li {
+  margin: 0.35rem 0;
+  line-height: 1.45;
+  counter-increment: tocn;
+}
+.np-toc li::before {
+  content: counter(tocn, decimal-leading-zero) ".";
+  color: #C8A876;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  margin-right: 0.55rem;
+}
+.np-toc a {
+  color: #4d2e8f;
+  text-decoration: none;
+  font-size: 0.98rem;
+  border-bottom: 1px solid transparent;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+.np-toc a:hover,
+.np-toc a:focus { color: #C8A876; border-bottom-color: #C8A876; }
+
+/* Collapsed by default on mobile (the JS adds .is-open on desktop) */
+@media (max-width: 600px) {
+  .np-toc ol { display: none; }
+  .np-toc.is-open ol { display: block; }
+}
+
+/* Closing CTA band — purple gradient, paired buttons, centered.
+   .np-cta-block is the legacy class used on ~99 pages — alias it here. */
+.np-section.np-cta-band,
+.np-section.np-cta-block {
+  background: linear-gradient(135deg, #4d2e8f 0%, #3a226d 100%);
+  color: #fff;
+  text-align: center;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+.np-section.np-cta-band h2,
+.np-section.np-cta-block h2 {
+  color: #fff !important;
+  margin: 0 0 0.5rem;
+}
+.np-section.np-cta-band p,
+.np-section.np-cta-block p {
+  color: rgba(255,255,255,0.92);
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+.np-section.np-cta-band .np-hero-cta,
+.np-section.np-cta-band .np-cta-row,
+.np-section.np-cta-block .np-hero-cta,
+.np-section.np-cta-block .np-cta-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+/* Legacy ghost buttons on the dark band — make secondary readable */
+.np-section.np-cta-band .np-btn-secondary,
+.np-section.np-cta-block .np-btn-secondary {
+  background: rgba(255,255,255,0.10);
+  color: #fff;
+  border-color: rgba(255,255,255,0.55);
+}
+.np-section.np-cta-band .np-btn-secondary:hover,
+.np-section.np-cta-block .np-btn-secondary:hover {
+  background: #fff;
+  color: #4d2e8f;
+  border-color: #fff;
+}
