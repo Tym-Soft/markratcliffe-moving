@@ -2823,3 +2823,85 @@ img, video, picture, svg {
     animation: none !important;
   }
 }
+
+/* =========================================================
+   PHASE A — page-content components
+   .np-eyebrow         small bronze caps line above section H2
+   .np-hero-sub        hero subtitle paragraph
+   .np-split           2-column text + image section
+   .np-accred-row      horizontal accreditation strip
+   ========================================================= */
+
+.np-eyebrow {
+  display: inline-block;
+  font-family: "Inter", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #C8A876;
+  margin-bottom: 0.65rem;
+}
+
+.np-hero .np-hero-sub,
+.np-hero-sub {
+  font-family: "Inter", sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.92);
+  max-width: 640px;
+  margin: 0.75rem 0 1.5rem;
+}
+@media (max-width: 600px) {
+  .np-hero-sub { font-size: 1.02rem; line-height: 1.5; }
+}
+
+/* Two-column split block: text on the left, figure on the right */
+.np-split {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 3rem;
+  align-items: center;
+}
+.np-split-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 24px 48px -28px rgba(77, 46, 143, 0.45);
+  display: block;
+}
+.np-split-text p { line-height: 1.7; }
+@media (max-width: 900px) {
+  .np-split { grid-template-columns: 1fr; gap: 2rem; }
+  .np-split-figure { order: 2; }
+}
+
+/* Accreditation logos: balanced flex row, white tile underneath each logo */
+.np-accred-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.np-accred-row img {
+  height: auto;
+  max-height: 110px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(0%) saturate(110%);
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+.np-accred-row img:hover {
+  transform: translateY(-2px);
+  filter: grayscale(0%) saturate(125%);
+}
+@media (max-width: 600px) {
+  .np-accred-row { gap: 1rem 1.5rem; }
+  .np-accred-row img { max-height: 78px; }
+}
+
+/* Polishing the .np-section.np-accred wrapper to match the brand-soft section */
+.np-section.np-accred { padding-top: 3.25rem; padding-bottom: 3.25rem; }
