@@ -93,3 +93,65 @@
     init();
   }
 })();
+
+/* ---------------------------------------------------------
+   Sticky-header scroll state — adds .is-scrolled to .nav-section
+   once the user has scrolled more than a few pixels.
+   --------------------------------------------------------- */
+(function () {
+  'use strict';
+  function bind() {
+    var nav = document.querySelector('.nav-section');
+    if (!nav) return;
+    var lastState = null;
+    function update() {
+      var scrolled = window.scrollY > 8;
+      if (scrolled === lastState) return;
+      lastState = scrolled;
+      nav.classList.toggle('is-scrolled', scrolled);
+    }
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bind);
+  } else {
+    bind();
+  }
+})();
+
+/* ---------------------------------------------------------
+   Active page highlighting — adds .is-active to the matching
+   navbar link, and .has-active to the parent dropdown if the
+   current page lives inside a dropdown menu.
+   --------------------------------------------------------- */
+(function () {
+  'use strict';
+  function fileFromHref(href) {
+    if (!href) return '';
+    return href.split('?')[0].split('#')[0].split('/').pop().toLowerCase();
+  }
+  function bind() {
+    var current = fileFromHref(location.pathname) || 'index.html';
+    if (current === '' || current === '/') current = 'index.html';
+
+    var links = document.querySelectorAll(
+      '.navbar .navlink, .navbar .dropdown-list a, ' +
+      '.navbar .mega-menu a, .navbar .mega-col a'
+    );
+    links.forEach(function (link) {
+      if (link.tagName !== 'A') return;
+      var file = fileFromHref(link.getAttribute('href') || '');
+      if (file && file === current) link.classList.add('is-active');
+    });
+
+    document.querySelectorAll('.navbar .dropdown.w-dropdown').forEach(function (drop) {
+      if (drop.querySelector('a.is-active')) drop.classList.add('has-active');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bind);
+  } else {
+    bind();
+  }
+})();

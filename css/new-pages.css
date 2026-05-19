@@ -630,8 +630,25 @@ img {
   top: 0; left: 0; right: 0;
   z-index: 1001;
   background: #4d2e8f;       /* brand purple — covers any gap behind transparent children */
-  box-shadow: 0 11px 14px rgba(0,0,0,0.18);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 2px 8px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  border-bottom: 1px solid rgba(200, 168, 118, 0.18);
 }
+.nav-section.is-scrolled {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.22), 0 1px 0 rgba(200,168,118,0.18);
+  border-bottom-color: rgba(200, 168, 118, 0.45);
+}
+.nav-section::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #C8A876 35%, #C8A876 65%, transparent 100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.nav-section.is-scrolled::after { opacity: 0.65; }
 /* Push page content down so it isn't hidden behind the fixed nav.
    The nav is roughly 76-110px tall depending on top-bar visibility. */
 body { padding-top: 78px; }
@@ -2688,4 +2705,121 @@ img, video, picture, svg {
 @media (prefers-reduced-motion: reduce) {
   .fab-call { transition: none; }
   .fab-call:hover { transform: none; }
+}
+
+/* =========================================================
+   ACTIVE PAGE STYLING — bronze marker on the current nav item
+   ========================================================= */
+
+/* Desktop: bronze underline + bronze text */
+@media (min-width: 992px) {
+  .navbar .navlink.is-active,
+  .navbar .dropdown.has-active > .dropdown-toggle {
+    color: #D6B274 !important;
+    font-weight: 700 !important;
+    position: relative;
+  }
+  .navbar .navlink.is-active::after,
+  .navbar .dropdown.has-active > .dropdown-toggle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 6px;
+    width: 26px;
+    height: 3px;
+    background: #C8A876;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(200, 168, 118, 0.35);
+  }
+  /* Dropdown items inside an open menu — bronze tint on the active row */
+  .navbar .dropdown-list a.is-active,
+  .navbar .mega-menu a.is-active,
+  .navbar .mega-col a.is-active {
+    color: #D6B274 !important;
+    font-weight: 700 !important;
+    background: rgba(200, 168, 118, 0.08);
+  }
+}
+
+/* Mobile: left bronze bar + soft tinted background */
+@media (max-width: 991px) {
+  .navbar .navlink.is-active,
+  .navbar .dropdown-list a.is-active,
+  .navbar .mega-col a.is-active {
+    color: #D6B274 !important;
+    background: rgba(200, 168, 118, 0.10) !important;
+    border-left: 3px solid #C8A876 !important;
+    padding-left: 1rem !important;
+  }
+  .navbar .dropdown.has-active > .dropdown-toggle {
+    color: #D6B274 !important;
+    background: rgba(200, 168, 118, 0.08) !important;
+  }
+}
+
+/* =========================================================
+   SMOOTHER MOBILE HAMBURGER + MENU REVEAL
+   ========================================================= */
+@media (max-width: 991px) {
+  .menu-button.w-nav-button {
+    transition: background 0.2s ease, transform 0.15s ease, color 0.2s ease !important;
+    border-radius: 8px !important;
+  }
+  .menu-button.w-nav-button:active { transform: scale(0.92); }
+  .menu-button.w-nav-button.w--open { color: #D6B274 !important; }
+  .menu-button.w-nav-button.w--open .w-icon-nav-menu { color: #D6B274 !important; }
+
+  /* Slide-in animation for the mobile menu panel */
+  .navbar .w-nav-overlay .nav-menu.w-nav-menu,
+  .navbar .nav-menu.w-nav-menu {
+    animation: mr-nav-slide-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform-origin: top center;
+  }
+  @keyframes mr-nav-slide-in {
+    from { transform: translateY(-12px); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+  }
+  /* Each row staggered for a softer reveal */
+  .navbar .w-nav-overlay .navlink {
+    animation: mr-nav-row-in 0.35s ease both;
+  }
+  .navbar .w-nav-overlay .navlink:nth-child(1)  { animation-delay: 0.03s; }
+  .navbar .w-nav-overlay .navlink:nth-child(2)  { animation-delay: 0.05s; }
+  .navbar .w-nav-overlay .navlink:nth-child(3)  { animation-delay: 0.07s; }
+  .navbar .w-nav-overlay .navlink:nth-child(4)  { animation-delay: 0.09s; }
+  .navbar .w-nav-overlay .navlink:nth-child(5)  { animation-delay: 0.11s; }
+  .navbar .w-nav-overlay .navlink:nth-child(6)  { animation-delay: 0.13s; }
+  .navbar .w-nav-overlay .navlink:nth-child(7)  { animation-delay: 0.15s; }
+  .navbar .w-nav-overlay .navlink:nth-child(8)  { animation-delay: 0.17s; }
+  .navbar .w-nav-overlay .navlink:nth-child(9)  { animation-delay: 0.19s; }
+  .navbar .w-nav-overlay .navlink:nth-child(10) { animation-delay: 0.21s; }
+  @keyframes mr-nav-row-in {
+    from { opacity: 0; transform: translateX(-14px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Dropdown accordion: smoother expand */
+  .navbar .dropdown.w-dropdown .dropdown-list.w-dropdown-list {
+    transition: max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+  }
+  .navbar .dropdown.w-dropdown.w--open .dropdown-list.w-dropdown-list {
+    max-height: 1400px;
+    opacity: 1;
+  }
+}
+
+/* Reduce-motion: disable nav animations */
+@media (prefers-reduced-motion: reduce) {
+  .nav-section, .nav-section::after,
+  .menu-button.w-nav-button,
+  .navbar .nav-menu.w-nav-menu,
+  .navbar .w-nav-overlay .navlink,
+  .navbar .dropdown.w-dropdown .dropdown-list.w-dropdown-list {
+    transition: none !important;
+    animation: none !important;
+  }
 }
