@@ -86,15 +86,23 @@
     return '£' + Math.round(n).toLocaleString('en-GB');
   }
 
-  // Single rate per home size: small = bottom of band, medium = mid,
-  // large = top. Same idea for the minimum charge.
+  // Fixed minimum charges per home size — Mark Ratcliffe Moving's
+  // published rate. Independent of vehicle band; covers our basic
+  // floor cost for that size of job before mileage and any premium
+  // for big-volume contents.
+  var HOME_SIZE_MIN = { small: 360, medium: 650, large: 1000 };
+  // Home-size labels used in the headline copy and emails.
+  var HOME_SIZE_LABEL = {
+    small:  '1-bed flat / studio',
+    medium: '2-3 bed home',
+    large:  '4+ bed / antiques / country property'
+  };
+
+  // £/cu ft rate by home size: small = bottom of band, medium = mid, large = top.
   function rateForSize(band, size) {
-    if (size === 'small') return { rate: band.rateMin, min: band.minMin };
-    if (size === 'large') return { rate: band.rateMax, min: band.minMax };
-    return {
-      rate: (band.rateMin + band.rateMax) / 2,
-      min:  (band.minMin  + band.minMax) / 2
-    };
+    if (size === 'small') return band.rateMin;
+    if (size === 'large') return band.rateMax;
+    return (band.rateMin + band.rateMax) / 2;
   }
 
   function getHomeSize() {
@@ -160,29 +168,34 @@
       if (cuft <= BANDS[i].max) { band = BANDS[i]; break; }
     }
 
-    var size = getHomeSize();
-    var rs   = rateForSize(band, size);
+    var size      = getHomeSize();
+    var rate      = rateForSize(band, size);
+    var minCharge = HOME_SIZE_MIN[size] || HOME_SIZE_MIN.medium;
+    var headlineLabel = document.getElementById('cost-headline-label');
 
     if (cuft === 0) {
-      costVehicle.textContent = 'Add items above to see your vehicle band';
+      costVehicle.textContent = 'Add items above to see your vehicle';
       costVolume.textContent  = '£0';
       costMileage.textContent = pounds(miles * band.mileRate);
-      costMinimum.textContent = pounds(rs.min);
-      costTotal.textContent   = pounds(rs.min + miles * band.mileRate);
-      updateStorage(cuft, rs.min + miles * band.mileRate);
+      costMinimum.textContent = pounds(minCharge);
+      costTotal.textContent   = pounds(minCharge + miles * band.mileRate);
+      if (headlineLabel) headlineLabel.textContent = 'Add items to see your removals cost';
+      updateStorage(cuft, minCharge + miles * band.mileRate);
       return;
     }
 
-    var volCost  = cuft * rs.rate;
+    var volCost  = cuft * rate;
     var mileCost = miles * band.mileRate;
-    var base     = Math.max(rs.min, volCost);
+    var base     = Math.max(minCharge, volCost);
     var total    = base + mileCost;
+    var sizeText = size.charAt(0).toUpperCase() + size.slice(1);
 
     costVehicle.textContent = band.vehicle;
-    costVolume.textContent  = pounds(volCost) + ' (' + cuft + ' cu ft × £' + rs.rate.toFixed(2) + '/cu ft, ' + size + ' home)';
+    costVolume.textContent  = pounds(volCost) + ' (' + cuft + ' cu ft × £' + rate.toFixed(2) + '/cu ft)';
     costMileage.textContent = pounds(mileCost) + ' (' + miles + ' mi × £' + band.mileRate.toFixed(2) + '/mi)';
-    costMinimum.textContent = pounds(rs.min);
+    costMinimum.textContent = pounds(minCharge) + ' (' + sizeText + ' home)';
     costTotal.textContent   = pounds(total);
+    if (headlineLabel) headlineLabel.textContent = 'Estimated removals cost · ' + sizeText + ' home, ' + miles + ' mi';
 
     updateStorage(cuft, total);
   }
@@ -215,7 +228,12 @@
 
     storageUnitEl.textContent   = unit.sqft + ' sqft Prestige steel room' + biggerNote;
     storageWeeklyEl.textContent = '£' + unit.weekly.toFixed(2);
-    storageTotalEl.textContent  = '£' + storageTotal.toFixed(2) + ' (' + weeks + ' wk × £' + unit.weekly.toFixed(2) + ')';
+    storageTotalEl.textContent  = '£' + storageTotal.toFixed(2);
+
+    var storageLabel = document.getElementById('storage-headline-label');
+    if (storageLabel) {
+      storageLabel.textContent = 'Estimated storage cost · ' + weeks + ' weeks, ' + unit.sqft + ' sqft room';
+    }
 
     if (grandTotalRow && grandTotalValue) {
       grandTotalValue.textContent = pounds(removalsTotal + storageTotal);
