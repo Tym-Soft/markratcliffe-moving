@@ -755,125 +755,129 @@ def page_html() -> str:
       <h2>Get your estimate in 30 seconds</h2>
       <p class="calc-lead">Pick what you want priced, the size of your home, the round-trip distance and (if you need it) storage days. Your figure updates as you type — refine with a room-by-room inventory below if you want a sharper number.</p>
 
-      <div class="calc-shell">
-        <!-- LEFT COLUMN — inputs -->
-        <div class="calc-shell-inputs">
+      <div class="calc-panel-wrap">
+        <div class="quote-card quote-card-full" aria-live="polite" aria-label="Live estimate">
 
-          <fieldset class="mode-selector" id="mode-selector">
-            <legend class="calc-step-label"><span class="calc-step-num">1</span> What are you calculating?</legend>
-            <label class="mode-option">
-              <input type="radio" name="calc-mode" value="removals">
-              <span class="mode-icon">__ICON_TRUCK__</span>
-              <span class="mode-text"><strong>Removals only</strong><small>Move your items to a new home.</small></span>
-            </label>
-            <label class="mode-option">
-              <input type="radio" name="calc-mode" value="storage">
-              <span class="mode-icon">__ICON_WAREHOUSE__</span>
-              <span class="mode-text"><strong>Storage only</strong><small>Store in a Prestige steel room.</small></span>
-            </label>
-            <label class="mode-option">
-              <input type="radio" name="calc-mode" value="both" checked>
-              <span class="mode-icon">__ICON_TRUCKBOX__</span>
-              <span class="mode-text"><strong>Both</strong><small>Removals + storage combined.</small></span>
-            </label>
+          <!-- STEP 1: MODE -->
+          <fieldset class="qc-step" id="mode-selector">
+            <legend class="qc-step-label"><span class="qc-step-num">1</span> What are you calculating?</legend>
+            <div class="qc-mode-row">
+              <label class="qc-mode-card">
+                <input type="radio" name="calc-mode" value="removals">
+                <span class="qc-mode-icon">__ICON_TRUCK__</span>
+                <span class="qc-mode-text"><strong>Removals only</strong><small>Move your items to a new home.</small></span>
+              </label>
+              <label class="qc-mode-card">
+                <input type="radio" name="calc-mode" value="storage">
+                <span class="qc-mode-icon">__ICON_WAREHOUSE__</span>
+                <span class="qc-mode-text"><strong>Storage only</strong><small>Store in a Prestige steel room.</small></span>
+              </label>
+              <label class="qc-mode-card">
+                <input type="radio" name="calc-mode" value="both" checked>
+                <span class="qc-mode-icon">__ICON_TRUCKBOX__</span>
+                <span class="qc-mode-text"><strong>Both</strong><small>Removals + storage combined.</small></span>
+              </label>
+            </div>
           </fieldset>
 
-          <fieldset class="bedroom-selector" id="bedroom-selector">
-            <legend class="calc-step-label"><span class="calc-step-num">2</span> How big is the home?</legend>
-            <label class="bedroom-card">
-              <input type="radio" name="home-size" value="1bed">
-              <span class="bedroom-icon">__ICON_BED_1__</span>
-              <span class="bedroom-text"><strong>1-bed flat or studio</strong><small>typical 700 cu ft</small></span>
-            </label>
-            <label class="bedroom-card">
-              <input type="radio" name="home-size" value="2bed">
-              <span class="bedroom-icon">__ICON_BED_2__</span>
-              <span class="bedroom-text"><strong>2-bed home</strong><small>typical 1,100 cu ft</small></span>
-            </label>
-            <label class="bedroom-card">
-              <input type="radio" name="home-size" value="3bed" checked>
-              <span class="bedroom-icon">__ICON_BED_3__</span>
-              <span class="bedroom-text"><strong>3-bed home</strong><small>typical 1,500 cu ft</small></span>
-            </label>
-            <label class="bedroom-card">
-              <input type="radio" name="home-size" value="4bed">
-              <span class="bedroom-icon">__ICON_BED_4__</span>
-              <span class="bedroom-text"><strong>4-bed home</strong><small>typical 2,200 cu ft</small></span>
-            </label>
-            <label class="bedroom-card">
-              <input type="radio" name="home-size" value="5bed">
-              <span class="bedroom-icon">__ICON_BED_5__</span>
-              <span class="bedroom-text"><strong>5+ bed / antiques / country</strong><small>typical 3,000+ cu ft</small></span>
-            </label>
+          <!-- STEP 2: BEDROOMS -->
+          <fieldset class="qc-step" id="bedroom-selector">
+            <legend class="qc-step-label"><span class="qc-step-num">2</span> How big is the home?</legend>
+            <div class="qc-bed-row">
+              <label class="qc-bed-card">
+                <input type="radio" name="home-size" value="1bed">
+                <span class="qc-bed-icon">__ICON_BED_1__</span>
+                <span class="qc-bed-text"><strong>1-bed</strong><small>~700 cu ft</small></span>
+              </label>
+              <label class="qc-bed-card">
+                <input type="radio" name="home-size" value="2bed">
+                <span class="qc-bed-icon">__ICON_BED_2__</span>
+                <span class="qc-bed-text"><strong>2-bed</strong><small>~1,100 cu ft</small></span>
+              </label>
+              <label class="qc-bed-card">
+                <input type="radio" name="home-size" value="3bed" checked>
+                <span class="qc-bed-icon">__ICON_BED_3__</span>
+                <span class="qc-bed-text"><strong>3-bed</strong><small>~1,500 cu ft</small></span>
+              </label>
+              <label class="qc-bed-card">
+                <input type="radio" name="home-size" value="4bed">
+                <span class="qc-bed-icon">__ICON_BED_4__</span>
+                <span class="qc-bed-text"><strong>4-bed</strong><small>~2,200 cu ft</small></span>
+              </label>
+              <label class="qc-bed-card">
+                <input type="radio" name="home-size" value="5bed">
+                <span class="qc-bed-icon">__ICON_BED_5__</span>
+                <span class="qc-bed-text"><strong>5+ bed</strong><small>~3,000+ cu ft</small></span>
+              </label>
+            </div>
           </fieldset>
 
-          <fieldset class="calc-numfields">
-            <legend class="calc-step-label"><span class="calc-step-num">3</span> Volume &amp; distance</legend>
-            <div class="calc-numfields-grid">
-              <label class="calc-numfield">
-                <span class="calc-numfield-label">Cubic feet</span>
+          <!-- STEP 3: NUMBERS -->
+          <fieldset class="qc-step">
+            <legend class="qc-step-label"><span class="qc-step-num">3</span> Volume &amp; distance</legend>
+            <div class="qc-num-row">
+              <label class="qc-num">
+                <span class="qc-num-label">Cubic feet</span>
                 <input type="number" id="cost-manual-cuft" min="0" step="50" value="1500" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
-                <span class="calc-numfield-help" id="cost-manual-cuft-help">Auto-fills with the typical figure for your chosen bedroom count. Tick items below to override with a precise volume.</span>
+                <span class="qc-num-help" id="cost-manual-cuft-help">Auto-fills typical figure; tick items below for a precise volume.</span>
               </label>
-              <label class="calc-numfield" data-show-modes="removals both">
-                <span class="calc-numfield-label">Total job miles</span>
+              <label class="qc-num" data-show-modes="removals both">
+                <span class="qc-num-label">Total job miles</span>
                 <input type="number" id="cost-miles" min="0" value="30" inputmode="numeric" aria-describedby="cost-miles-help">
-                <span class="calc-numfield-help" id="cost-miles-help">Round-trip: depot → old home → new home → depot. Local Sussex 25–50 mi. London 100–150 mi.</span>
+                <span class="qc-num-help" id="cost-miles-help">Round-trip: depot → home → new home → depot.</span>
               </label>
-              <label class="calc-numfield" data-show-modes="storage both">
-                <span class="calc-numfield-label">Days of storage</span>
+              <label class="qc-num" data-show-modes="storage both">
+                <span class="qc-num-label">Days of storage</span>
                 <input type="number" id="storage-days" min="1" value="28" inputmode="numeric" aria-describedby="storage-days-help">
-                <span class="calc-numfield-help" id="storage-days-help">7 days = 1 week. Default 28 (~4 wks). Most book 28–182 days.</span>
+                <span class="qc-num-help" id="storage-days-help">7 days = 1 week. Default 28 (~4 wks).</span>
               </label>
             </div>
           </fieldset>
 
-          <aside class="inventory-prompt" id="inventory-prompt" hidden>
-            <div class="inventory-prompt-text">
+          <!-- AUTO-FILL PROMPT (in-card variant) -->
+          <aside class="qc-inv-prompt" id="inventory-prompt" hidden>
+            <div class="qc-inv-prompt-text">
               <strong>Want a head start?</strong>
-              <span id="inventory-prompt-detail">Load a typical 3-bed inventory into the item picker below. We&rsquo;ve worked out a standard loadout for that size of home — you can tweak the quantities after.</span>
+              <span id="inventory-prompt-detail">Load a typical 3-bed inventory into the item picker below.</span>
             </div>
-            <div class="inventory-prompt-actions">
-              <button type="button" id="load-inventory-btn" class="np-btn np-btn-primary">Load typical inventory</button>
-              <button type="button" id="dismiss-inventory-prompt" class="inventory-prompt-skip">Skip — I&rsquo;ll use the cu ft figure</button>
+            <div class="qc-inv-prompt-actions">
+              <button type="button" id="load-inventory-btn" class="qc-inv-load">Load typical inventory</button>
+              <button type="button" id="dismiss-inventory-prompt" class="qc-inv-skip">Skip</button>
             </div>
           </aside>
 
+          <div class="qc-divider"></div>
+
+          <!-- ESTIMATE -->
+          <div class="quote-card-eyebrow">Your estimate</div>
+          <div class="quote-card-amount" id="cost-grand-total-value">£0</div>
+          <div class="quote-card-label" id="cost-headline-label">Live estimate · updates as you type</div>
+
+          <div class="quote-card-meta">
+            <div class="quote-card-meta-item"><strong id="total-cuft">0</strong><span>cu ft</span></div>
+            <div class="quote-card-meta-item"><strong id="total-cum">0.00</strong><span>cu m</span></div>
+            <div class="quote-card-meta-item"><strong id="total-kg">0</strong><span>kg</span></div>
+            <div class="quote-card-meta-item"><strong id="van-estimate">—</strong><span>load size</span></div>
+          </div>
+
+          <dl class="quote-card-breakdown">
+            <div class="quote-line" data-show-modes="removals both"><dt>Vehicle</dt><dd><strong id="cost-vehicle">—</strong></dd></div>
+            <div class="quote-line" data-show-modes="removals both"><dt>Volume cost</dt><dd><strong id="cost-volume">£0</strong></dd></div>
+            <div class="quote-line" data-show-modes="removals both"><dt>Mileage</dt><dd><strong id="cost-mileage">£0</strong></dd></div>
+            <div class="quote-line quote-line-subtotal" data-show-modes="removals both"><dt>Removals subtotal</dt><dd><strong id="cost-total">£0</strong></dd></div>
+            <div class="quote-line" data-show-modes="storage both"><dt>Storage unit</dt><dd><strong id="storage-unit">—</strong></dd></div>
+            <div class="quote-line" data-show-modes="storage both"><dt>Daily rate</dt><dd><strong id="storage-daily">£0.00</strong></dd></div>
+            <div class="quote-line quote-line-subtotal" data-show-modes="storage both"><dt>Storage subtotal</dt><dd><strong id="storage-total">£0.00</strong></dd></div>
+          </dl>
+
+          <p class="quote-card-alt" data-show-modes="storage both">Also available: <strong>75 sqft low-ceiling room at £6.91/day</strong> — ideal if your contents won&rsquo;t stack high.</p>
+
+          <a href="#quote-form" class="quote-card-cta">Send these figures for a quote &rarr;</a>
+          <p class="quote-card-disclaimer">Estimate only. The exact quote depends on access, stairs, packing materials, antiques handling and timing. <a href="../mark-ratcliffe-moving-online-removals-quote.html">Request a free survey</a> — reply in 48 hours.</p>
+
           <!-- Hidden storage-enabled checkbox kept for JS compatibility (mode picker drives it). -->
           <input type="checkbox" id="storage-enabled" hidden aria-hidden="true">
-
         </div>
-
-        <!-- RIGHT COLUMN — sticky live quote card -->
-        <aside class="calc-shell-output" aria-live="polite" aria-label="Live estimate">
-          <div class="quote-card">
-            <div class="quote-card-eyebrow">Your estimate</div>
-            <div class="quote-card-amount" id="cost-grand-total-value">£0</div>
-            <div class="quote-card-label" id="cost-headline-label">Live estimate · updates as you type</div>
-
-            <div class="quote-card-meta">
-              <div class="quote-card-meta-item"><strong id="total-cuft">0</strong><span>cu ft</span></div>
-              <div class="quote-card-meta-item"><strong id="total-cum">0.00</strong><span>cu m</span></div>
-              <div class="quote-card-meta-item"><strong id="total-kg">0</strong><span>kg</span></div>
-              <div class="quote-card-meta-item"><strong id="van-estimate">—</strong><span>load size</span></div>
-            </div>
-
-            <dl class="quote-card-breakdown">
-              <div class="quote-line" data-show-modes="removals both"><dt>Vehicle</dt><dd><strong id="cost-vehicle">—</strong></dd></div>
-              <div class="quote-line" data-show-modes="removals both"><dt>Volume cost</dt><dd><strong id="cost-volume">£0</strong></dd></div>
-              <div class="quote-line" data-show-modes="removals both"><dt>Mileage</dt><dd><strong id="cost-mileage">£0</strong></dd></div>
-              <div class="quote-line quote-line-subtotal" data-show-modes="removals both"><dt>Removals subtotal</dt><dd><strong id="cost-total">£0</strong></dd></div>
-              <div class="quote-line" data-show-modes="storage both"><dt>Storage unit</dt><dd><strong id="storage-unit">—</strong></dd></div>
-              <div class="quote-line" data-show-modes="storage both"><dt>Daily rate</dt><dd><strong id="storage-daily">£0.00</strong></dd></div>
-              <div class="quote-line quote-line-subtotal" data-show-modes="storage both"><dt>Storage subtotal</dt><dd><strong id="storage-total">£0.00</strong></dd></div>
-            </dl>
-
-            <p class="quote-card-alt" data-show-modes="storage both">Also available: <strong>75 sqft low-ceiling room at £6.91/day</strong> — ideal if your contents won&rsquo;t stack high.</p>
-
-            <a href="#quote-form" class="quote-card-cta">Send these figures for a quote &rarr;</a>
-            <p class="quote-card-disclaimer">Estimate only. The exact quote depends on access, stairs, packing materials, antiques handling and timing. <a href="../mark-ratcliffe-moving-online-removals-quote.html">Request a free survey</a> — reply in 48 hours.</p>
-          </div>
-        </aside>
       </div>
     </div>
   </section>
@@ -1039,7 +1043,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260587"></script>
+  <script defer src="../js/storage-calculator.js?v=20260588"></script>
 </body>
 </html>
 """
