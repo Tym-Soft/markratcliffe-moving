@@ -92,7 +92,7 @@
   // and also defines the volume the property's base charge already
   // covers. Above typicalCuft, each extra cu ft adds £1.21.
   var BED_DEFAULTS = {
-    '1bed': { label: '1-bed flat or studio',         typicalCuft:  100, base:  500 },
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  500, base:  500 },
     '2bed': { label: '2-bed home',                   typicalCuft:  800, base:  650 },
     '3bed': { label: '3-bed home',                   typicalCuft: 1200, base:  900 },
     '4bed': { label: '4-bed home',                   typicalCuft: 1800, base: 1500 },
