@@ -695,6 +695,30 @@
     if (visible && scroll) {
       invSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    if (visible) {
+      // Re-measure after layout settles (section was hidden, dimensions were 0).
+      requestAnimationFrame(function () { requestAnimationFrame(updateTabsMoreBtn); });
+    }
+  }
+
+  // "More →" tab-strip affordance — appears when tabs are scrolled
+  // offscreen to the right. Clicking scrolls the tab strip further right.
+  var tabsContainer = root.querySelector('.calc-tabs');
+  var tabsMoreBtn   = document.getElementById('calc-tabs-more');
+  function updateTabsMoreBtn() {
+    if (!tabsContainer || !tabsMoreBtn) return;
+    var moreRight = tabsContainer.scrollLeft + tabsContainer.clientWidth < tabsContainer.scrollWidth - 2;
+    tabsMoreBtn.hidden = !moreRight;
+  }
+  if (tabsContainer) {
+    tabsContainer.addEventListener('scroll', updateTabsMoreBtn);
+    window.addEventListener('resize', updateTabsMoreBtn);
+  }
+  if (tabsMoreBtn && tabsContainer) {
+    tabsMoreBtn.addEventListener('click', function () {
+      var amount = Math.max(220, tabsContainer.clientWidth * 0.7);
+      tabsContainer.scrollBy({ left: amount, behavior: 'smooth' });
+    });
   }
 
   // Toggle change handler — ON loads the preset and shows the editor;
