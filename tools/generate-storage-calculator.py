@@ -832,8 +832,9 @@ def page_html() -> str:
         <div class="storage-details" id="storage-details" hidden>
           <div class="storage-fields">
             <label class="storage-weeks-field">
-              <span class="storage-label">Weeks of storage</span>
-              <input type="number" id="storage-weeks" min="1" value="4">
+              <span class="storage-label">Days of storage</span>
+              <input type="number" id="storage-days" min="1" value="28" inputmode="numeric" aria-describedby="storage-days-help">
+              <span class="cost-input-help" id="storage-days-help">7 days = 1 week. Defaults to 28 days (~4 weeks). Most customers book 4&ndash;26 weeks (28&ndash;182 days).</span>
             </label>
             <p class="storage-help">Unit size is picked automatically from your selected volume — a Prestige steel storage room at our Lower Dicker depot. Rates include VAT and goods-in-storage insurance.</p>
           </div>
@@ -844,9 +845,9 @@ def page_html() -> str:
             </div>
             <dl class="cost-breakdown">
               <div class="cost-line"><dt>Recommended unit</dt><dd><strong id="storage-unit">—</strong></dd></div>
-              <div class="cost-line"><dt>Weekly rate (inc VAT &amp; insurance)</dt><dd><strong id="storage-weekly">£0.00</strong></dd></div>
+              <div class="cost-line"><dt>Daily rate (inc VAT &amp; insurance)</dt><dd><strong id="storage-daily">£0.00</strong></dd></div>
             </dl>
-            <p class="storage-alt">Also available: <strong>75 sqft low-ceiling room at £6.91/week</strong> (inc VAT &amp; insurance) — ideal if your contents won&rsquo;t stack high.</p>
+            <p class="storage-alt">Also available: <strong>75 sqft low-ceiling room at £6.91/day</strong> (inc VAT &amp; insurance) — ideal if your contents won&rsquo;t stack high.</p>
           </div>
         </div>
       </div>
@@ -1035,7 +1036,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260578"></script>
+  <script defer src="../js/storage-calculator.js?v=20260579"></script>
 </body>
 </html>
 """

@@ -31,34 +31,32 @@
   var costMinimum  = document.getElementById('cost-minimum');
   var costTotal    = document.getElementById('cost-total');
 
-  // Storage-unit price list (sqft, weekly rate inc VAT & insurance).
-  // Source: Mark Ratcliffe Moving Prestige steel storage rate table.
+  // Storage-unit price list (sqft, daily rate inc VAT & insurance).
+  // Source: Mark Ratcliffe Moving Prestige steel storage rate sheet.
   var STORAGE_UNITS = [
-    { sqft:  25, weekly:  2.59 },
-    { sqft:  30, weekly:  3.02 },
-    { sqft:  40, weekly:  4.50 },
-    { sqft:  50, weekly:  5.96 },
-    { sqft:  60, weekly:  6.48 },
-    { sqft:  65, weekly:  7.44 },
-    { sqft:  75, weekly:  8.90 },
-    { sqft: 100, weekly: 11.93 },
-    { sqft: 120, weekly: 13.68 },
-    { sqft: 145, weekly: 15.54 },
-    { sqft: 200, weekly: 21.60 },
-    { sqft: 280, weekly: 24.48 }
+    { sqft:  25, daily:  2.59 },
+    { sqft:  30, daily:  3.02 },
+    { sqft:  40, daily:  4.50 },
+    { sqft:  60, daily:  6.48 },
+    { sqft:  65, daily:  7.44 },
+    { sqft:  75, daily:  8.90 },
+    { sqft: 120, daily: 13.68 },
+    { sqft: 145, daily: 15.54 },
+    { sqft: 200, daily: 21.60 },
+    { sqft: 280, daily: 24.48 }
   ];
   // Lower-ceiling 75 sqft room (cheaper than the standard 75). Shown as a
   // side-by-side option whenever the auto-picker lands on the 75 sqft band
   // — the customer can pick the lower-ceiling option if their contents
   // won't stack high.
-  var STORAGE_LOW_CEILING_75 = { sqft: 75, weekly: 6.91, label: '75 sqft low-ceiling' };
+  var STORAGE_LOW_CEILING_75 = { sqft: 75, daily: 6.91, label: '75 sqft low-ceiling' };
   var STORAGE_CUFT_PER_SQFT = 7; // packing efficiency: 7 cu ft per sqft of floor
 
   var storageEnabled    = document.getElementById('storage-enabled');
-  var storageWeeksInput = document.getElementById('storage-weeks');
+  var storageDaysInput  = document.getElementById('storage-days');
   var storageDetails    = document.getElementById('storage-details');
   var storageUnitEl     = document.getElementById('storage-unit');
-  var storageWeeklyEl   = document.getElementById('storage-weekly');
+  var storageDailyEl    = document.getElementById('storage-daily');
   var storageTotalEl    = document.getElementById('storage-total');
   var grandTotalRow     = document.getElementById('cost-grand-total');
   var grandTotalValue   = document.getElementById('cost-grand-total-value');
@@ -244,29 +242,30 @@
       return;
     }
 
-    var weeks = parseInt((storageWeeksInput && storageWeeksInput.value) || '0', 10);
-    if (isNaN(weeks) || weeks < 0) weeks = 0;
+    var days = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10);
+    if (isNaN(days) || days < 0) days = 0;
 
     if (cuft === 0) {
       storageUnitEl.textContent = 'Select items first to see your unit size';
-      storageWeeklyEl.textContent = '£0.00';
-      storageTotalEl.textContent  = '£0.00';
+      storageDailyEl.textContent = '£0.00';
+      storageTotalEl.textContent = '£0.00';
       if (grandTotalRow) grandTotalRow.hidden = true;
       return;
     }
 
     var unit = pickStorageUnit(cuft);
-    var storageTotal = unit.weekly * weeks;
+    var storageTotal = unit.daily * days;
     var sqftNeeded   = Math.ceil(cuft / STORAGE_CUFT_PER_SQFT);
     var biggerNote   = (sqftNeeded > unit.sqft) ? ' (or split across multiple ' + unit.sqft + ' sqft rooms)' : '';
 
-    storageUnitEl.textContent   = unit.sqft + ' sqft Prestige steel room' + biggerNote;
-    storageWeeklyEl.textContent = '£' + unit.weekly.toFixed(2);
-    storageTotalEl.textContent  = '£' + storageTotal.toFixed(2);
+    storageUnitEl.textContent  = unit.sqft + ' sqft Prestige steel room' + biggerNote;
+    storageDailyEl.textContent = '£' + unit.daily.toFixed(2);
+    storageTotalEl.textContent = '£' + storageTotal.toFixed(2);
 
     var storageLabel = document.getElementById('storage-headline-label');
     if (storageLabel) {
-      storageLabel.textContent = 'Estimated storage cost · ' + weeks + ' weeks, ' + unit.sqft + ' sqft room';
+      var weeksEq = (days / 7).toFixed(days % 7 === 0 ? 0 : 1);
+      storageLabel.textContent = 'Estimated storage cost · ' + days + ' days (~' + weeksEq + ' wks), ' + unit.sqft + ' sqft room';
     }
 
     if (grandTotalRow && grandTotalValue) {
@@ -481,11 +480,11 @@
     applyHomeSizeDefault();
   }
 
-  // Storage toggle + weeks
-  if (storageEnabled)    storageEnabled.addEventListener('change', recalc);
-  if (storageWeeksInput) {
-    storageWeeksInput.addEventListener('input', recalc);
-    storageWeeksInput.addEventListener('change', recalc);
+  // Storage toggle + days
+  if (storageEnabled)   storageEnabled.addEventListener('change', recalc);
+  if (storageDaysInput) {
+    storageDaysInput.addEventListener('input', recalc);
+    storageDaysInput.addEventListener('change', recalc);
   }
 
   // Quote request form — build a pre-filled mailto: with all the
@@ -514,11 +513,11 @@
 
       // Storage details (if enabled)
       var storageWanted = !!(storageEnabled && storageEnabled.checked);
-      var storageWeeks  = parseInt((storageWeeksInput && storageWeeksInput.value) || '0', 10);
-      var storageUnitTxt   = (storageUnitEl && storageUnitEl.textContent) || '';
-      var storageWeeklyTxt = (storageWeeklyEl && storageWeeklyEl.textContent) || '';
-      var storageTotalTxt  = (storageTotalEl && storageTotalEl.textContent) || '';
-      var grandTotalTxt    = (grandTotalValue && grandTotalValue.textContent) || '';
+      var storageDays   = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10);
+      var storageUnitTxt  = (storageUnitEl && storageUnitEl.textContent) || '';
+      var storageDailyTxt = (storageDailyEl && storageDailyEl.textContent) || '';
+      var storageTotalTxt = (storageTotalEl && storageTotalEl.textContent) || '';
+      var grandTotalTxt   = (grandTotalValue && grandTotalValue.textContent) || '';
 
       var picked = [];
       var anyItems = false;
@@ -572,8 +571,8 @@
       if (storageWanted) {
         body.push('STORAGE REQUIRED');
         body.push('  Unit:            ' + storageUnitTxt);
-        body.push('  Weekly rate:     ' + storageWeeklyTxt + ' (inc VAT & insurance)');
-        body.push('  Duration:        ' + storageWeeks + ' weeks');
+        body.push('  Daily rate:      ' + storageDailyTxt + ' (inc VAT & insurance)');
+        body.push('  Duration:        ' + storageDays + ' days (~' + (storageDays / 7).toFixed(storageDays % 7 === 0 ? 0 : 1) + ' weeks)');
         body.push('  Storage total:   ' + storageTotalTxt);
         body.push('  Grand total:     ' + grandTotalTxt + ' (removals + storage)');
         body.push('');
