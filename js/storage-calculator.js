@@ -477,12 +477,14 @@
     });
   }
 
-  // Home size radios — update the manual cu ft default (if user hasn't typed),
-  // re-show the auto-fill prompt for the new bedroom count, then recalc.
+  // Home size radios — switching bedrooms always resets the cu ft to the
+  // bedroom's default (overrides any manual edit), re-shows the auto-fill
+  // prompt for the new size, and recalcs.
   var homeSizeRadios = document.querySelectorAll('input[name="home-size"]');
   for (var hs = 0; hs < homeSizeRadios.length; hs++) {
     homeSizeRadios[hs].addEventListener('change', function () {
-      inventoryPromptDismissed = false; // give them the option again for the new size
+      inventoryPromptDismissed = false;
+      manualCuftTouched = false; // force overwrite — bedroom drives cu ft
       applyHomeSizeDefault();
       showInventoryPrompt();
       recalc();
