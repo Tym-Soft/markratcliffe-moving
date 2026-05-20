@@ -322,9 +322,15 @@ def extract(html: str, pattern: str) -> str:
 
 def page_html(slug: str, cfg: dict, towns: list[tuple]) -> str:
     sample = open(SAMPLE_PATH, encoding='utf-8').read()
-    # The chrome we need: from <body> through end of navbar (the .nav-section), and the entire <footer>...</footer>.
-    nav_m = re.search(r'(<body>.*?</div>\s*</div>\s*</div>)', sample, re.S)
-    navbar = nav_m.group(1) if nav_m else '<body>'
+    # The chrome we need: from <body> up to the start of <header class="np-hero">.
+    # Anchoring to the hero start guarantees every nav-section/navbar wrapper
+    # closes properly (the earlier "match three </div>" regex truncated the
+    # extraction one closure short, leaving <div class="nav-section"> open and
+    # swallowing the entire body content).
+    nav_m = re.search(r'<body>(.*?)<header class="np-hero"', sample, re.S)
+    navbar = '<body>' + nav_m.group(1) if nav_m else '<body>'
+    # Strip the source page's own breadcrumb — our template emits its own.
+    navbar = re.sub(r'\s*<nav class="np-breadcrumb"[^>]*>.*?</nav>\s*', '\n  ', navbar, flags=re.S)
     footer_m = re.search(r'(<footer class="mr-footer".*?</footer>)', sample, re.S)
     footer = footer_m.group(1) if footer_m else ''
     csp_m = re.search(r'(<meta http-equiv="Content-Security-Policy"[^>]+>)', sample)
