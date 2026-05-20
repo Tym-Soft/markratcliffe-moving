@@ -54,11 +54,9 @@
 
   var storageEnabled    = document.getElementById('storage-enabled');
   var storageDaysInput  = document.getElementById('storage-days');
-  var storageDetails    = document.getElementById('storage-details');
   var storageUnitEl     = document.getElementById('storage-unit');
   var storageDailyEl    = document.getElementById('storage-daily');
   var storageTotalEl    = document.getElementById('storage-total');
-  var grandTotalRow     = document.getElementById('cost-grand-total');
   var grandTotalValue   = document.getElementById('cost-grand-total-value');
 
   function pickStorageUnit(cuft) {
@@ -108,18 +106,8 @@
   function applyCalcMode() {
     var mode = getCalcMode();
     document.body.setAttribute('data-calc-mode', mode);
-    // Storage is implied by both 'storage' and 'both' — auto-check the
-    // checkbox and reveal the details panel so the redundant "Do you also
-    // need storage?" question doesn't appear in either mode.
-    if (storageEnabled && storageDetails) {
-      if (mode === 'storage' || mode === 'both') {
-        storageEnabled.checked = true;
-        storageDetails.hidden = false;
-      } else {
-        storageEnabled.checked = false;
-        storageDetails.hidden = true;
-      }
-    }
+    // Storage is implied by mode — CSS handles show/hide via data-show-modes.
+    if (storageEnabled) storageEnabled.checked = (mode === 'storage' || mode === 'both');
     recalc();
   }
 
@@ -197,81 +185,78 @@
 
   function recalcCost(cuft) {
     if (!costVehicle) return;
+    var mode  = getCalcMode();
     var miles = parseInt((milesInput && milesInput.value) || '0', 10);
     if (isNaN(miles) || miles < 0) miles = 0;
 
     var profile = getProfile();
     var headlineLabel = document.getElementById('cost-headline-label');
 
-    var volCost  = cuft * profile.rate;
-    var mileCost = miles * profile.mileRate;
-    var subtotal = volCost + mileCost;
-    // The minimum charge covers the WHOLE job (volume + mileage). Total
-    // is the higher of the published minimum and the actual subtotal —
-    // adding inventory or miles below the floor doesn't push the price
-    // up, only when their sum exceeds the minimum.
-    var minApplied = subtotal < profile.minCharge;
-    var total = Math.max(profile.minCharge, subtotal);
+    // --- REMOVALS leg ---
+    var volCost    = cuft * profile.rate;
+    var mileCost   = miles * profile.mileRate;
+    var rmvSubtot  = volCost + mileCost;
+    // Minimum covers the WHOLE removals job (volume + mileage).
+    var minApplied = (mode !== 'storage') && rmvSubtot < profile.minCharge;
+    var removalsTotal = (mode === 'storage') ? 0 : Math.max(profile.minCharge, rmvSubtot);
 
     costVehicle.textContent = profile.vehicle;
     costVolume.textContent  = cuft === 0
-      ? '£0 (tick items below or use the cu ft input)'
-      : pounds(volCost) + ' (' + cuft + ' cu ft × £' + profile.rate.toFixed(2) + '/cu ft)';
-    costMileage.textContent = pounds(mileCost) + ' (' + miles + ' mi × £' + profile.mileRate.toFixed(2) + '/mi)';
+      ? '£0 (set cu ft above or tick items below)'
+      : pounds(volCost) + ' (' + cuft + ' × £' + profile.rate.toFixed(2) + ')';
+    costMileage.textContent = pounds(mileCost) + ' (' + miles + ' × £' + profile.mileRate.toFixed(2) + ')';
     if (costMinimum) {
       costMinimum.textContent = pounds(profile.minCharge) + ' (' + profile.label + ')' + (minApplied ? '  · APPLIED' : '');
     }
-    costTotal.textContent   = pounds(total);
+    costTotal.textContent = (mode === 'storage') ? '£0' : pounds(removalsTotal);
+
+    // --- STORAGE leg + GRAND TOTAL ---
+    var storageTotal = updateStorage(cuft, mode);
+    var grandTotal = removalsTotal + storageTotal;
+    if (grandTotalValue) grandTotalValue.textContent = pounds(grandTotal);
 
     if (headlineLabel) {
-      headlineLabel.textContent = minApplied
-        ? 'Minimum charge applies · ' + profile.label + ', ' + miles + ' mi'
-        : 'Estimated removals cost · ' + profile.label + ', ' + miles + ' mi';
+      var bits = [];
+      if (mode !== 'storage') bits.push(profile.label);
+      if (mode !== 'storage') bits.push(miles + ' mi');
+      if (mode !== 'removals') {
+        var days = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10) || 0;
+        bits.push(days + ' days storage');
+      }
+      var prefix = minApplied ? 'Minimum charge applies' : 'Live estimate';
+      headlineLabel.textContent = prefix + ' · ' + bits.join(' · ');
     }
-
-    updateStorage(cuft, total);
   }
 
-  function updateStorage(cuft, removalsTotal) {
-    if (!storageEnabled || !storageDetails) return;
-    var enabled = storageEnabled.checked;
-    storageDetails.hidden = !enabled;
-
-    if (!enabled) {
-      if (grandTotalRow) grandTotalRow.hidden = true;
-      return;
+  function updateStorage(cuft, mode) {
+    if (!storageUnitEl) return 0;
+    var wantsStorage = (mode === 'storage' || mode === 'both');
+    if (!wantsStorage) {
+      storageUnitEl.textContent  = '—';
+      storageDailyEl.textContent = '£0.00';
+      storageTotalEl.textContent = '£0.00';
+      return 0;
     }
 
     var days = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10);
     if (isNaN(days) || days < 0) days = 0;
 
     if (cuft === 0) {
-      storageUnitEl.textContent = 'Select items first to see your unit size';
+      storageUnitEl.textContent  = 'Set a cu ft figure first';
       storageDailyEl.textContent = '£0.00';
       storageTotalEl.textContent = '£0.00';
-      if (grandTotalRow) grandTotalRow.hidden = true;
-      return;
+      return 0;
     }
 
     var unit = pickStorageUnit(cuft);
     var storageTotal = unit.daily * days;
     var sqftNeeded   = Math.ceil(cuft / STORAGE_CUFT_PER_SQFT);
-    var biggerNote   = (sqftNeeded > unit.sqft) ? ' (or split across multiple ' + unit.sqft + ' sqft rooms)' : '';
+    var biggerNote   = (sqftNeeded > unit.sqft) ? ' (or split rooms)' : '';
 
-    storageUnitEl.textContent  = unit.sqft + ' sqft Prestige steel room' + biggerNote;
+    storageUnitEl.textContent  = unit.sqft + ' sqft Prestige steel' + biggerNote;
     storageDailyEl.textContent = '£' + unit.daily.toFixed(2);
     storageTotalEl.textContent = '£' + storageTotal.toFixed(2);
-
-    var storageLabel = document.getElementById('storage-headline-label');
-    if (storageLabel) {
-      var weeksEq = (days / 7).toFixed(days % 7 === 0 ? 0 : 1);
-      storageLabel.textContent = 'Estimated storage cost · ' + days + ' days (~' + weeksEq + ' wks), ' + unit.sqft + ' sqft room';
-    }
-
-    if (grandTotalRow && grandTotalValue) {
-      grandTotalValue.textContent = pounds(removalsTotal + storageTotal);
-      grandTotalRow.hidden = false;
-    }
+    return storageTotal;
   }
 
   function activateTab(targetId) {
@@ -564,7 +549,6 @@
         body.push('  Distance:        ' + miles + ' miles');
         body.push('  Volume cost:     ' + volumeCost);
         body.push('  Mileage cost:    ' + mileageCost);
-        body.push('  Minimum charge:  ' + minimumCost);
         body.push('  Removals total:  ' + totalCost);
         body.push('');
       }
