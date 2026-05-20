@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies the ten build rules:
+Verifies the twelve build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -17,6 +17,10 @@ Verifies the ten build rules:
      pointing to its production https://www.markratcliffemoving.co.uk
      URL (no JS-injected canonicals — crawlers like Screaming Frog
      don't execute JS).
+ 11. No two indexable pages share the same <h1> tag (duplicate-content
+     guard alongside Rule 6).
+ 12. No internal <a href> points at a `*/index.html` path — links to
+     index pages must use the directory URL (`/`, `blog/`, etc.).
 
 Run from the site root:
     python3 tools/audit.py
@@ -187,6 +191,8 @@ def sitemap_locs() -> set[str]:
 def expected_loc(path: str) -> str:
     if path == 'index.html':
         return BASE_URL + '/'
+    if path.endswith('/index.html'):
+        return BASE_URL + '/' + path[:-len('index.html')]
     return BASE_URL + '/' + path
 
 def audit():
@@ -203,6 +209,8 @@ def audit():
         'title_pixel_width':     [],
         'image_alt':             [],
         'canonical':             [],
+        'duplicate_h1':          [],
+        'index_html_links':      [],
     }
 
     blog_posts = []
@@ -439,6 +447,55 @@ def audit():
          f'{len(indexable)} pages all canonical to www.markratcliffemoving.co.uk',
          failures['canonical'])
 
+    # Rule 11 — no duplicate <h1> tags across indexable pages
+    h1_re = re.compile(r'<h1[^>]*>(.*?)</h1>', re.I | re.S)
+    h1_tag_strip = re.compile(r'<[^>]+>')
+    h1s_seen: dict[str, list[str]] = {}
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        m = h1_re.search(html)
+        if not m:
+            failures['duplicate_h1'].append(('no-h1', p))
+            continue
+        text = h1_tag_strip.sub('', m.group(1))
+        text = ' '.join(text.split()).strip()
+        h1s_seen.setdefault(text, []).append(p)
+    for text, paths in h1s_seen.items():
+        if len(paths) > 1:
+            failures['duplicate_h1'].append(
+                f'"{text}" used by {len(paths)} pages: {", ".join(paths)}'
+            )
+    rule('Rule 11 — no duplicate <h1> tags',
+         f'{len(h1s_seen)} unique H1 tags across {len(indexable)} indexable pages',
+         failures['duplicate_h1'])
+
+    # Rule 12 — no internal href to */index.html (use directory URLs)
+    link_re = re.compile(r'<a\b[^>]*?\bhref="([^"]+)"', re.I)
+    bad_re  = re.compile(r'(^|[/])(index\.html)(?:[?#]|$)')
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        offenders: list[str] = []
+        for m in link_re.finditer(html):
+            href = m.group(1)
+            if href.startswith(('mailto:', 'tel:', 'javascript:', '#')): continue
+            if href.startswith(('http://', 'https://', '//')) and 'markratcliffemoving.co.uk' not in href: continue
+            if bad_re.search(href):
+                offenders.append(href)
+        if offenders:
+            failures['index_html_links'].append(
+                f'{p}  →  {", ".join(sorted(set(offenders))[:4])}'
+                + (f' (+{len(set(offenders))-4} more)' if len(set(offenders)) > 4 else '')
+            )
+    rule('Rule 12 — no internal links to */index.html',
+         f'{len(indexable)} pages: all internal links use directory URLs',
+         failures['index_html_links'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -447,7 +504,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all ten content rules satisfied.')
+    print('PASS — all twelve content rules satisfied.')
     return 0
 
 if __name__ == '__main__':

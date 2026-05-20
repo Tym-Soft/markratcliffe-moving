@@ -50,6 +50,9 @@ def loc_for(path: str) -> str:
     # index.html → / (clean root URL)
     if path == 'index.html':
         return BASE_URL + '/'
+    # subdir index.html → /subdir/ (clean directory URL)
+    if path.endswith('/index.html'):
+        return BASE_URL + '/' + path[:-len('index.html')]
     return BASE_URL + '/' + path
 
 def lastmod_for(path: str) -> str:

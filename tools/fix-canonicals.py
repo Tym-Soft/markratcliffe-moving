@@ -33,6 +33,8 @@ def production_url(path: str) -> str:
     p = path.replace(os.sep, '/')
     if p == 'index.html':
         return BASE + '/'
+    if p.endswith('/index.html'):
+        return BASE + '/' + p[:-len('index.html')]
     return BASE + '/' + p
 
 def is_redirect(html: str) -> bool:
