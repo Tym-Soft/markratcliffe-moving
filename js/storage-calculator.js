@@ -73,12 +73,20 @@
   //   1-bed       → Small  pricing (Luton Van, £360 min)
   //   2-3 bed     → Medium pricing (7.5 – 18 Tonne lorry, £650 min)
   //   4-5+ bed    → Large  pricing (18 Tonne+ / Artic, £1,000 min)
+  // Pricing model:
+  //   • For volumes up to `cap` (upper bound of the typical range for the
+  //     property), the customer pays the flat `minCharge` for the volume
+  //     leg. Mileage is added on top.
+  //   • Above `cap`, the per-cu-ft `rate` kicks in for the excess only,
+  //     stacked on top of `minCharge`.
+  //   • Formula: volumeCost = minCharge + max(0, cuft - cap) * rate
+  //              total = volumeCost + miles * mileRate
   var BED_PROFILES = {
-    '1bed': { label: '1-bed flat or studio',         typicalCuft:  700, vehicle: 'Luton Van (3.5t)',     rate: 2.25, mileRate: 2.00, minCharge:  360 },
-    '2bed': { label: '2-bed home',                   typicalCuft: 1100, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
-    '3bed': { label: '3-bed home',                   typicalCuft: 1500, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
-    '4bed': { label: '4-bed home',                   typicalCuft: 2200, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 },
-    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 3000, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 }
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  700, cap:  900, vehicle: 'Luton Van (3.5t)',     rate: 2.25, mileRate: 2.00, minCharge:  360 },
+    '2bed': { label: '2-bed home',                   typicalCuft: 1100, cap: 1400, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1500, cap: 1800, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '4bed': { label: '4-bed home',                   typicalCuft: 2200, cap: 2800, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 },
+    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 3000, cap: 4000, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 }
   };
   // BED_INVENTORY is emitted by the Python generator as inline JS just
   // before this script loads. Each entry maps "item-<slug>" → quantity.
@@ -193,20 +201,25 @@
     var headlineLabel = document.getElementById('cost-headline-label');
 
     // --- REMOVALS leg ---
-    var volCost    = cuft * profile.rate;
+    // Volume cost = base min charge + (excess above cap) × rate
+    var excessCuft = Math.max(0, cuft - profile.cap);
+    var excessCost = excessCuft * profile.rate;
+    var volCost    = profile.minCharge + excessCost;
     var mileCost   = miles * profile.mileRate;
-    var rmvSubtot  = volCost + mileCost;
-    // Minimum covers the WHOLE removals job (volume + mileage).
-    var minApplied = (mode !== 'storage') && rmvSubtot < profile.minCharge;
-    var removalsTotal = (mode === 'storage') ? 0 : Math.max(profile.minCharge, rmvSubtot);
+    var withinCap  = (mode !== 'storage') && cuft <= profile.cap;
+    var removalsTotal = (mode === 'storage') ? 0 : (volCost + mileCost);
 
     costVehicle.textContent = profile.vehicle;
-    costVolume.textContent  = cuft === 0
-      ? '£0 (set cu ft above or tick items below)'
-      : pounds(volCost) + ' (' + cuft + ' × £' + profile.rate.toFixed(2) + ')';
+    if (cuft === 0) {
+      costVolume.textContent = pounds(profile.minCharge) + ' (' + profile.label + ' base)';
+    } else if (withinCap || cuft <= profile.cap) {
+      costVolume.textContent = pounds(profile.minCharge) + ' (' + profile.label + ' base, ' + cuft + ' / ' + profile.cap + ' cu ft cap)';
+    } else {
+      costVolume.textContent = pounds(volCost) + ' (' + pounds(profile.minCharge) + ' base + ' + excessCuft + ' extra × £' + profile.rate.toFixed(2) + ')';
+    }
     costMileage.textContent = pounds(mileCost) + ' (' + miles + ' × £' + profile.mileRate.toFixed(2) + ')';
     if (costMinimum) {
-      costMinimum.textContent = pounds(profile.minCharge) + ' (' + profile.label + ')' + (minApplied ? '  · APPLIED' : '');
+      costMinimum.textContent = pounds(profile.minCharge) + ' (' + profile.label + ')';
     }
     costTotal.textContent = (mode === 'storage') ? '£0' : pounds(removalsTotal);
 
@@ -223,7 +236,14 @@
         var days = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10) || 0;
         bits.push(days + ' days storage');
       }
-      var prefix = minApplied ? 'Minimum charge applies' : 'Live estimate';
+      var prefix;
+      if (mode === 'storage') {
+        prefix = 'Live estimate';
+      } else if (excessCuft > 0) {
+        prefix = 'Above ' + profile.cap + ' cu ft cap';
+      } else {
+        prefix = profile.label + ' base charge';
+      }
       headlineLabel.textContent = prefix + ' · ' + bits.join(' · ');
     }
   }
