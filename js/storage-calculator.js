@@ -463,6 +463,12 @@
     });
     inventoryPromptDismissed = true;
     if (inventoryPrompt) inventoryPrompt.hidden = true;
+    // Reveal the inventory refinement section so the customer can tweak.
+    var invSection = document.getElementById('inventory-section');
+    if (invSection) {
+      invSection.hidden = false;
+      invSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     manualCuftTouched = true; // inventory now drives cu ft
     recalc();
   }
