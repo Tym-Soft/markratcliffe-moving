@@ -79,7 +79,7 @@
   //   • Nett total  = volume cost + miles × picked-vehicle mile rate
   //   • VAT         = nett × 20%
   //   • Inc-VAT     = nett × 1.20 (storage rates already include VAT)
-  var EXCESS_RATE = 1.21;
+  var EXCESS_RATE = 1.41;
   var VAT_RATE    = 0.20;
   var VEHICLE_TIERS = [
     { name: 'Luton Van (3.5t)', maxCuft:  800, mileRate: 2.00 },
