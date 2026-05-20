@@ -220,7 +220,9 @@
       ? '£0 (tick items below or use the cu ft input)'
       : pounds(volCost) + ' (' + cuft + ' cu ft × £' + profile.rate.toFixed(2) + '/cu ft)';
     costMileage.textContent = pounds(mileCost) + ' (' + miles + ' mi × £' + profile.mileRate.toFixed(2) + '/mi)';
-    costMinimum.textContent = pounds(profile.minCharge) + ' (' + profile.label + ')' + (minApplied ? '  · APPLIED' : '');
+    if (costMinimum) {
+      costMinimum.textContent = pounds(profile.minCharge) + ' (' + profile.label + ')' + (minApplied ? '  · APPLIED' : '');
+    }
     costTotal.textContent   = pounds(total);
 
     if (headlineLabel) {
