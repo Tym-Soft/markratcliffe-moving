@@ -23,6 +23,32 @@
   var vanEstimate = document.getElementById('van-estimate');
   var resetBtn    = document.getElementById('calc-reset');
 
+  // Cost estimator elements
+  var milesInput   = document.getElementById('cost-miles');
+  var costVehicle  = document.getElementById('cost-vehicle');
+  var costVolume   = document.getElementById('cost-volume');
+  var costMileage  = document.getElementById('cost-mileage');
+  var costMinimum  = document.getElementById('cost-minimum');
+  var costTotal    = document.getElementById('cost-total');
+
+  // Rate bands from the published Mark Ratcliffe Moving rate table.
+  // Each band: max volume in cu ft, vehicle label, £/cu ft range, minimum charge range.
+  var BANDS = [
+    { max:   80, vehicle: 'Small van',              rateMin: 2.50, rateMax: 3.00, minMin:  180, minMax:  220 },
+    { max:  250, vehicle: 'Luton van',              rateMin: 2.00, rateMax: 2.50, minMin:  250, minMax:  350 },
+    { max:  600, vehicle: '3.5T / large Luton',     rateMin: 1.60, rateMax: 2.00, minMin:  450, minMax:  650 },
+    { max: 1100, vehicle: '7.5T lorry',             rateMin: 1.40, rateMax: 1.80, minMin:  800, minMax: 1200 },
+    { max: 1700, vehicle: '18T lorry',              rateMin: 1.20, rateMax: 1.60, minMin: 1400, minMax: 2000 },
+    { max: Infinity, vehicle: 'Artic / multiple loads', rateMin: 1.00, rateMax: 1.40, minMin: 2000, minMax: 4000 }
+  ];
+  var MILEAGE_RATE = 2; // £/mile
+
+  function poundsRange(lo, hi) {
+    var l = Math.round(lo), h = Math.round(hi);
+    if (l === h) return '£' + l.toLocaleString('en-GB');
+    return '£' + l.toLocaleString('en-GB') + ' – £' + h.toLocaleString('en-GB');
+  }
+
   function loadSizeLabel(cuft) {
     if (cuft === 0)    return 'No items selected';
     if (cuft <= 80)    return '~ Small-van load';
@@ -42,10 +68,47 @@
       cum  += q * parseFloat(inputs[i].dataset.cum);
       kg   += q * parseFloat(inputs[i].dataset.kg);
     }
-    totalCuft.textContent   = Math.round(cuft);
+    var roundedCuft = Math.round(cuft);
+    totalCuft.textContent   = roundedCuft;
     totalCum.textContent    = cum.toFixed(2);
     totalKg.textContent     = Math.round(kg);
-    vanEstimate.textContent = loadSizeLabel(Math.round(cuft));
+    vanEstimate.textContent = loadSizeLabel(roundedCuft);
+    recalcCost(roundedCuft);
+  }
+
+  function recalcCost(cuft) {
+    if (!costVehicle) return;
+    var miles = parseInt((milesInput && milesInput.value) || '0', 10);
+    if (isNaN(miles) || miles < 0) miles = 0;
+
+    // Pick the band — the smallest band whose max ≥ cuft (or the last band for huge loads)
+    var band = BANDS[BANDS.length - 1];
+    for (var i = 0; i < BANDS.length; i++) {
+      if (cuft <= BANDS[i].max) { band = BANDS[i]; break; }
+    }
+
+    if (cuft === 0) {
+      costVehicle.textContent = 'Add items above to see your vehicle band';
+      costVolume.textContent  = '£0';
+      costMileage.textContent = '£' + (miles * MILEAGE_RATE);
+      costMinimum.textContent = poundsRange(band.minMin, band.minMax);
+      costTotal.textContent   = poundsRange(band.minMin + miles * MILEAGE_RATE, band.minMax + miles * MILEAGE_RATE);
+      return;
+    }
+
+    var volMin   = cuft * band.rateMin;
+    var volMax   = cuft * band.rateMax;
+    var mileCost = miles * MILEAGE_RATE;
+    var baseMin  = Math.max(band.minMin, volMin);
+    var baseMax  = Math.max(band.minMax, volMax);
+    var totalMin = baseMin + mileCost;
+    var totalMax = baseMax + mileCost;
+
+    costVehicle.textContent = band.vehicle;
+    costVolume.textContent  = poundsRange(volMin, volMax) + ' (' + cuft + ' cu ft × £' + band.rateMin.toFixed(2) + '–£' + band.rateMax.toFixed(2) + '/cu ft)';
+    costMileage.textContent = '£' + mileCost.toLocaleString('en-GB') + ' (' + miles + ' mi × £' + MILEAGE_RATE + '/mi)';
+    costMinimum.textContent = poundsRange(band.minMin, band.minMax);
+    costTotal.textContent   = poundsRange(totalMin, totalMax);
   }
 
   function activateTab(targetId) {
@@ -145,6 +208,12 @@
       inputs.forEach(function (input) { input.value = 0; });
       recalc();
     });
+  }
+
+  // Miles input
+  if (milesInput) {
+    milesInput.addEventListener('input', recalc);
+    milesInput.addEventListener('change', recalc);
   }
 
   recalc();

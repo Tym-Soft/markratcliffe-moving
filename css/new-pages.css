@@ -528,6 +528,128 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
 
 .storage-calc .calc-actions { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
+/* Cost estimator (mileage + £/cu ft → live total) */
+.cost-estimator {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 2fr;
+  gap: 1.5rem;
+  align-items: start;
+  background: #fff;
+  border: 1px solid var(--np-border, #e5e7eb);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin: 1rem 0 0.75rem;
+}
+.cost-input { display: flex; flex-direction: column; gap: 0.4rem; }
+.cost-input-label {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  color: var(--brand-navy, #4d2e8f);
+  font-size: 0.95rem;
+}
+.cost-input input {
+  font-family: "Inter", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--brand-navy, #4d2e8f);
+  border: 1px solid var(--np-border, #e5e7eb);
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+.cost-input input:focus {
+  outline: 2px solid var(--brand-bronze, #C8A876);
+  outline-offset: -1px;
+  border-color: var(--brand-bronze, #C8A876);
+}
+.cost-input-help {
+  font-size: 0.82rem;
+  color: var(--np-muted, #6b7280);
+  line-height: 1.45;
+}
+.cost-output {
+  display: grid;
+  gap: 0.55rem;
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+}
+.cost-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  border-bottom: 1px dashed rgba(0,0,0,0.08);
+  padding-bottom: 0.45rem;
+}
+.cost-line:last-child { border-bottom: 0; padding-bottom: 0; }
+.cost-line span {
+  color: var(--np-muted, #6b7280);
+  font-size: 0.9rem;
+  font-family: "Inter", sans-serif;
+}
+.cost-line strong {
+  color: var(--brand-navy, #4d2e8f);
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.cost-line.cost-total {
+  margin-top: 0.4rem;
+  padding-top: 0.7rem;
+  border-top: 2px solid var(--brand-bronze, #C8A876);
+}
+.cost-line.cost-total span { color: var(--brand-navy, #4d2e8f); font-weight: 700; font-size: 1rem; }
+.cost-line.cost-total strong { font-size: 1.35rem; color: var(--brand-navy, #4d2e8f); }
+.cost-disclaimer {
+  background: rgba(200,168,118,0.12);
+  border-left: 3px solid var(--brand-bronze, #C8A876);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 6px 6px 0;
+  color: var(--brand-navy, #4d2e8f);
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 760px) {
+  .cost-estimator { grid-template-columns: 1fr; gap: 1rem; padding: 1rem; }
+  .cost-line strong { font-size: 0.92rem; }
+  .cost-line.cost-total strong { font-size: 1.2rem; }
+}
+
+/* Rate table */
+.rate-table-wrap { overflow-x: auto; }
+.rate-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid var(--np-border, #e5e7eb);
+  font-family: "Inter", sans-serif;
+}
+.rate-table th, .rate-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 0.92rem;
+  vertical-align: middle;
+}
+.rate-table th {
+  background: var(--brand-navy, #4d2e8f);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.rate-table tbody tr:nth-child(even) td { background: #fafafa; }
+.rate-table strong { color: var(--brand-navy, #4d2e8f); }
+@media (max-width: 760px) {
+  .rate-table th, .rate-table td { padding: 0.6rem 0.7rem; font-size: 0.85rem; }
+}
+
 @media (max-width: 640px) {
   .storage-calc .calc-tab { width: 80px; font-size: 0.62rem; }
   .storage-calc .calc-tab-icon { width: 28px; height: 28px; }
