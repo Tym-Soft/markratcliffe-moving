@@ -256,12 +256,12 @@
     costMileage.textContent = pounds(mileCost) + ' (' + miles + ' × £' + vehicle.mileRate.toFixed(2) + ')';
     if (costNettTotal) costNettTotal.textContent = pounds(removalsNett);
     if (costVAT)       costVAT.textContent       = pounds(removalsVAT);
-    costTotal.textContent = (mode === 'storage') ? '£0' : pounds(removalsInc);
+    costTotal.textContent = (mode === 'storage') ? '£0' : pounds(removalsNett);
 
-    // --- STORAGE leg + GRAND TOTAL (inc VAT for removals; storage already inc) ---
+    // --- STORAGE leg + GRAND TOTAL (NETT — VAT added at booking) ---
     var storageTotal = updateStorage(cuft, mode);
-    var grandTotal = removalsInc + storageTotal;
-    if (grandTotalValue) grandTotalValue.textContent = poundsPence(grandTotal);
+    var grandTotalNett = removalsNett + storageTotal;
+    if (grandTotalValue) grandTotalValue.textContent = poundsPence(grandTotalNett);
 
     if (headlineLabel) {
       var bits = [];
@@ -273,11 +273,11 @@
       }
       var prefix;
       if (mode === 'storage') {
-        prefix = 'Live estimate (inc VAT)';
+        prefix = 'Live estimate (+ VAT)';
       } else if (excessCuft > 0) {
-        prefix = excessCuft + ' cu ft above ' + bed.typicalCuft + ' included · inc VAT';
+        prefix = excessCuft + ' cu ft above ' + bed.typicalCuft + ' included · + VAT';
       } else {
-        prefix = bed.label + ' base · inc VAT';
+        prefix = bed.label + ' base · + VAT';
       }
       headlineLabel.textContent = prefix + ' · ' + bits.join(' · ');
     }
@@ -639,13 +639,13 @@
         body.push('  Mileage cost:    ' + mileageCost);
         body.push('  Nett subtotal:   ' + nettTotalTxt);
         body.push('  VAT (20%):       ' + vatTxt);
-        body.push('  Removals total (inc VAT): ' + totalCost);
+        body.push('  Removals quote:  ' + totalCost + ' (nett — VAT added at booking)');
         body.push('');
       }
       if (storageWanted) {
         body.push('STORAGE REQUIRED');
         body.push('  Unit:            ' + storageUnitTxt);
-        body.push('  Daily rate:      ' + storageDailyTxt + ' (inc VAT & insurance)');
+        body.push('  Daily rate:      ' + storageDailyTxt + ' (nett, +VAT at booking)');
         body.push('  Duration:        ' + storageDays + ' days (~' + (storageDays / 7).toFixed(storageDays % 7 === 0 ? 0 : 1) + ' weeks)');
         body.push('  Storage total:   ' + storageTotalTxt);
         body.push('  Grand total:     ' + grandTotalTxt + ' (removals + storage)');

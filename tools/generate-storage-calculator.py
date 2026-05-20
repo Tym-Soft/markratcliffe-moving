@@ -855,7 +855,7 @@ def page_html() -> str:
           <div class="qc-divider"></div>
 
           <!-- ESTIMATE -->
-          <div class="quote-card-eyebrow">Your estimate (inc VAT)</div>
+          <div class="quote-card-eyebrow">Your estimate (+ VAT at booking)</div>
           <div class="quote-card-amount" id="cost-grand-total-value">£0</div>
           <div class="quote-card-label" id="cost-headline-label">Live estimate · updates as you type</div>
 
@@ -868,14 +868,14 @@ def page_html() -> str:
 
           <dl class="quote-card-breakdown">
             <div class="quote-line" data-show-modes="removals both"><dt>Vehicle</dt><dd><strong id="cost-vehicle">—</strong></dd></div>
-            <div class="quote-line" data-show-modes="removals both"><dt>Volume cost (nett)</dt><dd><strong id="cost-volume">£0</strong></dd></div>
-            <div class="quote-line" data-show-modes="removals both"><dt>Mileage (nett)</dt><dd><strong id="cost-mileage">£0</strong></dd></div>
+            <div class="quote-line" data-show-modes="removals both"><dt>Volume cost</dt><dd><strong id="cost-volume">£0</strong></dd></div>
+            <div class="quote-line" data-show-modes="removals both"><dt>Mileage</dt><dd><strong id="cost-mileage">£0</strong></dd></div>
             <div class="quote-line" data-show-modes="removals both"><dt>Removals nett</dt><dd><strong id="cost-nett-total">£0</strong></dd></div>
             <div class="quote-line" data-show-modes="removals both"><dt>VAT (20%)</dt><dd><strong id="cost-vat">£0</strong></dd></div>
-            <div class="quote-line quote-line-subtotal" data-show-modes="removals both"><dt>Removals total (inc VAT)</dt><dd><strong id="cost-total">£0</strong></dd></div>
+            <div class="quote-line quote-line-subtotal" data-show-modes="removals both"><dt>Removals subtotal (nett)</dt><dd><strong id="cost-total">£0</strong></dd></div>
             <div class="quote-line" data-show-modes="storage both"><dt>Storage unit</dt><dd><strong id="storage-unit">—</strong></dd></div>
-            <div class="quote-line" data-show-modes="storage both"><dt>Daily rate (inc VAT)</dt><dd><strong id="storage-daily">£0.00</strong></dd></div>
-            <div class="quote-line quote-line-subtotal" data-show-modes="storage both"><dt>Storage subtotal (inc VAT)</dt><dd><strong id="storage-total">£0.00</strong></dd></div>
+            <div class="quote-line" data-show-modes="storage both"><dt>Daily rate (nett)</dt><dd><strong id="storage-daily">£0.00</strong></dd></div>
+            <div class="quote-line quote-line-subtotal" data-show-modes="storage both"><dt>Storage subtotal (nett)</dt><dd><strong id="storage-total">£0.00</strong></dd></div>
           </dl>
 
           <div class="quote-card-storage" data-show-modes="storage both" id="storage-summary">
@@ -1046,7 +1046,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260615"></script>
+  <script defer src="../js/storage-calculator.js?v=20260616"></script>
 </body>
 </html>
 """
