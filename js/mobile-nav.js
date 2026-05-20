@@ -64,7 +64,9 @@
       h.setAttribute('tabindex', '0');
       h.setAttribute('aria-expanded', 'false');
       function toggleCol(e) {
-        // Accordion behaviour applies on desktop AND mobile now
+        // Accordion behaviour applies on MOBILE ONLY (≤991px).
+        // On desktop every region's cities are visible at once.
+        if (!window.matchMedia('(max-width: 991px)').matches) return;
         e.preventDefault();
         e.stopPropagation();
         var col = h.parentElement;

@@ -1513,99 +1513,73 @@ html { scroll-behavior: smooth; }
 }
 
 /* =========================================================
-   MEGAMENU ACCORDION MODE (desktop + mobile)
-   Region headings collapsed by default; click to drop down cities.
-   Single open at a time.
+   MEGAMENU — desktop multi-column, mobile accordion
+   Desktop: every region's cities visible at once in a clean grid.
+   Mobile (≤991px): one region open at a time via accordion toggle.
    ========================================================= */
+
+/* ---- Desktop default ---- */
 .dropdown.mega-areas .dropdown-list.mega-menu,
 .dropdown.mega-services .dropdown-list.mega-menu {
-  /* Override the 5-column grid — switch to vertical accordion */
   display: none;
-  grid-template-columns: none !important;
-  width: min(95vw, 640px) !important;
-  max-width: 95vw;
-  padding: 0.5rem 0 !important;
+  width: min(96vw, 1280px) !important;
+  max-width: 96vw;
+  padding: 1.6rem 1.75rem !important;
   background: var(--brand-navy) !important;
   border-radius: 8px;
   box-shadow: 0 16px 40px rgba(0,0,0,0.4);
   left: 50%;
   transform: translateX(-50%);
-  flex-direction: column;
-  gap: 0 !important;
+  gap: 0.4rem 2rem !important;
 }
 .dropdown.mega-areas .dropdown-list.mega-menu.w--open,
 .dropdown.mega-services .dropdown-list.mega-menu.w--open {
-  display: flex !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.dropdown.mega-services .dropdown-list.mega-menu.w--open {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-/* Each region becomes a full-width accordion row */
 .mega-col {
-  width: 100%;
+  display: flex !important;
+  flex-direction: column !important;
   padding: 0 !important;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  display: block !important;
-  flex-direction: unset !important;
-}
-.mega-col:last-child {
-  border-bottom: none;
+  border: none;
+  width: auto;
 }
 .mega-col .mega-h {
-  cursor: pointer;
-  margin: 0 !important;
-  padding: 0.95rem 1.5rem !important;
-  border: none !important;
-  width: 100%;
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center;
-  user-select: none;
+  margin: 0 0 0.7rem 0 !important;
+  padding: 0 0 0.5rem 0 !important;
+  border-bottom: 1px solid rgba(214,178,116,0.4) !important;
+  background: transparent !important;
   color: var(--brand-bronze-light) !important;
   font-family: "Inter", sans-serif !important;
-  font-weight: 600 !important;
-  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  font-size: 0.7rem !important;
   letter-spacing: 0.14em !important;
   text-transform: uppercase;
-  background: transparent;
-  transition: background 0.15s ease;
+  cursor: default;
+  user-select: text;
 }
-.mega-col .mega-h::after {
-  content: "+";
-  font-size: 1.5rem;
-  font-weight: 200;
-  line-height: 1;
-  transition: transform 0.2s ease;
-}
-.mega-col[data-open="true"] .mega-h {
-  background: rgba(200, 168, 118, 0.08) !important;
-}
-.mega-col[data-open="true"] .mega-h::after {
-  content: "−";
-}
-.mega-col .mega-h:hover {
-  background: rgba(255, 255, 255, 0.04) !important;
-}
-
-/* Children are anchors (the city links). Hide by default. */
+.mega-col .mega-h::after { content: ""; }
 .mega-col > a {
-  display: none !important;
-  padding: 0.45rem 1.5rem 0.45rem 2.25rem !important;
-  border-left: 2px solid transparent !important;
-  color: rgba(255,255,255,0.9) !important;
-  font-size: 0.88rem;
-}
-.mega-col[data-open="true"] > a {
   display: block !important;
-}
-.mega-col[data-open="true"] > a:last-child {
-  padding-bottom: 0.9rem !important;
+  padding: 0.32rem 0 0.32rem 0.6rem !important;
+  border-left: 2px solid transparent !important;
+  color: #fff !important;
+  font-size: 0.86rem;
+  text-decoration: none;
+  line-height: 1.35;
+  background: transparent;
 }
 .mega-col > a:hover {
-  background: rgba(255, 255, 255, 0.04) !important;
   color: var(--brand-bronze-light) !important;
   border-left-color: var(--brand-bronze) !important;
+  background: rgba(255,255,255,0.04) !important;
 }
 
-/* On mobile, panel takes full width */
+/* ---- Mobile (≤991px): accordion ---- */
 @media (max-width: 991px) {
   .dropdown.mega-areas .dropdown-list.mega-menu,
   .dropdown.mega-services .dropdown-list.mega-menu {
@@ -1615,7 +1589,49 @@ html { scroll-behavior: smooth; }
     transform: none;
     border-radius: 0;
     box-shadow: none;
+    padding: 0 !important;
+    gap: 0 !important;
   }
+  .dropdown.mega-areas .dropdown-list.mega-menu.w--open,
+  .dropdown.mega-services .dropdown-list.mega-menu.w--open {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+  }
+  .mega-col {
+    width: 100%;
+    display: block !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .mega-col:last-child { border-bottom: none; }
+  .mega-col .mega-h {
+    cursor: pointer;
+    margin: 0 !important;
+    padding: 0.95rem 1.5rem !important;
+    border: none !important;
+    width: 100%;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center;
+    font-size: 0.78rem !important;
+    background: transparent !important;
+  }
+  .mega-col .mega-h::after {
+    content: "+";
+    font-size: 1.5rem;
+    font-weight: 200;
+    line-height: 1;
+    color: var(--brand-bronze-light);
+  }
+  .mega-col[data-open="true"] .mega-h { background: rgba(200,168,118,0.08) !important; }
+  .mega-col[data-open="true"] .mega-h::after { content: "−"; }
+  .mega-col .mega-h:hover { background: rgba(255,255,255,0.04) !important; }
+  .mega-col > a {
+    display: none !important;
+    padding: 0.45rem 1.5rem 0.45rem 2.25rem !important;
+  }
+  .mega-col[data-open="true"] > a { display: block !important; }
+  .mega-col[data-open="true"] > a:last-child { padding-bottom: 0.9rem !important; }
 }
 
 /* =========================================================
