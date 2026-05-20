@@ -2,12 +2,13 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies the five build rules:
+Verifies the six build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
   4. blog/index.html lists every blog post, newest-first, capped at 9.
   5. sitemap.xml contains a <url> for every indexable HTML page.
+  6. No two indexable pages share the same <title> tag.
 
 Run from the site root:
     python3 tools/audit.py
@@ -152,6 +153,7 @@ def audit():
         'blog_index_listing':    [],
         'blog_index_order':      [],
         'sitemap':               [],
+        'duplicate_titles':      [],
     }
 
     blog_posts = []
@@ -288,6 +290,29 @@ def audit():
          f'{len(indexable)} indexable pages all listed; {len(sitemap)} sitemap entries match',
          failures['sitemap'])
 
+    # Rule 6 — no duplicate <title> tags across indexable pages
+    title_re = re.compile(r'<title>([^<]+)</title>', re.I)
+    titles_seen: dict[str, list[str]] = {}
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        m = title_re.search(html)
+        if not m:
+            failures['duplicate_titles'].append(('no-title', p))
+            continue
+        title = ' '.join(m.group(1).split()).strip()
+        titles_seen.setdefault(title, []).append(p)
+    for title, paths in titles_seen.items():
+        if len(paths) > 1:
+            failures['duplicate_titles'].append(
+                f'"{title}" used by {len(paths)} pages: {", ".join(paths)}'
+            )
+    rule('Rule 6 — no duplicate <title> tags',
+         f'{len(titles_seen)} unique titles across {len(indexable)} indexable pages',
+         failures['duplicate_titles'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -296,7 +321,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all five content rules satisfied.')
+    print('PASS — all six content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
