@@ -74,7 +74,7 @@
   //   • Vehicle is auto-picked by cu ft for naming + mileage rate only.
   //   • Volume cost = BASE + max(0, cuft − BASE_INCLUDED) × EXCESS_RATE
   //   • Total       = volume cost + miles × picked-vehicle mile rate
-  var BASE_CHARGE   = 360;
+  var BASE_CHARGE   = 500;
   var BASE_INCLUDED = 500;
   var EXCESS_RATE   = 1.61;
   var VEHICLE_TIERS = [
