@@ -316,8 +316,14 @@
     if (manualCuftInput) {
       manualCuft = parseInt(manualCuftInput.value, 10);
       if (isNaN(manualCuft) || manualCuft < 0) manualCuft = 0;
-      // Disable the manual input while inventory drives the figure
+      // While inventory drives the figure: disable the field AND keep
+      // its displayed value in sync with the live inventory sum so the
+      // customer can see the cu ft figure update as items are added,
+      // removed or +/- stepped.
       manualCuftInput.disabled = hasInventory;
+      if (hasInventory) {
+        manualCuftInput.value = Math.round(invCuft);
+      }
     }
     var effectiveCuft = hasInventory ? Math.round(invCuft) : manualCuft;
 
@@ -681,6 +687,9 @@
       } else {
         clearAllInventoryInputs();
         setInventoryVisible(false, false);
+        // Reset cu ft to the bedroom's default once items are cleared.
+        manualCuftTouched = false;
+        applyHomeSizeDefault();
       }
       recalc();
     });
