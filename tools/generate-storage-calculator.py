@@ -462,36 +462,6 @@ def page_html() -> str:
     </div>
   </section>
 
-  <section class="np-section np-section-soft">
-    <div class="np-inner">
-      <h2>Pricing rate table — Mark Ratcliffe Moving</h2>
-      <p>For reference, here are the volume bands and per-band rates used by our crews:</p>
-      <div class="rate-table-wrap">
-        <table class="rate-table">
-          <thead>
-            <tr>
-              <th>Volume</th>
-              <th>Vehicle</th>
-              <th>Mileage</th>
-              <th>Suggested £/cu ft</th>
-              <th>Minimum charge</th>
-              <th>Max mileage / day</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Up to 80 cu ft</td><td>Small van</td><td>£2/mile</td><td>£2.50&ndash;£3.00/cu ft</td><td><strong>£180&ndash;£220</strong></td><td>250&ndash;300 miles</td></tr>
-            <tr><td>81&ndash;250 cu ft</td><td>Luton van</td><td>£2/mile</td><td>£2.00&ndash;£2.50/cu ft</td><td><strong>£250&ndash;£350</strong></td><td>250&ndash;300 miles</td></tr>
-            <tr><td>251&ndash;600 cu ft</td><td>3.5T / large Luton</td><td>£2/mile</td><td>£1.60&ndash;£2.00/cu ft</td><td><strong>£450&ndash;£650</strong></td><td>220&ndash;280 miles</td></tr>
-            <tr><td>601&ndash;1,100 cu ft</td><td>7.5T lorry</td><td>£2/mile</td><td>£1.40&ndash;£1.80/cu ft</td><td><strong>£800&ndash;£1,200</strong></td><td>180&ndash;250 miles</td></tr>
-            <tr><td>1,101&ndash;1,700 cu ft</td><td>18T lorry</td><td>£2/mile</td><td>£1.20&ndash;£1.60/cu ft</td><td><strong>£1,400&ndash;£2,000</strong></td><td>150&ndash;220 miles</td></tr>
-            <tr><td>1,701+ cu ft</td><td>Artic / multiple loads</td><td>£2/mile</td><td>£1.00&ndash;£1.40/cu ft</td><td><strong>£2,000+</strong></td><td>120&ndash;200 miles</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>These rates reflect our typical Sussex jobs. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Our pricing is in-person-surveyed every time — the BAR Advance Payment Guarantee protects every customer deposit, and our processes are certified to the BS 8564 international removals standard.</p>
-    </div>
-  </section>
-
   <section class="np-section">
     <div class="np-inner">
       <h2>How to use the calculator</h2>
