@@ -74,19 +74,20 @@
   //   2-3 bed     → Medium pricing (7.5 – 18 Tonne lorry, £650 min)
   //   4-5+ bed    → Large  pricing (18 Tonne+ / Artic, £1,000 min)
   // Pricing model:
-  //   • For volumes up to `cap` (upper bound of the typical range for the
-  //     property), the customer pays the flat `minCharge` for the volume
-  //     leg. Mileage is added on top.
+  //   • `cap` is the LOWER bound of the typical cu ft range for that
+  //     property — the volume the published base charge already covers.
+  //   • For volumes up to `cap` the customer pays the flat `minCharge`
+  //     for the volume leg. Mileage is added on top.
   //   • Above `cap`, the per-cu-ft `rate` kicks in for the excess only,
   //     stacked on top of `minCharge`.
   //   • Formula: volumeCost = minCharge + max(0, cuft - cap) * rate
-  //              total = volumeCost + miles * mileRate
+  //              total      = volumeCost + miles * mileRate
   var BED_PROFILES = {
-    '1bed': { label: '1-bed flat or studio',         typicalCuft:  700, cap:  900, vehicle: 'Luton Van (3.5t)',     rate: 2.25, mileRate: 2.00, minCharge:  360 },
-    '2bed': { label: '2-bed home',                   typicalCuft: 1100, cap: 1400, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
-    '3bed': { label: '3-bed home',                   typicalCuft: 1500, cap: 1800, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
-    '4bed': { label: '4-bed home',                   typicalCuft: 2200, cap: 2800, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 },
-    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 3000, cap: 4000, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 }
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  700, cap:  500, vehicle: 'Luton Van (3.5t)',     rate: 2.25, mileRate: 2.00, minCharge:  360 },
+    '2bed': { label: '2-bed home',                   typicalCuft: 1100, cap:  800, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1500, cap: 1200, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '4bed': { label: '4-bed home',                   typicalCuft: 2200, cap: 1800, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 },
+    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 3000, cap: 2800, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 }
   };
   // BED_INVENTORY is emitted by the Python generator as inline JS just
   // before this script loads. Each entry maps "item-<slug>" → quantity.
@@ -211,9 +212,9 @@
 
     costVehicle.textContent = profile.vehicle;
     if (cuft === 0) {
-      costVolume.textContent = pounds(profile.minCharge) + ' (' + profile.label + ' base)';
-    } else if (withinCap || cuft <= profile.cap) {
-      costVolume.textContent = pounds(profile.minCharge) + ' (' + profile.label + ' base, ' + cuft + ' / ' + profile.cap + ' cu ft cap)';
+      costVolume.textContent = pounds(profile.minCharge) + ' (' + profile.label + ' base · first ' + profile.cap + ' cu ft)';
+    } else if (cuft <= profile.cap) {
+      costVolume.textContent = pounds(profile.minCharge) + ' (' + profile.label + ' base · ' + cuft + ' / ' + profile.cap + ' cu ft included)';
     } else {
       costVolume.textContent = pounds(volCost) + ' (' + pounds(profile.minCharge) + ' base + ' + excessCuft + ' extra × £' + profile.rate.toFixed(2) + ')';
     }
@@ -240,7 +241,7 @@
       if (mode === 'storage') {
         prefix = 'Live estimate';
       } else if (excessCuft > 0) {
-        prefix = 'Above ' + profile.cap + ' cu ft cap';
+        prefix = excessCuft + ' cu ft above ' + profile.cap + ' inclusive';
       } else {
         prefix = profile.label + ' base charge';
       }

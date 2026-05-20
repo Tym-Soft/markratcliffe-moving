@@ -975,41 +975,41 @@ def page_html() -> str:
           <tr>
             <td><strong>1-bed</strong><br><span class="rate-table-sub">flat or studio</span></td>
             <td>Luton Van (3.5t)</td>
-            <td><strong>£360</strong><br>(up to 900 cu ft)</td>
+            <td><strong>£360</strong><br>(first 500 cu ft)</td>
             <td>£2.25</td>
             <td>£2.00</td>
           </tr>
           <tr>
             <td><strong>2-bed</strong><br><span class="rate-table-sub">home</span></td>
             <td>7.5 – 18 Tonne lorry</td>
-            <td><strong>£650</strong><br>(up to 1,400 cu ft)</td>
+            <td><strong>£650</strong><br>(first 800 cu ft)</td>
             <td>£1.60</td>
             <td>£2.75</td>
           </tr>
           <tr>
             <td><strong>3-bed</strong><br><span class="rate-table-sub">home</span></td>
             <td>7.5 – 18 Tonne lorry</td>
-            <td><strong>£650</strong><br>(up to 1,800 cu ft)</td>
+            <td><strong>£650</strong><br>(first 1,200 cu ft)</td>
             <td>£1.60</td>
             <td>£2.75</td>
           </tr>
           <tr>
             <td><strong>4-bed</strong><br><span class="rate-table-sub">home</span></td>
             <td>18 Tonne+ / 44 Tonne Artic</td>
-            <td><strong>£1,000</strong><br>(up to 2,800 cu ft)</td>
+            <td><strong>£1,000</strong><br>(first 1,800 cu ft)</td>
             <td>£1.30</td>
             <td>£3.50</td>
           </tr>
           <tr>
             <td><strong>5+ bed</strong><br><span class="rate-table-sub">antiques / country property</span></td>
             <td>18 Tonne+ / 44 Tonne Artic</td>
-            <td><strong>£1,000</strong><br>(up to 4,000 cu ft)</td>
+            <td><strong>£1,000</strong><br>(first 2,800 cu ft)</td>
             <td>£1.30</td>
             <td>£3.50</td>
           </tr>
         </tbody>
       </table>
-      <p>The cost formula: <strong>cost = base charge + max(0, cu ft − cap) × £/cu ft + miles × £/mile</strong>. At or below the cap you simply pay the base charge plus mileage. Above the cap, every extra cu ft is added at the per-cu-ft rate. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
+      <p>The cost formula: <strong>cost = base charge + max(0, cu ft − included volume) × £/cu ft + miles × £/mile</strong>. The base charge already covers the first chunk of cu ft for that property (a 1-bed&rsquo;s £360 includes the first 500 cu ft). Above the included volume, every extra cu ft is added at the per-cu-ft rate. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
       <p>For an accurate price, book a <a href="../mark-ratcliffe-moving-online-removals-quote.html">free in-home survey</a>. We respond within 48 hours.</p>
     </div>
   </section>
@@ -1056,7 +1056,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260582"></script>
+  <script defer src="../js/storage-calculator.js?v=20260583"></script>
 </body>
 </html>
 """
