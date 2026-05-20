@@ -47,6 +47,11 @@
     { sqft: 200, weekly: 21.60 },
     { sqft: 280, weekly: 24.48 }
   ];
+  // Lower-ceiling 75 sqft room (cheaper than the standard 75). Shown as a
+  // side-by-side option whenever the auto-picker lands on the 75 sqft band
+  // — the customer can pick the lower-ceiling option if their contents
+  // won't stack high.
+  var STORAGE_LOW_CEILING_75 = { sqft: 75, weekly: 6.91, label: '75 sqft low-ceiling' };
   var STORAGE_CUFT_PER_SQFT = 7; // packing efficiency: 7 cu ft per sqft of floor
 
   var storageEnabled    = document.getElementById('storage-enabled');
@@ -95,6 +100,28 @@
   function getHomeSize() {
     var checked = document.querySelector('input[name="home-size"]:checked');
     return checked ? checked.value : 'medium';
+  }
+
+  function getCalcMode() {
+    var checked = document.querySelector('input[name="calc-mode"]:checked');
+    return checked ? checked.value : 'both';
+  }
+
+  function applyCalcMode() {
+    var mode = getCalcMode();
+    document.body.setAttribute('data-calc-mode', mode);
+    // In storage-only mode, force the storage block open — the user has
+    // already declared they want storage, no need to make them tick the box.
+    if (storageEnabled && storageDetails) {
+      if (mode === 'storage') {
+        storageEnabled.checked = true;
+        storageDetails.hidden = false;
+      } else if (mode === 'removals') {
+        storageEnabled.checked = false;
+        storageDetails.hidden = true;
+      }
+    }
+    recalc();
   }
 
   function loadSizeLabel(cuft) {
@@ -301,6 +328,14 @@
     milesInput.addEventListener('change', recalc);
   }
 
+  // Calculator-mode radios (Removals only / Storage only / Both)
+  var calcModeRadios = document.querySelectorAll('input[name="calc-mode"]');
+  for (var cm = 0; cm < calcModeRadios.length; cm++) {
+    calcModeRadios[cm].addEventListener('change', applyCalcMode);
+  }
+  // Apply the initial mode on load so the right sections show
+  applyCalcMode();
+
   // Home size radios
   var homeSizeRadios = document.querySelectorAll('input[name="home-size"]');
   for (var hs = 0; hs < homeSizeRadios.length; hs++) {
@@ -359,7 +394,11 @@
       }
       if (!anyItems) picked.push('  (no items selected on the calculator)');
 
-      var subjectParts = ['Removals quote request', cuft + ' cu ft', fromPC + ' -> ' + toPC];
+      var calcMode = getCalcMode();
+      var modeLabel = calcMode === 'storage' ? 'Storage only'
+                    : calcMode === 'removals' ? 'Removals only'
+                    : 'Removals + storage';
+      var subjectParts = [modeLabel + ' quote request', cuft + ' cu ft', fromPC + ' -> ' + toPC];
       var subject = subjectParts.join(' | ');
 
       var body = [
@@ -374,19 +413,22 @@
         '  Moving to postcode:   ' + toPC,
         '',
         'CALCULATOR TOTALS',
+        '  Quote type:    ' + modeLabel,
         '  Volume:        ' + cuft + ' cu ft (' + cum + ' cu m / ' + kg + ' kg)',
         '  Load size:     ' + van,
-        '  Vehicle band:  ' + vehicle,
-        '',
-        'ESTIMATED REMOVALS COST',
-        '  Home size:       ' + getHomeSize(),
-        '  Distance:        ' + miles + ' miles',
-        '  Volume cost:     ' + volumeCost,
-        '  Mileage cost:    ' + mileageCost,
-        '  Minimum charge:  ' + minimumCost,
-        '  Removals total:  ' + totalCost,
         ''
       ];
+      if (calcMode !== 'storage') {
+        body.push('ESTIMATED REMOVALS COST');
+        body.push('  Vehicle band:    ' + vehicle);
+        body.push('  Home size:       ' + getHomeSize());
+        body.push('  Distance:        ' + miles + ' miles');
+        body.push('  Volume cost:     ' + volumeCost);
+        body.push('  Mileage cost:    ' + mileageCost);
+        body.push('  Minimum charge:  ' + minimumCost);
+        body.push('  Removals total:  ' + totalCost);
+        body.push('');
+      }
       if (storageWanted) {
         body.push('STORAGE REQUIRED');
         body.push('  Unit:            ' + storageUnitTxt);

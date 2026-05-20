@@ -333,6 +333,61 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
    Layout: sticky totals bar · horizontal tab bar with icons ·
    search filter · per-item rows with ± stepper.
    ========================================================= */
+/* Calculator-mode selector (Removals only / Storage only / Both) */
+.mode-selector {
+  border: 0;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.7rem;
+}
+.mode-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border: 1px solid var(--np-border, #e5e7eb);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  color: var(--brand-navy, #4d2e8f);
+  transition: background .15s, border-color .15s;
+}
+.mode-option:hover { border-color: var(--brand-bronze, #C8A876); background: rgba(200,168,118,0.06); }
+.mode-option input[type="radio"] {
+  margin: 0.25rem 0 0;
+  accent-color: var(--brand-bronze, #C8A876);
+  cursor: pointer;
+}
+.mode-option strong { display: block; font-size: 1rem; }
+.mode-option small {
+  display: block;
+  color: var(--np-muted, #6b7280);
+  font-size: 0.84rem;
+  font-weight: 400;
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+.mode-option:has(input:checked) {
+  background: rgba(200,168,118,0.15);
+  border-color: var(--brand-bronze, #C8A876);
+}
+
+/* Mode-driven visibility. Each element declares data-show-modes="..." with
+ * a space-separated list of modes in which it should be visible. The body's
+ * data-calc-mode attribute is set by the JS on mode switch. */
+body[data-calc-mode="removals"] [data-show-modes]:not([data-show-modes~="removals"]) { display: none !important; }
+body[data-calc-mode="storage"]  [data-show-modes]:not([data-show-modes~="storage"])  { display: none !important; }
+body[data-calc-mode="both"]     [data-show-modes]:not([data-show-modes~="both"])     { display: none !important; }
+
+/* In storage-only mode, hide the storage toggle row (it's redundant — the
+ * user already declared they want storage) and force the storage details
+ * block visible regardless of the [hidden] attribute. */
+body[data-calc-mode="storage"] .storage-toggle { display: none; }
+body[data-calc-mode="storage"] .storage-details { display: grid !important; }
+
 .calc-totals {
   position: sticky;
   top: 96px;
@@ -717,6 +772,16 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
   background: #fafafa;
   border-radius: 6px;
   padding: 1rem 1.25rem;
+}
+.storage-alt {
+  margin: 0.4rem 0 0;
+  padding: 0.6rem 0.85rem;
+  background: rgba(200,168,118,0.12);
+  border-left: 3px solid var(--brand-bronze, #C8A876);
+  border-radius: 0 4px 4px 0;
+  font-size: 0.85rem;
+  color: var(--brand-navy, #4d2e8f);
+  line-height: 1.45;
 }
 
 /* Grand total row shown when storage is added */

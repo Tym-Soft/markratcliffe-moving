@@ -431,7 +431,23 @@ def page_html() -> str:
 
   <section class="np-section">
     <div class="np-inner">
-      <h2>Estimate your removals cost</h2>
+      <h2>What would you like to calculate?</h2>
+
+      <fieldset class="mode-selector" id="mode-selector">
+        <legend class="sr-only">Calculator mode</legend>
+        <label class="mode-option">
+          <input type="radio" name="calc-mode" value="removals">
+          <span><strong>Removals cost only</strong><small>The cost of moving your items to a new home.</small></span>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="calc-mode" value="storage">
+          <span><strong>Storage cost only</strong><small>The cost of storing your items in a Prestige steel room.</small></span>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="calc-mode" value="both" checked>
+          <span><strong>Both removals + storage</strong><small>The full picture for a move-and-store job.</small></span>
+        </label>
+      </fieldset>
 
       <div class="calc-totals" aria-live="polite" id="calc-totals">
         <div><strong id="total-cuft">0</strong><span>cu ft</span></div>
@@ -440,9 +456,9 @@ def page_html() -> str:
         <div><strong id="van-estimate">No items selected</strong><span>load size</span></div>
       </div>
 
-      <p>Enter the round-trip distance for the move below. The calculator finds your vehicle band from the volume above, multiplies the volume by the suggested £/cu ft rate, adds the mileage at £2/mile, and applies the minimum charge if the volume cost would be lower. Output is a range that covers our typical Sussex quote.</p>
+      <p data-show-modes="removals both">Enter the round-trip distance for the move below. The calculator finds your vehicle band from the volume above, multiplies the volume by the suggested £/cu ft rate, adds the mileage at the per-vehicle rate, and applies the minimum charge if the volume cost would be lower. The home-size selector picks a single price point inside the band.</p>
 
-      <div class="cost-estimator" id="cost-estimator">
+      <div class="cost-estimator" id="cost-estimator" data-show-modes="removals both">
         <div class="cost-inputs">
           <label class="cost-input">
             <span class="cost-input-label">Total job miles (depot → old home → new home → depot)</span>
@@ -476,7 +492,7 @@ def page_html() -> str:
         </div>
       </div>
 
-      <div class="storage-block" id="storage-block">
+      <div class="storage-block" id="storage-block" data-show-modes="storage both">
         <label class="storage-toggle">
           <input type="checkbox" id="storage-enabled">
           <span><strong>Do you also need storage?</strong> Add our self-storage to the estimate.</span>
@@ -493,11 +509,12 @@ def page_html() -> str:
             <div class="cost-line"><span>Recommended unit</span><strong id="storage-unit">—</strong></div>
             <div class="cost-line"><span>Weekly rate (inc VAT &amp; insurance)</span><strong id="storage-weekly">£0.00</strong></div>
             <div class="cost-line cost-total"><span>Storage total</span><strong id="storage-total">£0.00</strong></div>
+            <p class="storage-alt">Also available: <strong>75 sqft low-ceiling room at £6.91/week</strong> (inc VAT &amp; insurance) — ideal if your contents won&rsquo;t stack high.</p>
           </div>
         </div>
       </div>
 
-      <div class="cost-grand-total" id="cost-grand-total" hidden>
+      <div class="cost-grand-total" id="cost-grand-total" hidden data-show-modes="both">
         <span>Removals + storage estimate</span>
         <strong id="cost-grand-total-value">£0</strong>
       </div>
@@ -607,7 +624,7 @@ def page_html() -> str:
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260567"></script>
+  <script defer src="../js/storage-calculator.js?v=20260568"></script>
 </body>
 </html>
 """
