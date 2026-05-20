@@ -222,10 +222,25 @@ def indexable_pages(pages: list[str]) -> list[str]:
     return out
 
 def sitemap_locs() -> set[str]:
+    """Return every <loc> across the sitemap index + sub-sitemaps.
+    Falls back to a flat sitemap.xml if no <sitemapindex> wrapper is found."""
     try:
         xml = open('sitemap.xml', encoding='utf-8').read()
     except OSError:
         return set()
+    if '<sitemapindex' in xml:
+        locs: set[str] = set()
+        for child in re.findall(r'<sitemap>\s*<loc>([^<]+)</loc>', xml):
+            # Strip BASE_URL prefix to find local sub-sitemap file
+            child_path = re.sub(r'^https?://(?:www\.)?markratcliffemoving\.co\.uk/', '', child)
+            if not os.path.exists(child_path):
+                continue
+            try:
+                sub_xml = open(child_path, encoding='utf-8').read()
+            except OSError:
+                continue
+            locs.update(re.findall(r'<loc>([^<]+)</loc>', sub_xml))
+        return locs
     return set(re.findall(r'<loc>([^<]+)</loc>', xml))
 
 def expected_loc(path: str) -> str:
