@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """
-Rebuild the blog/index.html "Latest articles" grid.
+Rebuild the blog/index.html main content area.
 
-Reads every blog/*.html (excluding index.html), pulls headline +
-datePublished + description + image from its JSON-LD and meta tags,
-sorts newest-first, and rewrites the `<div class="np-blog-grid"> ... </div>`
-block inside blog/index.html. Max 9 cards shown.
+Generates a two-column layout: main column with the latest 9 cards
+(Rule 4 cap) plus category-grouped lists giving access to every post,
+and a sticky sidebar with recent posts and CTA blocks.
+
+The script overwrites everything between
+    <!-- BLOG_INDEX_AUTO_START -->
+and
+    <!-- BLOG_INDEX_AUTO_END -->
+in blog/index.html. The hero, footer and surrounding chrome stay manual.
 
 Run from the site root:    python3 tools/build-blog-index.py
 """
@@ -18,37 +23,179 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BLOG_DIR = os.path.join(ROOT, 'blog')
 INDEX = os.path.join(BLOG_DIR, 'index.html')
 MAX_CARDS = 9
+SIDEBAR_RECENT = 8
 
-CATEGORY_HINTS = [
-    ('pad-wrap',         'Packing'),
-    ('packing',          'Packing'),
-    ('fragile',          'Packing'),
-    ('checklist',        'Moving Tips'),
-    ('prepare',          'Moving Tips'),
-    ('cost',             'Cost & Quotes'),
-    ('choosing',         'Choosing a Mover'),
-    ('storage',          'Storage'),
-    ('international',    'International'),
-    ('overseas',         'International'),
+# Explicit slug → category mapping. Each post belongs to exactly one
+# category. Order of CATEGORIES below determines display order on the
+# page (and the category nav pills).
+CATEGORIES = [
+    ('planning',     'Planning your move'),
+    ('cleaning',     'Move-out cleaning'),
+    ('packing',      'Packing & materials'),
+    ('storage',      'Storage'),
+    ('cost',         'Cost & budget'),
+    ('remover',      'Choosing a remover'),
+    ('local',        'Local area guides'),
+    ('family',       'Family & lifestyle'),
+    ('seasonal',     'Seasonal moves'),
+    ('specialist',   'Specialist moves'),
+    ('business',     'Business & office'),
+    ('international','International'),
+    ('sustainable',  'Sustainable moves'),
+    ('stories',      'Customer stories'),
 ]
 
-def category_for(slug: str, title: str) -> str:
-    s = (slug + ' ' + title).lower()
-    for needle, cat in CATEGORY_HINTS:
-        if needle in s:
-            return cat
-    return 'Moving Tips'
+SLUG_TO_CATEGORY = {
+    # planning
+    'how-to-prepare-for-your-house-move.html':                'planning',
+    'moving-house-checklist-eastbourne.html':                 'planning',
+    'what-to-pack-first-when-moving-house.html':              'planning',
+    'moving-day-survival-kit.html':                           'planning',
+    'essential-moving-day-survival-kit.html':                 'planning',
+    'what-happens-on-moving-day.html':                        'planning',
+    'moving-day-step-by-step-guide.html':                     'planning',
+    'how-to-organise-move-when-busy.html':                    'planning',
+    'best-day-of-week-to-move-house.html':                    'planning',
+    '10-most-commonly-forgotten-moving-items.html':           'planning',
+    # cleaning
+    'how-to-clean-old-house-before-moving.html':              'cleaning',
+    'cleaning-checklist-moving-out.html':                     'cleaning',
+    # packing
+    'how-to-pack-fragile-items.html':                         'packing',
+    'packing-tips-fragile-items-pictures.html':               'packing',
+    'how-to-pack-kitchen-items-safely.html':                  'packing',
+    'how-to-pack-clothes-without-wrinkling.html':             'packing',
+    'how-to-pack-electronics-safely.html':                    'packing',
+    'benefits-of-professional-packing-service.html':          'packing',
+    'cardboard-boxes-vs-plastic-crates.html':                 'packing',
+    'full-pad-wrap-protection-explained.html':                'packing',
+    'how-our-pad-wrap-service-protects-furniture.html':       'packing',
+    # storage
+    'how-to-choose-right-self-storage.html':                  'storage',
+    'short-term-vs-long-term-storage.html':                   'storage',
+    'what-you-can-and-cannot-store.html':                     'storage',
+    'how-to-prepare-furniture-for-storage.html':              'storage',
+    'prestige-steel-storage-rooms.html':                      'storage',
+    # cost
+    'cost-of-moving-house-sussex-2026.html':                  'cost',
+    'how-to-save-money-on-house-move-2026.html':              'cost',
+    'ways-to-save-on-house-move.html':                        'cost',
+    'should-you-move-yourself-or-hire-professionals.html':    'cost',
+    'diy-move-vs-professional.html':                          'cost',
+    # remover
+    'choosing-a-removal-company-eastbourne.html':             'remover',
+    'questions-to-ask-removals-company.html':                 'remover',
+    'how-to-spot-rogue-removal-traders.html':                 'remover',
+    'common-moving-scams-2026.html':                          'remover',
+    'how-to-avoid-moving-scams.html':                         'remover',
+    # local
+    'moving-to-eastbourne-area-guide.html':                   'local',
+    'moving-to-brighton-area-guide.html':                     'local',
+    'moving-to-chichester-area-guide.html':                   'local',
+    'moving-to-hastings-area-guide.html':                     'local',
+    'moving-to-worthing-area-guide.html':                     'local',
+    'moving-to-lewes-area-guide.html':                        'local',
+    'newhaven-or-seaford-which-is-better.html':               'local',
+    'best-areas-to-live-east-sussex-2026.html':               'local',
+    'moving-to-countryside-east-sussex.html':                 'local',
+    'moving-to-tunbridge-wells-area-guide.html':              'local',
+    'eastbourne-parking-permits-when-moving.html':            'local',
+    'best-schools-eastbourne-families.html':                  'local',
+    'moving-to-listed-building-sussex.html':                  'local',
+    'cost-of-living-eastbourne-vs-brighton.html':             'local',
+    'moving-from-london-to-sussex.html':                      'local',
+    # family
+    'moving-house-with-children.html':                        'family',
+    'moving-house-with-pets.html':                            'family',
+    'moving-house-alone-practical-tips.html':                 'family',
+    'moving-student-belongings-parents-guide.html':           'family',
+    'student-move-tips-for-parents.html':                     'family',
+    'how-to-downsize-before-moving.html':                     'family',
+    'moving-from-flat-vs-house.html':                         'family',
+    # seasonal
+    'moving-house-in-winter.html':                            'seasonal',
+    'moving-house-in-summer.html':                            'seasonal',
+    'moving-during-school-holidays.html':                     'seasonal',
+    'moving-during-school-holidays-pros-cons.html':           'seasonal',
+    'moving-over-christmas-and-new-year.html':                'seasonal',
+    'moving-house-at-christmas-worth-it.html':                'seasonal',
+    'christmas-new-year-house-move.html':                     'seasonal',
+    'spring-cleaning-before-moving-house.html':               'seasonal',
+    'spring-clean-while-moving.html':                         'seasonal',
+    'school-holiday-moves.html':                              'seasonal',
+    # specialist
+    'moving-heavy-awkward-items.html':                        'specialist',
+    'heavy-item-moves-pianos-safes.html':                     'specialist',
+    'moving-antiques-valuable-furniture.html':                'specialist',
+    'antique-furniture-moving-specialist.html':               'specialist',
+    'moving-fine-art-collectibles.html':                      'specialist',
+    'fine-art-moving-guide.html':                             'specialist',
+    'moving-care-home-nursing-home.html':                     'specialist',
+    'care-home-relocation-guide.html':                        'specialist',
+    'moving-pub-or-restaurant.html':                          'specialist',
+    'licensed-premises-relocation.html':                      'specialist',
+    # business
+    'office-relocation-minimise-disruption.html':             'business',
+    'business-office-relocation.html':                        'business',
+    # international
+    'international-moves-from-sussex.html':                   'international',
+    'overseas-removals-from-sussex.html':                     'international',
+    # sustainable
+    'eco-friendly-moving-sustainable-removals.html':          'sustainable',
+    'ten-ways-eco-friendly-house-move.html':                  'sustainable',
+    'sustainable-removals-guide.html':                        'sustainable',
+    'how-to-make-move-carbon-neutral.html':                   'sustainable',
+    'how-to-offset-carbon-emissions-moving.html':             'sustainable',
+    'carbon-neutral-moves-explained.html':                    'sustainable',
+    # stories
+    'real-customer-moving-stories.html':                      'stories',
+    'customer-moving-stories.html':                           'stories',
+}
+
+# Fallback keyword hints for any post that isn't explicitly mapped above
+# (e.g. when new posts are added). Order matters — first match wins.
+FALLBACK_HINTS = [
+    ('cleaning',   'cleaning'),
+    ('moving-to-', 'local'),
+    ('removals-',  'local'),
+    ('storage',    'storage'),
+    ('packing',    'packing'),
+    ('pad-wrap',   'packing'),
+    ('fragile',    'packing'),
+    ('cost',       'cost'),
+    ('save',       'cost'),
+    ('international', 'international'),
+    ('overseas',   'international'),
+    ('eco',        'sustainable'),
+    ('carbon',     'sustainable'),
+    ('children',   'family'),
+    ('pets',       'family'),
+    ('student',    'family'),
+    ('office',     'business'),
+    ('care-home',  'specialist'),
+    ('antique',    'specialist'),
+    ('art',        'specialist'),
+    ('piano',      'specialist'),
+    ('checklist',  'planning'),
+    ('day',        'planning'),
+]
+
+
+def category_for(slug: str) -> str:
+    if slug in SLUG_TO_CATEGORY:
+        return SLUG_TO_CATEGORY[slug]
+    for needle, key in FALLBACK_HINTS:
+        if needle in slug:
+            return key
+    return 'planning'
+
 
 def extract_meta(path: str) -> dict | None:
     html = open(path, encoding='utf-8').read()
     if 'http-equiv="refresh"' in html or 'window.location.replace' in html:
-        return None  # redirect stub
+        return None
 
-    # Try JSON-LD BlogPosting first
-    headline = None
-    date = None
-    image = None
-    description = None
+    headline = date = image = description = None
     for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', html, re.S):
         try:
             data = json.loads(m.group(1))
@@ -65,12 +212,10 @@ def extract_meta(path: str) -> dict | None:
                 if isinstance(img, dict): img = img.get('url')
                 image = img or image
 
-    # Fall back to <title> and meta description
     if not headline:
         m = re.search(r'<title>([^<]+)</title>', html)
         if m:
             headline = m.group(1).strip()
-            # Strip site suffixes like " | Mark Ratcliffe Moving"
             headline = re.sub(r'\s*[|·—]\s*Mark Ratcliffe.*$', '', headline)
     if not description:
         m = re.search(r'<meta name="description" content="([^"]+)"', html)
@@ -81,7 +226,6 @@ def extract_meta(path: str) -> dict | None:
 
     if not headline: return None
 
-    # Normalise image to a path relative to blog/index.html
     if image:
         image = image.split('?')[0]
         m = re.search(r'/images/([^/]+\.\w+)$', image)
@@ -92,30 +236,140 @@ def extract_meta(path: str) -> dict | None:
         else:
             image = '../images/mark-ratcliffe-modern-removal-lorry-eastbourne.webp'
 
-    # Sortable date: keep "YYYY-MM-DD"
     sort_date = date or '1970-01-01'
+    slug = os.path.basename(path)
 
     return {
-        'slug':        os.path.basename(path),
+        'slug':        slug,
         'title':       unescape(headline.strip()),
         'date':        sort_date,
         'description': unescape((description or '').strip()),
         'image':       image,
+        'category':    category_for(slug),
     }
 
+
 def render_card(post: dict) -> str:
-    cat = category_for(post['slug'], post['title'])
+    cat_label = next((label for key, label in CATEGORIES if key == post['category']), 'Moving Tips')
     return (
         '          <article class="np-blog-card">\n'
         f'            <img src="{post["image"]}" alt="{post["title"]}" loading="lazy" decoding="async" width="600" height="360">\n'
         '            <div class="np-blog-card-body">\n'
-        f'              <div class="np-blog-card-meta">{cat} &middot; {post["date"]}</div>\n'
+        f'              <div class="np-blog-card-meta">{cat_label} &middot; {post["date"]}</div>\n'
         f'              <h3><a href="{post["slug"]}">{post["title"]}</a></h3>\n'
         f'              <p>{post["description"]}</p>\n'
         f'              <a href="{post["slug"]}"><strong>Read more &rarr;</strong></a>\n'
         '            </div>\n'
         '          </article>'
     )
+
+
+def render_category_pill(key: str, label: str, count: int) -> str:
+    return f'          <a class="np-cat-pill" href="#cat-{key}">{label} <span>({count})</span></a>'
+
+
+def render_category_section(key: str, label: str, posts: list[dict]) -> str:
+    items = '\n'.join(
+        f'              <li><a href="{p["slug"]}">{p["title"]}</a></li>' for p in posts
+    )
+    return (
+        f'        <section class="np-blog-category" id="cat-{key}">\n'
+        f'          <h3>{label} <span class="np-cat-count">({len(posts)} article{"s" if len(posts)!=1 else ""})</span></h3>\n'
+         '          <ul class="np-blog-list">\n'
+        f'{items}\n'
+         '          </ul>\n'
+         '        </section>'
+    )
+
+
+def render_sidebar_recent(posts: list[dict]) -> str:
+    items = '\n'.join(
+        f'            <li><a href="{p["slug"]}">{p["title"]}</a></li>' for p in posts
+    )
+    return (
+        '        <div class="np-sidebar-block">\n'
+        '          <h3>Recent posts</h3>\n'
+        '          <ul class="np-sidebar-list">\n'
+        f'{items}\n'
+        '          </ul>\n'
+        '        </div>'
+    )
+
+
+SIDEBAR_CTA = """        <div class="np-sidebar-block np-sidebar-cta">
+          <h3>Quote or question?</h3>
+          <p>Call us on <a href="tel:01323848008">01323 848 008</a> &mdash; or send a free quote request and we&rsquo;ll come back within 48 hours.</p>
+          <a class="np-btn np-btn-primary np-sidebar-btn" href="../mark-ratcliffe-moving-online-removals-quote.html">Get a Free Quote</a>
+        </div>"""
+
+SIDEBAR_SERVICES = """        <div class="np-sidebar-block np-sidebar-services">
+          <h3>Our services</h3>
+          <p>Family-run Sussex removals since 1982. Local moves, international, packing, storage, piano, antiques.</p>
+          <a class="np-btn np-btn-secondary np-sidebar-btn" href="../services.html">View all services</a>
+        </div>"""
+
+
+def render_auto_block(posts: list[dict]) -> str:
+    """Assemble the full auto-generated content block."""
+    # Latest 9 — newest first, cap-9 (Rule 4)
+    posts_sorted = sorted(posts, key=lambda p: (p['date'] or '', p['slug'] or ''), reverse=True)
+    latest = posts_sorted[:MAX_CARDS]
+
+    # Sidebar recent: 8 newest by date
+    recent_sidebar = posts_sorted[:SIDEBAR_RECENT]
+
+    # Category groups
+    by_cat: dict[str, list[dict]] = {key: [] for key, _ in CATEGORIES}
+    for p in posts_sorted:
+        if p['category'] in by_cat:
+            by_cat[p['category']].append(p)
+
+    grid_html = '<div class="np-blog-grid">\n' + '\n'.join(render_card(p) for p in latest) + '\n          </div>'
+
+    pills_html = '\n'.join(
+        render_category_pill(key, label, len(by_cat[key]))
+        for key, label in CATEGORIES if by_cat[key]
+    )
+
+    sections_html = '\n'.join(
+        render_category_section(key, label, by_cat[key])
+        for key, label in CATEGORIES if by_cat[key]
+    )
+
+    sidebar_recent_html = render_sidebar_recent(recent_sidebar)
+
+    return f"""<!-- BLOG_INDEX_AUTO_START -->
+  <section class="np-section np-section-soft np-blog-layout-section">
+    <div class="np-inner np-blog-layout">
+      <div class="np-blog-main">
+
+        <h2>Latest articles</h2>
+        {grid_html}
+
+        <h2 class="np-blog-all-heading">Browse all {len(posts_sorted)} articles by topic</h2>
+        <nav class="np-blog-categories-nav" aria-label="Blog categories">
+{pills_html}
+        </nav>
+
+{sections_html}
+
+      </div>
+      <aside class="np-blog-sidebar" aria-label="Sidebar">
+{sidebar_recent_html}
+
+{SIDEBAR_CTA}
+
+{SIDEBAR_SERVICES}
+      </aside>
+    </div>
+  </section>
+  <!-- BLOG_INDEX_AUTO_END -->"""
+
+
+# Markers must already be present in blog/index.html
+MARKER_START = '<!-- BLOG_INDEX_AUTO_START -->'
+MARKER_END   = '<!-- BLOG_INDEX_AUTO_END -->'
+
 
 def main() -> int:
     posts = []
@@ -124,47 +378,28 @@ def main() -> int:
         meta = extract_meta(path)
         if meta: posts.append(meta)
 
-    # Sort newest-first by datePublished, with the slug as a stable tiebreaker
-    # so this ordering matches tools/audit.py and stays deterministic.
-    posts.sort(key=lambda p: (p['date'] or '', p['slug'] or ''), reverse=True)
-    visible = posts[:MAX_CARDS]
+    if not posts:
+        print('No blog posts found', file=sys.stderr)
+        return 1
 
-    grid_html = '<div class="np-blog-grid">\n' + '\n'.join(render_card(p) for p in visible) + '\n        </div>'
+    auto_block = render_auto_block(posts)
 
     index_html = open(INDEX, encoding='utf-8').read()
-    # Locate the grid block by div-balanced scan
-    start = index_html.find('<div class="np-blog-grid">')
-    if start < 0:
-        print('Could not find <div class="np-blog-grid"> in index.html', file=sys.stderr)
+    s = index_html.find(MARKER_START)
+    e = index_html.find(MARKER_END)
+    if s < 0 or e < 0 or e < s:
+        print('Markers not found in blog/index.html. Add:', file=sys.stderr)
+        print(f'  {MARKER_START}  ...  {MARKER_END}', file=sys.stderr)
         return 1
-    # Walk forward counting open/close <div> tags until depth returns to 0.
-    depth = 0
-    i = start
-    end = -1
-    DIV_OPEN  = re.compile(r'<div\b', re.I)
-    DIV_CLOSE = re.compile(r'</div>', re.I)
-    while i < len(index_html):
-        next_open  = DIV_OPEN.search(index_html, i)
-        next_close = DIV_CLOSE.search(index_html, i)
-        if not next_close: break
-        if next_open and next_open.start() < next_close.start():
-            depth += 1
-            i = next_open.end()
-        else:
-            depth -= 1
-            i = next_close.end()
-            if depth == 0:
-                end = i
-                break
-    if end < 0:
-        print('Could not find matching </div> for grid', file=sys.stderr)
-        return 1
-    new_index = index_html[:start] + grid_html + index_html[end:]
+
+    new_index = index_html[:s] + auto_block + index_html[e + len(MARKER_END):]
     open(INDEX, 'w', encoding='utf-8').write(new_index)
-    print(f'Rebuilt {INDEX} with {len(visible)} cards (of {len(posts)} total posts).')
-    if len(posts) > MAX_CARDS:
-        print(f'  ({len(posts) - MAX_CARDS} older post(s) not shown; index capped at {MAX_CARDS}.)')
+
+    n_total = len(posts)
+    n_visible = min(MAX_CARDS, n_total)
+    print(f'Rebuilt {INDEX}: latest {n_visible} cards + {n_total} categorised links.')
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())

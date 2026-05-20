@@ -285,6 +285,55 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
 .np-blog-card h3 a { color: var(--np-primary); text-decoration: none; }
 .np-blog-card-meta { font-size: 0.85rem; color: var(--np-muted); margin-bottom: 0.5rem; }
 
+/* =========================================================
+   Blog index — two-column layout (main + sticky sidebar)
+   Brand colours: purple #4d2e8f, bronze #C8A876.
+   Mobile breakpoint at 991px stacks sidebar below main.
+   ========================================================= */
+.np-blog-layout-section { padding-top: 2.25rem; padding-bottom: 2.5rem; }
+.np-blog-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 2.5rem; align-items: start; }
+.np-blog-main { min-width: 0; }
+.np-blog-main > h2 { margin: 0 0 1rem; }
+.np-blog-all-heading { margin-top: 2.75rem !important; padding-top: 1.75rem; border-top: 1px solid var(--np-border); }
+
+.np-blog-categories-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0 2rem; }
+.np-cat-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.45rem 0.9rem; border-radius: 999px; background: #fff; border: 1px solid var(--np-border); color: var(--np-primary); font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.np-cat-pill span { color: var(--np-muted); font-weight: 500; font-size: 0.85rem; }
+.np-cat-pill:hover { background: var(--np-primary); border-color: var(--np-primary); color: #fff; }
+.np-cat-pill:hover span { color: rgba(255,255,255,0.85); }
+
+.np-blog-category { scroll-margin-top: 110px; margin-bottom: 2.25rem; padding: 1.4rem 1.5rem 1.25rem; background: #fff; border: 1px solid var(--np-border); border-left: 4px solid var(--np-accent); border-radius: 8px; }
+.np-blog-category h3 { margin: 0 0 0.85rem; color: var(--np-primary); font-size: 1.35rem; }
+.np-cat-count { color: var(--np-muted); font-weight: 500; font-size: 0.95rem; }
+.np-blog-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem 1.25rem; }
+.np-blog-list li { padding-left: 1.25rem; position: relative; font-size: 1rem; line-height: 1.45; }
+.np-blog-list li::before { content: "→"; position: absolute; left: 0; top: 0; color: var(--np-accent); font-weight: 600; }
+.np-blog-list a { color: var(--np-primary); text-decoration: none; }
+.np-blog-list a:hover { text-decoration: underline; }
+
+.np-blog-sidebar { position: sticky; top: 96px; display: flex; flex-direction: column; gap: 1.25rem; }
+.np-sidebar-block { background: #fff; border: 1px solid var(--np-border); border-radius: 8px; padding: 1.25rem 1.35rem; }
+.np-sidebar-block h3 { margin: 0 0 0.85rem; color: var(--np-primary); font-size: 1.15rem; padding-bottom: 0.6rem; border-bottom: 2px solid var(--np-accent); }
+.np-sidebar-list { list-style: none; padding: 0; margin: 0; }
+.np-sidebar-list li { padding: 0.55rem 0; border-bottom: 1px solid var(--np-border); font-size: 0.95rem; line-height: 1.4; }
+.np-sidebar-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+.np-sidebar-list a { color: var(--np-primary); text-decoration: none; }
+.np-sidebar-list a:hover { color: var(--np-accent); text-decoration: underline; }
+.np-sidebar-cta { background: linear-gradient(135deg, var(--np-primary) 0%, #6841b8 100%); color: #fff; border-color: var(--np-primary); }
+.np-sidebar-cta h3 { color: #fff; border-bottom-color: var(--np-accent); }
+.np-sidebar-cta p { color: rgba(255,255,255,0.92); font-size: 0.95rem; margin: 0 0 1rem; }
+.np-sidebar-cta a { color: #fff; }
+.np-sidebar-cta p a { text-decoration: underline; }
+.np-sidebar-services { background: #faf6ee; border-color: var(--np-accent); }
+.np-sidebar-services p { font-size: 0.95rem; margin: 0 0 1rem; }
+.np-sidebar-btn { display: block; width: 100%; text-align: center; padding: 0.7rem 1rem; }
+
+@media (max-width: 991px) {
+  .np-blog-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .np-blog-sidebar { position: static; top: auto; }
+  .np-blog-list { grid-template-columns: 1fr; }
+}
+
 .np-related { background: var(--np-bg-soft); }
 .np-related-list { list-style: none; padding: 0; margin: 0.75rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.65rem 1.25rem; }
 .np-related-list li { padding-left: 1.5rem; position: relative; font-size: 1.05rem; line-height: 1.6; }
