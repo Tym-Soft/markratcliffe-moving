@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies the thirteen build rules:
+Verifies twenty build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -17,15 +17,22 @@ Verifies the thirteen build rules:
      pointing to its production https://www.markratcliffemoving.co.uk
      URL (no JS-injected canonicals — crawlers like Screaming Frog
      don't execute JS).
- 11. No two indexable pages share the same <h1> tag (duplicate-content
-     guard alongside Rule 6).
+ 11. No two indexable pages share the same <h1> tag.
  12. Internal <a href> values must point at an indexable, self-
      canonical page — no links to noindex, redirect-stub or
-     canonicalised pages, and no `*/index.html` links (use directory
-     URLs instead).
+     canonicalised pages, and no `*/index.html` links.
  13. Every canonical target itself resolves to an indexable page on
-     disk (no canonical chains, no canonicals to noindex/missing
-     resources).
+     disk (no canonical chains).
+ 14. <link rel="canonical"> appears inside the <head> element.
+ 15. Every <img> carries both width and height attributes (CLS).
+ 16. Internal anchor text is descriptive — no "click here", "read
+     more", "learn more", "here" etc.
+ 17. Internal anchors have non-empty accessible names (visible text,
+     image alt, or aria-label).
+ 18. <h1> is the first heading on the page — no <h2>-<h6> before it.
+ 19. Every <img alt="..."> ≤125 chars when present.
+ 20. Every page has Content-Security-Policy and Referrer-Policy
+     declared via <meta> tags.
 
 Run from the site root:
     python3 tools/audit.py
@@ -47,6 +54,12 @@ BODY_LINKS_MIN     = 10
 BLOG_INDEX_MAX     = 9
 META_DESC_MAX      = 145
 TITLE_PX_MAX       = 550
+ALT_TEXT_MAX       = 125
+NON_DESCRIPTIVE_ANCHORS = {
+    'click here', 'clickhere', 'read more', 'learn more', 'more', 'here',
+    'this', 'click', 'continue reading', 'continue', 'link', 'this link',
+    'more info', 'read', 'see more', 'view more', 'find out more', 'tap here',
+}
 
 # Approximate Arial Bold ~20px character pixel widths.
 # Calibrated to match Screaming Frog's "Title Pixel Width" output within ~3%.
@@ -217,6 +230,13 @@ def audit():
         'duplicate_h1':          [],
         'links_to_non_canonical':[],
         'canonical_target':      [],
+        'canonical_in_head':     [],
+        'img_dimensions':        [],
+        'non_descriptive_anchor':[],
+        'empty_anchor':          [],
+        'h1_not_first':          [],
+        'alt_too_long':          [],
+        'security_meta':         [],
     }
 
     blog_posts = []
@@ -586,6 +606,135 @@ def audit():
          f'{len(canon_by_file)} canonical targets all resolve to indexable pages',
          failures['canonical_target'])
 
+    # Rule 14 — canonical link element inside <head>
+    head_close_re = re.compile(r'</head>', re.I)
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        cm = canon_lookup_re.search(html)
+        hm = head_close_re.search(html)
+        if cm and hm and cm.start() > hm.start():
+            failures['canonical_in_head'].append(p)
+    rule('Rule 14 — canonical link element inside <head>',
+         f'{len(indexable)} pages: all canonical tags inside <head>',
+         failures['canonical_in_head'])
+
+    # Rule 15 — every <img> has width + height attributes
+    img_iter_re = re.compile(r'<img\b([^>]*)>', re.I)
+    img_attr_re = re.compile(r'(\w[\w-]*)\s*=\s*"([^"]*)"', re.I)
+    n_imgs = 0
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        for m in img_iter_re.finditer(html):
+            n_imgs += 1
+            attrs = dict(img_attr_re.findall(m.group(1)))
+            if 'width' not in attrs or 'height' not in attrs:
+                src = (attrs.get('src') or attrs.get('data-src') or '?')[:60]
+                failures['img_dimensions'].append(f'{p}  ({src})')
+    rule('Rule 15 — every <img> has width+height attributes',
+         f'{n_imgs} images across {len(indexable)} pages all have dimensions',
+         failures['img_dimensions'])
+
+    # Rule 16 / 17 / 19 — anchor text + alt length
+    body_a_re = re.compile(r'<a\b([^>]*)>(.*?)</a>', re.I | re.S)
+    tag_strip_re = re.compile(r'<[^>]+>')
+
+    def clean_anchor_text(s: str) -> str:
+        s = tag_strip_re.sub('', s)
+        s = (s.replace('&rarr;', '→').replace('&larr;', '←')
+              .replace('&ndash;', '–').replace('&mdash;', '—')
+              .replace('&amp;', '&').replace('&nbsp;', ' ')
+              .replace('&middot;', '·').replace('&rsquo;', '’')
+              .replace('&lsquo;', '‘').replace('&hellip;', '…'))
+        s = re.sub(r'&[a-zA-Z]+;', '', s)
+        return re.sub(r'\s+', ' ', s).strip()
+
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        # body region = after </head>, before <footer>
+        head_m = head_close_re.search(html)
+        body = html[head_m.end():] if head_m else html
+        f_m = re.search(r'<footer\b', body)
+        if f_m: body = body[:f_m.start()]
+        for m in body_a_re.finditer(body):
+            attrs = dict(img_attr_re.findall(m.group(1)))
+            href = attrs.get('href', '')
+            if not href or href.startswith(('mailto:', 'tel:', '#', 'javascript:')):
+                continue
+            inner = m.group(2)
+            text = clean_anchor_text(inner)
+            norm = re.sub(r'[→»>\s\.,!:;\-–—]+', ' ', text.lower()).strip()
+            # Rule 16 — non-descriptive
+            if norm in NON_DESCRIPTIVE_ANCHORS:
+                failures['non_descriptive_anchor'].append(f'{p}  "{text}" → {href}')
+            # Rule 17 — empty anchor text (no visible, no img alt, no aria-label)
+            if not text:
+                im = re.search(r'<img\b[^>]*\balt="([^"]*)"', inner, re.I)
+                if im and im.group(1).strip():
+                    continue
+                if attrs.get('aria-label', '').strip():
+                    continue
+                failures['empty_anchor'].append(f'{p}  href={href}')
+
+        # Rule 19 — alt text length
+        for m in img_iter_re.finditer(html):
+            attrs = dict(img_attr_re.findall(m.group(1)))
+            alt = attrs.get('alt', '')
+            if len(alt) > ALT_TEXT_MAX:
+                failures['alt_too_long'].append(f'{p}  alt={len(alt)} chars')
+
+    rule(f'Rule 16 — descriptive anchor text (no "click here"/"read more"/"learn more")',
+         f'{len(indexable)} pages: all internal anchor text is descriptive',
+         failures['non_descriptive_anchor'])
+    rule(f'Rule 17 — anchors have accessible names',
+         f'{len(indexable)} pages: no empty-text anchors',
+         failures['empty_anchor'])
+
+    # Rule 18 — H1 is the first heading on the page
+    heading_re = re.compile(r'<(h[1-6])\b', re.I)
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        bm = re.search(r'<body\b[^>]*>', html, re.I)
+        body_html = html[bm.end():] if bm else html
+        first = heading_re.search(body_html)
+        if first and first.group(1).lower() != 'h1':
+            failures['h1_not_first'].append(f'{p}  first heading: <{first.group(1)}>')
+    rule('Rule 18 — <h1> is the first heading on the page',
+         f'{len(indexable)} pages: heading order starts with <h1>',
+         failures['h1_not_first'])
+
+    rule(f'Rule 19 — alt text ≤{ALT_TEXT_MAX} chars',
+         f'{n_imgs} images across {len(indexable)} pages all within {ALT_TEXT_MAX} chars',
+         failures['alt_too_long'])
+
+    # Rule 20 — Content-Security-Policy + Referrer-Policy meta tags
+    csp_re_a = re.compile(r'<meta\s+http-equiv="Content-Security-Policy"', re.I)
+    ref_re_a = re.compile(r'<meta\s+name="referrer"', re.I)
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        missing = []
+        if not csp_re_a.search(html): missing.append('Content-Security-Policy')
+        if not ref_re_a.search(html): missing.append('Referrer-Policy')
+        if missing:
+            failures['security_meta'].append(f'{p}  missing: {", ".join(missing)}')
+    rule('Rule 20 — CSP + Referrer-Policy meta tags present',
+         f'{len(indexable)} pages: all have CSP and Referrer-Policy',
+         failures['security_meta'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -594,7 +743,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all thirteen content rules satisfied.')
+    print('PASS — all twenty content rules satisfied.')
     return 0
 
 if __name__ == '__main__':

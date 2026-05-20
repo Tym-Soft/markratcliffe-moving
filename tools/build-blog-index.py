@@ -258,7 +258,7 @@ def render_card(post: dict) -> str:
         f'              <div class="np-blog-card-meta">{cat_label} &middot; {post["date"]}</div>\n'
         f'              <h3><a href="{post["slug"]}">{post["title"]}</a></h3>\n'
         f'              <p>{post["description"]}</p>\n'
-        f'              <a href="{post["slug"]}"><strong>Read more &rarr;</strong></a>\n'
+        f'              <a href="{post["slug"]}" class="np-blog-card-cta"><strong>Read: {post["title"]} &rarr;</strong></a>\n'
         '            </div>\n'
         '          </article>'
     )
