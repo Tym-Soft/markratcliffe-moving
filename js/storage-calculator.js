@@ -83,11 +83,11 @@
   //   • Formula: volumeCost = minCharge + max(0, cuft - cap) * rate
   //              total      = volumeCost + miles * mileRate
   var BED_PROFILES = {
-    '1bed': { label: '1-bed flat or studio',         typicalCuft:  700, cap:  500, vehicle: 'Luton Van (3.5t)',     rate: 4.50, mileRate: 2.00, minCharge:  360 },
-    '2bed': { label: '2-bed home',                   typicalCuft: 1100, cap:  800, vehicle: '7.5 – 18 Tonne Lorry', rate: 3.20, mileRate: 2.75, minCharge:  650 },
-    '3bed': { label: '3-bed home',                   typicalCuft: 1500, cap: 1200, vehicle: '7.5 – 18 Tonne Lorry', rate: 3.20, mileRate: 2.75, minCharge:  650 },
-    '4bed': { label: '4-bed home',                   typicalCuft: 2200, cap: 1800, vehicle: '18 Tonne+ / Artic',    rate: 2.60, mileRate: 3.50, minCharge: 1000 },
-    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 3000, cap: 2800, vehicle: '18 Tonne+ / Artic',    rate: 2.60, mileRate: 3.50, minCharge: 1000 }
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  700, cap:  500, vehicle: 'Luton Van (3.5t)',     rate: 2.25, mileRate: 2.00, minCharge:  360 },
+    '2bed': { label: '2-bed home',                   typicalCuft: 1100, cap:  800, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1500, cap: 1200, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '4bed': { label: '4-bed home',                   typicalCuft: 2200, cap: 1800, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 },
+    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 3000, cap: 2800, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 }
   };
   // BED_INVENTORY is emitted by the Python generator as inline JS just
   // before this script loads. Each entry maps "item-<slug>" → quantity.
