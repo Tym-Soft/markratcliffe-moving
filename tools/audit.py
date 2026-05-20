@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies the nine build rules:
+Verifies the ten build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -13,6 +13,10 @@ Verifies the nine build rules:
   8. <title> pixel width is ≤550px (Arial Bold ≈ 20px, matches SF).
   9. Every <img> has an alt attribute (empty alt allowed only with
      role="presentation" or aria-hidden="true" for decorative images).
+ 10. Every indexable page has a static <link rel="canonical">
+     pointing to its production https://www.markratcliffemoving.co.uk
+     URL (no JS-injected canonicals — crawlers like Screaming Frog
+     don't execute JS).
 
 Run from the site root:
     python3 tools/audit.py
@@ -198,6 +202,7 @@ def audit():
         'meta_description':      [],
         'title_pixel_width':     [],
         'image_alt':             [],
+        'canonical':             [],
     }
 
     blog_posts = []
@@ -414,6 +419,26 @@ def audit():
          f'{n_imgs_scanned} images across {len(indexable)} pages all have alt (or decorative role)',
          failures['image_alt'])
 
+    # Rule 10 — every indexable page has a static canonical pointing to production
+    canon_re = re.compile(r'<link\s+rel="canonical"\s+href="([^"]+)"', re.I)
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        ms = canon_re.findall(html)
+        expected = expected_loc(p)
+        if not ms:
+            failures['canonical'].append(f'missing  {p}')
+        elif len(ms) > 1:
+            failures['canonical'].append(f'multiple {p} ({len(ms)} canonical tags)')
+        elif ms[0] != expected:
+            failures['canonical'].append(f'wrong    {p}  → {ms[0]}  (expected {expected})')
+
+    rule('Rule 10 — every page has a static canonical → production URL',
+         f'{len(indexable)} pages all canonical to www.markratcliffemoving.co.uk',
+         failures['canonical'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -422,7 +447,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all nine content rules satisfied.')
+    print('PASS — all ten content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
