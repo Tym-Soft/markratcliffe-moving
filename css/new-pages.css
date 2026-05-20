@@ -586,6 +586,24 @@ body[data-calc-mode="both"]    .storage-details { display: grid !important; }
 .storage-calc .calc-actions { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
 /* Cost estimator (mileage + £/cu ft → live total) */
+/* Always-visible volume inputs (home size + cu ft override).
+ * Sits between the totals bar and the mode-specific blocks below.
+ * Visible in every calculator mode because every mode needs a cu ft figure. */
+.volume-inputs {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  background: #fff;
+  border: 1px solid var(--np-border, #e5e7eb);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  margin: 1rem 0 1rem;
+}
+@media (max-width: 760px) {
+  .volume-inputs { grid-template-columns: 1fr; gap: 1rem; padding: 1rem; }
+}
+
 .cost-estimator {
   display: grid;
   grid-template-columns: minmax(220px, 1fr) 2fr;

@@ -140,7 +140,13 @@
   }
 
   function loadSizeLabel(cuft) {
-    if (cuft === 0)    return 'No items selected';
+    if (cuft === 0) return 'No items selected';
+    // In storage-only mode the load size should describe a storage room,
+    // not a removals lorry.
+    if (getCalcMode() === 'storage') {
+      var unit = pickStorageUnit(cuft);
+      return '~ ' + unit.sqft + ' sqft room';
+    }
     if (cuft <= 600)   return '~ Luton Van (3.5t) load';
     if (cuft <= 1100)  return '~ 7.5 Tonne Lorry load';
     if (cuft <= 2000)  return '~ 18–26 Tonne Rigid load';

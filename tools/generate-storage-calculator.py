@@ -456,7 +456,31 @@ def page_html() -> str:
         <div><strong id="van-estimate">No items selected</strong><span>load size</span></div>
       </div>
 
-      <p data-show-modes="removals both">Enter the round-trip distance for the move below. The calculator finds your vehicle band from the volume above, multiplies the volume by the suggested £/cu ft rate, adds the mileage at the per-vehicle rate, and applies the minimum charge if the volume cost would be lower. The home-size selector picks a single price point inside the band.</p>
+      <div class="volume-inputs">
+        <fieldset class="cost-size-input">
+          <legend class="cost-input-label">Home size</legend>
+          <label class="cost-size-option">
+            <input type="radio" name="home-size" value="small">
+            <span><strong>Small</strong> <small>1-bed flat or studio &middot; 500-900 cu ft &middot; Luton Van &middot; £360 min</small></span>
+          </label>
+          <label class="cost-size-option">
+            <input type="radio" name="home-size" value="medium" checked>
+            <span><strong>Medium</strong> <small>2-3 bed home &middot; 900-1,800 cu ft &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
+          </label>
+          <label class="cost-size-option">
+            <input type="radio" name="home-size" value="large">
+            <span><strong>Large</strong> <small>4+ bed / antiques / country property &middot; 1,800-4,000+ cu ft &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
+          </label>
+        </fieldset>
+
+        <label class="cost-manual-cuft" id="cost-manual-cuft-wrap">
+          <span class="cost-input-label">Cubic feet (if you&rsquo;re not using the inventory)</span>
+          <input type="number" id="cost-manual-cuft" min="0" step="50" value="1350" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
+          <span class="cost-input-help" id="cost-manual-cuft-help">Auto-fills with the typical figure for your chosen home size. Tick items above to override with a precise volume.</span>
+        </label>
+      </div>
+
+      <p data-show-modes="removals both">Enter the round-trip distance for the move below. The calculator multiplies the volume by the £/cu ft rate for your home size, adds the mileage at the per-vehicle rate, and applies the minimum charge if the volume cost would be lower.</p>
 
       <div class="cost-estimator" id="cost-estimator" data-show-modes="removals both">
         <div class="cost-inputs">
@@ -464,28 +488,6 @@ def page_html() -> str:
             <span class="cost-input-label">Total job miles (depot → old home → new home → depot)</span>
             <input type="number" id="cost-miles" min="0" value="30" inputmode="numeric" aria-describedby="cost-miles-help">
             <span class="cost-input-help" id="cost-miles-help">Typical Sussex local move: 25-50 mi. Sussex → London: 100-150 mi. Sussex → north UK: 400-600 mi.</span>
-          </label>
-
-          <fieldset class="cost-size-input">
-            <legend class="cost-input-label">Home size</legend>
-            <label class="cost-size-option">
-              <input type="radio" name="home-size" value="small">
-              <span><strong>Small</strong> <small>1-bed flat or studio &middot; 500-900 cu ft &middot; Luton Van &middot; £360 min</small></span>
-            </label>
-            <label class="cost-size-option">
-              <input type="radio" name="home-size" value="medium" checked>
-              <span><strong>Medium</strong> <small>2-3 bed home &middot; 900-1,800 cu ft &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
-            </label>
-            <label class="cost-size-option">
-              <input type="radio" name="home-size" value="large">
-              <span><strong>Large</strong> <small>4+ bed / antiques / country property &middot; 1,800-4,000+ cu ft &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
-            </label>
-          </fieldset>
-
-          <label class="cost-manual-cuft" id="cost-manual-cuft-wrap">
-            <span class="cost-input-label">Cubic feet (if you&rsquo;re not using the inventory)</span>
-            <input type="number" id="cost-manual-cuft" min="0" step="50" value="1350" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
-            <span class="cost-input-help" id="cost-manual-cuft-help">Auto-fills with the typical figure for your chosen home size. Tick items above to override with a precise volume.</span>
           </label>
         </div>
 
@@ -667,7 +669,7 @@ def page_html() -> str:
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260572"></script>
+  <script defer src="../js/storage-calculator.js?v=20260573"></script>
 </body>
 </html>
 """
