@@ -981,18 +981,25 @@ def page_html() -> str:
             <td>£2.00</td>
           </tr>
           <tr>
-            <td><strong>7.5 – 18 Tonne lorry</strong></td>
+            <td><strong>7.5 Tonne Lorry</strong></td>
             <td>2-bed and 3-bed homes</td>
             <td><strong>£650</strong><br>(first 1,200 cu ft)</td>
             <td>£1.61</td>
             <td>£2.75</td>
           </tr>
           <tr>
-            <td><strong>18 Tonne+ / 44 Tonne Artic</strong></td>
-            <td>4-bed, 5+ bed, antiques, country property</td>
+            <td><strong>18 Tonne Lorry</strong></td>
+            <td>3-bed (large) and 4-bed homes</td>
+            <td><strong>£850</strong><br>(first 1,800 cu ft)</td>
+            <td>£1.61</td>
+            <td>£4.00</td>
+          </tr>
+          <tr>
+            <td><strong>44 Tonne Artic</strong></td>
+            <td>5+ bed, antiques, country property, long-distance</td>
             <td><strong>£1,000</strong><br>(first 2,800 cu ft)</td>
             <td>£1.61</td>
-            <td>£3.50</td>
+            <td>£4.00</td>
           </tr>
         </tbody>
       </table>
@@ -1043,7 +1050,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260588"></script>
+  <script defer src="../js/storage-calculator.js?v=20260589"></script>
 </body>
 </html>
 """
