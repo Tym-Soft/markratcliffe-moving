@@ -189,7 +189,9 @@
   // and also defines the volume the property's base charge already
   // covers. Above typicalCuft, each extra cu ft adds £1.21.
   var BED_DEFAULTS = {
-    'tiny': { label: 'Tiny move',                    typicalCuft:  300, base:  300, rate: 1.00 },
+    // Tiny is capped at 500 cu ft — above that we always defer to a real
+    // bed tier so the £1/cu ft Tiny rate can't undercut larger jobs.
+    'tiny': { label: 'Tiny move',                    typicalCuft:  300, base:  300, rate: 1.00, maxCuft: 500 },
     '1bed': { label: '1-bed flat or studio',         typicalCuft:  500, base:  500, rate: 1.51 },
     '2bed': { label: '2-bed home',                   typicalCuft:  800, base:  650, rate: 1.51 },
     '3bed': { label: '3-bed home',                   typicalCuft: 1000, base:  900, rate: 1.51 },
@@ -201,6 +203,21 @@
     var excess = Math.max(0, cuft - bed.typicalCuft);
     var rate = (typeof bed.rate === 'number') ? bed.rate : DEFAULT_EXCESS_RATE;
     return bed.base + excess * rate;
+  }
+  // Picks the cheapest valid bed tier for a given cu ft. Tiers with a
+  // maxCuft are skipped when the volume exceeds it (so the £1/cu ft Tiny
+  // rate can't take over at high volumes). Mirrors the
+  // pickStorageUnits/pickVehicle "always cheapest" logic.
+  function pickCheapestBed(cuft) {
+    var bestBed = null;
+    var bestCost = Infinity;
+    Object.keys(BED_DEFAULTS).forEach(function (key) {
+      var b = BED_DEFAULTS[key];
+      if (typeof b.maxCuft === 'number' && cuft > b.maxCuft) return;
+      var c = computeVolumeCost(cuft, b);
+      if (c < bestCost) { bestCost = c; bestBed = b; }
+    });
+    return bestBed || BED_DEFAULTS['3bed'];
   }
   function pickVehicle(cuft) {
     for (var i = 0; i < VEHICLE_TIERS.length; i++) {
@@ -352,7 +369,10 @@
     var miles = parseInt((milesInput && milesInput.value) || '0', 10);
     if (isNaN(miles) || miles < 0) miles = 0;
 
-    var bed = getBed();
+    // Pricing tier = cheapest valid bed for the cu ft (independent of
+    // which bedroom radio the customer ticked — that's just for the
+    // inventory preset and the auto-fill cu ft default).
+    var bed = pickCheapestBed(cuft);
     var vehicle = pickVehicle(cuft);
     var headlineLabel = document.getElementById('cost-headline-label');
 
