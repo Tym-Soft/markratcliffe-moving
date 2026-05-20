@@ -32,16 +32,15 @@
   var costTotal    = document.getElementById('cost-total');
 
   // Rate bands from the published Mark Ratcliffe Moving rate table.
-  // Each band: max volume in cu ft, vehicle label, £/cu ft range, minimum charge range.
+  // Each band: max volume in cu ft, vehicle label, £/cu ft range,
+  // minimum charge range, and the per-mile mileage charge for that
+  // vehicle (varies — heavier vehicles cost more per mile to run).
   var BANDS = [
-    { max:   80, vehicle: 'Small van',              rateMin: 2.50, rateMax: 3.00, minMin:  180, minMax:  220 },
-    { max:  250, vehicle: 'Luton van',              rateMin: 2.00, rateMax: 2.50, minMin:  250, minMax:  350 },
-    { max:  600, vehicle: '3.5T / large Luton',     rateMin: 1.60, rateMax: 2.00, minMin:  450, minMax:  650 },
-    { max: 1100, vehicle: '7.5T lorry',             rateMin: 1.40, rateMax: 1.80, minMin:  800, minMax: 1200 },
-    { max: 1700, vehicle: '18T lorry',              rateMin: 1.20, rateMax: 1.60, minMin: 1400, minMax: 2000 },
-    { max: Infinity, vehicle: 'Artic / multiple loads', rateMin: 1.00, rateMax: 1.40, minMin: 2000, minMax: 4000 }
+    { max:  600, vehicle: 'Luton Van (3.5t)',    rateMin: 2.00, rateMax: 2.50, minMin:  250, minMax:  650, mileRate: 2.00 },
+    { max: 1100, vehicle: '7.5 Tonne Lorry',     rateMin: 1.40, rateMax: 1.80, minMin:  800, minMax: 1200, mileRate: 2.50 },
+    { max: 2000, vehicle: '18–26 Tonne Rigid',   rateMin: 1.20, rateMax: 1.60, minMin: 1400, minMax: 2500, mileRate: 3.00 },
+    { max: Infinity, vehicle: '44 Tonne Artic',  rateMin: 1.00, rateMax: 1.40, minMin: 2500, minMax: 5000, mileRate: 4.00 }
   ];
-  var MILEAGE_RATE = 2; // £/mile
 
   function poundsRange(lo, hi) {
     var l = Math.round(lo), h = Math.round(hi);
@@ -51,12 +50,10 @@
 
   function loadSizeLabel(cuft) {
     if (cuft === 0)    return 'No items selected';
-    if (cuft <= 80)    return '~ Small-van load';
-    if (cuft <= 250)   return '~ Luton van load';
-    if (cuft <= 600)   return '~ 3.5-tonne lorry';
-    if (cuft <= 1100)  return '~ 7.5-tonne lorry';
-    if (cuft <= 1700)  return '~ 18-tonne lorry';
-    return '~ Artic lorry / multiple loads';
+    if (cuft <= 600)   return '~ Luton Van (3.5t) load';
+    if (cuft <= 1100)  return '~ 7.5 Tonne Lorry load';
+    if (cuft <= 2000)  return '~ 18–26 Tonne Rigid load';
+    return '~ 44 Tonne Artic load';
   }
 
   function recalc() {
@@ -90,15 +87,15 @@
     if (cuft === 0) {
       costVehicle.textContent = 'Add items above to see your vehicle band';
       costVolume.textContent  = '£0';
-      costMileage.textContent = '£' + (miles * MILEAGE_RATE);
+      costMileage.textContent = '£' + (miles * band.mileRate).toLocaleString('en-GB');
       costMinimum.textContent = poundsRange(band.minMin, band.minMax);
-      costTotal.textContent   = poundsRange(band.minMin + miles * MILEAGE_RATE, band.minMax + miles * MILEAGE_RATE);
+      costTotal.textContent   = poundsRange(band.minMin + miles * band.mileRate, band.minMax + miles * band.mileRate);
       return;
     }
 
     var volMin   = cuft * band.rateMin;
     var volMax   = cuft * band.rateMax;
-    var mileCost = miles * MILEAGE_RATE;
+    var mileCost = miles * band.mileRate;
     var baseMin  = Math.max(band.minMin, volMin);
     var baseMax  = Math.max(band.minMax, volMax);
     var totalMin = baseMin + mileCost;
@@ -106,7 +103,7 @@
 
     costVehicle.textContent = band.vehicle;
     costVolume.textContent  = poundsRange(volMin, volMax) + ' (' + cuft + ' cu ft × £' + band.rateMin.toFixed(2) + '–£' + band.rateMax.toFixed(2) + '/cu ft)';
-    costMileage.textContent = '£' + mileCost.toLocaleString('en-GB') + ' (' + miles + ' mi × £' + MILEAGE_RATE + '/mi)';
+    costMileage.textContent = '£' + mileCost.toLocaleString('en-GB') + ' (' + miles + ' mi × £' + band.mileRate.toFixed(2) + '/mi)';
     costMinimum.textContent = poundsRange(band.minMin, band.minMax);
     costTotal.textContent   = poundsRange(totalMin, totalMax);
   }
