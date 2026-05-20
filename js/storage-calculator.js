@@ -85,7 +85,7 @@
   //   • VAT         = nett × 20%
   //   • Inc-VAT     = nett × 1.20 (storage rates already include VAT)
   // Default excess £/cu ft if a property doesn't override its own rate.
-  var DEFAULT_EXCESS_RATE = 1.41;
+  var DEFAULT_EXCESS_RATE = 1.51;
   var VAT_RATE            = 0.20;
   var VEHICLE_TIERS = [
     { name: 'Luton Van (3.5t)', maxCuft:  800, mileRate: 2.00 },
@@ -99,11 +99,11 @@
   // covers. Above typicalCuft, each extra cu ft adds £1.21.
   var BED_DEFAULTS = {
     'tiny': { label: 'Tiny move',                    typicalCuft:  300, base:  300, rate: 1.00 },
-    '1bed': { label: '1-bed flat or studio',         typicalCuft:  500, base:  500, rate: 1.41 },
-    '2bed': { label: '2-bed home',                   typicalCuft:  800, base:  650, rate: 1.41 },
-    '3bed': { label: '3-bed home',                   typicalCuft: 1200, base:  900, rate: 1.41 },
-    '4bed': { label: '4-bed home',                   typicalCuft: 1800, base: 1500, rate: 1.41 },
-    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800, base: 2500, rate: 1.41 }
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  500, base:  500, rate: 1.51 },
+    '2bed': { label: '2-bed home',                   typicalCuft:  800, base:  650, rate: 1.51 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1200, base:  900, rate: 1.51 },
+    '4bed': { label: '4-bed home',                   typicalCuft: 1800, base: 1500, rate: 1.51 },
+    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800, base: 2500, rate: 1.51 }
   };
 
   function computeVolumeCost(cuft, bed) {

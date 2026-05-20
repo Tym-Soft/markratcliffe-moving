@@ -969,7 +969,7 @@ def page_html() -> str:
   <section class="np-section np-section-soft">
     <div class="np-inner">
       <h2>Mark Ratcliffe Moving pricing model</h2>
-      <p>Each property type carries its own base charge that covers the typical volume for that home. Every cu ft above the property's typical adds <strong>£1.41</strong>. Mileage is added at the per-vehicle rate (vehicle is auto-picked from the volume you enter). All prices below are <em>nett</em> — 20% VAT is added to the final quote.</p>
+      <p>Each property type carries its own base charge that covers the typical volume for that home. Every cu ft above the property's typical adds <strong>£1.51+v</strong>. Mileage is added at the per-vehicle rate (vehicle is auto-picked from the volume you enter). All prices below are <em>nett</em> — 20% VAT is added to the final quote.</p>
       <table class="rate-table">
         <thead>
           <tr>
@@ -981,15 +981,15 @@ def page_html() -> str:
         </thead>
         <tbody>
           <tr><td><strong>Tiny move</strong> (few boxes, single items)</td><td><strong>£300</strong></td><td>first 300 cu ft</td><td>£1.00</td></tr>
-          <tr><td><strong>1-bed</strong> flat or studio</td><td><strong>£500</strong></td><td>first 500 cu ft</td><td>£1.41</td></tr>
-          <tr><td><strong>2-bed</strong> home</td><td><strong>£650</strong></td><td>first 800 cu ft</td><td>£1.41</td></tr>
-          <tr><td><strong>3-bed</strong> home</td><td><strong>£900</strong></td><td>first 1,200 cu ft</td><td>£1.41</td></tr>
-          <tr><td><strong>4-bed</strong> home</td><td><strong>£1,500</strong></td><td>first 1,800 cu ft</td><td>£1.41</td></tr>
-          <tr><td><strong>5+ bed</strong> / antiques / country</td><td><strong>£2,500</strong></td><td>first 2,800 cu ft</td><td>£1.41</td></tr>
+          <tr><td><strong>1-bed</strong> flat or studio</td><td><strong>£500</strong></td><td>first 500 cu ft</td><td>£1.51+v</td></tr>
+          <tr><td><strong>2-bed</strong> home</td><td><strong>£650</strong></td><td>first 800 cu ft</td><td>£1.51+v</td></tr>
+          <tr><td><strong>3-bed</strong> home</td><td><strong>£900</strong></td><td>first 1,200 cu ft</td><td>£1.51+v</td></tr>
+          <tr><td><strong>4-bed</strong> home</td><td><strong>£1,500</strong></td><td>first 1,800 cu ft</td><td>£1.51+v</td></tr>
+          <tr><td><strong>5+ bed</strong> / antiques / country</td><td><strong>£2,500</strong></td><td>first 2,800 cu ft</td><td>£1.51+v</td></tr>
         </tbody>
       </table>
       <p>Vehicle is auto-picked from your cu ft for the mileage rate: <strong>Luton Van (3.5t)</strong> £2.00/mi up to 800 cu ft, <strong>7.5 Tonne Lorry</strong> £2.75/mi up to 1,500 cu ft, <strong>18 Tonne Lorry</strong> £4.00/mi up to 2,500 cu ft, <strong>44 Tonne Artic</strong> £4.00/mi above 2,500 cu ft.</p>
-      <p>The cost formula: <strong>(base charge + max(0, cu ft − typical) × £1.41 + miles × £/mile) × 1.20 VAT</strong>. The calculator shows nett figures plus a 20% VAT line so you can see exactly what the VAT addition is. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
+      <p>The cost formula: <strong>(base charge + max(0, cu ft − typical) × £1.51 + miles × £/mile) × 1.20 VAT</strong>. The calculator shows nett figures plus a 20% VAT line so you can see exactly what the VAT addition is. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
       <p>For an accurate price, book a <a href="../mark-ratcliffe-moving-online-removals-quote.html">free in-home survey</a>. We respond within 48 hours.</p>
     </div>
   </section>
@@ -1036,7 +1036,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260610"></script>
+  <script defer src="../js/storage-calculator.js?v=20260611"></script>
 </body>
 </html>
 """
