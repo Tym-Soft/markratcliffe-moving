@@ -1473,8 +1473,7 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
    Mode + bedroom + numbers all live inside the purple card.
    ========================================================= */
 .calc-panel-wrap {
-  max-width: 760px;
-  margin: 0 auto;
+  /* full-width like the inventory section below */
 }
 .quote-card.quote-card-full {
   padding: 2rem 2rem 1.6rem;
