@@ -718,7 +718,7 @@ def page_html() -> str:
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260618" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260619" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -852,6 +852,29 @@ def page_html() -> str:
             </div>
           </aside>
 
+          <!-- Inventory editor — appears in-card after the customer clicks Load. -->
+          <div class="qc-inventory" id="inventory-section" hidden>
+            <div class="qc-inventory-header">
+              <strong>Your inventory</strong>
+              <span>Tick or adjust items below — the estimate updates live.</span>
+            </div>
+            <div class="storage-calc" id="storage-calc">
+              <div class="calc-tabs" role="tablist" aria-label="Room categories">
+{tabs_html}
+              </div>
+              <label class="calc-search" aria-label="Search items">
+                <span class="calc-search-icon">{ICON_SEARCH}</span>
+                <input type="search" id="calc-search-input" placeholder="Search Boxes &amp; cartons" aria-label="Search items in the active category">
+              </label>
+              <div class="calc-panels">
+{panels_html}
+              </div>
+              <div class="calc-actions">
+                <button id="calc-reset" type="button" class="np-btn np-btn-secondary">Reset all quantities</button>
+              </div>
+            </div>
+          </div>
+
           <div class="qc-divider"></div>
 
           <!-- ESTIMATE -->
@@ -911,33 +934,6 @@ def page_html() -> str:
 
           <!-- Hidden storage-enabled checkbox kept for JS compatibility (mode picker drives it). -->
           <input type="checkbox" id="storage-enabled" hidden aria-hidden="true">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="np-section np-section-soft" id="inventory-section" hidden>
-    <div class="np-inner">
-      <h2>Refine your inventory item-by-item (optional)</h2>
-      <p>The estimate above uses a standard inventory for your chosen bedroom count. If you want a more precise figure, tick the exact items you&rsquo;re moving below — the cu ft, cu m, kg and cost figures above will update live.</p>
-
-      <div class="storage-calc" id="storage-calc">
-        <div class="calc-tabs" role="tablist" aria-label="Room categories">
-{tabs_html}
-        </div>
-
-        <label class="calc-search" aria-label="Search items">
-          <span class="calc-search-icon">{ICON_SEARCH}</span>
-          <input type="search" id="calc-search-input" placeholder="Search Boxes &amp; cartons" aria-label="Search items in the active category">
-        </label>
-
-        <div class="calc-panels">
-{panels_html}
-        </div>
-
-        <div class="calc-actions">
-          <button id="calc-reset" type="button" class="np-btn np-btn-secondary">Reset all quantities</button>
-          <a href="#quote-form" class="np-btn np-btn-primary">Send these figures with a quote request</a>
         </div>
       </div>
     </div>

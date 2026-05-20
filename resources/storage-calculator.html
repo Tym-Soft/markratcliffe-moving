@@ -19,7 +19,7 @@
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260618" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260619" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -348,77 +348,14 @@
             </div>
           </aside>
 
-          <div class="qc-divider"></div>
-
-          <!-- ESTIMATE -->
-          <div class="quote-card-eyebrow">Your estimate (+ VAT at booking)</div>
-          <div class="quote-card-amount" id="cost-grand-total-value">£0</div>
-          <div class="quote-card-label" id="cost-headline-label">Live estimate · updates as you type</div>
-
-          <!-- Split panel — visible only in "Both" mode -->
-          <div class="quote-card-split" data-show-modes="both">
-            <div class="qc-split-row">
-              <span class="qc-split-label">Removals</span>
-              <strong class="qc-split-value" id="split-removals">£0.00</strong>
+          <!-- Inventory editor — appears in-card after the customer clicks Load. -->
+          <div class="qc-inventory" id="inventory-section" hidden>
+            <div class="qc-inventory-header">
+              <strong>Your inventory</strong>
+              <span>Tick or adjust items below — the estimate updates live.</span>
             </div>
-            <div class="qc-split-row">
-              <span class="qc-split-label" id="split-storage-label">Storage</span>
-              <strong class="qc-split-value" id="split-storage">£0.00</strong>
-            </div>
-            <div class="qc-split-row qc-split-row-total">
-              <span class="qc-split-label">Total (+ VAT)</span>
-              <strong class="qc-split-value" id="split-total">£0.00</strong>
-            </div>
-          </div>
-
-          <div class="quote-card-meta">
-            <div class="quote-card-meta-item"><strong id="total-cuft">0</strong><span>cu ft</span></div>
-            <div class="quote-card-meta-item"><strong id="total-cum">0.00</strong><span>cu m</span></div>
-            <div class="quote-card-meta-item"><strong id="total-kg">0</strong><span>kg</span></div>
-            <div class="quote-card-meta-item"><strong id="van-estimate">—</strong><span>load size</span></div>
-          </div>
-
-          <dl class="quote-card-breakdown">
-            <div class="quote-line" data-show-modes="removals both"><dt>Vehicle</dt><dd><strong id="cost-vehicle">—</strong></dd></div>
-            <div class="quote-line" data-show-modes="removals both"><dt>Volume cost</dt><dd><strong id="cost-volume">£0</strong></dd></div>
-            <div class="quote-line" data-show-modes="removals both"><dt>Mileage</dt><dd><strong id="cost-mileage">£0</strong></dd></div>
-            <div class="quote-line" data-show-modes="removals both"><dt>Removals nett</dt><dd><strong id="cost-nett-total">£0</strong></dd></div>
-            <div class="quote-line" data-show-modes="removals both"><dt>VAT (20%)</dt><dd><strong id="cost-vat">£0</strong></dd></div>
-            <div class="quote-line quote-line-subtotal" data-show-modes="removals both"><dt>Removals subtotal (nett)</dt><dd><strong id="cost-total">£0</strong></dd></div>
-            <div class="quote-line" data-show-modes="storage both"><dt>Storage unit</dt><dd><strong id="storage-unit">—</strong></dd></div>
-            <div class="quote-line" data-show-modes="storage both"><dt>Daily rate (nett)</dt><dd><strong id="storage-daily">£0.00</strong></dd></div>
-            <div class="quote-line quote-line-subtotal" data-show-modes="storage both"><dt>Storage subtotal (nett)</dt><dd><strong id="storage-total">£0.00</strong></dd></div>
-          </dl>
-
-          <div class="quote-card-storage" data-show-modes="storage both" id="storage-summary">
-            <span class="quote-card-storage-label">Storage room required</span>
-            <span class="quote-card-storage-figures">
-              <strong id="storage-summary-sqft">—</strong>
-              <span class="qc-sep">·</span>
-              <strong id="storage-summary-cuft">— cu ft</strong>
-              <span class="qc-sep">·</span>
-              <strong id="storage-summary-cum">— cu m</strong>
-            </span>
-          </div>
-          <p class="quote-card-alt" data-show-modes="storage both">Also available: <strong>75 sqft low-ceiling room at £6.91/day</strong> — ideal if your contents won&rsquo;t stack high.</p>
-
-          <a href="#quote-form" class="quote-card-cta">Send these figures for a quote &rarr;</a>
-          <p class="quote-card-disclaimer">Estimate only. The exact quote depends on access, stairs, packing materials, antiques handling and timing. <a href="../mark-ratcliffe-moving-online-removals-quote.html">Request a free survey</a> — reply in 48 hours.</p>
-
-          <!-- Hidden storage-enabled checkbox kept for JS compatibility (mode picker drives it). -->
-          <input type="checkbox" id="storage-enabled" hidden aria-hidden="true">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="np-section np-section-soft" id="inventory-section" hidden>
-    <div class="np-inner">
-      <h2>Refine your inventory item-by-item (optional)</h2>
-      <p>The estimate above uses a standard inventory for your chosen bedroom count. If you want a more precise figure, tick the exact items you&rsquo;re moving below — the cu ft, cu m, kg and cost figures above will update live.</p>
-
-      <div class="storage-calc" id="storage-calc">
-        <div class="calc-tabs" role="tablist" aria-label="Room categories">
+            <div class="storage-calc" id="storage-calc">
+              <div class="calc-tabs" role="tablist" aria-label="Room categories">
         <button type="button" class="calc-tab active" role="tab" id="tab-cat-boxes-cartons" aria-controls="cat-boxes-cartons" aria-selected="true" data-target="cat-boxes-cartons">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="4" y="14" width="14" height="14" rx="1"/><rect x="22" y="14" width="14" height="14" rx="1"/><rect x="13" y="6" width="14" height="10" rx="1"/></svg></span>
           <span class="calc-tab-label">Boxes & cartons</span>
@@ -471,14 +408,12 @@
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="6" y="14" width="28" height="14" rx="1"/><line x1="12" y1="14" x2="12" y2="22"/><line x1="16" y1="14" x2="16" y2="22"/><line x1="20" y1="14" x2="20" y2="22"/><line x1="24" y1="14" x2="24" y2="22"/><line x1="28" y1="14" x2="28" y2="22"/><line x1="6" y1="22" x2="34" y2="22"/></svg></span>
           <span class="calc-tab-label">Specialist &amp; other</span>
         </button>
-        </div>
-
-        <label class="calc-search" aria-label="Search items">
-          <span class="calc-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6"/><line x1="15.5" y1="15.5" x2="20" y2="20"/></svg></span>
-          <input type="search" id="calc-search-input" placeholder="Search Boxes &amp; cartons" aria-label="Search items in the active category">
-        </label>
-
-        <div class="calc-panels">
+              </div>
+              <label class="calc-search" aria-label="Search items">
+                <span class="calc-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6"/><line x1="15.5" y1="15.5" x2="20" y2="20"/></svg></span>
+                <input type="search" id="calc-search-input" placeholder="Search Boxes &amp; cartons" aria-label="Search items in the active category">
+              </label>
+              <div class="calc-panels">
         <div class="calc-cat-panel active" id="cat-boxes-cartons" role="tabpanel" aria-labelledby="tab-cat-boxes-cartons">
           <div class="calc-item">
             <div class="calc-item-text">
@@ -2859,11 +2794,72 @@
             </div>
           </div>
         </div>
-        </div>
+              </div>
+              <div class="calc-actions">
+                <button id="calc-reset" type="button" class="np-btn np-btn-secondary">Reset all quantities</button>
+              </div>
+            </div>
+          </div>
 
-        <div class="calc-actions">
-          <button id="calc-reset" type="button" class="np-btn np-btn-secondary">Reset all quantities</button>
-          <a href="#quote-form" class="np-btn np-btn-primary">Send these figures with a quote request</a>
+          <div class="qc-divider"></div>
+
+          <!-- ESTIMATE -->
+          <div class="quote-card-eyebrow">Your estimate (+ VAT at booking)</div>
+          <div class="quote-card-amount" id="cost-grand-total-value">£0</div>
+          <div class="quote-card-label" id="cost-headline-label">Live estimate · updates as you type</div>
+
+          <!-- Split panel — visible only in "Both" mode -->
+          <div class="quote-card-split" data-show-modes="both">
+            <div class="qc-split-row">
+              <span class="qc-split-label">Removals</span>
+              <strong class="qc-split-value" id="split-removals">£0.00</strong>
+            </div>
+            <div class="qc-split-row">
+              <span class="qc-split-label" id="split-storage-label">Storage</span>
+              <strong class="qc-split-value" id="split-storage">£0.00</strong>
+            </div>
+            <div class="qc-split-row qc-split-row-total">
+              <span class="qc-split-label">Total (+ VAT)</span>
+              <strong class="qc-split-value" id="split-total">£0.00</strong>
+            </div>
+          </div>
+
+          <div class="quote-card-meta">
+            <div class="quote-card-meta-item"><strong id="total-cuft">0</strong><span>cu ft</span></div>
+            <div class="quote-card-meta-item"><strong id="total-cum">0.00</strong><span>cu m</span></div>
+            <div class="quote-card-meta-item"><strong id="total-kg">0</strong><span>kg</span></div>
+            <div class="quote-card-meta-item"><strong id="van-estimate">—</strong><span>load size</span></div>
+          </div>
+
+          <dl class="quote-card-breakdown">
+            <div class="quote-line" data-show-modes="removals both"><dt>Vehicle</dt><dd><strong id="cost-vehicle">—</strong></dd></div>
+            <div class="quote-line" data-show-modes="removals both"><dt>Volume cost</dt><dd><strong id="cost-volume">£0</strong></dd></div>
+            <div class="quote-line" data-show-modes="removals both"><dt>Mileage</dt><dd><strong id="cost-mileage">£0</strong></dd></div>
+            <div class="quote-line" data-show-modes="removals both"><dt>Removals nett</dt><dd><strong id="cost-nett-total">£0</strong></dd></div>
+            <div class="quote-line" data-show-modes="removals both"><dt>VAT (20%)</dt><dd><strong id="cost-vat">£0</strong></dd></div>
+            <div class="quote-line quote-line-subtotal" data-show-modes="removals both"><dt>Removals subtotal (nett)</dt><dd><strong id="cost-total">£0</strong></dd></div>
+            <div class="quote-line" data-show-modes="storage both"><dt>Storage unit</dt><dd><strong id="storage-unit">—</strong></dd></div>
+            <div class="quote-line" data-show-modes="storage both"><dt>Daily rate (nett)</dt><dd><strong id="storage-daily">£0.00</strong></dd></div>
+            <div class="quote-line quote-line-subtotal" data-show-modes="storage both"><dt>Storage subtotal (nett)</dt><dd><strong id="storage-total">£0.00</strong></dd></div>
+          </dl>
+
+          <div class="quote-card-storage" data-show-modes="storage both" id="storage-summary">
+            <span class="quote-card-storage-label">Storage room required</span>
+            <span class="quote-card-storage-figures">
+              <strong id="storage-summary-sqft">—</strong>
+              <span class="qc-sep">·</span>
+              <strong id="storage-summary-cuft">— cu ft</strong>
+              <span class="qc-sep">·</span>
+              <strong id="storage-summary-cum">— cu m</strong>
+            </span>
+          </div>
+          <p class="quote-card-alt" data-show-modes="storage both">Also available: <strong>75 sqft low-ceiling room at £6.91/day</strong> — ideal if your contents won&rsquo;t stack high.</p>
+
+          <a href="#quote-form" class="quote-card-cta">Send these figures for a quote &rarr;</a>
+          <p class="quote-card-disclaimer">Estimate only. The exact quote depends on access, stairs, packing materials, antiques handling and timing. <a href="../mark-ratcliffe-moving-online-removals-quote.html">Request a free survey</a> — reply in 48 hours.</p>
+
+          <!-- Hidden storage-enabled checkbox kept for JS compatibility (mode picker drives it). -->
+          <input type="checkbox" id="storage-enabled" hidden aria-hidden="true">
         </div>
       </div>
     </div>

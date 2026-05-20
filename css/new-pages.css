@@ -1834,6 +1834,35 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
   outline: none;
 }
 
+/* In-card inventory editor — light inset panel sitting on the dark card.
+   Revealed by the Load button. The .storage-calc inside keeps its
+   existing purple-on-white tab/panel styling. */
+.quote-card .qc-inventory {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.1rem 1.1rem 0.9rem;
+  margin: 0 0 1.25rem;
+  color: var(--brand-navy, #4d2e8f);
+}
+.quote-card .qc-inventory[hidden] { display: none; }
+.quote-card .qc-inventory-header {
+  margin: 0 0 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.quote-card .qc-inventory-header strong {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--brand-navy, #4d2e8f);
+}
+.quote-card .qc-inventory-header span {
+  font-size: 0.82rem;
+  color: var(--np-muted, #6b7280);
+  line-height: 1.4;
+}
+
 /* Divider between inputs and estimate */
 .qc-divider {
   height: 1px;
