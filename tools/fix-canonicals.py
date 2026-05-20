@@ -104,6 +104,7 @@ def main() -> int:
         + glob.glob('areas-covered/*.html')
         + glob.glob('blog/*.html')
         + glob.glob('services/*.html')
+        + glob.glob('resources/*.html')
     )
     n_changed = 0
     for p in paths:

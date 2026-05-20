@@ -22,11 +22,11 @@ os.chdir(ROOT)
 
 CSP = (
     "default-src 'self' https:; "
-    "script-src 'self' 'unsafe-inline' https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.yoshki.com https://d3e54v103j8qbb.cloudfront.net https://www.cognitoforms.com https://services.cognitoforms.com; "
+    "script-src 'self' 'unsafe-inline' https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.yoshki.com https://yoshki.com https://d3e54v103j8qbb.cloudfront.net https://www.cognitoforms.com https://services.cognitoforms.com; "
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ajax.googleapis.com https://www.cognitoforms.com; "
     "img-src 'self' data: https:; "
     "font-src 'self' https://fonts.gstatic.com data:; "
-    "frame-src https://www.google.com https://www.cognitoforms.com https://services.cognitoforms.com; "
+    "frame-src https://www.google.com https://yoshki.com https://www.cognitoforms.com https://services.cognitoforms.com; "
     "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://www.cognitoforms.com https://services.cognitoforms.com; "
     "object-src 'none'; "
     "base-uri 'self'; "
@@ -87,7 +87,7 @@ def fix(path: str) -> str:
 
 
 def main() -> int:
-    paths = sorted(glob.glob('*.html') + glob.glob('areas-covered/*.html') + glob.glob('blog/*.html') + glob.glob('services/*.html'))
+    paths = sorted(glob.glob('*.html') + glob.glob('areas-covered/*.html') + glob.glob('blog/*.html') + glob.glob('services/*.html') + glob.glob('resources/*.html'))
     n_changed = 0
     for p in paths:
         r = fix(p)

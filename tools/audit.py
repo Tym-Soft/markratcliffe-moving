@@ -177,6 +177,7 @@ def all_pages() -> list[str]:
         + glob.glob('areas-covered/*.html')
         + glob.glob('blog/*.html')
         + glob.glob('services/*.html')
+        + glob.glob('resources/*.html')
     )
     return sorted(p for p in paths if os.path.isfile(p))
 
