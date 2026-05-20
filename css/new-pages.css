@@ -1343,14 +1343,10 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
   .quote-card-eyebrow { font-size: 0.8rem; letter-spacing: 0.14em; }
   .quote-card-amount  { font-size: 3.6rem; }
 }
+/* Meta strip — populated in DOM (so the office email body can pull
+   cu ft / cu m / kg / load size) but hidden from the customer. */
 .quote-card-meta {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
-  padding: 0.7rem 0;
-  border-top: 1px solid rgba(255,255,255,0.18);
-  border-bottom: 1px solid rgba(255,255,255,0.18);
-  margin-bottom: 1rem;
+  display: none;
 }
 .quote-card-meta-item { text-align: center; }
 .quote-card-meta-item strong {
