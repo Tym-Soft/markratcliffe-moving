@@ -93,7 +93,7 @@
   // and also defines the volume the property's base charge already
   // covers. Above typicalCuft, each extra cu ft adds £1.21.
   var BED_DEFAULTS = {
-    'tiny': { label: 'Tiny move',                    typicalCuft:  100, base:  360, rate: 0.35 },
+    'tiny': { label: 'Tiny move',                    typicalCuft:  300, base:  300, rate: 1.00 },
     '1bed': { label: '1-bed flat or studio',         typicalCuft:  500, base:  500, rate: 1.41 },
     '2bed': { label: '2-bed home',                   typicalCuft:  800, base:  650, rate: 1.41 },
     '3bed': { label: '3-bed home',                   typicalCuft: 1200, base:  900, rate: 1.41 },
