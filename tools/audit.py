@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies the twelve build rules:
+Verifies the thirteen build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -19,8 +19,13 @@ Verifies the twelve build rules:
      don't execute JS).
  11. No two indexable pages share the same <h1> tag (duplicate-content
      guard alongside Rule 6).
- 12. No internal <a href> points at a `*/index.html` path — links to
-     index pages must use the directory URL (`/`, `blog/`, etc.).
+ 12. Internal <a href> values must point at an indexable, self-
+     canonical page — no links to noindex, redirect-stub or
+     canonicalised pages, and no `*/index.html` links (use directory
+     URLs instead).
+ 13. Every canonical target itself resolves to an indexable page on
+     disk (no canonical chains, no canonicals to noindex/missing
+     resources).
 
 Run from the site root:
     python3 tools/audit.py
@@ -210,7 +215,8 @@ def audit():
         'image_alt':             [],
         'canonical':             [],
         'duplicate_h1':          [],
-        'index_html_links':      [],
+        'links_to_non_canonical':[],
+        'canonical_target':      [],
     }
 
     blog_posts = []
@@ -472,29 +478,113 @@ def audit():
          f'{len(h1s_seen)} unique H1 tags across {len(indexable)} indexable pages',
          failures['duplicate_h1'])
 
-    # Rule 12 — no internal href to */index.html (use directory URLs)
+    # Pre-compute each file's canonical href (None if no canonical or non-existent file).
+    # This lets Rules 12 and 13 share the same data.
+    canon_by_file: dict[str, str] = {}
+    canon_lookup_re = re.compile(r'<link\s+rel="canonical"\s+href="([^"]+)"', re.I)
+    for p in pages:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        m = canon_lookup_re.search(html)
+        if m:
+            canon_by_file[p] = m.group(1)
+
+    def url_to_path(u: str) -> str:
+        """Convert an absolute production URL or relative href back to a repo path."""
+        u = u.split('#')[0].split('?')[0]
+        u = re.sub(r'^https?://(www\.)?markratcliffemoving\.co\.uk', '', u)
+        u = u.lstrip('/')
+        if u == '':
+            return 'index.html'
+        if u.endswith('/'):
+            return u + 'index.html'
+        return u
+
+    indexable_set = set(indexable)
+
+    def resolve_href(href: str, p_dir: str) -> str | None:
+        """Resolve href → repo-relative path. Returns None if href is off-site or not an html file."""
+        h = href.split('#')[0].split('?')[0]
+        if not h: return None
+        if h.startswith(('http://', 'https://', '//')):
+            if 'markratcliffemoving.co.uk' not in h: return None
+            return url_to_path(h)
+        if h.startswith('/'):
+            return url_to_path(h)
+        appends_index = h.endswith('/')
+        joined = os.path.normpath(os.path.join(p_dir, h.rstrip('/') or '.'))
+        if joined == '.':
+            joined = ''
+        if appends_index:
+            target = (joined + '/index.html') if joined else 'index.html'
+        else:
+            target = joined
+        target = target.replace(os.sep, '/').lstrip('./')
+        if not target.endswith('.html'):
+            return None
+        return target
+
+    # Rule 12 — internal links must point at indexable, self-canonical pages
     link_re = re.compile(r'<a\b[^>]*?\bhref="([^"]+)"', re.I)
-    bad_re  = re.compile(r'(^|[/])(index\.html)(?:[?#]|$)')
+    raw_index_re = re.compile(r'(^|/)index\.html$')
     for p in indexable:
         try:
             html = open(p, encoding='utf-8').read()
         except OSError:
             continue
-        offenders: list[str] = []
+        offenders: dict[str, str] = {}
+        p_dir = os.path.dirname(p)
         for m in link_re.finditer(html):
             href = m.group(1)
             if href.startswith(('mailto:', 'tel:', 'javascript:', '#')): continue
             if href.startswith(('http://', 'https://', '//')) and 'markratcliffemoving.co.uk' not in href: continue
-            if bad_re.search(href):
-                offenders.append(href)
+            # raw `*/index.html`-form hrefs leak the duplicate URL surface — always offending
+            raw = href.split('#')[0].split('?')[0]
+            if raw_index_re.search(raw):
+                offenders[href] = 'leaks /index.html (use directory URL)'
+                continue
+            target_path = resolve_href(href, p_dir)
+            if target_path is None: continue
+            # Destination must be indexable
+            if target_path not in indexable_set:
+                if os.path.exists(target_path):
+                    offenders[href] = f'→ non-indexable {target_path}'
+                else:
+                    offenders[href] = f'→ missing file {target_path}'
+                continue
+            # Destination's canonical must be self
+            target_canon = canon_by_file.get(target_path)
+            target_expected = expected_loc(target_path)
+            if target_canon and target_canon != target_expected:
+                offenders[href] = f'→ canonicalised: {target_path} canon={target_canon}'
         if offenders:
-            failures['index_html_links'].append(
-                f'{p}  →  {", ".join(sorted(set(offenders))[:4])}'
-                + (f' (+{len(set(offenders))-4} more)' if len(set(offenders)) > 4 else '')
+            shown = list(offenders.items())[:4]
+            extra = '' if len(offenders) <= 4 else f' (+{len(offenders)-4} more)'
+            failures['links_to_non_canonical'].append(
+                f'{p}  ' + '; '.join(f'{h} {why}' for h, why in shown) + extra
             )
-    rule('Rule 12 — no internal links to */index.html',
-         f'{len(indexable)} pages: all internal links use directory URLs',
-         failures['index_html_links'])
+
+    rule('Rule 12 — internal links → indexable, self-canonical pages',
+         f'{len(indexable)} pages: all internal links land on canonical destinations',
+         failures['links_to_non_canonical'])
+
+    # Rule 13 — every canonical target itself resolves to an indexable file
+    for p in indexable:
+        c = canon_by_file.get(p)
+        if not c:
+            continue  # Rule 10 already caught missing canonicals
+        target_path = url_to_path(c)
+        if not os.path.exists(target_path):
+            failures['canonical_target'].append(f'{p}  canon→ {c}  (file {target_path} missing)')
+            continue
+        if target_path not in indexable_set:
+            failures['canonical_target'].append(f'{p}  canon→ {c}  (target {target_path} non-indexable)')
+
+    rule('Rule 13 — canonical targets are indexable',
+         f'{len(canon_by_file)} canonical targets all resolve to indexable pages',
+         failures['canonical_target'])
 
     print('=' * 64)
     if any_fail:
@@ -504,7 +594,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all twelve content rules satisfied.')
+    print('PASS — all thirteen content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
