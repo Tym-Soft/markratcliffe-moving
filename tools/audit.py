@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies twenty-four build rules:
+Verifies twenty-eight build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -42,6 +42,21 @@ Verifies twenty-four build rules:
      stub (delivered by Cloudflare Pages / Netlify).
  24. No internal <a href> carries URL parameters (clean, static URLs
      for every indexable page).
+ 25. No two indexable pages share the same meta description (paired
+     with Rule 6 closing the duplicate-content surface).
+ 26. Every indexable page has exactly one <h1> — not zero, not more.
+ 27. No mixed content — indexable pages must not load resources or
+     link to http:// URLs (HTTPS-only).
+ 28. /robots.txt exists, allows crawling of the production site, and
+     lists the sitemap.
+
+Items the user's checklist mentioned that this static audit cannot
+verify (need separate runtime tooling or deployment-level checks):
+  - External 4xx URLs (need live HTTP requests; see
+    tools/check-external-links.py when added)
+  - Redirect chains, redirect loops, soft 404s (server-side concerns
+    on the production deploy)
+  - JavaScript-rendered content visibility (rendering check)
 
 Run from the site root:
     python3 tools/audit.py
@@ -251,6 +266,10 @@ def audit():
         'headers_file':          [],
         'redirects_file':        [],
         'url_parameters':        [],
+        'duplicate_descriptions':[],
+        'h1_count':              [],
+        'mixed_content':         [],
+        'robots_txt':            [],
     }
 
     blog_posts = []
@@ -829,6 +848,85 @@ def audit():
          f'{len(indexable)} pages: all internal page links are static URLs',
          failures['url_parameters'])
 
+    # Rule 25 — no duplicate meta descriptions
+    descs_seen: dict[str, list[str]] = {}
+    desc_lookup_re = re.compile(r'<meta\s+name="description"\s+content="([^"]*)"', re.I)
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        m = desc_lookup_re.search(html)
+        if not m: continue
+        d = ' '.join(m.group(1).split()).strip()
+        if d:
+            descs_seen.setdefault(d, []).append(p)
+    for d, paths in descs_seen.items():
+        if len(paths) > 1:
+            failures['duplicate_descriptions'].append(
+                f'"{d[:70]}..." used by {len(paths)} pages: {", ".join(paths)}'
+            )
+    rule('Rule 25 — no duplicate meta descriptions',
+         f'{len(descs_seen)} unique descriptions across {len(indexable)} pages',
+         failures['duplicate_descriptions'])
+
+    # Rule 26 — exactly one <h1> per page
+    h1_open_re = re.compile(r'<h1\b', re.I)
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        count = len(h1_open_re.findall(html))
+        if count != 1:
+            failures['h1_count'].append(f'{p}  ({count} <h1> tags — must be exactly 1)')
+    rule('Rule 26 — exactly one <h1> per page',
+         f'{len(indexable)} pages: each has exactly one <h1>',
+         failures['h1_count'])
+
+    # Rule 27 — no mixed content (http:// resources/links on indexable pages)
+    http_ref_re = re.compile(r'\b(?:src|href)="(http://[^"]+)"', re.I)
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        offenders: set[str] = set()
+        for m in http_ref_re.finditer(html):
+            u = m.group(1)
+            # Skip schema vocabulary URLs (used as @context inside JSON-LD strings,
+            # not as live resource references). Actually most live in JSON-LD blobs.
+            # Easiest: ignore http://schema.org URLs and any http URL inside <script type="application/ld+json">.
+            if u.startswith('http://schema.org') or u.startswith('http://www.w3.org'):
+                continue
+            # Check if inside a JSON-LD block (these aren't fetched resources)
+            ctx_start = max(0, m.start() - 200)
+            preceding = html[ctx_start:m.start()]
+            if 'application/ld+json' in preceding and '</script>' not in preceding:
+                continue
+            offenders.add(u)
+        if offenders:
+            failures['mixed_content'].append(
+                f'{p}  {len(offenders)} http:// reference(s): {list(offenders)[:2]}'
+            )
+    rule('Rule 27 — no mixed content (https-only)',
+         f'{len(indexable)} pages: no http:// resources or links',
+         failures['mixed_content'])
+
+    # Rule 28 — robots.txt exists and references the sitemap
+    if not os.path.exists('robots.txt'):
+        failures['robots_txt'].append('robots.txt missing')
+    else:
+        rb = open('robots.txt').read()
+        if 'Sitemap:' not in rb:
+            failures['robots_txt'].append('robots.txt does not list Sitemap:')
+        # Check for accidental site-wide block (Disallow: /)
+        if re.search(r'^User-agent:\s*\*\s*\n\s*Disallow:\s*/\s*$', rb, re.M):
+            failures['robots_txt'].append('robots.txt has Disallow: / under User-agent: * — blocks the entire site')
+    rule('Rule 28 — robots.txt present and not site-blocking',
+         'robots.txt allows crawling and references the sitemap',
+         failures['robots_txt'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -837,7 +935,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all twenty-four content rules satisfied.')
+    print('PASS — all twenty-eight content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
