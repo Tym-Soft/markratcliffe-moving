@@ -807,17 +807,6 @@ def page_html() -> str:
             </label>
           </fieldset>
 
-          <aside class="inventory-prompt" id="inventory-prompt" hidden>
-            <div class="inventory-prompt-text">
-              <strong>Want a head start?</strong>
-              <span id="inventory-prompt-detail">Load a typical 3-bed inventory into the item picker below. We&rsquo;ve worked out a standard loadout for that size of home — you can tweak the quantities after.</span>
-            </div>
-            <div class="inventory-prompt-actions">
-              <button type="button" id="load-inventory-btn" class="np-btn np-btn-primary">Load typical inventory</button>
-              <button type="button" id="dismiss-inventory-prompt" class="inventory-prompt-skip">Skip — I&rsquo;ll use the cu ft figure</button>
-            </div>
-          </aside>
-
           <fieldset class="calc-numfields">
             <legend class="calc-step-label"><span class="calc-step-num">3</span> Volume &amp; distance</legend>
             <div class="calc-numfields-grid">
@@ -838,6 +827,17 @@ def page_html() -> str:
               </label>
             </div>
           </fieldset>
+
+          <aside class="inventory-prompt" id="inventory-prompt" hidden>
+            <div class="inventory-prompt-text">
+              <strong>Want a head start?</strong>
+              <span id="inventory-prompt-detail">Load a typical 3-bed inventory into the item picker below. We&rsquo;ve worked out a standard loadout for that size of home — you can tweak the quantities after.</span>
+            </div>
+            <div class="inventory-prompt-actions">
+              <button type="button" id="load-inventory-btn" class="np-btn np-btn-primary">Load typical inventory</button>
+              <button type="button" id="dismiss-inventory-prompt" class="inventory-prompt-skip">Skip — I&rsquo;ll use the cu ft figure</button>
+            </div>
+          </aside>
 
           <!-- Hidden storage-enabled checkbox kept for JS compatibility (mode picker drives it). -->
           <input type="checkbox" id="storage-enabled" hidden aria-hidden="true">
