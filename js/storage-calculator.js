@@ -79,10 +79,10 @@
   //   4-5+ bed    → Large  pricing (18 Tonne+ / Artic, £1,000 min)
   var BED_PROFILES = {
     '1bed': { label: '1-bed flat or studio',         typicalCuft:  700, vehicle: 'Luton Van (3.5t)',     rate: 2.25, mileRate: 2.00, minCharge:  360 },
-    '2bed': { label: '2-bed home',                   typicalCuft: 1000, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
-    '3bed': { label: '3-bed home',                   typicalCuft: 1350, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
-    '4bed': { label: '4-bed home',                   typicalCuft: 1800, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 },
-    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2500, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 }
+    '2bed': { label: '2-bed home',                   typicalCuft: 1100, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1500, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '4bed': { label: '4-bed home',                   typicalCuft: 2200, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 },
+    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 3000, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 }
   };
   // BED_INVENTORY is emitted by the Python generator as inline JS just
   // before this script loads. Each entry maps "item-<slug>" → quantity.
@@ -143,10 +143,10 @@
   // pre-fills the manual cu ft input as the customer changes home size.
   var TYPICAL_RANGE = {
     '1bed':  '500–900 cu ft',
-    '2bed':  '800–1,200 cu ft',
-    '3bed':  '1,100–1,600 cu ft',
-    '4bed':  '1,500–2,200 cu ft',
-    '5bed':  '2,200–4,000+ cu ft'
+    '2bed':  '800–1,400 cu ft',
+    '3bed':  '1,200–1,800 cu ft',
+    '4bed':  '1,800–2,800 cu ft',
+    '5bed':  '2,800–4,000+ cu ft'
   };
   var manualCuftInput = document.getElementById('cost-manual-cuft');
   var manualCuftHelp  = document.getElementById('cost-manual-cuft-help');

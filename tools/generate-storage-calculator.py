@@ -762,29 +762,29 @@ def page_html() -> str:
           <legend class="cost-input-label">Bedrooms</legend>
           <label class="cost-size-option">
             <input type="radio" name="home-size" value="1bed">
-            <span><strong>1-bed flat or studio</strong> <small>~700 cu ft &middot; Luton Van &middot; £360 min</small></span>
+            <span><strong>1-bed flat or studio</strong> <small>500–900 cu ft (~700) &middot; Luton Van &middot; £360 min</small></span>
           </label>
           <label class="cost-size-option">
             <input type="radio" name="home-size" value="2bed">
-            <span><strong>2-bed home</strong> <small>~1,000 cu ft &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
+            <span><strong>2-bed home</strong> <small>800–1,400 cu ft (~1,100) &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
           </label>
           <label class="cost-size-option">
             <input type="radio" name="home-size" value="3bed" checked>
-            <span><strong>3-bed home</strong> <small>~1,350 cu ft &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
+            <span><strong>3-bed home</strong> <small>1,200–1,800 cu ft (~1,500) &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
           </label>
           <label class="cost-size-option">
             <input type="radio" name="home-size" value="4bed">
-            <span><strong>4-bed home</strong> <small>~1,800 cu ft &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
+            <span><strong>4-bed home</strong> <small>1,800–2,800 cu ft (~2,200) &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
           </label>
           <label class="cost-size-option">
             <input type="radio" name="home-size" value="5bed">
-            <span><strong>5+ bed / antiques / country</strong> <small>~2,500+ cu ft &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
+            <span><strong>5+ bed / antiques / country</strong> <small>2,800–4,000+ cu ft (~3,000) &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
           </label>
         </fieldset>
 
         <label class="cost-manual-cuft" id="cost-manual-cuft-wrap">
           <span class="cost-input-label">Cubic feet (if you&rsquo;re not using the inventory)</span>
-          <input type="number" id="cost-manual-cuft" min="0" step="50" value="1350" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
+          <input type="number" id="cost-manual-cuft" min="0" step="50" value="1500" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
           <span class="cost-input-help" id="cost-manual-cuft-help">Auto-fills with the typical figure for your chosen bedroom count. Tick items below to override with a precise volume.</span>
         </label>
       </div>
@@ -1036,7 +1036,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260576"></script>
+  <script defer src="../js/storage-calculator.js?v=20260577"></script>
 </body>
 </html>
 """
