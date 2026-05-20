@@ -626,12 +626,14 @@ INVENTORY_PRESETS: dict[str, list[tuple[str, str, int]]] = {
 
 
 def emit_inventory_presets_js() -> str:
-    """Emit BED_INVENTORY as a JS object whose keys match the item input ids."""
+    """Emit BED_INVENTORY as a JS object whose keys match the item input ids.
+    Input ids are computed in the panel-render loop as 'item-cat-<catSlug>-<nameSlug>',
+    so the preset keys must include the same 'cat-' prefix."""
     lines = ['  var BED_INVENTORY = {']
     for bed, items in INVENTORY_PRESETS.items():
         lines.append(f"    '{bed}': {{")
         for cat, name, qty in items:
-            slug = slugify(cat) + '-' + slugify(name)
+            slug = 'cat-' + slugify(cat) + '-' + slugify(name)
             lines.append(f"      'item-{slug}': {qty},")
         lines.append('    },')
     lines.append('  };')
@@ -1072,7 +1074,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260624"></script>
+  <script defer src="../js/storage-calculator.js?v=20260625"></script>
 </body>
 </html>
 """
