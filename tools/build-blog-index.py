@@ -305,7 +305,7 @@ SIDEBAR_CTA = """        <div class="np-sidebar-block np-sidebar-cta">
 SIDEBAR_SERVICES = """        <div class="np-sidebar-block np-sidebar-services">
           <h3>Our services</h3>
           <p>Family-run Sussex removals since 1982. Local moves, international, packing, storage, piano, antiques.</p>
-          <a class="np-btn np-btn-secondary np-sidebar-btn" href="../services.html">View all services</a>
+          <a class="np-btn np-btn-secondary np-sidebar-btn" href="../services/">View all services</a>
         </div>"""
 
 

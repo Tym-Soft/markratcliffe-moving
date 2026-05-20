@@ -64,6 +64,7 @@ def main() -> int:
         glob.glob('*.html')
         + glob.glob('areas-covered/*.html')
         + glob.glob('blog/*.html')
+        + glob.glob('services/*.html')
     )
     paths = [p for p in paths if os.path.isfile(p) and is_indexable(p)]
 

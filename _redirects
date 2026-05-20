@@ -1,18 +1,4 @@
-# 301 redirects for legacy URLs. Honoured by Cloudflare Pages / Netlify
-# but NOT by raw GitHub Pages (which has no custom-redirect support).
-# Until the production deploy moves to a host that respects this file,
-# the same redirects are delivered by the meta-refresh stub HTML files
-# (which also carry rel=canonical + noindex,follow as belt-and-braces).
-
-/contact-us.html                                   /mark-ratcliffe-moving-online-removals-quote.html  301
-/domestic-services.html                            /removals-eastbourne.html                          301
-/man-van.html                                      /man-and-van-eastbourne.html                       301
-/overseas-services.html                            /international-removals-eastbourne.html            301
-/secure-self-storage-rooms.html                    /storage-eastbourne.html                           301
-/testimonials.html                                 /reviews.html                                      301
-/areas-covered/man-with-a-van-eastbourne.html      /man-and-van-eastbourne.html                       301
-/areas-covered/removals-bexhill.html               /removals-bexhill.html                             301
-
-# Directory-URL normalisation (already canonical-tagged but belt-and-braces)
-/index.html       /                       301
-/blog/index.html  /blog/                  301
+# User explicitly chose no redirects after the 2026-05-20 URL
+# restructure. Old root-level service / location URLs no longer
+# exist; every internal link points at the new path directly.
+# This file is intentionally empty of redirect mappings.

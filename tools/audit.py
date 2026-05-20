@@ -124,10 +124,9 @@ def title_pixel_width(text: str) -> int:
 # Heuristic location-page detector. Anything starting with removals-* at the root,
 # any subpage under areas-covered/, plus the two outliers in root.
 LOCATION_GLOBS = [
-    'removals-*.html',
     'areas-covered/*.html',
 ]
-LOCATION_EXTRA = ['man-and-van-eastbourne.html', 'hailsham-removals.html']
+LOCATION_EXTRA: list[str] = []
 
 NAV_END_RE   = re.compile(r'<div class="menu-button[^>]*>.*?</div>\s*</div>\s*</div>', re.S)
 FOOTER_RE    = re.compile(r'<footer', re.S)
@@ -158,17 +157,18 @@ def body_internal_links(html: str, current_path: str) -> set[str]:
     seen    = set()
     for href in refs:
         h = href.split('#')[0].split('?')[0].strip()
-        if not h or h in ('/', './'): continue
+        if not h or h in ('/', './', '../'): continue
         if h.startswith(('mailto:', 'tel:', 'javascript:', '#')): continue
         if h.startswith(('http://', 'https://', '//')):
             if 'markratcliffemoving.co.uk' not in h: continue
-            m = re.search(r'markratcliffemoving\.co\.uk/(.+\.html)', h)
-            if m: h = m.group(1)
-        if not h.endswith('.html'): continue
+            m = re.search(r'markratcliffemoving\.co\.uk(/.+)', h)
+            if m: h = m.group(1).lstrip('/')
+        # Strip a single leading ../ or ./ so equivalent paths dedupe correctly
         if h.startswith('../'): h = h[3:]
         elif h.startswith('./'): h = h[2:]
-        # leave subdir-relative as-is — that's fine for distinctness counting
-        seen.add(h)
+        # Count internal HTML pages and directory URLs (e.g. services/, blog/)
+        if h.endswith('.html') or h.endswith('/'):
+            seen.add(h)
     return seen
 
 def all_pages() -> list[str]:
@@ -176,6 +176,7 @@ def all_pages() -> list[str]:
         glob.glob('*.html')
         + glob.glob('areas-covered/*.html')
         + glob.glob('blog/*.html')
+        + glob.glob('services/*.html')
     )
     return sorted(p for p in paths if os.path.isfile(p))
 
@@ -183,12 +184,7 @@ def is_blog_post(path: str) -> bool:
     return path.startswith('blog/') and os.path.basename(path) != 'index.html'
 
 def is_location_page(path: str) -> bool:
-    base = os.path.basename(path)
-    if path.startswith('areas-covered/'):
-        return True
-    if base in LOCATION_EXTRA:
-        return True
-    return base.startswith('removals-') and path.count('/') == 0
+    return path.startswith('areas-covered/') and os.path.basename(path) != 'index.html'
 
 def blog_post_meta(path: str) -> dict | None:
     """Pull headline + datePublished from a blog post's BlogPosting JSON-LD."""
@@ -805,27 +801,17 @@ def audit():
          f'{headers_path} present with X-Frame-Options, X-Content-Type-Options, Referrer-Policy, HSTS',
          failures['headers_file'])
 
-    # Rule 23 — _redirects file present with all known stub mappings
-    redirects_path = '_redirects'
-    expected_stubs = {
-        '/contact-us.html', '/domestic-services.html', '/man-van.html',
-        '/overseas-services.html', '/secure-self-storage-rooms.html',
-        '/testimonials.html',
-        '/areas-covered/man-with-a-van-eastbourne.html',
-        '/areas-covered/removals-bexhill.html',
-    }
-    if not os.path.exists(redirects_path):
-        failures['redirects_file'].append(f'{redirects_path} missing')
-    else:
+    # Rule 23 — no redirect stubs anywhere on the site (no 302s, no soft-301s,
+    # no meta-refresh, no JS location.replace). Internal links must hit final URLs.
+    for p in pages:
         try:
-            content = open(redirects_path).read()
+            head = open(p, encoding='utf-8').read(8192)
         except OSError:
-            content = ''
-        missing = [s for s in expected_stubs if s not in content]
-        if missing:
-            failures['redirects_file'].append(f'{redirects_path} missing stub mappings: {", ".join(missing[:3])}...' if len(missing) > 3 else f'{redirects_path} missing stub mappings: {", ".join(missing)}')
-    rule('Rule 23 — /_redirects maps every legacy stub URL',
-         f'{redirects_path} present with all 8 stub redirects',
+            continue
+        if 'http-equiv="refresh"' in head or 'window.location.replace' in head:
+            failures['redirects_file'].append(f'{p} contains a redirect stub')
+    rule('Rule 23 — no redirect stubs (no 302s / meta-refresh / JS redirects)',
+         f'{len(pages)} HTML files: none redirect to another URL',
          failures['redirects_file'])
 
     # Rule 24 — no internal <a href> carries URL parameters
