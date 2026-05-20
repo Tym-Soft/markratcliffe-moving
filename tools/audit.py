@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies twenty build rules:
+Verifies twenty-four build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -30,9 +30,18 @@ Verifies twenty build rules:
  17. Internal anchors have non-empty accessible names (visible text,
      image alt, or aria-label).
  18. <h1> is the first heading on the page — no <h2>-<h6> before it.
- 19. Every <img alt="..."> ≤125 chars when present.
+ 19. Every <img alt="..."> ≤100 chars when present.
  20. Every page has Content-Security-Policy and Referrer-Policy
      declared via <meta> tags.
+ 21. Every image in /images/ is ≤200 KB on disk.
+ 22. /_headers file present with X-Frame-Options + X-Content-Type-
+     Options + Referrer-Policy + Strict-Transport-Security (delivered
+     by Cloudflare Pages / Netlify; GitHub Pages ignores it but the
+     file is staged for the production deployment).
+ 23. /_redirects file present with mappings for every legacy noindex
+     stub (delivered by Cloudflare Pages / Netlify).
+ 24. No internal <a href> carries URL parameters (clean, static URLs
+     for every indexable page).
 
 Run from the site root:
     python3 tools/audit.py
@@ -54,7 +63,8 @@ BODY_LINKS_MIN     = 10
 BLOG_INDEX_MAX     = 9
 META_DESC_MAX      = 145
 TITLE_PX_MAX       = 550
-ALT_TEXT_MAX       = 125
+ALT_TEXT_MAX       = 100
+IMAGE_MAX_BYTES    = 200 * 1024
 NON_DESCRIPTIVE_ANCHORS = {
     'click here', 'clickhere', 'read more', 'learn more', 'more', 'here',
     'this', 'click', 'continue reading', 'continue', 'link', 'this link',
@@ -237,6 +247,10 @@ def audit():
         'h1_not_first':          [],
         'alt_too_long':          [],
         'security_meta':         [],
+        'image_size':            [],
+        'headers_file':          [],
+        'redirects_file':        [],
+        'url_parameters':        [],
     }
 
     blog_posts = []
@@ -735,6 +749,86 @@ def audit():
          f'{len(indexable)} pages: all have CSP and Referrer-Policy',
          failures['security_meta'])
 
+    # Rule 21 — image file size ≤200 KB on disk
+    n_imgs_on_disk = 0
+    for img in glob.glob('images/*'):
+        if not os.path.isfile(img): continue
+        ext = os.path.splitext(img)[1].lower()
+        if ext not in ('.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif'):
+            continue
+        n_imgs_on_disk += 1
+        sz = os.path.getsize(img)
+        if sz > IMAGE_MAX_BYTES:
+            failures['image_size'].append(f'{img}  {sz//1024} KB (>200 KB)')
+    rule('Rule 21 — images ≤200 KB on disk',
+         f'{n_imgs_on_disk} files in /images/ all ≤200 KB',
+         failures['image_size'])
+
+    # Rule 22 — _headers file present with required security headers
+    headers_path = '_headers'
+    required_headers = {
+        'X-Frame-Options',
+        'X-Content-Type-Options',
+        'Referrer-Policy',
+        'Strict-Transport-Security',
+    }
+    if not os.path.exists(headers_path):
+        failures['headers_file'].append(f'{headers_path} missing — create one for Cloudflare Pages / Netlify deployments')
+    else:
+        try:
+            content = open(headers_path).read()
+        except OSError:
+            content = ''
+        missing = [h for h in required_headers if h.lower() not in content.lower()]
+        if missing:
+            failures['headers_file'].append(f'{headers_path} missing headers: {", ".join(missing)}')
+    rule('Rule 22 — /_headers carries required security headers',
+         f'{headers_path} present with X-Frame-Options, X-Content-Type-Options, Referrer-Policy, HSTS',
+         failures['headers_file'])
+
+    # Rule 23 — _redirects file present with all known stub mappings
+    redirects_path = '_redirects'
+    expected_stubs = {
+        '/contact-us.html', '/domestic-services.html', '/man-van.html',
+        '/overseas-services.html', '/secure-self-storage-rooms.html',
+        '/testimonials.html',
+        '/areas-covered/man-with-a-van-eastbourne.html',
+        '/areas-covered/removals-bexhill.html',
+    }
+    if not os.path.exists(redirects_path):
+        failures['redirects_file'].append(f'{redirects_path} missing')
+    else:
+        try:
+            content = open(redirects_path).read()
+        except OSError:
+            content = ''
+        missing = [s for s in expected_stubs if s not in content]
+        if missing:
+            failures['redirects_file'].append(f'{redirects_path} missing stub mappings: {", ".join(missing[:3])}...' if len(missing) > 3 else f'{redirects_path} missing stub mappings: {", ".join(missing)}')
+    rule('Rule 23 — /_redirects maps every legacy stub URL',
+         f'{redirects_path} present with all 8 stub redirects',
+         failures['redirects_file'])
+
+    # Rule 24 — no internal <a href> carries URL parameters
+    a_param_re = re.compile(r'<a\b[^>]*?\bhref="([^"]+)"', re.I)
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        for m in a_param_re.finditer(html):
+            href = m.group(1)
+            if href.startswith(('mailto:', 'tel:', '#', 'javascript:')): continue
+            if href.startswith(('http://', 'https://', '//')) and 'markratcliffemoving.co.uk' not in href: continue
+            # We care only about HTML page links, not asset cache-busts in <a href>
+            if '?' in href and href.endswith('.html'):
+                failures['url_parameters'].append(f'{p}  {href}')
+            elif '?' in href and (href.endswith('/') or '?' in href.split('#')[0].split('/')[-1] and '.' not in href.split('?')[0].split('/')[-1]):
+                failures['url_parameters'].append(f'{p}  {href}')
+    rule('Rule 24 — no URL parameters on internal page links',
+         f'{len(indexable)} pages: all internal page links are static URLs',
+         failures['url_parameters'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -743,7 +837,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all twenty content rules satisfied.')
+    print('PASS — all twenty-four content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
