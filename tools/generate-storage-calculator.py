@@ -961,49 +961,43 @@ def page_html() -> str:
   <section class="np-section np-section-soft">
     <div class="np-inner">
       <h2>Mark Ratcliffe Moving pricing model</h2>
-      <p>The calculator picks the right vehicle from the cubic feet you enter. Each vehicle carries a flat base charge that covers the first chunk of volume, then £1.61 for every extra cu ft above that. Mileage is added on top at the per-vehicle rate. The bedroom selector is just a head-start — it auto-fills typical cu ft and a standard inventory — but the vehicle and pricing are driven by the actual volume.</p>
+      <p>A flat <strong>£360 base charge</strong> covers the first 500 cu ft of volume on any move. Every cu ft above 500 adds <strong>£1.61</strong>. The calculator picks the right vehicle from the volume you enter, and adds mileage at that vehicle's per-mile rate. The bedroom selector is a head-start — it auto-fills a typical cu ft figure and a standard inventory — but the pricing is driven by your actual volume.</p>
       <table class="rate-table">
         <thead>
           <tr>
             <th>Vehicle</th>
-            <th>Typical job</th>
-            <th>Base charge<br>(includes up to&hellip;)</th>
-            <th>Excess £ / cu ft</th>
+            <th>Auto-picked when</th>
+            <th>Base charge</th>
+            <th>Each cu ft above 500</th>
             <th>£ / mile</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Luton Van (3.5t)</strong></td>
-            <td>1-bed flat or studio</td>
-            <td><strong>£360</strong><br>(first 500 cu ft)</td>
-            <td>£1.61</td>
+            <td>up to 800 cu ft</td>
+            <td rowspan="4" style="vertical-align: middle;"><strong>£360</strong><br>(first 500 cu ft)</td>
+            <td rowspan="4" style="vertical-align: middle;">£1.61</td>
             <td>£2.00</td>
           </tr>
           <tr>
             <td><strong>7.5 Tonne Lorry</strong></td>
-            <td>2-bed and 3-bed homes</td>
-            <td><strong>£650</strong><br>(first 1,200 cu ft)</td>
-            <td>£1.61</td>
+            <td>801 – 1,500 cu ft</td>
             <td>£2.75</td>
           </tr>
           <tr>
             <td><strong>18 Tonne Lorry</strong></td>
-            <td>3-bed (large) and 4-bed homes</td>
-            <td><strong>£850</strong><br>(first 1,800 cu ft)</td>
-            <td>£1.61</td>
+            <td>1,501 – 2,500 cu ft</td>
             <td>£4.00</td>
           </tr>
           <tr>
             <td><strong>44 Tonne Artic</strong></td>
-            <td>5+ bed, antiques, country property, long-distance</td>
-            <td><strong>£2,000</strong><br>(first 2,800 cu ft)</td>
-            <td>£1.61</td>
+            <td>2,501+ cu ft</td>
             <td>£4.00</td>
           </tr>
         </tbody>
       </table>
-      <p>The cost formula: <strong>cost = base charge + max(0, cu ft − included volume) × £1.61 + miles × £/mile</strong>. The calculator tries each vehicle tier and picks the one that produces the lowest total — so the moment your volume needs a bigger truck, the base steps up to the next tier (no over-paying for the wrong size). Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
+      <p>The cost formula: <strong>cost = £360 base + max(0, cu ft − 500) × £1.61 + miles × £/mile</strong>. Adding a single cu ft above 500 always nudges the price up — there are no plateaus or tier discontinuities. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
       <p>For an accurate price, book a <a href="../mark-ratcliffe-moving-online-removals-quote.html">free in-home survey</a>. We respond within 48 hours.</p>
     </div>
   </section>
@@ -1050,7 +1044,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260593"></script>
+  <script defer src="../js/storage-calculator.js?v=20260594"></script>
 </body>
 </html>
 """

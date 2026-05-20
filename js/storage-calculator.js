@@ -67,21 +67,21 @@
     return STORAGE_UNITS[STORAGE_UNITS.length - 1]; // bigger than largest — flag this
   }
 
-  // Pricing model:
-  //   • Vehicle is auto-picked by cu ft (the bedroom selection just
-  //     auto-fills typical cu ft / inventory — it does not lock pricing).
-  //   • Each vehicle tier has: base charge, included volume, excess
-  //     £/cu ft, and per-mile mileage rate.
-  //   • For a given cu ft, the calc tries every tier and picks the one
-  //     producing the lowest volume cost. This guarantees prices rise
-  //     monotonically with cu ft (no drop at a tier boundary).
-  //   • Volume cost = base + max(0, cuft − included) × rate
+  // Pricing model (single monotonic formula):
+  //   • Flat base charge of £360 covers the first 500 cu ft (any vehicle).
+  //   • Every cu ft above 500 adds £1.61 — price rises continuously with
+  //     cu ft, no plateaus, no tier discontinuities.
+  //   • Vehicle is auto-picked by cu ft for naming + mileage rate only.
+  //   • Volume cost = BASE + max(0, cuft − BASE_INCLUDED) × EXCESS_RATE
   //   • Total       = volume cost + miles × picked-vehicle mile rate
+  var BASE_CHARGE   = 360;
+  var BASE_INCLUDED = 500;
+  var EXCESS_RATE   = 1.61;
   var VEHICLE_TIERS = [
-    { name: 'Luton Van (3.5t)',  base:  360, included:  500, rate: 1.61, mileRate: 2.00 },
-    { name: '7.5 Tonne Lorry',   base:  650, included: 1200, rate: 1.61, mileRate: 2.75 },
-    { name: '18 Tonne Lorry',    base:  850, included: 1800, rate: 1.61, mileRate: 4.00 },
-    { name: '44 Tonne Artic',    base: 2000, included: 2800, rate: 1.61, mileRate: 4.00 }
+    { name: 'Luton Van (3.5t)', maxCuft:  800, mileRate: 2.00 },
+    { name: '7.5 Tonne Lorry',  maxCuft: 1500, mileRate: 2.75 },
+    { name: '18 Tonne Lorry',   maxCuft: 2500, mileRate: 4.00 },
+    { name: '44 Tonne Artic',   maxCuft: Infinity, mileRate: 4.00 }
   ];
 
   // Bedroom presets — auto-fill the LOWER bound of each property's
@@ -95,18 +95,15 @@
     '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800 }
   };
 
-  function priceForTier(cuft, tier) {
-    var excess = Math.max(0, cuft - tier.included);
-    return tier.base + excess * tier.rate;
+  function computeVolumeCost(cuft) {
+    var excess = Math.max(0, cuft - BASE_INCLUDED);
+    return BASE_CHARGE + excess * EXCESS_RATE;
   }
   function pickVehicle(cuft) {
-    var best = VEHICLE_TIERS[0];
-    var bestCost = priceForTier(cuft, best);
-    for (var i = 1; i < VEHICLE_TIERS.length; i++) {
-      var c = priceForTier(cuft, VEHICLE_TIERS[i]);
-      if (c < bestCost) { best = VEHICLE_TIERS[i]; bestCost = c; }
+    for (var i = 0; i < VEHICLE_TIERS.length; i++) {
+      if (cuft <= VEHICLE_TIERS[i].maxCuft) return VEHICLE_TIERS[i];
     }
-    return best;
+    return VEHICLE_TIERS[VEHICLE_TIERS.length - 1];
   }
   // BED_INVENTORY is emitted by the Python generator as inline JS just
   // before this script loads. Each entry maps "item-<slug>" → quantity.
@@ -222,23 +219,23 @@
     var headlineLabel = document.getElementById('cost-headline-label');
 
     // --- REMOVALS leg ---
-    var excessCuft = Math.max(0, cuft - vehicle.included);
-    var excessCost = excessCuft * vehicle.rate;
-    var volCost    = vehicle.base + excessCost;
+    var excessCuft = Math.max(0, cuft - BASE_INCLUDED);
+    var excessCost = excessCuft * EXCESS_RATE;
+    var volCost    = computeVolumeCost(cuft);
     var mileCost   = miles * vehicle.mileRate;
     var removalsTotal = (mode === 'storage') ? 0 : (volCost + mileCost);
 
     costVehicle.textContent = vehicle.name;
     if (cuft === 0) {
-      costVolume.textContent = pounds(vehicle.base) + ' (' + vehicle.name + ' base · first ' + vehicle.included + ' cu ft)';
+      costVolume.textContent = pounds(BASE_CHARGE) + ' (base · first ' + BASE_INCLUDED + ' cu ft)';
     } else if (excessCuft === 0) {
-      costVolume.textContent = pounds(vehicle.base) + ' (' + vehicle.name + ' base · ' + cuft + ' / ' + vehicle.included + ' cu ft included)';
+      costVolume.textContent = pounds(BASE_CHARGE) + ' (base · ' + cuft + ' / ' + BASE_INCLUDED + ' cu ft included)';
     } else {
-      costVolume.textContent = pounds(volCost) + ' (' + pounds(vehicle.base) + ' base + ' + excessCuft + ' extra × £' + vehicle.rate.toFixed(2) + ')';
+      costVolume.textContent = pounds(volCost) + ' (' + pounds(BASE_CHARGE) + ' base + ' + excessCuft + ' extra × £' + EXCESS_RATE.toFixed(2) + ')';
     }
     costMileage.textContent = pounds(mileCost) + ' (' + miles + ' × £' + vehicle.mileRate.toFixed(2) + ')';
     if (costMinimum) {
-      costMinimum.textContent = pounds(vehicle.base) + ' (' + vehicle.name + ')';
+      costMinimum.textContent = pounds(BASE_CHARGE);
     }
     costTotal.textContent = (mode === 'storage') ? '£0' : pounds(removalsTotal);
 
@@ -259,9 +256,9 @@
       if (mode === 'storage') {
         prefix = 'Live estimate';
       } else if (excessCuft > 0) {
-        prefix = excessCuft + ' cu ft above ' + vehicle.included + ' included';
+        prefix = excessCuft + ' cu ft above ' + BASE_INCLUDED + ' included';
       } else {
-        prefix = 'Auto-picked for ' + cuft + ' cu ft';
+        prefix = 'Base rate · ' + cuft + ' / ' + BASE_INCLUDED + ' cu ft included';
       }
       headlineLabel.textContent = prefix + ' · ' + bits.join(' · ');
     }
