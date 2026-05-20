@@ -423,7 +423,7 @@ def page_html() -> str:
 
         <div class="calc-actions">
           <button id="calc-reset" type="button" class="np-btn np-btn-secondary">Reset all quantities</button>
-          <a href="../mark-ratcliffe-moving-online-removals-quote.html" class="np-btn np-btn-primary">Send these figures with a quote request</a>
+          <a href="#quote-form" class="np-btn np-btn-primary">Send these figures with a quote request</a>
         </div>
       </div>
     </div>
@@ -459,6 +459,43 @@ def page_html() -> str:
       </div>
 
       <p class="cost-disclaimer"><strong>Estimate only.</strong> The exact quote depends on access, stairs, the listed-property quotient, packing materials, antiques handling and timing. For an accurate, written, BAR-Advance-Payment-Guarantee-protected quote please <a href="../mark-ratcliffe-moving-online-removals-quote.html">request a free survey</a> — we respond within 48 hours.</p>
+    </div>
+  </section>
+
+  <section class="np-section np-section-soft" id="quote-form">
+    <div class="np-inner">
+      <h2>Send these figures with a quote request</h2>
+      <p>Fill in your details below. When you click <strong>Send quote request</strong> we open your email app with every item you ticked, the calculated cubic feet, vehicle band and cost estimate already in the message — you just click send. We reply within 48 hours.</p>
+
+      <form class="quote-form" id="quote-request-form">
+        <div class="quote-form-grid">
+          <label>
+            <span class="quote-form-label">Your email</span>
+            <input type="email" name="email" id="qf-email" required autocomplete="email" placeholder="you@example.com">
+          </label>
+          <label>
+            <span class="quote-form-label">Phone number</span>
+            <input type="tel" name="phone" id="qf-phone" required autocomplete="tel" placeholder="01234 567 890">
+          </label>
+          <label>
+            <span class="quote-form-label">Moving FROM (postcode)</span>
+            <input type="text" name="from_postcode" id="qf-from" required autocomplete="postal-code" placeholder="BN21 3AB">
+          </label>
+          <label>
+            <span class="quote-form-label">Moving TO (postcode)</span>
+            <input type="text" name="to_postcode" id="qf-to" required autocomplete="postal-code" placeholder="TN22 5JD">
+          </label>
+          <label class="quote-form-full">
+            <span class="quote-form-label">Anything else we should know? (optional)</span>
+            <textarea name="notes" id="qf-notes" rows="3" placeholder="Preferred move date, access notes, listed property, antiques, etc."></textarea>
+          </label>
+        </div>
+        <div class="quote-form-actions">
+          <button type="submit" class="np-btn np-btn-primary">Send quote request</button>
+          <p class="quote-form-help">Opens your email app with everything pre-filled. Goes to <a href="mailto:office@markratcliffemoving.co.uk">office@markratcliffemoving.co.uk</a> — just hit send.</p>
+        </div>
+        <div class="quote-form-status" id="qf-status" role="status" aria-live="polite"></div>
+      </form>
     </div>
   </section>
 
@@ -526,7 +563,7 @@ def page_html() -> str:
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260563"></script>
+  <script defer src="../js/storage-calculator.js?v=20260564"></script>
 </body>
 </html>
 """

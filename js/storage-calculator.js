@@ -216,5 +216,92 @@
     milesInput.addEventListener('change', recalc);
   }
 
+  // Quote request form — build a pre-filled mailto: with all the
+  // calculator output + the customer's contact details.
+  var quoteForm = document.getElementById('quote-request-form');
+  if (quoteForm) {
+    quoteForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email   = document.getElementById('qf-email').value.trim();
+      var phone   = document.getElementById('qf-phone').value.trim();
+      var fromPC  = document.getElementById('qf-from').value.trim().toUpperCase();
+      var toPC    = document.getElementById('qf-to').value.trim().toUpperCase();
+      var notes   = document.getElementById('qf-notes').value.trim();
+      var status  = document.getElementById('qf-status');
+
+      var cuft        = (totalCuft  && totalCuft.textContent)  || '0';
+      var cum         = (totalCum   && totalCum.textContent)   || '0';
+      var kg          = (totalKg    && totalKg.textContent)    || '0';
+      var van         = (vanEstimate && vanEstimate.textContent) || '';
+      var vehicle     = (costVehicle && costVehicle.textContent) || '';
+      var volumeCost  = (costVolume && costVolume.textContent) || '';
+      var mileageCost = (costMileage && costMileage.textContent) || '';
+      var minimumCost = (costMinimum && costMinimum.textContent) || '';
+      var totalCost   = (costTotal && costTotal.textContent) || '';
+      var miles       = (milesInput && milesInput.value) || '0';
+
+      var picked = [];
+      var anyItems = false;
+      for (var i = 0; i < inputs.length; i++) {
+        var q = parseInt(inputs[i].value, 10);
+        if (!q || q < 0) continue;
+        anyItems = true;
+        var item = inputs[i].closest('.calc-item');
+        var nameEl = item ? item.querySelector('.calc-item-name') : null;
+        var name = nameEl ? nameEl.textContent : 'Item';
+        picked.push('  - ' + q + ' x ' + name);
+      }
+      if (!anyItems) picked.push('  (no items selected on the calculator)');
+
+      var subjectParts = ['Removals quote request', cuft + ' cu ft', fromPC + ' -> ' + toPC];
+      var subject = subjectParts.join(' | ');
+
+      var body = [
+        'Hi Mark Ratcliffe Moving,',
+        '',
+        'Please prepare a quote for my move.',
+        '',
+        'CONTACT',
+        '  Email: ' + email,
+        '  Phone: ' + phone,
+        '  Moving from postcode: ' + fromPC,
+        '  Moving to postcode:   ' + toPC,
+        '',
+        'CALCULATOR TOTALS',
+        '  Volume:        ' + cuft + ' cu ft (' + cum + ' cu m / ' + kg + ' kg)',
+        '  Load size:     ' + van,
+        '  Vehicle band:  ' + vehicle,
+        '',
+        'ESTIMATED COST',
+        '  Distance:        ' + miles + ' miles',
+        '  Volume cost:     ' + volumeCost,
+        '  Mileage cost:    ' + mileageCost,
+        '  Minimum charge:  ' + minimumCost,
+        '  Estimated total: ' + totalCost,
+        '',
+        'ITEMS SELECTED',
+        picked.join('\n'),
+        ''
+      ];
+      if (notes) {
+        body.push('NOTES');
+        body.push('  ' + notes.split('\n').join('\n  '));
+        body.push('');
+      }
+      body.push('Sent from the Mark Ratcliffe Moving online removals calculator.');
+
+      var mailto =
+        'mailto:office@markratcliffemoving.co.uk?subject=' +
+        encodeURIComponent(subject) +
+        '&body=' +
+        encodeURIComponent(body.join('\n'));
+
+      if (status) {
+        status.textContent = 'Opening your email app... if nothing happens, email office@markratcliffemoving.co.uk and we will fill in the details from your message.';
+      }
+      window.location.href = mailto;
+    });
+  }
+
   recalc();
 })();
