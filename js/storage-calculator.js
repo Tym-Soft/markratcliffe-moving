@@ -84,14 +84,15 @@
     { name: '44 Tonne Artic',    base: 1000, included: 2800, rate: 1.61, mileRate: 4.00 }
   ];
 
-  // Bedroom presets — auto-fill typical cu ft + inventory loadout. These
-  // no longer drive pricing.
+  // Bedroom presets — auto-fill the LOWER bound of each property's
+  // typical cu ft range so the headline £ figure starts at the cheapest
+  // possible estimate. The customer can drag the cu ft figure higher.
   var BED_DEFAULTS = {
-    '1bed': { label: '1-bed flat or studio',         typicalCuft:  700 },
-    '2bed': { label: '2-bed home',                   typicalCuft: 1100 },
-    '3bed': { label: '3-bed home',                   typicalCuft: 1500 },
-    '4bed': { label: '4-bed home',                   typicalCuft: 2200 },
-    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 3000 }
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  500 },
+    '2bed': { label: '2-bed home',                   typicalCuft:  800 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1200 },
+    '4bed': { label: '4-bed home',                   typicalCuft: 1800 },
+    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800 }
   };
 
   function priceForTier(cuft, tier) {

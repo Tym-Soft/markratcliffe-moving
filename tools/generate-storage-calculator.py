@@ -787,27 +787,27 @@ def page_html() -> str:
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="1bed">
                 <span class="qc-bed-icon">__ICON_BED_1__</span>
-                <span class="qc-bed-text"><strong>1-bed</strong><small>~700 cu ft</small></span>
+                <span class="qc-bed-text"><strong>1-bed</strong><small>from 500 cu ft</small></span>
               </label>
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="2bed">
                 <span class="qc-bed-icon">__ICON_BED_2__</span>
-                <span class="qc-bed-text"><strong>2-bed</strong><small>~1,100 cu ft</small></span>
+                <span class="qc-bed-text"><strong>2-bed</strong><small>from 800 cu ft</small></span>
               </label>
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="3bed" checked>
                 <span class="qc-bed-icon">__ICON_BED_3__</span>
-                <span class="qc-bed-text"><strong>3-bed</strong><small>~1,500 cu ft</small></span>
+                <span class="qc-bed-text"><strong>3-bed</strong><small>from 1,200 cu ft</small></span>
               </label>
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="4bed">
                 <span class="qc-bed-icon">__ICON_BED_4__</span>
-                <span class="qc-bed-text"><strong>4-bed</strong><small>~2,200 cu ft</small></span>
+                <span class="qc-bed-text"><strong>4-bed</strong><small>from 1,800 cu ft</small></span>
               </label>
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="5bed">
                 <span class="qc-bed-icon">__ICON_BED_5__</span>
-                <span class="qc-bed-text"><strong>5+ bed</strong><small>~3,000+ cu ft</small></span>
+                <span class="qc-bed-text"><strong>5+ bed</strong><small>from 2,800 cu ft</small></span>
               </label>
             </div>
           </fieldset>
@@ -818,7 +818,7 @@ def page_html() -> str:
             <div class="qc-num-row">
               <label class="qc-num">
                 <span class="qc-num-label">Cubic feet</span>
-                <input type="number" id="cost-manual-cuft" min="0" step="50" value="1500" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
+                <input type="number" id="cost-manual-cuft" min="0" step="50" value="1200" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
                 <span class="qc-num-help" id="cost-manual-cuft-help">Auto-fills typical figure; tick items below for a precise volume.</span>
               </label>
               <label class="qc-num" data-show-modes="removals both">
@@ -1050,7 +1050,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260589"></script>
+  <script defer src="../js/storage-calculator.js?v=20260590"></script>
 </body>
 </html>
 """
