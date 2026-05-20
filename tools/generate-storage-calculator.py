@@ -290,6 +290,333 @@ def slugify(s: str) -> str:
     return re.sub(r'[^a-z0-9]+', '-', s).strip('-')
 
 
+# ----------------------------------------------------------------------
+# Typical inventory presets per bedroom count.
+# Each entry: (category name, item name, quantity). Category + name must
+# match the ITEMS table verbatim — the slug is computed identically to
+# the inventory input ids so the JS auto-fill targets the right element.
+# ----------------------------------------------------------------------
+INVENTORY_PRESETS: dict[str, list[tuple[str, str, int]]] = {
+    '1bed': [
+        ('Bedroom (master)', 'Bed, double (mattress only)', 1),
+        ('Bedroom (master)', 'Bed, double (base only)', 1),
+        ('Bedroom (master)', 'Wardrobe, double', 1),
+        ('Bedroom (master)', 'Chest of drawers, small', 1),
+        ('Bedroom (master)', 'Bedside table', 1),
+        ('Bedroom (master)', 'Mirror, full-length', 1),
+        ('Living room', 'Sofa, 2-seater', 1),
+        ('Living room', 'Armchair', 1),
+        ('Living room', 'Coffee table', 1),
+        ('Living room', 'TV, large (50"+)', 1),
+        ('Living room', 'TV unit / stand', 1),
+        ('Living room', 'Bookcase, small', 1),
+        ('Living room', 'Floor lamp', 1),
+        ('Dining room', 'Dining table, 4-seater', 1),
+        ('Dining room', 'Dining chair', 2),
+        ('Kitchen / utility', 'Fridge, undercounter', 1),
+        ('Kitchen / utility', 'Washing machine', 1),
+        ('Kitchen / utility', 'Microwave', 1),
+        ('Kitchen / utility', 'Kettle', 1),
+        ('Kitchen / utility', 'Toaster', 1),
+        ('Kitchen / utility', 'Vacuum cleaner', 1),
+        ('Kitchen / utility', 'Ironing board', 1),
+        ('Bathroom', 'Bathroom cabinet', 1),
+        ('Bathroom', 'Linen basket', 1),
+        ('Boxes & cartons', 'Standard removals box (medium)', 30),
+        ('Boxes & cartons', 'Book box (1.5 cu ft)', 5),
+        ('Boxes & cartons', 'Wardrobe carton (tall)', 10),
+        ('Boxes & cartons', 'Picture box (large flat)', 3),
+        ('Boxes & cartons', 'Suitcase (large)', 2),
+    ],
+    '2bed': [
+        ('Bedroom (master)', 'Bed, double (mattress only)', 1),
+        ('Bedroom (master)', 'Bed, double (base only)', 1),
+        ('Bedroom (master)', 'Wardrobe, double', 1),
+        ('Bedroom (master)', 'Chest of drawers, large', 1),
+        ('Bedroom (master)', 'Bedside table', 2),
+        ('Bedroom (master)', 'Mirror, full-length', 1),
+        ('Bedroom (master)', 'Dressing table', 1),
+        ('Kids bedroom', 'Bed, single (mattress only)', 1),
+        ('Kids bedroom', 'Bed, single (base only)', 1),
+        ('Kids bedroom', 'Junior wardrobe', 1),
+        ('Kids bedroom', 'Chest of drawers, kids', 1),
+        ('Kids bedroom', 'Kids bedside table', 1),
+        ('Hall / Foyer', 'Hall mirror', 1),
+        ('Hall / Foyer', 'Shoe rack, small', 1),
+        ('Hall / Foyer', 'Coat rack / stand', 1),
+        ('Living room', 'Sofa, 3-seater', 1),
+        ('Living room', 'Armchair', 1),
+        ('Living room', 'Coffee table', 1),
+        ('Living room', 'Side / lamp table', 1),
+        ('Living room', 'TV, large (50"+)', 1),
+        ('Living room', 'TV unit / stand', 1),
+        ('Living room', 'Bookcase, large', 1),
+        ('Living room', 'Floor lamp', 1),
+        ('Living room', 'Mirror, large', 1),
+        ('Dining room', 'Dining table, 4-seater', 1),
+        ('Dining room', 'Dining chair', 4),
+        ('Dining room', 'Sideboard', 1),
+        ('Kitchen / utility', 'Fridge-freezer, tall', 1),
+        ('Kitchen / utility', 'Washing machine', 1),
+        ('Kitchen / utility', 'Cooker, freestanding', 1),
+        ('Kitchen / utility', 'Microwave', 1),
+        ('Kitchen / utility', 'Kettle', 1),
+        ('Kitchen / utility', 'Toaster', 1),
+        ('Kitchen / utility', 'Vacuum cleaner', 1),
+        ('Kitchen / utility', 'Ironing board', 1),
+        ('Bathroom', 'Bathroom cabinet', 1),
+        ('Bathroom', 'Linen basket', 1),
+        ('Bathroom', 'Vanity unit', 1),
+        ('Boxes & cartons', 'Standard removals box (medium)', 50),
+        ('Boxes & cartons', 'Book box (1.5 cu ft)', 10),
+        ('Boxes & cartons', 'Wardrobe carton (tall)', 15),
+        ('Boxes & cartons', 'Picture box (large flat)', 5),
+        ('Boxes & cartons', 'Suitcase (large)', 2),
+        ('Boxes & cartons', 'Suitcase (small)', 1),
+    ],
+    '3bed': [
+        ('Bedroom (master)', 'Bed, king (mattress only)', 1),
+        ('Bedroom (master)', 'Bed, king (base only)', 1),
+        ('Bedroom (master)', 'Wardrobe, double', 1),
+        ('Bedroom (master)', 'Chest of drawers, large', 1),
+        ('Bedroom (master)', 'Bedside table', 2),
+        ('Bedroom (master)', 'Mirror, full-length', 1),
+        ('Bedroom (master)', 'Dressing table', 1),
+        ('Bedroom (master)', 'Bedroom chair', 1),
+        ('Kids bedroom', 'Bed, single (mattress only)', 2),
+        ('Kids bedroom', 'Bed, single (base only)', 2),
+        ('Kids bedroom', 'Junior wardrobe', 2),
+        ('Kids bedroom', 'Chest of drawers, kids', 2),
+        ('Kids bedroom', 'Kids bedside table', 2),
+        ('Kids bedroom', 'Kids desk', 1),
+        ('Kids bedroom', 'Kids desk chair', 1),
+        ('Kids bedroom', 'Bookshelf', 1),
+        ('Hall / Foyer', 'Hall table', 1),
+        ('Hall / Foyer', 'Hall mirror', 1),
+        ('Hall / Foyer', 'Shoe rack, large', 1),
+        ('Hall / Foyer', 'Coat rack / stand', 1),
+        ('Living room', 'Sofa, 3-seater', 1),
+        ('Living room', 'Armchair', 2),
+        ('Living room', 'Coffee table', 1),
+        ('Living room', 'Side / lamp table', 2),
+        ('Living room', 'TV, large (50"+)', 1),
+        ('Living room', 'TV unit / stand', 1),
+        ('Living room', 'Bookcase, large', 2),
+        ('Living room', 'Sideboard', 1),
+        ('Living room', 'Floor lamp', 1),
+        ('Living room', 'Table lamp', 2),
+        ('Living room', 'Mirror, large', 1),
+        ('Dining room', 'Dining table, 6-seater', 1),
+        ('Dining room', 'Dining chair', 6),
+        ('Dining room', 'Sideboard', 1),
+        ('Dining room', 'Display cabinet', 1),
+        ('Kitchen / utility', 'Fridge-freezer, tall', 1),
+        ('Kitchen / utility', 'Washing machine', 1),
+        ('Kitchen / utility', 'Tumble dryer', 1),
+        ('Kitchen / utility', 'Dishwasher', 1),
+        ('Kitchen / utility', 'Cooker, freestanding', 1),
+        ('Kitchen / utility', 'Microwave', 1),
+        ('Kitchen / utility', 'Kettle', 1),
+        ('Kitchen / utility', 'Toaster', 1),
+        ('Kitchen / utility', 'Vacuum cleaner', 1),
+        ('Kitchen / utility', 'Ironing board', 1),
+        ('Bathroom', 'Bathroom cabinet', 1),
+        ('Bathroom', 'Linen basket', 1),
+        ('Bathroom', 'Vanity unit', 1),
+        ('Bathroom', 'Storage shelves', 1),
+        ('Boxes & cartons', 'Standard removals box (medium)', 70),
+        ('Boxes & cartons', 'Book box (1.5 cu ft)', 15),
+        ('Boxes & cartons', 'Wardrobe carton (tall)', 20),
+        ('Boxes & cartons', 'Picture box (large flat)', 8),
+        ('Boxes & cartons', 'Suitcase (large)', 3),
+        ('Boxes & cartons', 'Suitcase (small)', 2),
+        ('Garden & outdoor', 'Garden tools (set)', 1),
+        ('Garden & outdoor', 'Lawnmower, push', 1),
+    ],
+    '4bed': [
+        ('Bedroom (master)', 'Bed, king (mattress only)', 1),
+        ('Bedroom (master)', 'Bed, king (base only)', 1),
+        ('Bedroom (master)', 'Wardrobe, triple', 1),
+        ('Bedroom (master)', 'Chest of drawers, large', 1),
+        ('Bedroom (master)', 'Bedside table', 2),
+        ('Bedroom (master)', 'Mirror, full-length', 1),
+        ('Bedroom (master)', 'Dressing table', 1),
+        ('Bedroom (master)', 'Dressing table mirror', 1),
+        ('Bedroom (master)', 'Bedroom chair', 1),
+        ('Bedroom (master)', 'Blanket box / ottoman', 1),
+        ('Kids bedroom', 'Bed, single (mattress only)', 3),
+        ('Kids bedroom', 'Bed, single (base only)', 3),
+        ('Kids bedroom', 'Junior wardrobe', 3),
+        ('Kids bedroom', 'Chest of drawers, kids', 3),
+        ('Kids bedroom', 'Kids bedside table', 3),
+        ('Kids bedroom', 'Kids desk', 2),
+        ('Kids bedroom', 'Kids desk chair', 2),
+        ('Kids bedroom', 'Bookshelf', 2),
+        ('Kids bedroom', 'Toy chest', 1),
+        ('Hall / Foyer', 'Hall table', 1),
+        ('Hall / Foyer', 'Console table', 1),
+        ('Hall / Foyer', 'Hall mirror', 1),
+        ('Hall / Foyer', 'Shoe rack, large', 1),
+        ('Hall / Foyer', 'Coat rack / stand', 1),
+        ('Hall / Foyer', 'Boot bench', 1),
+        ('Living room', 'Sofa, 3-seater', 1),
+        ('Living room', 'Sofa, 2-seater', 1),
+        ('Living room', 'Armchair', 2),
+        ('Living room', 'Coffee table', 1),
+        ('Living room', 'Side / lamp table', 2),
+        ('Living room', 'TV, large (50"+)', 1),
+        ('Living room', 'TV unit / stand', 1),
+        ('Living room', 'Bookcase, large', 2),
+        ('Living room', 'Sideboard', 1),
+        ('Living room', 'Display cabinet', 1),
+        ('Living room', 'Floor lamp', 1),
+        ('Living room', 'Table lamp', 3),
+        ('Living room', 'Mirror, large', 1),
+        ('Dining room', 'Dining table, 6-seater', 1),
+        ('Dining room', 'Dining chair', 6),
+        ('Dining room', 'Carver chair', 2),
+        ('Dining room', 'Sideboard', 1),
+        ('Dining room', 'Display cabinet', 1),
+        ('Dining room', 'Welsh dresser', 1),
+        ('Kitchen / utility', 'Fridge-freezer, American', 1),
+        ('Kitchen / utility', 'Washing machine', 1),
+        ('Kitchen / utility', 'Tumble dryer', 1),
+        ('Kitchen / utility', 'Dishwasher', 1),
+        ('Kitchen / utility', 'Cooker, freestanding', 1),
+        ('Kitchen / utility', 'Microwave', 1),
+        ('Kitchen / utility', 'Kettle', 1),
+        ('Kitchen / utility', 'Toaster', 1),
+        ('Kitchen / utility', 'Stand mixer / food processor', 1),
+        ('Kitchen / utility', 'Vacuum cleaner', 1),
+        ('Kitchen / utility', 'Ironing board', 1),
+        ('Kitchen / utility', 'Kitchen table', 1),
+        ('Kitchen / utility', 'Kitchen chair', 4),
+        ('Bathroom', 'Bathroom cabinet', 2),
+        ('Bathroom', 'Linen basket', 1),
+        ('Bathroom', 'Vanity unit', 1),
+        ('Bathroom', 'Storage shelves', 1),
+        ('Office / study', 'Desk', 1),
+        ('Office / study', 'Office chair', 1),
+        ('Office / study', 'Filing cabinet, 2-drawer', 1),
+        ('Office / study', 'Computer (desktop tower)', 1),
+        ('Office / study', 'Monitor', 1),
+        ('Office / study', 'Printer', 1),
+        ('Office / study', 'Bookcase, office', 1),
+        ('Boxes & cartons', 'Standard removals box (medium)', 90),
+        ('Boxes & cartons', 'Book box (1.5 cu ft)', 20),
+        ('Boxes & cartons', 'Wardrobe carton (tall)', 25),
+        ('Boxes & cartons', 'Picture box (large flat)', 10),
+        ('Boxes & cartons', 'Suitcase (large)', 4),
+        ('Boxes & cartons', 'Suitcase (small)', 2),
+        ('Garden & outdoor', 'BBQ, kettle', 1),
+        ('Garden & outdoor', 'Garden tools (set)', 1),
+        ('Garden & outdoor', 'Lawnmower, push', 1),
+        ('Garden & outdoor', 'Patio table', 1),
+        ('Garden & outdoor', 'Patio chair (folding)', 4),
+    ],
+    '5bed': [
+        ('Bedroom (master)', 'Bed, super-king (mattress only)', 1),
+        ('Bedroom (master)', 'Bed, super-king (base only)', 1),
+        ('Bedroom (master)', 'Wardrobe, triple', 1),
+        ('Bedroom (master)', 'Chest of drawers, large', 2),
+        ('Bedroom (master)', 'Bedside table', 2),
+        ('Bedroom (master)', 'Mirror, full-length', 1),
+        ('Bedroom (master)', 'Dressing table', 1),
+        ('Bedroom (master)', 'Dressing table mirror', 1),
+        ('Bedroom (master)', 'Bedroom chair', 2),
+        ('Bedroom (master)', 'Blanket box / ottoman', 1),
+        ('Kids bedroom', 'Bed, single (mattress only)', 4),
+        ('Kids bedroom', 'Bed, single (base only)', 4),
+        ('Kids bedroom', 'Junior wardrobe', 4),
+        ('Kids bedroom', 'Chest of drawers, kids', 4),
+        ('Kids bedroom', 'Kids bedside table', 4),
+        ('Kids bedroom', 'Kids desk', 3),
+        ('Kids bedroom', 'Kids desk chair', 3),
+        ('Kids bedroom', 'Bookshelf', 3),
+        ('Kids bedroom', 'Toy chest', 1),
+        ('Hall / Foyer', 'Hall table', 1),
+        ('Hall / Foyer', 'Console table', 1),
+        ('Hall / Foyer', 'Hall mirror', 1),
+        ('Hall / Foyer', 'Shoe rack, large', 1),
+        ('Hall / Foyer', 'Coat rack / stand', 1),
+        ('Hall / Foyer', 'Boot bench', 1),
+        ('Hall / Foyer', 'Hall cabinet', 1),
+        ('Living room', 'Sofa, 3-seater', 1),
+        ('Living room', 'Sofa, 2-seater', 1),
+        ('Living room', 'Armchair', 2),
+        ('Living room', 'Coffee table', 1),
+        ('Living room', 'Side / lamp table', 2),
+        ('Living room', 'TV, large (50"+)', 2),
+        ('Living room', 'TV unit / stand', 1),
+        ('Living room', 'Bookcase, large', 2),
+        ('Living room', 'Sideboard', 1),
+        ('Living room', 'Display cabinet', 1),
+        ('Living room', 'Drinks cabinet', 1),
+        ('Living room', 'Floor lamp', 2),
+        ('Living room', 'Table lamp', 3),
+        ('Living room', 'Mirror, large', 2),
+        ('Dining room', 'Dining table, 8-seater', 1),
+        ('Dining room', 'Dining chair', 8),
+        ('Dining room', 'Carver chair', 2),
+        ('Dining room', 'Sideboard', 1),
+        ('Dining room', 'Display cabinet', 1),
+        ('Dining room', 'Welsh dresser', 1),
+        ('Dining room', 'Drinks trolley', 1),
+        ('Kitchen / utility', 'Fridge-freezer, American', 1),
+        ('Kitchen / utility', 'Washing machine', 1),
+        ('Kitchen / utility', 'Tumble dryer', 1),
+        ('Kitchen / utility', 'Dishwasher', 1),
+        ('Kitchen / utility', 'Range cooker', 1),
+        ('Kitchen / utility', 'Microwave', 1),
+        ('Kitchen / utility', 'Kettle', 1),
+        ('Kitchen / utility', 'Toaster', 1),
+        ('Kitchen / utility', 'Stand mixer / food processor', 1),
+        ('Kitchen / utility', 'Vacuum cleaner', 1),
+        ('Kitchen / utility', 'Ironing board', 1),
+        ('Kitchen / utility', 'Kitchen table', 1),
+        ('Kitchen / utility', 'Kitchen chair', 6),
+        ('Bathroom', 'Bathroom cabinet', 2),
+        ('Bathroom', 'Linen basket', 1),
+        ('Bathroom', 'Vanity unit', 2),
+        ('Bathroom', 'Storage shelves', 2),
+        ('Office / study', 'Desk', 1),
+        ('Office / study', 'Office chair', 1),
+        ('Office / study', 'Filing cabinet, 4-drawer', 1),
+        ('Office / study', 'Computer (desktop tower)', 1),
+        ('Office / study', 'Monitor', 1),
+        ('Office / study', 'Printer', 1),
+        ('Office / study', 'Bookcase, office', 2),
+        ('Boxes & cartons', 'Standard removals box (medium)', 110),
+        ('Boxes & cartons', 'Book box (1.5 cu ft)', 25),
+        ('Boxes & cartons', 'Wardrobe carton (tall)', 30),
+        ('Boxes & cartons', 'Picture box (large flat)', 12),
+        ('Boxes & cartons', 'Suitcase (large)', 4),
+        ('Boxes & cartons', 'Suitcase (small)', 3),
+        ('Garden & outdoor', 'BBQ, large gas', 1),
+        ('Garden & outdoor', 'Garden tools (set)', 1),
+        ('Garden & outdoor', 'Lawnmower, push', 1),
+        ('Garden & outdoor', 'Patio table', 1),
+        ('Garden & outdoor', 'Patio chair (folding)', 4),
+        ('Garden & outdoor', 'Garden bench', 1),
+        ('Specialist & other', 'Antique chest (large)', 1),
+        ('Specialist & other', 'Piano, upright', 1),
+    ],
+}
+
+
+def emit_inventory_presets_js() -> str:
+    """Emit BED_INVENTORY as a JS object whose keys match the item input ids."""
+    lines = ['  var BED_INVENTORY = {']
+    for bed, items in INVENTORY_PRESETS.items():
+        lines.append(f"    '{bed}': {{")
+        for cat, name, qty in items:
+            slug = slugify(cat) + '-' + slugify(name)
+            lines.append(f"      'item-{slug}': {qty},")
+        lines.append('    },')
+    lines.append('  };')
+    return '\n'.join(lines)
+
+
 SAMPLE_PATH = 'resources/pricing.html'
 
 
@@ -370,7 +697,7 @@ def page_html() -> str:
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260562" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260575" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -458,27 +785,46 @@ def page_html() -> str:
 
       <div class="volume-inputs">
         <fieldset class="cost-size-input">
-          <legend class="cost-input-label">Home size</legend>
+          <legend class="cost-input-label">Bedrooms</legend>
           <label class="cost-size-option">
-            <input type="radio" name="home-size" value="small">
-            <span><strong>Small</strong> <small>1-bed flat or studio &middot; 500-900 cu ft &middot; Luton Van &middot; £360 min</small></span>
+            <input type="radio" name="home-size" value="1bed">
+            <span><strong>1-bed flat or studio</strong> <small>~700 cu ft &middot; Luton Van &middot; £360 min</small></span>
           </label>
           <label class="cost-size-option">
-            <input type="radio" name="home-size" value="medium" checked>
-            <span><strong>Medium</strong> <small>2-3 bed home &middot; 900-1,800 cu ft &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
+            <input type="radio" name="home-size" value="2bed">
+            <span><strong>2-bed home</strong> <small>~1,000 cu ft &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
           </label>
           <label class="cost-size-option">
-            <input type="radio" name="home-size" value="large">
-            <span><strong>Large</strong> <small>4+ bed / antiques / country property &middot; 1,800-4,000+ cu ft &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
+            <input type="radio" name="home-size" value="3bed" checked>
+            <span><strong>3-bed home</strong> <small>~1,350 cu ft &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
+          </label>
+          <label class="cost-size-option">
+            <input type="radio" name="home-size" value="4bed">
+            <span><strong>4-bed home</strong> <small>~1,800 cu ft &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
+          </label>
+          <label class="cost-size-option">
+            <input type="radio" name="home-size" value="5bed">
+            <span><strong>5+ bed / antiques / country</strong> <small>~2,500+ cu ft &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
           </label>
         </fieldset>
 
         <label class="cost-manual-cuft" id="cost-manual-cuft-wrap">
           <span class="cost-input-label">Cubic feet (if you&rsquo;re not using the inventory)</span>
           <input type="number" id="cost-manual-cuft" min="0" step="50" value="1350" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
-          <span class="cost-input-help" id="cost-manual-cuft-help">Auto-fills with the typical figure for your chosen home size. Tick items above to override with a precise volume.</span>
+          <span class="cost-input-help" id="cost-manual-cuft-help">Auto-fills with the typical figure for your chosen bedroom count. Tick items above to override with a precise volume.</span>
         </label>
       </div>
+
+      <aside class="inventory-prompt" id="inventory-prompt" hidden>
+        <div class="inventory-prompt-text">
+          <strong>Want a head start?</strong>
+          <span id="inventory-prompt-detail">Load a typical 3-bed inventory into the item picker above. We&rsquo;ve worked out a standard loadout for that size of home — you can tweak the quantities after.</span>
+        </div>
+        <div class="inventory-prompt-actions">
+          <button type="button" id="load-inventory-btn" class="np-btn np-btn-primary">Load typical inventory</button>
+          <button type="button" id="dismiss-inventory-prompt" class="inventory-prompt-skip">Skip — I&rsquo;ll use the cu ft figure</button>
+        </div>
+      </aside>
 
       <p data-show-modes="removals both">Enter the round-trip distance for the move below. The calculator multiplies the volume by the £/cu ft rate for your home size, adds the mileage at the per-vehicle rate, and applies the minimum charge if the volume cost would be lower.</p>
 
@@ -593,7 +939,7 @@ def page_html() -> str:
   <section class="np-section np-section-soft">
     <div class="np-inner">
       <h2>Mark Ratcliffe Moving pricing model</h2>
-      <p>Each home size maps to the vehicle our crews actually send, the per-cu-ft rate we apply, the per-mile mileage rate for that vehicle, and a minimum-charge floor. The calculator uses these published figures directly:</p>
+      <p>Each bedroom count maps to the vehicle our crews actually send, the per-cu-ft rate we apply, the per-mile mileage rate for that vehicle, and a minimum-charge floor. The calculator uses these published figures directly:</p>
       <table class="rate-table">
         <thead>
           <tr>
@@ -606,29 +952,43 @@ def page_html() -> str:
         </thead>
         <tbody>
           <tr>
-            <td><strong>Small</strong><br><span class="rate-table-sub">1-bed flat or studio</span></td>
+            <td><strong>1-bed</strong><br><span class="rate-table-sub">flat or studio</span></td>
             <td>Luton Van (3.5t)</td>
-            <td>£2.00 – £2.50</td>
+            <td>£2.25</td>
             <td>£2.00</td>
             <td><strong>£360</strong></td>
           </tr>
           <tr>
-            <td><strong>Medium</strong><br><span class="rate-table-sub">2-3 bed home</span></td>
+            <td><strong>2-bed</strong><br><span class="rate-table-sub">home</span></td>
             <td>7.5 – 18 Tonne lorry</td>
-            <td>£1.40 – £1.80</td>
-            <td>£2.50 – £3.00</td>
+            <td>£1.60</td>
+            <td>£2.75</td>
             <td><strong>£650</strong></td>
           </tr>
           <tr>
-            <td><strong>Large</strong><br><span class="rate-table-sub">4+ bed / antiques / country</span></td>
+            <td><strong>3-bed</strong><br><span class="rate-table-sub">home</span></td>
+            <td>7.5 – 18 Tonne lorry</td>
+            <td>£1.60</td>
+            <td>£2.75</td>
+            <td><strong>£650</strong></td>
+          </tr>
+          <tr>
+            <td><strong>4-bed</strong><br><span class="rate-table-sub">home</span></td>
             <td>18 Tonne+ / 44 Tonne Artic</td>
-            <td>£1.00 – £1.60</td>
-            <td>£3.00 – £4.00</td>
+            <td>£1.30</td>
+            <td>£3.50</td>
+            <td><strong>£1,000</strong></td>
+          </tr>
+          <tr>
+            <td><strong>5+ bed</strong><br><span class="rate-table-sub">antiques / country property</span></td>
+            <td>18 Tonne+ / 44 Tonne Artic</td>
+            <td>£1.30</td>
+            <td>£3.50</td>
             <td><strong>£1,000</strong></td>
           </tr>
         </tbody>
       </table>
-      <p>The cost formula: <strong>cost = max(minimum charge, volume × £/cu ft) + (miles × £/mile)</strong>. The minimum charge protects us against very small jobs that wouldn&rsquo;t otherwise cover the day. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
+      <p>The cost formula: <strong>cost = max(minimum charge, (volume × £/cu ft) + (miles × £/mile))</strong>. The minimum charge protects against very small jobs that wouldn&rsquo;t otherwise cover the day &mdash; but the minimum covers the <em>whole</em> job (volume plus mileage), so adding more inventory or more miles only pushes the price up once the combined figure passes the floor. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
       <p>For an accurate price, book a <a href="../mark-ratcliffe-moving-online-removals-quote.html">free in-home survey</a>. We respond within 48 hours.</p>
     </div>
   </section>
@@ -664,12 +1024,18 @@ def page_html() -> str:
 
   {footer}
 
+  <!-- Inventory presets — slugs match the item input ids, computed at
+       build time by the Python generator. -->
+  <script>
+__BED_INVENTORY__
+  </script>
+
   <!-- Site-wide nav JS: jQuery + Webflow site script + mobile-nav. Without these
        the megamenu dropdowns and mobile hamburger don't work. -->
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260573"></script>
+  <script defer src="../js/storage-calculator.js?v=20260575"></script>
 </body>
 </html>
 """
@@ -680,9 +1046,10 @@ def main() -> int:
         print(f'ERROR — sample {SAMPLE_PATH} missing', file=sys.stderr)
         return 1
     os.makedirs('resources', exist_ok=True)
-    open('resources/storage-calculator.html', 'w', encoding='utf-8').write(page_html())
+    html = page_html().replace('__BED_INVENTORY__', emit_inventory_presets_js())
+    open('resources/storage-calculator.html', 'w', encoding='utf-8').write(html)
     n = sum(len(items) for _, _, items in ITEMS)
-    print(f'  wrote resources/storage-calculator.html ({n} items across {len(ITEMS)} categories)')
+    print(f'  wrote resources/storage-calculator.html ({n} items / {len(ITEMS)} cats / {sum(len(v) for v in INVENTORY_PRESETS.values())} preset rows)')
     return 0
 
 

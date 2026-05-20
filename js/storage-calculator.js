@@ -71,49 +71,35 @@
     return STORAGE_UNITS[STORAGE_UNITS.length - 1]; // bigger than largest — flag this
   }
 
-  // Per-home-size pricing profile. The chosen home size drives the
-  // vehicle, the £/cu ft rate, the per-mile mileage rate AND the
-  // minimum charge — Mark Ratcliffe Moving's published pricing model.
-  //
-  // Vehicle mapping (per the rate sheet):
-  //   Small  →  Luton Van (3.5t)
-  //   Medium →  7.5 – 18 Tonne Lorry
-  //   Large  →  18 Tonne+ / 44 Tonne Artic
-  var HOME_PROFILES = {
-    small: {
-      vehicle:   'Luton Van (3.5t)',
-      rate:      2.25,   // £/cu ft (mid of £2.00–£2.50)
-      mileRate:  2.00,   // £/mile
-      minCharge: 360
-    },
-    medium: {
-      vehicle:   '7.5 – 18 Tonne Lorry',
-      rate:      1.60,   // £/cu ft (mid of £1.40–£1.80)
-      mileRate:  2.75,   // £/mile (mid of 7.5t £2.50 and 18t £3.00)
-      minCharge: 650
-    },
-    large: {
-      vehicle:   '18 Tonne+ / Artic',
-      rate:      1.30,   // £/cu ft (covers 18-26T and artic)
-      mileRate:  3.50,   // £/mile (mid of £3.00 and £4.00)
-      minCharge: 1000
-    }
+  // Per-bedroom-count pricing profile. The selected bedroom count drives
+  // the vehicle, £/cu ft rate, per-mile mileage rate AND minimum charge.
+  // Pricing tiers map to Mark Ratcliffe Moving's published rate sheet:
+  //   1-bed       → Small  pricing (Luton Van, £360 min)
+  //   2-3 bed     → Medium pricing (7.5 – 18 Tonne lorry, £650 min)
+  //   4-5+ bed    → Large  pricing (18 Tonne+ / Artic, £1,000 min)
+  var BED_PROFILES = {
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  700, vehicle: 'Luton Van (3.5t)',     rate: 2.25, mileRate: 2.00, minCharge:  360 },
+    '2bed': { label: '2-bed home',                   typicalCuft: 1000, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1350, vehicle: '7.5 – 18 Tonne Lorry', rate: 1.60, mileRate: 2.75, minCharge:  650 },
+    '4bed': { label: '4-bed home',                   typicalCuft: 1800, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 },
+    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2500, vehicle: '18 Tonne+ / Artic',    rate: 1.30, mileRate: 3.50, minCharge: 1000 }
   };
+  // BED_INVENTORY is emitted by the Python generator as inline JS just
+  // before this script loads. Each entry maps "item-<slug>" → quantity.
+  var BED_INVENTORY_DATA = (typeof BED_INVENTORY !== 'undefined') ? BED_INVENTORY : {};
 
   function pounds(n) {
     return '£' + Math.round(n).toLocaleString('en-GB');
   }
 
-  // Friendly labels for home sizes (used in headline + emails).
-  var HOME_SIZE_LABEL = {
-    small:  '1-bed flat / studio',
-    medium: '2-3 bed home',
-    large:  '4+ bed / antiques / country property'
-  };
+  function getProfile() {
+    var size = getHomeSize();
+    return BED_PROFILES[size] || BED_PROFILES['3bed'];
+  }
 
   function getHomeSize() {
     var checked = document.querySelector('input[name="home-size"]:checked');
-    return checked ? checked.value : 'medium';
+    return checked ? checked.value : '3bed';
   }
 
   function getCalcMode() {
@@ -153,28 +139,29 @@
     return '~ 44 Tonne Artic load';
   }
 
-  // Typical cu ft figures used when no inventory items are selected —
+  // Typical cu ft range used when no inventory items are selected —
   // pre-fills the manual cu ft input as the customer changes home size.
-  var TYPICAL_CUFT = { small: 700, medium: 1350, large: 2500 };
   var TYPICAL_RANGE = {
-    small:  '500–900 cu ft',
-    medium: '900–1,800 cu ft',
-    large:  '1,800–4,000+ cu ft'
+    '1bed':  '500–900 cu ft',
+    '2bed':  '800–1,200 cu ft',
+    '3bed':  '1,100–1,600 cu ft',
+    '4bed':  '1,500–2,200 cu ft',
+    '5bed':  '2,200–4,000+ cu ft'
   };
   var manualCuftInput = document.getElementById('cost-manual-cuft');
   var manualCuftHelp  = document.getElementById('cost-manual-cuft-help');
   var manualCuftTouched = false;
 
   function applyHomeSizeDefault() {
+    var profile = getProfile();
     if (manualCuftInput && !manualCuftTouched) {
-      var size = getHomeSize();
-      manualCuftInput.value = TYPICAL_CUFT[size] || TYPICAL_CUFT.medium;
+      manualCuftInput.value = profile.typicalCuft;
     }
     if (manualCuftHelp) {
       var sz = getHomeSize();
       var rng = TYPICAL_RANGE[sz] || '';
-      manualCuftHelp.textContent = 'Typical ' + sz + ' home: ' + rng +
-        '. Auto-fills with this figure; tick items above to override with a precise volume.';
+      manualCuftHelp.textContent = 'Typical ' + profile.label + ': ' + rng +
+        '. Auto-fills with this figure; tick items above for a precise volume — or hit "Load inventory" to populate the room lists for you.';
     }
   }
 
@@ -215,28 +202,31 @@
     var miles = parseInt((milesInput && milesInput.value) || '0', 10);
     if (isNaN(miles) || miles < 0) miles = 0;
 
-    var size     = getHomeSize();
-    var profile  = HOME_PROFILES[size] || HOME_PROFILES.medium;
-    var sizeText = size.charAt(0).toUpperCase() + size.slice(1);
+    var profile = getProfile();
     var headlineLabel = document.getElementById('cost-headline-label');
 
     var volCost  = cuft * profile.rate;
     var mileCost = miles * profile.mileRate;
-    var base     = Math.max(profile.minCharge, volCost);
-    var total    = base + mileCost;
+    var subtotal = volCost + mileCost;
+    // The minimum charge covers the WHOLE job (volume + mileage). Total
+    // is the higher of the published minimum and the actual subtotal —
+    // adding inventory or miles below the floor doesn't push the price
+    // up, only when their sum exceeds the minimum.
+    var minApplied = subtotal < profile.minCharge;
+    var total = Math.max(profile.minCharge, subtotal);
 
     costVehicle.textContent = profile.vehicle;
     costVolume.textContent  = cuft === 0
-      ? '£0 (tick items above)'
+      ? '£0 (tick items above or use the cu ft input)'
       : pounds(volCost) + ' (' + cuft + ' cu ft × £' + profile.rate.toFixed(2) + '/cu ft)';
     costMileage.textContent = pounds(mileCost) + ' (' + miles + ' mi × £' + profile.mileRate.toFixed(2) + '/mi)';
-    costMinimum.textContent = pounds(profile.minCharge) + ' (' + sizeText + ' home)';
+    costMinimum.textContent = pounds(profile.minCharge) + ' (' + profile.label + ')' + (minApplied ? '  · APPLIED' : '');
     costTotal.textContent   = pounds(total);
 
     if (headlineLabel) {
-      headlineLabel.textContent = cuft === 0
-        ? sizeText + ' home minimum · ' + miles + ' mi'
-        : 'Estimated removals cost · ' + sizeText + ' home, ' + miles + ' mi';
+      headlineLabel.textContent = minApplied
+        ? 'Minimum charge applies · ' + profile.label + ', ' + miles + ' mi'
+        : 'Estimated removals cost · ' + profile.label + ', ' + miles + ' mi';
     }
 
     updateStorage(cuft, total);
@@ -396,12 +386,83 @@
   // Apply the initial mode on load so the right sections show
   applyCalcMode();
 
-  // Home size radios — update the manual cu ft default (if user hasn't typed)
-  // then recalc.
+  // Inventory auto-fill prompt — shown when the customer picks a bedroom
+  // count but hasn't ticked any inventory items yet. They can load the
+  // standard inventory for that size, or skip and edit cu ft manually.
+  var inventoryPrompt    = document.getElementById('inventory-prompt');
+  var inventoryPromptMsg = document.getElementById('inventory-prompt-detail');
+  var loadInventoryBtn   = document.getElementById('load-inventory-btn');
+  var skipInventoryBtn   = document.getElementById('dismiss-inventory-prompt');
+  var inventoryPromptDismissed = false;
+
+  function hasAnyInventory() {
+    for (var i = 0; i < inputs.length; i++) {
+      var q = parseInt(inputs[i].value, 10);
+      if (q && q > 0) return true;
+    }
+    return false;
+  }
+
+  function showInventoryPrompt() {
+    if (!inventoryPrompt) return;
+    if (inventoryPromptDismissed) return;
+    if (hasAnyInventory()) { inventoryPrompt.hidden = true; return; }
+    var profile = getProfile();
+    if (inventoryPromptMsg) {
+      inventoryPromptMsg.textContent =
+        'Want me to auto-fill a standard ' + profile.label +
+        ' inventory? You can tweak quantities after.';
+    }
+    if (loadInventoryBtn) {
+      loadInventoryBtn.textContent = 'Load ' + profile.label + ' inventory';
+    }
+    inventoryPrompt.hidden = false;
+  }
+
+  function clearAllInventoryInputs() {
+    for (var i = 0; i < inputs.length; i++) inputs[i].value = 0;
+  }
+
+  function loadInventoryForCurrentSize() {
+    var size = getHomeSize();
+    var preset = BED_INVENTORY_DATA[size];
+    if (!preset) return;
+    if (hasAnyInventory()) {
+      var ok = window.confirm(
+        'This will replace the items you have already ticked with the standard ' +
+        getProfile().label + ' inventory. Continue?'
+      );
+      if (!ok) return;
+    }
+    clearAllInventoryInputs();
+    Object.keys(preset).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.value = preset[id];
+    });
+    inventoryPromptDismissed = true;
+    if (inventoryPrompt) inventoryPrompt.hidden = true;
+    manualCuftTouched = true; // inventory now drives cu ft
+    recalc();
+  }
+
+  if (loadInventoryBtn) {
+    loadInventoryBtn.addEventListener('click', loadInventoryForCurrentSize);
+  }
+  if (skipInventoryBtn) {
+    skipInventoryBtn.addEventListener('click', function () {
+      inventoryPromptDismissed = true;
+      if (inventoryPrompt) inventoryPrompt.hidden = true;
+    });
+  }
+
+  // Home size radios — update the manual cu ft default (if user hasn't typed),
+  // re-show the auto-fill prompt for the new bedroom count, then recalc.
   var homeSizeRadios = document.querySelectorAll('input[name="home-size"]');
   for (var hs = 0; hs < homeSizeRadios.length; hs++) {
     homeSizeRadios[hs].addEventListener('change', function () {
+      inventoryPromptDismissed = false; // give them the option again for the new size
       applyHomeSizeDefault();
+      showInventoryPrompt();
       recalc();
     });
   }
@@ -495,9 +556,10 @@
         ''
       ];
       if (calcMode !== 'storage') {
+        var prof = getProfile();
         body.push('ESTIMATED REMOVALS COST');
         body.push('  Vehicle band:    ' + vehicle);
-        body.push('  Home size:       ' + getHomeSize());
+        body.push('  Home size:       ' + prof.label);
         body.push('  Distance:        ' + miles + ' miles');
         body.push('  Volume cost:     ' + volumeCost);
         body.push('  Mileage cost:    ' + mileageCost);
@@ -541,4 +603,6 @@
   }
 
   recalc();
+  // Trigger the inventory auto-fill prompt on first paint (mode permitting).
+  if (getCalcMode() !== 'storage') showInventoryPrompt();
 })();

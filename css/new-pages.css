@@ -390,6 +390,56 @@ body[data-calc-mode="both"]    .storage-toggle { display: none; }
 body[data-calc-mode="storage"] .storage-details,
 body[data-calc-mode="both"]    .storage-details { display: grid !important; }
 
+/* Inventory auto-fill prompt — appears when the user picks a bedroom
+   count but hasn't ticked any rooms yet. Offers to load a preset. */
+.inventory-prompt {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.25rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(200,168,118,0.18), rgba(77,46,143,0.12));
+  border: 1px solid rgba(200,168,118,0.45);
+  color: #2a1f4a;
+}
+.inventory-prompt[hidden] { display: none; }
+.inventory-prompt-text {
+  flex: 1 1 280px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.inventory-prompt-text strong {
+  display: block;
+  color: var(--brand-navy, #4d2e8f);
+  margin-bottom: 0.15rem;
+  font-size: 1.02rem;
+}
+.inventory-prompt-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.inventory-prompt-skip {
+  font: inherit;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  background: transparent;
+  color: var(--brand-navy, #4d2e8f);
+  border: 1px solid rgba(77,46,143,0.4);
+  transition: background 0.15s, border-color 0.15s;
+}
+.inventory-prompt-skip:hover,
+.inventory-prompt-skip:focus-visible {
+  background: rgba(77,46,143,0.08);
+  outline: none;
+}
+/* Storage-only mode hides the inventory prompt (irrelevant). */
+body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
+
 .calc-totals {
   position: sticky;
   top: 96px;
