@@ -336,11 +336,8 @@
             </div>
           </fieldset>
 
-          <!-- Removals-only mode: hide the storage toggle (no storage in this mode) -->
-          <label class="storage-toggle" data-show-modes="removals">
-            <input type="checkbox" id="storage-enabled">
-            <span>Add storage? (Switch the mode above to &ldquo;Both&rdquo;.)</span>
-          </label>
+          <!-- Hidden storage-enabled checkbox kept for JS compatibility (mode picker drives it). -->
+          <input type="checkbox" id="storage-enabled" hidden aria-hidden="true">
 
         </div>
 
