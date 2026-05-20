@@ -64,9 +64,14 @@
   function pickStorageUnit(cuft) {
     var sqftNeeded = Math.ceil(cuft / STORAGE_CUFT_PER_SQFT);
     for (var i = 0; i < STORAGE_UNITS.length; i++) {
-      if (STORAGE_UNITS[i].sqft >= sqftNeeded) return STORAGE_UNITS[i];
+      if (STORAGE_UNITS[i].sqft >= sqftNeeded) {
+        return { unit: STORAGE_UNITS[i], qty: 1 };
+      }
     }
-    return STORAGE_UNITS[STORAGE_UNITS.length - 1]; // bigger than largest — flag this
+    // Bigger than the largest single room — provision multiples of the
+    // 280 sqft room to fit, charged accordingly.
+    var biggest = STORAGE_UNITS[STORAGE_UNITS.length - 1];
+    return { unit: biggest, qty: Math.ceil(sqftNeeded / biggest.sqft) };
   }
 
   // Pricing model (per-property base + monotonic excess):
@@ -295,13 +300,18 @@
       return 0;
     }
 
-    var unit = pickStorageUnit(cuft);
-    var storageTotal = unit.daily * days;
-    var sqftNeeded   = Math.ceil(cuft / STORAGE_CUFT_PER_SQFT);
-    var biggerNote   = (sqftNeeded > unit.sqft) ? ' (or split rooms)' : '';
+    var picked = pickStorageUnit(cuft);
+    var unit   = picked.unit;
+    var qty    = picked.qty;
+    var perDay = unit.daily * qty;
+    var storageTotal = perDay * days;
 
-    storageUnitEl.textContent  = unit.sqft + ' sqft Prestige steel' + biggerNote;
-    storageDailyEl.textContent = '£' + unit.daily.toFixed(2);
+    storageUnitEl.textContent  = qty > 1
+      ? qty + ' × ' + unit.sqft + ' sqft Prestige steel rooms'
+      : unit.sqft + ' sqft Prestige steel room';
+    storageDailyEl.textContent = qty > 1
+      ? '£' + perDay.toFixed(2) + ' (' + qty + ' × £' + unit.daily.toFixed(2) + ')'
+      : '£' + unit.daily.toFixed(2);
     storageTotalEl.textContent = '£' + storageTotal.toFixed(2);
     return storageTotal;
   }
