@@ -1093,6 +1093,51 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
 }
 .quote-form-status:empty { display: none; }
 
+/* In-card quote-request dropdown — toggled by the Send-figures CTA.
+   Light inset panel inside the dark quote card, so the embedded form
+   fields keep their normal white-on-purple-ink styling. */
+.quote-card .qc-quote-dropdown {
+  margin: 1rem 0 0;
+  padding: 1.25rem 1.25rem 1.1rem;
+  background: #fff;
+  border-radius: 12px;
+  color: var(--brand-navy, #4d2e8f);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+.quote-card .qc-quote-dropdown[hidden] { display: none; }
+.quote-card .qc-quote-dropdown-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--np-border, #e5e7eb);
+}
+.quote-card .qc-quote-dropdown-header strong {
+  display: block;
+  font-family: "Inter", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-navy, #4d2e8f);
+}
+.quote-card .qc-quote-dropdown-header p {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--np-muted, #6b7280);
+}
+.quote-card .qc-quote-dropdown-header a {
+  color: var(--brand-navy, #4d2e8f);
+}
+.quote-card .qc-quote-dropdown .quote-form {
+  background: transparent;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+}
+/* Slight rotate on the CTA arrow when the dropdown is open. */
+.quote-card-cta[aria-expanded="true"]::after {
+  content: '';
+}
+
 /* Live quote preview — shows exactly what the email will contain. */
 .quote-preview {
   margin: 1.5rem 0 1.25rem;

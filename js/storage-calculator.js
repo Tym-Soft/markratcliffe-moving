@@ -912,6 +912,24 @@
     storageDaysInput.addEventListener('change', recalc);
   }
 
+  // CTA → toggle the in-card quote dropdown (form + preview).
+  var quoteCtaToggle = document.getElementById('quote-cta-toggle');
+  var quoteDropdown  = document.getElementById('quote-dropdown');
+  if (quoteCtaToggle && quoteDropdown) {
+    quoteCtaToggle.addEventListener('click', function () {
+      var willOpen = quoteDropdown.hidden;
+      quoteDropdown.hidden = !willOpen;
+      quoteCtaToggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      if (willOpen) {
+        requestAnimationFrame(function () {
+          quoteDropdown.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          var emailField = document.getElementById('qf-email');
+          if (emailField) emailField.focus({ preventScroll: true });
+        });
+      }
+    });
+  }
+
   // Keep the live preview in sync when the customer types postcodes etc.
   ['qf-from', 'qf-to'].forEach(function (id) {
     var el = document.getElementById(id);
