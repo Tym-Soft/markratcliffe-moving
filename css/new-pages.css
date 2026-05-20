@@ -1575,13 +1575,16 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
   outline-offset: 2px;
 }
 
-/* Bedroom row — 5 cards */
+/* Bedroom row — 6 cards (Tiny + 1/2/3/4/5+ bed) */
 .qc-bed-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0.4rem;
 }
-@media (max-width: 640px) {
+@media (max-width: 900px) {
+  .qc-bed-row { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
   .qc-bed-row { grid-template-columns: repeat(2, 1fr); }
 }
 .qc-bed-card {
