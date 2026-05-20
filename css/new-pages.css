@@ -1402,6 +1402,46 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
 }
 .quote-line.quote-line-subtotal dt { color: #fff; font-weight: 600; }
 .quote-line.quote-line-subtotal strong { color: var(--brand-bronze-light, #D6B274); }
+/* Storage-mode summary — visible only in storage / both modes, shows the
+   recommended room size in sqft + cu ft + cu m. */
+.quote-card .quote-card-storage {
+  margin: 0 0 0.85rem;
+  padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 9px;
+  text-align: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.quote-card .quote-card-storage-label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.7);
+}
+.quote-card .quote-card-storage-figures {
+  font-family: "Inter", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--brand-bronze-light, #D6B274);
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  align-items: baseline;
+}
+.quote-card .quote-card-storage-figures .qc-sep {
+  color: rgba(255,255,255,0.4);
+  font-weight: 400;
+}
+.quote-card-storage[hidden] { display: none; }
+body[data-calc-mode="removals"] .quote-card-storage { display: none !important; }
+
 .quote-card .quote-card-alt {
   margin: 0 0 0.85rem;
   font-size: 0.78rem;

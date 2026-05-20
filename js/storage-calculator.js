@@ -59,7 +59,10 @@
   var storageUnitEl     = document.getElementById('storage-unit');
   var storageDailyEl    = document.getElementById('storage-daily');
   var storageTotalEl    = document.getElementById('storage-total');
-  var grandTotalValue   = document.getElementById('cost-grand-total-value');
+  var storageSummarySqft = document.getElementById('storage-summary-sqft');
+  var storageSummaryCuft = document.getElementById('storage-summary-cuft');
+  var storageSummaryCum  = document.getElementById('storage-summary-cum');
+  var grandTotalValue    = document.getElementById('cost-grand-total-value');
 
   function pickStorageUnit(cuft) {
     var sqftNeeded = Math.ceil(cuft / STORAGE_CUFT_PER_SQFT);
@@ -287,6 +290,9 @@
       storageUnitEl.textContent  = '—';
       storageDailyEl.textContent = '£0.00';
       storageTotalEl.textContent = '£0.00';
+      if (storageSummarySqft) storageSummarySqft.textContent = '—';
+      if (storageSummaryCuft) storageSummaryCuft.textContent = '— cu ft';
+      if (storageSummaryCum)  storageSummaryCum.textContent  = '— cu m';
       return 0;
     }
 
@@ -305,6 +311,9 @@
     var qty    = picked.qty;
     var perDay = unit.daily * qty;
     var storageTotal = perDay * days;
+    var totalSqft = unit.sqft * qty;
+    var totalCuft = totalSqft * STORAGE_CUFT_PER_SQFT;
+    var totalCum  = totalCuft * 0.02832;
 
     storageUnitEl.textContent  = qty > 1
       ? qty + ' × ' + unit.sqft + ' sqft Prestige steel rooms'
@@ -313,6 +322,16 @@
       ? '£' + perDay.toFixed(2) + ' (' + qty + ' × £' + unit.daily.toFixed(2) + ')'
       : '£' + unit.daily.toFixed(2);
     storageTotalEl.textContent = '£' + storageTotal.toFixed(2);
+
+    // Customer-facing summary (sqft / cu ft / cu m of the picked room)
+    if (storageSummarySqft) {
+      storageSummarySqft.textContent = qty > 1
+        ? qty + ' × ' + unit.sqft + ' sqft (' + totalSqft + ' sqft total)'
+        : unit.sqft + ' sqft';
+    }
+    if (storageSummaryCuft) storageSummaryCuft.textContent = totalCuft.toLocaleString('en-GB') + ' cu ft';
+    if (storageSummaryCum)  storageSummaryCum.textContent  = totalCum.toFixed(2) + ' cu m';
+
     return storageTotal;
   }
 
