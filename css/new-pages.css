@@ -1332,12 +1332,9 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
   margin-bottom: 0.5rem;
   text-align: center;
 }
+/* Status label hidden from customer — the headline £ already communicates the price. */
 .quote-card-label {
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.88);
-  margin-bottom: 1.4rem;
-  line-height: 1.4;
-  text-align: center;
+  display: none;
 }
 @media (max-width: 640px) {
   .quote-card-eyebrow { font-size: 0.8rem; letter-spacing: 0.14em; }
@@ -1619,10 +1616,7 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
   line-height: 1.2;
 }
 .qc-bed-text small {
-  display: block;
-  color: rgba(255,255,255,0.7);
-  font-size: 0.7rem;
-  margin-top: 0.1rem;
+  display: none;
 }
 .qc-bed-card:has(input:checked) {
   background: rgba(200,168,118,0.22);
