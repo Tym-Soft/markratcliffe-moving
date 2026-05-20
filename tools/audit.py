@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies twenty-eight build rules:
+Verifies twenty-nine build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -49,6 +49,19 @@ Verifies twenty-eight build rules:
      link to http:// URLs (HTTPS-only).
  28. /robots.txt exists, allows crawling of the production site, and
      lists the sitemap.
+ 29. Every indexable page's body content demonstrates E-E-A-T —
+     Experience, Expertise, Authority, Trust. Concretely: the body
+     (between </nav> and <footer>) must contain at least 4 distinct
+     signals from the set below, so no page is generic / AI-written
+     filler:
+       • "Mark Ratcliffe" (organisation identity)
+       • "1982" / "since 1982" / "40 years" / "forty years" (longevity)
+       • "BAR" / "British Association of Removers" (industry authority)
+       • "BS 8564" / "Advance Payment Guarantee" (accreditation/trust)
+       • "Sussex" (first-hand local expertise)
+       • "our crew" / "our team" / "we've" / "we have" (first-person
+         experience)
+       • "01323" or other contact specifics (trust signal)
 
 Items the user's checklist mentioned that this static audit cannot
 verify (need separate runtime tooling or deployment-level checks):
@@ -282,6 +295,7 @@ def audit():
         'h1_count':              [],
         'mixed_content':         [],
         'robots_txt':            [],
+        'eeat':                  [],
     }
 
     blog_posts = []
@@ -929,6 +943,40 @@ def audit():
          'robots.txt allows crawling and references the sitemap',
          failures['robots_txt'])
 
+    # Rule 29 — E-E-A-T signals in body content
+    # Each page body must include at least 4 distinct signals from the set
+    # below — demonstrating organisation identity, longevity, industry
+    # authority, accreditation, local first-hand expertise, lived
+    # experience, and concrete contact details.
+    EEAT_SIGNALS = [
+        ('identity',     re.compile(r'\bMark\s+Ratcliffe\b', re.I)),
+        ('longevity',    re.compile(r'\b(?:since\s+1982|1982|forty\s+years|40\+?\s*years|40-?plus\s*years)\b', re.I)),
+        ('authority',    re.compile(r'\b(?:BAR\b|British\s+Association\s+of\s+Removers)\b')),
+        ('accreditation',re.compile(r'\b(?:BS\s*8564|Advance\s+Payment\s+Guarantee)\b', re.I)),
+        ('local',        re.compile(r'\b(?:Sussex|Eastbourne|East\s+Sussex|West\s+Sussex)\b', re.I)),
+        ('first_person', re.compile(r"\b(?:our\s+crew|our\s+crews|our\s+team|we['’]ve|we\s+have\s+(?:moved|packed|wrapped|loaded|been)|in\s+our\s+\d+\s*years?)\b", re.I)),
+        ('contact',      re.compile(r'\b01323\s*848\s*008\b|\b01323848008\b|\b07437\s*414\s*589\b')),
+    ]
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        m_start = NAV_END_RE.search(html)
+        m_end   = FOOTER_RE.search(html)
+        start   = m_start.end() if m_start else 0
+        end     = m_end.start() if m_end else len(html)
+        body    = html[start:end]
+        text    = TAG_RE.sub(' ', body)
+        text    = ENT_RE.sub(' ', text)
+        hits    = sum(1 for _, pat in EEAT_SIGNALS if pat.search(text))
+        if hits < 4:
+            present = [name for name, pat in EEAT_SIGNALS if pat.search(text)]
+            failures['eeat'].append(f'{p}  only {hits}/{len(EEAT_SIGNALS)} E-E-A-T signals (has: {", ".join(present) or "none"})')
+    rule('Rule 29 — body content shows E-E-A-T (≥4 of 7 trust signals)',
+         f'{len(indexable)} pages: every body demonstrates expertise/experience/authority/trust',
+         failures['eeat'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -937,7 +985,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all twenty-eight content rules satisfied.')
+    print('PASS — all twenty-nine content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
