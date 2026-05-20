@@ -787,7 +787,7 @@ def page_html() -> str:
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="1bed">
                 <span class="qc-bed-icon">__ICON_BED_1__</span>
-                <span class="qc-bed-text"><strong>1-bed</strong><small>from 500 cu ft</small></span>
+                <span class="qc-bed-text"><strong>1-bed</strong><small>from 100 cu ft</small></span>
               </label>
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="2bed">
@@ -1050,7 +1050,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260590"></script>
+  <script defer src="../js/storage-calculator.js?v=20260592"></script>
 </body>
 </html>
 """

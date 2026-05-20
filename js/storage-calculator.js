@@ -88,7 +88,7 @@
   // typical cu ft range so the headline £ figure starts at the cheapest
   // possible estimate. The customer can drag the cu ft figure higher.
   var BED_DEFAULTS = {
-    '1bed': { label: '1-bed flat or studio',         typicalCuft:  500 },
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  100 },
     '2bed': { label: '2-bed home',                   typicalCuft:  800 },
     '3bed': { label: '3-bed home',                   typicalCuft: 1200 },
     '4bed': { label: '4-bed home',                   typicalCuft: 1800 },
