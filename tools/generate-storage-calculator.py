@@ -730,32 +730,6 @@ def page_html() -> str:
 
   <nav class="np-breadcrumb" aria-label="Breadcrumb"><a href="../">Home</a> &rsaquo; <a href="./">Resources</a> &rsaquo; Storage Calculator</nav>
 
-  <section class="np-section np-section-soft">
-    <div class="np-inner">
-      <h2>Volume calculator — pick a room</h2>
-
-      <div class="storage-calc" id="storage-calc">
-        <div class="calc-tabs" role="tablist" aria-label="Room categories">
-{tabs_html}
-        </div>
-
-        <label class="calc-search" aria-label="Search items">
-          <span class="calc-search-icon">{ICON_SEARCH}</span>
-          <input type="search" id="calc-search-input" placeholder="Search Boxes &amp; cartons" aria-label="Search items in the active category">
-        </label>
-
-        <div class="calc-panels">
-{panels_html}
-        </div>
-
-        <div class="calc-actions">
-          <button id="calc-reset" type="button" class="np-btn np-btn-secondary">Reset all quantities</button>
-          <a href="#quote-form" class="np-btn np-btn-primary">Send these figures with a quote request</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="np-section">
     <div class="np-inner">
       <h2>What would you like to calculate?</h2>
@@ -811,14 +785,14 @@ def page_html() -> str:
         <label class="cost-manual-cuft" id="cost-manual-cuft-wrap">
           <span class="cost-input-label">Cubic feet (if you&rsquo;re not using the inventory)</span>
           <input type="number" id="cost-manual-cuft" min="0" step="50" value="1350" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
-          <span class="cost-input-help" id="cost-manual-cuft-help">Auto-fills with the typical figure for your chosen bedroom count. Tick items above to override with a precise volume.</span>
+          <span class="cost-input-help" id="cost-manual-cuft-help">Auto-fills with the typical figure for your chosen bedroom count. Tick items below to override with a precise volume.</span>
         </label>
       </div>
 
       <aside class="inventory-prompt" id="inventory-prompt" hidden>
         <div class="inventory-prompt-text">
           <strong>Want a head start?</strong>
-          <span id="inventory-prompt-detail">Load a typical 3-bed inventory into the item picker above. We&rsquo;ve worked out a standard loadout for that size of home — you can tweak the quantities after.</span>
+          <span id="inventory-prompt-detail">Load a typical 3-bed inventory into the item picker below. We&rsquo;ve worked out a standard loadout for that size of home — you can tweak the quantities after.</span>
         </div>
         <div class="inventory-prompt-actions">
           <button type="button" id="load-inventory-btn" class="np-btn np-btn-primary">Load typical inventory</button>
@@ -884,6 +858,33 @@ def page_html() -> str:
       </div>
 
       <p class="cost-disclaimer"><strong>Estimate only.</strong> The exact quote depends on access, stairs, the listed-property quotient, packing materials, antiques handling, timing and the actual storage duration you book. For an accurate, written, BAR-Advance-Payment-Guarantee-protected quote please <a href="../mark-ratcliffe-moving-online-removals-quote.html">request a free survey</a> — we respond within 48 hours.</p>
+    </div>
+  </section>
+
+  <section class="np-section np-section-soft">
+    <div class="np-inner">
+      <h2>Refine your inventory item-by-item (optional)</h2>
+      <p>The estimate above uses a standard inventory for your chosen bedroom count. If you want a more precise figure, tick the exact items you&rsquo;re moving below — the cu ft, cu m, kg and cost figures above will update live.</p>
+
+      <div class="storage-calc" id="storage-calc">
+        <div class="calc-tabs" role="tablist" aria-label="Room categories">
+{tabs_html}
+        </div>
+
+        <label class="calc-search" aria-label="Search items">
+          <span class="calc-search-icon">{ICON_SEARCH}</span>
+          <input type="search" id="calc-search-input" placeholder="Search Boxes &amp; cartons" aria-label="Search items in the active category">
+        </label>
+
+        <div class="calc-panels">
+{panels_html}
+        </div>
+
+        <div class="calc-actions">
+          <button id="calc-reset" type="button" class="np-btn np-btn-secondary">Reset all quantities</button>
+          <a href="#quote-form" class="np-btn np-btn-primary">Send these figures with a quote request</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1035,7 +1036,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260575"></script>
+  <script defer src="../js/storage-calculator.js?v=20260576"></script>
 </body>
 </html>
 """

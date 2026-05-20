@@ -161,7 +161,7 @@
       var sz = getHomeSize();
       var rng = TYPICAL_RANGE[sz] || '';
       manualCuftHelp.textContent = 'Typical ' + profile.label + ': ' + rng +
-        '. Auto-fills with this figure; tick items above for a precise volume — or hit "Load inventory" to populate the room lists for you.';
+        '. Auto-fills with this figure; tick items below for a precise volume — or hit "Load inventory" to populate the room lists for you.';
     }
   }
 
@@ -217,7 +217,7 @@
 
     costVehicle.textContent = profile.vehicle;
     costVolume.textContent  = cuft === 0
-      ? '£0 (tick items above or use the cu ft input)'
+      ? '£0 (tick items below or use the cu ft input)'
       : pounds(volCost) + ' (' + cuft + ' cu ft × £' + profile.rate.toFixed(2) + '/cu ft)';
     costMileage.textContent = pounds(mileCost) + ' (' + miles + ' mi × £' + profile.mileRate.toFixed(2) + '/mi)';
     costMinimum.textContent = pounds(profile.minCharge) + ' (' + profile.label + ')' + (minApplied ? '  · APPLIED' : '');
