@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies the eight build rules:
+Verifies the nine build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -11,6 +11,8 @@ Verifies the eight build rules:
   6. No two indexable pages share the same <title> tag.
   7. Meta descriptions are ≤145 characters.
   8. <title> pixel width is ≤550px (Arial Bold ≈ 20px, matches SF).
+  9. Every <img> has an alt attribute (empty alt allowed only with
+     role="presentation" or aria-hidden="true" for decorative images).
 
 Run from the site root:
     python3 tools/audit.py
@@ -195,6 +197,7 @@ def audit():
         'duplicate_titles':      [],
         'meta_description':      [],
         'title_pixel_width':     [],
+        'image_alt':             [],
     }
 
     blog_posts = []
@@ -382,6 +385,35 @@ def audit():
          f'{len(indexable)} pages all within {TITLE_PX_MAX}px',
          failures['title_pixel_width'])
 
+    # Rule 9 — every <img> has an alt attribute (decorative may use alt="" + role/aria-hidden)
+    img_re = re.compile(r'<img\b([^>]*)>', re.I)
+    attr_re = re.compile(r'(\w[\w-]*)\s*=\s*"([^"]*)"', re.I)
+    n_imgs_scanned = 0
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        for m in img_re.finditer(html):
+            attrs = dict(attr_re.findall(m.group(1)))
+            # ignore srcs inside <picture>'s <source> — these are <img>, not <source>, so always check
+            n_imgs_scanned += 1
+            src = (attrs.get('src') or attrs.get('data-src') or '(no src)')[:80]
+            if 'alt' not in attrs:
+                failures['image_alt'].append(f'no-alt   {p}  ({src})')
+                continue
+            alt = attrs['alt'].strip()
+            if not alt:
+                role = attrs.get('role', '').lower()
+                hidden = attrs.get('aria-hidden', '').lower()
+                if role == 'presentation' or hidden == 'true':
+                    continue  # decorative — OK
+                failures['image_alt'].append(f'empty-alt {p}  ({src})')
+
+    rule('Rule 9 — every <img> has alt text',
+         f'{n_imgs_scanned} images across {len(indexable)} pages all have alt (or decorative role)',
+         failures['image_alt'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -390,7 +422,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all eight content rules satisfied.')
+    print('PASS — all nine content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
