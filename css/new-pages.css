@@ -1363,10 +1363,11 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
   color: rgba(255,255,255,0.7);
   margin-top: 0.15rem;
 }
+/* Internal breakdown — values populate the DOM (so the office email
+   body can pull them) but it's hidden from the customer; the inc-VAT
+   headline £ is the only figure they need to see. */
 .quote-card-breakdown {
-  display: grid;
-  gap: 0.55rem;
-  margin: 0 0 0.85rem;
+  display: none;
 }
 .quote-line {
   display: flex;
