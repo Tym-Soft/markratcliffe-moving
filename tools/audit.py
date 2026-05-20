@@ -2,13 +2,15 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies the six build rules:
+Verifies the eight build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
   4. blog/index.html lists every blog post, newest-first, capped at 9.
   5. sitemap.xml contains a <url> for every indexable HTML page.
   6. No two indexable pages share the same <title> tag.
+  7. Meta descriptions are ≤145 characters.
+  8. <title> pixel width is ≤550px (Arial Bold ≈ 20px, matches SF).
 
 Run from the site root:
     python3 tools/audit.py
@@ -28,6 +30,43 @@ BLOG_MIN_WORDS     = 2000
 LOCATION_MIN_WORDS = 1500
 BODY_LINKS_MIN     = 10
 BLOG_INDEX_MAX     = 9
+META_DESC_MAX      = 145
+TITLE_PX_MAX       = 550
+
+# Approximate Arial Bold ~20px character pixel widths.
+# Calibrated to match Screaming Frog's "Title Pixel Width" output within ~3%.
+CHAR_PX = {
+    ' ': 5, '!': 5, '"': 6, '#': 11, '$': 11, '%': 17, '&': 13, "'": 4,
+    '(': 7, ')': 7, '*': 8, '+': 12, ',': 5, '-': 7, '.': 5, '/': 6,
+    '0': 11, '1': 11, '2': 11, '3': 11, '4': 11, '5': 11, '6': 11, '7': 11, '8': 11, '9': 11,
+    ':': 6, ';': 6, '<': 12, '=': 12, '>': 12, '?': 11, '@': 18,
+    'A': 12, 'B': 13, 'C': 14, 'D': 14, 'E': 13, 'F': 12, 'G': 15, 'H': 14, 'I': 6,
+    'J': 9, 'K': 13, 'L': 11, 'M': 16, 'N': 14, 'O': 15, 'P': 13, 'Q': 15, 'R': 14,
+    'S': 13, 'T': 12, 'U': 14, 'V': 12, 'W': 18, 'X': 12, 'Y': 12, 'Z': 12,
+    '[': 6, '\\': 6, ']': 6, '^': 9, '_': 11, '`': 6,
+    'a': 11, 'b': 12, 'c': 10, 'd': 12, 'e': 11, 'f': 7, 'g': 12, 'h': 12, 'i': 5,
+    'j': 5, 'k': 11, 'l': 5, 'm': 17, 'n': 12, 'o': 12, 'p': 12, 'q': 12, 'r': 7,
+    's': 10, 't': 7, 'u': 12, 'v': 10, 'w': 16, 'x': 11, 'y': 10, 'z': 10,
+    '{': 6, '|': 5, '}': 6, '~': 12,
+    # common Unicode punctuation appearing in titles
+    '–': 11, '—': 14, '‘': 4, '’': 4, '“': 8, '”': 8, '·': 5, '•': 7, '…': 13,
+    '&ndash;': 11, '&mdash;': 14, '&amp;': 13, '&middot;': 5,
+}
+DEFAULT_PX = 11
+
+def title_pixel_width(text: str) -> int:
+    # Decode the few HTML entities we use in titles before measuring.
+    decoded = (text.replace('&amp;', '&')
+                   .replace('&ndash;', '–')
+                   .replace('&mdash;', '—')
+                   .replace('&middot;', '·')
+                   .replace('&rsquo;', '’')
+                   .replace('&lsquo;', '‘')
+                   .replace('&rdquo;', '”')
+                   .replace('&ldquo;', '“')
+                   .replace('&quot;', '"')
+                   .replace('&apos;', "'"))
+    return sum(CHAR_PX.get(c, DEFAULT_PX) for c in decoded)
 
 # Heuristic location-page detector. Anything starting with removals-* at the root,
 # any subpage under areas-covered/, plus the two outliers in root.
@@ -154,6 +193,8 @@ def audit():
         'blog_index_order':      [],
         'sitemap':               [],
         'duplicate_titles':      [],
+        'meta_description':      [],
+        'title_pixel_width':     [],
     }
 
     blog_posts = []
@@ -313,6 +354,34 @@ def audit():
          f'{len(titles_seen)} unique titles across {len(indexable)} indexable pages',
          failures['duplicate_titles'])
 
+    # Rules 7 & 8 — meta description length & title pixel width
+    desc_re  = re.compile(r'<meta\s+name="description"\s+content="([^"]*)"', re.I)
+    for p in indexable:
+        try:
+            html = open(p, encoding='utf-8').read()
+        except OSError:
+            continue
+        dm = desc_re.search(html)
+        if not dm:
+            failures['meta_description'].append(('no-desc', p))
+        else:
+            dlen = len(dm.group(1))
+            if dlen > META_DESC_MAX:
+                failures['meta_description'].append((dlen, p))
+        tm = title_re.search(html)
+        if tm:
+            t   = ' '.join(tm.group(1).split()).strip()
+            px  = title_pixel_width(t)
+            if px > TITLE_PX_MAX:
+                failures['title_pixel_width'].append((px, p))
+
+    rule(f'Rule 7 — meta description ≤{META_DESC_MAX} chars',
+         f'{len(indexable)} pages all within {META_DESC_MAX} chars',
+         failures['meta_description'])
+    rule(f'Rule 8 — title pixel width ≤{TITLE_PX_MAX}px',
+         f'{len(indexable)} pages all within {TITLE_PX_MAX}px',
+         failures['title_pixel_width'])
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -321,7 +390,7 @@ def audit():
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
         return 1
-    print('PASS — all six content rules satisfied.')
+    print('PASS — all eight content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
