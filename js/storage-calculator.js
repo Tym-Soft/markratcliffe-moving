@@ -81,7 +81,7 @@
     { name: 'Luton Van (3.5t)',  base:  360, included:  500, rate: 1.61, mileRate: 2.00 },
     { name: '7.5 Tonne Lorry',   base:  650, included: 1200, rate: 1.61, mileRate: 2.75 },
     { name: '18 Tonne Lorry',    base:  850, included: 1800, rate: 1.61, mileRate: 4.00 },
-    { name: '44 Tonne Artic',    base: 1000, included: 2800, rate: 1.61, mileRate: 4.00 }
+    { name: '44 Tonne Artic',    base: 2000, included: 2800, rate: 1.61, mileRate: 4.00 }
   ];
 
   // Bedroom presets — auto-fill the LOWER bound of each property's
