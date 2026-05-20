@@ -927,7 +927,7 @@ def page_html() -> str:
               <strong id="storage-summary-cum">— cu m</strong>
             </span>
           </div>
-          <p class="quote-card-alt" data-show-modes="storage both">Also available: <strong>75 sqft low-ceiling room at £6.91/day</strong> — ideal if your contents won&rsquo;t stack high.</p>
+          <p class="quote-card-alt" data-show-modes="storage both">Also available: <strong>75 sqft low-ceiling room at £5.76/day (nett)</strong> — ideal if your contents won&rsquo;t stack high.</p>
 
           <a href="#quote-form" class="quote-card-cta">Send these figures for a quote &rarr;</a>
           <p class="quote-card-disclaimer">Estimate only. The exact quote depends on access, stairs, packing materials, antiques handling and timing. <a href="../mark-ratcliffe-moving-online-removals-quote.html">Request a free survey</a> — reply in 48 hours.</p>
@@ -1058,7 +1058,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260617"></script>
+  <script defer src="../js/storage-calculator.js?v=20260620"></script>
 </body>
 </html>
 """

@@ -33,25 +33,23 @@
   var costVAT        = document.getElementById('cost-vat');
   var costTotal      = document.getElementById('cost-total');
 
-  // Storage-unit price list (sqft, daily rate inc VAT & insurance).
-  // Source: Mark Ratcliffe Moving Prestige steel storage rate sheet.
+  // Storage-unit price list (sqft, NETT daily rate — VAT added at booking).
+  // Source: Mark Ratcliffe Moving Prestige steel storage rate sheet
+  // ("Rate Nett £" column).
   var STORAGE_UNITS = [
-    { sqft:  25, daily:  2.59 },
-    { sqft:  30, daily:  3.02 },
-    { sqft:  40, daily:  4.50 },
-    { sqft:  60, daily:  6.48 },
-    { sqft:  65, daily:  7.44 },
-    { sqft:  75, daily:  8.90 },
-    { sqft: 120, daily: 13.68 },
-    { sqft: 145, daily: 15.54 },
-    { sqft: 200, daily: 21.60 },
-    { sqft: 280, daily: 24.48 }
+    { sqft:  25, daily:  2.16 },
+    { sqft:  30, daily:  2.52 },
+    { sqft:  40, daily:  3.74 },
+    { sqft:  60, daily:  5.40 },
+    { sqft:  65, daily:  6.19 },
+    { sqft:  75, daily:  7.42 },
+    { sqft: 120, daily: 11.40 },
+    { sqft: 145, daily: 12.95 },
+    { sqft: 200, daily: 18.00 },
+    { sqft: 280, daily: 20.40 }
   ];
-  // Lower-ceiling 75 sqft room (cheaper than the standard 75). Shown as a
-  // side-by-side option whenever the auto-picker lands on the 75 sqft band
-  // — the customer can pick the lower-ceiling option if their contents
-  // won't stack high.
-  var STORAGE_LOW_CEILING_75 = { sqft: 75, daily: 6.91, label: '75 sqft low-ceiling' };
+  // Lower-ceiling 75 sqft room — nett rate.
+  var STORAGE_LOW_CEILING_75 = { sqft: 75, daily: 5.76, label: '75 sqft low-ceiling' };
   var STORAGE_CUFT_PER_SQFT = 7; // packing efficiency: 7 cu ft per sqft of floor
 
   var storageEnabled    = document.getElementById('storage-enabled');
