@@ -1314,27 +1314,34 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
 }
 .quote-card-eyebrow {
   font-family: "Inter", sans-serif;
-  font-size: 0.74rem;
+  font-size: 0.95rem;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: rgba(255,255,255,0.78);
-  margin-bottom: 0.3rem;
+  letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.88);
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
 .quote-card-amount {
   font-family: "Inter", sans-serif;
-  font-size: 3.6rem;
+  font-size: 6rem;
   font-weight: 800;
   line-height: 1;
   color: var(--brand-bronze-light, #D6B274);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.35rem;
+  letter-spacing: -0.04em;
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
 .quote-card-label {
-  font-size: 0.84rem;
+  font-size: 0.9rem;
   color: rgba(255,255,255,0.88);
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.4rem;
   line-height: 1.4;
+  text-align: center;
+}
+@media (max-width: 640px) {
+  .quote-card-eyebrow { font-size: 0.8rem; letter-spacing: 0.14em; }
+  .quote-card-amount  { font-size: 3.6rem; }
 }
 .quote-card-meta {
   display: grid;
