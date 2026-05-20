@@ -962,6 +962,7 @@ body[data-calc-mode="storage"] .storage-details { display: grid !important; }
 }
 .rate-table tbody tr:nth-child(even) td { background: #fafafa; }
 .rate-table strong { color: var(--brand-navy, #4d2e8f); }
+.rate-table-sub { display: block; color: var(--np-muted, #6b7280); font-size: 0.78rem; font-weight: 400; margin-top: 0.1rem; }
 @media (max-width: 760px) {
   .rate-table th, .rate-table td { padding: 0.6rem 0.7rem; font-size: 0.85rem; }
 }

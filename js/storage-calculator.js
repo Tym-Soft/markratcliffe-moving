@@ -71,39 +71,45 @@
     return STORAGE_UNITS[STORAGE_UNITS.length - 1]; // bigger than largest — flag this
   }
 
-  // Rate bands from the published Mark Ratcliffe Moving rate table.
-  // Each band: max volume in cu ft, vehicle label, £/cu ft range,
-  // minimum charge range, and the per-mile mileage charge for that
-  // vehicle (varies — heavier vehicles cost more per mile to run).
-  var BANDS = [
-    { max:  600, vehicle: 'Luton Van (3.5t)',    rateMin: 2.00, rateMax: 2.50, minMin:  250, minMax:  650, mileRate: 2.00 },
-    { max: 1100, vehicle: '7.5 Tonne Lorry',     rateMin: 1.40, rateMax: 1.80, minMin:  800, minMax: 1200, mileRate: 2.50 },
-    { max: 2000, vehicle: '18–26 Tonne Rigid',   rateMin: 1.20, rateMax: 1.60, minMin: 1400, minMax: 2500, mileRate: 3.00 },
-    { max: Infinity, vehicle: '44 Tonne Artic',  rateMin: 1.00, rateMax: 1.40, minMin: 2500, minMax: 5000, mileRate: 4.00 }
-  ];
+  // Per-home-size pricing profile. The chosen home size drives the
+  // vehicle, the £/cu ft rate, the per-mile mileage rate AND the
+  // minimum charge — Mark Ratcliffe Moving's published pricing model.
+  //
+  // Vehicle mapping (per the rate sheet):
+  //   Small  →  Luton Van (3.5t)
+  //   Medium →  7.5 – 18 Tonne Lorry
+  //   Large  →  18 Tonne+ / 44 Tonne Artic
+  var HOME_PROFILES = {
+    small: {
+      vehicle:   'Luton Van (3.5t)',
+      rate:      2.25,   // £/cu ft (mid of £2.00–£2.50)
+      mileRate:  2.00,   // £/mile
+      minCharge: 360
+    },
+    medium: {
+      vehicle:   '7.5 – 18 Tonne Lorry',
+      rate:      1.60,   // £/cu ft (mid of £1.40–£1.80)
+      mileRate:  2.75,   // £/mile (mid of 7.5t £2.50 and 18t £3.00)
+      minCharge: 650
+    },
+    large: {
+      vehicle:   '18 Tonne+ / Artic',
+      rate:      1.30,   // £/cu ft (covers 18-26T and artic)
+      mileRate:  3.50,   // £/mile (mid of £3.00 and £4.00)
+      minCharge: 1000
+    }
+  };
 
   function pounds(n) {
     return '£' + Math.round(n).toLocaleString('en-GB');
   }
 
-  // Fixed minimum charges per home size — Mark Ratcliffe Moving's
-  // published rate. Independent of vehicle band; covers our basic
-  // floor cost for that size of job before mileage and any premium
-  // for big-volume contents.
-  var HOME_SIZE_MIN = { small: 360, medium: 650, large: 1000 };
-  // Home-size labels used in the headline copy and emails.
+  // Friendly labels for home sizes (used in headline + emails).
   var HOME_SIZE_LABEL = {
     small:  '1-bed flat / studio',
     medium: '2-3 bed home',
     large:  '4+ bed / antiques / country property'
   };
-
-  // £/cu ft rate by home size: small = bottom of band, medium = mid, large = top.
-  function rateForSize(band, size) {
-    if (size === 'small') return band.rateMin;
-    if (size === 'large') return band.rateMax;
-    return (band.rateMin + band.rateMax) / 2;
-  }
 
   function getHomeSize() {
     var checked = document.querySelector('input[name="home-size"]:checked');
@@ -162,40 +168,29 @@
     var miles = parseInt((milesInput && milesInput.value) || '0', 10);
     if (isNaN(miles) || miles < 0) miles = 0;
 
-    // Pick the band — the smallest band whose max ≥ cuft (or the last band for huge loads)
-    var band = BANDS[BANDS.length - 1];
-    for (var i = 0; i < BANDS.length; i++) {
-      if (cuft <= BANDS[i].max) { band = BANDS[i]; break; }
-    }
-
-    var size      = getHomeSize();
-    var rate      = rateForSize(band, size);
-    var minCharge = HOME_SIZE_MIN[size] || HOME_SIZE_MIN.medium;
+    var size     = getHomeSize();
+    var profile  = HOME_PROFILES[size] || HOME_PROFILES.medium;
+    var sizeText = size.charAt(0).toUpperCase() + size.slice(1);
     var headlineLabel = document.getElementById('cost-headline-label');
 
-    if (cuft === 0) {
-      costVehicle.textContent = 'Add items above to see your vehicle';
-      costVolume.textContent  = '£0';
-      costMileage.textContent = pounds(miles * band.mileRate);
-      costMinimum.textContent = pounds(minCharge);
-      costTotal.textContent   = pounds(minCharge + miles * band.mileRate);
-      if (headlineLabel) headlineLabel.textContent = 'Add items to see your removals cost';
-      updateStorage(cuft, minCharge + miles * band.mileRate);
-      return;
-    }
-
-    var volCost  = cuft * rate;
-    var mileCost = miles * band.mileRate;
-    var base     = Math.max(minCharge, volCost);
+    var volCost  = cuft * profile.rate;
+    var mileCost = miles * profile.mileRate;
+    var base     = Math.max(profile.minCharge, volCost);
     var total    = base + mileCost;
-    var sizeText = size.charAt(0).toUpperCase() + size.slice(1);
 
-    costVehicle.textContent = band.vehicle;
-    costVolume.textContent  = pounds(volCost) + ' (' + cuft + ' cu ft × £' + rate.toFixed(2) + '/cu ft)';
-    costMileage.textContent = pounds(mileCost) + ' (' + miles + ' mi × £' + band.mileRate.toFixed(2) + '/mi)';
-    costMinimum.textContent = pounds(minCharge) + ' (' + sizeText + ' home)';
+    costVehicle.textContent = profile.vehicle;
+    costVolume.textContent  = cuft === 0
+      ? '£0 (tick items above)'
+      : pounds(volCost) + ' (' + cuft + ' cu ft × £' + profile.rate.toFixed(2) + '/cu ft)';
+    costMileage.textContent = pounds(mileCost) + ' (' + miles + ' mi × £' + profile.mileRate.toFixed(2) + '/mi)';
+    costMinimum.textContent = pounds(profile.minCharge) + ' (' + sizeText + ' home)';
     costTotal.textContent   = pounds(total);
-    if (headlineLabel) headlineLabel.textContent = 'Estimated removals cost · ' + sizeText + ' home, ' + miles + ' mi';
+
+    if (headlineLabel) {
+      headlineLabel.textContent = cuft === 0
+        ? sizeText + ' home minimum · ' + miles + ' mi'
+        : 'Estimated removals cost · ' + sizeText + ' home, ' + miles + ' mi';
+    }
 
     updateStorage(cuft, total);
   }

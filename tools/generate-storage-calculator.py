@@ -470,15 +470,15 @@ def page_html() -> str:
             <legend class="cost-input-label">Home size</legend>
             <label class="cost-size-option">
               <input type="radio" name="home-size" value="small">
-              <span><strong>Small</strong> <small>1-bed flat or studio</small></span>
+              <span><strong>Small</strong> <small>1-bed flat or studio &middot; Luton Van &middot; £360 min</small></span>
             </label>
             <label class="cost-size-option">
               <input type="radio" name="home-size" value="medium" checked>
-              <span><strong>Medium</strong> <small>2-3 bed home</small></span>
+              <span><strong>Medium</strong> <small>2-3 bed home &middot; 7.5 – 18 Tonne lorry &middot; £650 min</small></span>
             </label>
             <label class="cost-size-option">
               <input type="radio" name="home-size" value="large">
-              <span><strong>Large</strong> <small>4+ bed / antiques / country property</small></span>
+              <span><strong>Large</strong> <small>4+ bed / antiques / country property &middot; 18 Tonne+ / Artic &middot; £1,000 min</small></span>
             </label>
           </fieldset>
         </div>
@@ -584,17 +584,44 @@ def page_html() -> str:
 
   <section class="np-section np-section-soft">
     <div class="np-inner">
-      <h2>Lorry-size guide for Mark Ratcliffe Moving jobs</h2>
-      <p>Our crews use these rough cubic-footage bands to choose which lorry leaves the depot on the day. The calculator above gives a load-size estimate based on the same bands:</p>
-      <ul>
-        <li><strong>Up to 80 cu ft</strong> — a small van load. A single-person move, a few items only.</li>
-        <li><strong>80-250 cu ft</strong> — Luton van load. A small flat or one-bedroom property.</li>
-        <li><strong>250-600 cu ft</strong> — 3.5-tonne lorry. A two-bedroom flat or small house.</li>
-        <li><strong>600-1100 cu ft</strong> — 7.5-tonne lorry. A typical three- to four-bedroom Sussex home.</li>
-        <li><strong>1100-1700 cu ft</strong> — 18-tonne lorry. A large four-bedroom house with contents.</li>
-        <li><strong>1700+ cu ft</strong> — articulated lorry or multiple loads. A substantial country property with antiques and outbuildings.</li>
-      </ul>
-      <p>For an accurate price (with the BAR Advance Payment Guarantee protecting your deposit and our BS 8564 international-removals accreditation), book a <a href="../mark-ratcliffe-moving-online-removals-quote.html">free in-home survey</a>. We respond within 48 hours.</p>
+      <h2>Mark Ratcliffe Moving pricing model</h2>
+      <p>Each home size maps to the vehicle our crews actually send, the per-cu-ft rate we apply, the per-mile mileage rate for that vehicle, and a minimum-charge floor. The calculator uses these published figures directly:</p>
+      <table class="rate-table">
+        <thead>
+          <tr>
+            <th>Home size</th>
+            <th>Vehicle</th>
+            <th>£ / cu ft</th>
+            <th>£ / mile</th>
+            <th>Minimum charge</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Small</strong><br><span class="rate-table-sub">1-bed flat or studio</span></td>
+            <td>Luton Van (3.5t)</td>
+            <td>£2.00 – £2.50</td>
+            <td>£2.00</td>
+            <td><strong>£360</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Medium</strong><br><span class="rate-table-sub">2-3 bed home</span></td>
+            <td>7.5 – 18 Tonne lorry</td>
+            <td>£1.40 – £1.80</td>
+            <td>£2.50 – £3.00</td>
+            <td><strong>£650</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Large</strong><br><span class="rate-table-sub">4+ bed / antiques / country</span></td>
+            <td>18 Tonne+ / 44 Tonne Artic</td>
+            <td>£1.00 – £1.60</td>
+            <td>£3.00 – £4.00</td>
+            <td><strong>£1,000</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <p>The cost formula: <strong>cost = max(minimum charge, volume × £/cu ft) + (miles × £/mile)</strong>. The minimum charge protects us against very small jobs that wouldn&rsquo;t otherwise cover the day. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
+      <p>For an accurate price, book a <a href="../mark-ratcliffe-moving-online-removals-quote.html">free in-home survey</a>. We respond within 48 hours.</p>
     </div>
   </section>
 
@@ -634,7 +661,7 @@ def page_html() -> str:
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260569"></script>
+  <script defer src="../js/storage-calculator.js?v=20260570"></script>
 </body>
 </html>
 """
