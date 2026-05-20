@@ -783,27 +783,27 @@ def page_html() -> str:
             <label class="bedroom-card">
               <input type="radio" name="home-size" value="1bed">
               <span class="bedroom-icon">__ICON_BED_1__</span>
-              <span class="bedroom-text"><strong>1-bed flat or studio</strong><small>500–900 cu ft &middot; Luton Van</small></span>
+              <span class="bedroom-text"><strong>1-bed flat or studio</strong><small>typical 700 cu ft</small></span>
             </label>
             <label class="bedroom-card">
               <input type="radio" name="home-size" value="2bed">
               <span class="bedroom-icon">__ICON_BED_2__</span>
-              <span class="bedroom-text"><strong>2-bed home</strong><small>800–1,400 cu ft &middot; 7.5 – 18 Tonne</small></span>
+              <span class="bedroom-text"><strong>2-bed home</strong><small>typical 1,100 cu ft</small></span>
             </label>
             <label class="bedroom-card">
               <input type="radio" name="home-size" value="3bed" checked>
               <span class="bedroom-icon">__ICON_BED_3__</span>
-              <span class="bedroom-text"><strong>3-bed home</strong><small>1,200–1,800 cu ft &middot; 7.5 – 18 Tonne</small></span>
+              <span class="bedroom-text"><strong>3-bed home</strong><small>typical 1,500 cu ft</small></span>
             </label>
             <label class="bedroom-card">
               <input type="radio" name="home-size" value="4bed">
               <span class="bedroom-icon">__ICON_BED_4__</span>
-              <span class="bedroom-text"><strong>4-bed home</strong><small>1,800–2,800 cu ft &middot; 18 Tonne+</small></span>
+              <span class="bedroom-text"><strong>4-bed home</strong><small>typical 2,200 cu ft</small></span>
             </label>
             <label class="bedroom-card">
               <input type="radio" name="home-size" value="5bed">
               <span class="bedroom-icon">__ICON_BED_5__</span>
-              <span class="bedroom-text"><strong>5+ bed / antiques / country</strong><small>2,800–4,000+ cu ft &middot; 18 Tonne+ / Artic</small></span>
+              <span class="bedroom-text"><strong>5+ bed / antiques / country</strong><small>typical 3,000+ cu ft</small></span>
             </label>
           </fieldset>
 
@@ -957,12 +957,12 @@ def page_html() -> str:
   <section class="np-section np-section-soft">
     <div class="np-inner">
       <h2>Mark Ratcliffe Moving pricing model</h2>
-      <p>Each bedroom count maps to the vehicle our crews actually send, a flat base charge that covers the typical volume for that property, a per-cu-ft rate for anything above that cap, and the per-mile mileage rate for that vehicle. The calculator uses these published figures directly:</p>
+      <p>The calculator picks the right vehicle from the cubic feet you enter. Each vehicle carries a flat base charge that covers the first chunk of volume, then £1.61 for every extra cu ft above that. Mileage is added on top at the per-vehicle rate. The bedroom selector is just a head-start — it auto-fills typical cu ft and a standard inventory — but the vehicle and pricing are driven by the actual volume.</p>
       <table class="rate-table">
         <thead>
           <tr>
-            <th>Home size</th>
             <th>Vehicle</th>
+            <th>Typical job</th>
             <th>Base charge<br>(includes up to&hellip;)</th>
             <th>Excess £ / cu ft</th>
             <th>£ / mile</th>
@@ -970,43 +970,29 @@ def page_html() -> str:
         </thead>
         <tbody>
           <tr>
-            <td><strong>1-bed</strong><br><span class="rate-table-sub">flat or studio</span></td>
-            <td>Luton Van (3.5t)</td>
+            <td><strong>Luton Van (3.5t)</strong></td>
+            <td>1-bed flat or studio</td>
             <td><strong>£360</strong><br>(first 500 cu ft)</td>
             <td>£1.61</td>
             <td>£2.00</td>
           </tr>
           <tr>
-            <td><strong>2-bed</strong><br><span class="rate-table-sub">home</span></td>
-            <td>7.5 – 18 Tonne lorry</td>
-            <td><strong>£650</strong><br>(first 800 cu ft)</td>
-            <td>£1.61</td>
-            <td>£2.75</td>
-          </tr>
-          <tr>
-            <td><strong>3-bed</strong><br><span class="rate-table-sub">home</span></td>
-            <td>7.5 – 18 Tonne lorry</td>
+            <td><strong>7.5 – 18 Tonne lorry</strong></td>
+            <td>2-bed and 3-bed homes</td>
             <td><strong>£650</strong><br>(first 1,200 cu ft)</td>
             <td>£1.61</td>
             <td>£2.75</td>
           </tr>
           <tr>
-            <td><strong>4-bed</strong><br><span class="rate-table-sub">home</span></td>
-            <td>18 Tonne+ / 44 Tonne Artic</td>
-            <td><strong>£1,000</strong><br>(first 1,800 cu ft)</td>
-            <td>£1.61</td>
-            <td>£3.50</td>
-          </tr>
-          <tr>
-            <td><strong>5+ bed</strong><br><span class="rate-table-sub">antiques / country property</span></td>
-            <td>18 Tonne+ / 44 Tonne Artic</td>
+            <td><strong>18 Tonne+ / 44 Tonne Artic</strong></td>
+            <td>4-bed, 5+ bed, antiques, country property</td>
             <td><strong>£1,000</strong><br>(first 2,800 cu ft)</td>
             <td>£1.61</td>
             <td>£3.50</td>
           </tr>
         </tbody>
       </table>
-      <p>The cost formula: <strong>cost = base charge + max(0, cu ft − included volume) × £/cu ft + miles × £/mile</strong>. The base charge already covers the first chunk of cu ft for that property (a 1-bed&rsquo;s £360 includes the first 500 cu ft). Above the included volume, every extra cu ft is added at the per-cu-ft rate. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
+      <p>The cost formula: <strong>cost = base charge + max(0, cu ft − included volume) × £1.61 + miles × £/mile</strong>. The calculator tries each vehicle tier and picks the one that produces the lowest total — so the moment your volume needs a bigger truck, the base steps up to the next tier (no over-paying for the wrong size). Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
       <p>For an accurate price, book a <a href="../mark-ratcliffe-moving-online-removals-quote.html">free in-home survey</a>. We respond within 48 hours.</p>
     </div>
   </section>
@@ -1053,7 +1039,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260586"></script>
+  <script defer src="../js/storage-calculator.js?v=20260587"></script>
 </body>
 </html>
 """
