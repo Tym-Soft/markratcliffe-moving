@@ -382,11 +382,13 @@ body[data-calc-mode="removals"] [data-show-modes]:not([data-show-modes~="removal
 body[data-calc-mode="storage"]  [data-show-modes]:not([data-show-modes~="storage"])  { display: none !important; }
 body[data-calc-mode="both"]     [data-show-modes]:not([data-show-modes~="both"])     { display: none !important; }
 
-/* In storage-only mode, hide the storage toggle row (it's redundant — the
- * user already declared they want storage) and force the storage details
- * block visible regardless of the [hidden] attribute. */
-body[data-calc-mode="storage"] .storage-toggle { display: none; }
-body[data-calc-mode="storage"] .storage-details { display: grid !important; }
+/* In both storage-only AND both modes, hide the "Do you also need storage?"
+ * checkbox (storage is already implied) and force the storage details panel
+ * visible regardless of its [hidden] attribute. */
+body[data-calc-mode="storage"] .storage-toggle,
+body[data-calc-mode="both"]    .storage-toggle { display: none; }
+body[data-calc-mode="storage"] .storage-details,
+body[data-calc-mode="both"]    .storage-details { display: grid !important; }
 
 .calc-totals {
   position: sticky;

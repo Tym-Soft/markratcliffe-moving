@@ -124,13 +124,14 @@
   function applyCalcMode() {
     var mode = getCalcMode();
     document.body.setAttribute('data-calc-mode', mode);
-    // In storage-only mode, force the storage block open — the user has
-    // already declared they want storage, no need to make them tick the box.
+    // Storage is implied by both 'storage' and 'both' — auto-check the
+    // checkbox and reveal the details panel so the redundant "Do you also
+    // need storage?" question doesn't appear in either mode.
     if (storageEnabled && storageDetails) {
-      if (mode === 'storage') {
+      if (mode === 'storage' || mode === 'both') {
         storageEnabled.checked = true;
         storageDetails.hidden = false;
-      } else if (mode === 'removals') {
+      } else {
         storageEnabled.checked = false;
         storageDetails.hidden = true;
       }
