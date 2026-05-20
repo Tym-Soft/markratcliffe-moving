@@ -563,14 +563,12 @@
   // Apply the initial mode on load so the right sections show
   applyCalcMode();
 
-  // Inventory auto-fill prompt — shown when the customer picks a bedroom
-  // count but hasn't ticked any inventory items yet. They can load the
-  // standard inventory for that size, or skip and edit cu ft manually.
+  // Inventory toggle prompt — a switch that auto-fills the standard
+  // loadout for the picked bedroom. Customers can also tick items
+  // manually via the "Or tick items manually" link.
   var inventoryPrompt    = document.getElementById('inventory-prompt');
   var inventoryPromptMsg = document.getElementById('inventory-prompt-detail');
-  var loadInventoryBtn   = document.getElementById('load-inventory-btn');
-  var skipInventoryBtn   = document.getElementById('dismiss-inventory-prompt');
-  var inventoryPromptDismissed = false;
+  var inventoryToggle    = document.getElementById('inventory-toggle');
 
   function hasAnyInventory() {
     for (var i = 0; i < inputs.length; i++) {
@@ -582,94 +580,99 @@
 
   function showInventoryPrompt() {
     if (!inventoryPrompt) return;
-    if (inventoryPromptDismissed) return;
-    if (hasAnyInventory()) { inventoryPrompt.hidden = true; return; }
+    // Hide prompt entirely if the current mode is storage-only (inventory
+    // still drives cu ft but the toggle isn't needed there) or if the
+    // current property has no preset (Tiny).
+    if (getCalcMode() === 'storage') { inventoryPrompt.hidden = true; return; }
     var size = getHomeSize();
     if (!BED_INVENTORY_DATA[size]) { inventoryPrompt.hidden = true; return; }
-    var profile = getBed();
+    // Refresh the bedroom label inside the toggle text.
+    var bedLabelEl = document.getElementById('inventory-toggle-bed');
+    if (bedLabelEl) bedLabelEl.textContent = getBed().label;
     if (inventoryPromptMsg) {
       inventoryPromptMsg.textContent =
-        'Want me to auto-fill a standard ' + profile.label +
-        ' inventory? You can tweak quantities after.';
-    }
-    if (loadInventoryBtn) {
-      loadInventoryBtn.textContent = 'Load ' + profile.label + ' inventory';
+        'Auto-fills a standard ' + getBed().label + ' loadout — adjust quantities after.';
     }
     inventoryPrompt.hidden = false;
+  }
+
+  function loadPresetForSize(size) {
+    var preset = BED_INVENTORY_DATA[size];
+    if (!preset) return false;
+    clearAllInventoryInputs();
+    Object.keys(preset).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.value = preset[id];
+    });
+    return true;
   }
 
   function clearAllInventoryInputs() {
     for (var i = 0; i < inputs.length; i++) inputs[i].value = 0;
   }
 
-  function loadInventoryForCurrentSize() {
-    var size = getHomeSize();
-    var preset = BED_INVENTORY_DATA[size];
-    if (!preset) return;
-    if (hasAnyInventory()) {
-      var ok = window.confirm(
-        'This will replace the items you have already ticked with the standard ' +
-        getBed().label + ' inventory. Continue?'
-      );
-      if (!ok) return;
-    }
-    clearAllInventoryInputs();
-    Object.keys(preset).forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.value = preset[id];
-    });
-    inventoryPromptDismissed = true;
-    if (inventoryPrompt) inventoryPrompt.hidden = true;
-    // Reveal the inventory refinement section so the customer can tweak.
+  function setInventoryVisible(visible, scroll) {
     var invSection = document.getElementById('inventory-section');
-    if (invSection) {
-      invSection.hidden = false;
+    if (!invSection) return;
+    invSection.hidden = !visible;
+    if (visible && scroll) {
       invSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    manualCuftTouched = true; // inventory now drives cu ft
-    recalc();
   }
 
-  if (loadInventoryBtn) {
-    loadInventoryBtn.addEventListener('click', loadInventoryForCurrentSize);
-  }
-  if (skipInventoryBtn) {
-    skipInventoryBtn.addEventListener('click', function () {
-      inventoryPromptDismissed = true;
-      if (inventoryPrompt) inventoryPrompt.hidden = true;
+  // Toggle change handler — ON loads the preset and shows the editor;
+  // OFF clears items and hides the editor.
+  if (inventoryToggle) {
+    inventoryToggle.addEventListener('change', function () {
+      if (inventoryToggle.checked) {
+        var loaded = loadPresetForSize(getHomeSize());
+        if (loaded) {
+          setInventoryVisible(true, true);
+          manualCuftTouched = true; // inventory now drives cu ft
+        } else {
+          inventoryToggle.checked = false; // no preset, snap back
+        }
+      } else {
+        clearAllInventoryInputs();
+        setInventoryVisible(false, false);
+      }
+      recalc();
     });
   }
 
-  // "Add manually" — open the inventory editor empty so the customer can
-  // tick items without the auto-fill.
+  // "Or tick items manually" — open the empty editor without auto-fill.
   var addManuallyBtn = document.getElementById('add-inventory-manually');
   if (addManuallyBtn) {
     addManuallyBtn.addEventListener('click', function () {
-      inventoryPromptDismissed = true;
-      if (inventoryPrompt) inventoryPrompt.hidden = true;
-      var invSection = document.getElementById('inventory-section');
-      if (invSection) {
-        invSection.hidden = false;
-        invSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      setInventoryVisible(true, true);
     });
   }
 
-  // Home size radios — switching bedrooms always:
+  // Home size radios — switching bedrooms:
   //   • resets cu ft to the new property's default
   //   • clears any loaded inventory items
-  //   • hides the inventory editor (back to clean slate)
-  //   • re-shows the auto-fill prompt for the new size
+  //   • if the auto-fill toggle is ON: reloads the preset for the new
+  //     bedroom (and keeps the editor open + scrolls)
+  //   • if the toggle is OFF: hides the editor (clean slate)
   var homeSizeRadios = document.querySelectorAll('input[name="home-size"]');
   for (var hs = 0; hs < homeSizeRadios.length; hs++) {
     homeSizeRadios[hs].addEventListener('change', function () {
-      inventoryPromptDismissed = false;
       manualCuftTouched = false;
       clearAllInventoryInputs();
-      var invSection = document.getElementById('inventory-section');
-      if (invSection) invSection.hidden = true;
       applyHomeSizeDefault();
-      showInventoryPrompt();
+      showInventoryPrompt(); // refreshes the toggle label for the new size
+      if (inventoryToggle && inventoryToggle.checked) {
+        if (loadPresetForSize(getHomeSize())) {
+          setInventoryVisible(true, false);
+          manualCuftTouched = true;
+        } else {
+          // No preset for this size (e.g. Tiny) — snap toggle back to OFF.
+          inventoryToggle.checked = false;
+          setInventoryVisible(false, false);
+        }
+      } else {
+        setInventoryVisible(false, false);
+      }
       recalc();
     });
   }

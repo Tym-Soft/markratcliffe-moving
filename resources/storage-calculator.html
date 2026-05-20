@@ -19,7 +19,7 @@
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260623" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260624" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -336,18 +336,20 @@
             </div>
           </fieldset>
 
-          <!-- AUTO-FILL PROMPT (in-card variant) -->
-          <aside class="qc-inv-prompt" id="inventory-prompt" hidden>
-            <div class="qc-inv-prompt-text">
-              <strong>Want a head start?</strong>
-              <span id="inventory-prompt-detail">Load a typical 3-bed inventory into the item picker below.</span>
-            </div>
-            <div class="qc-inv-prompt-actions">
-              <button type="button" id="load-inventory-btn" class="qc-inv-load">Load typical inventory</button>
-              <button type="button" id="add-inventory-manually" class="qc-inv-manual">Add manually</button>
-              <button type="button" id="dismiss-inventory-prompt" class="qc-inv-skip">Skip</button>
-            </div>
-          </aside>
+          <!-- INVENTORY TOGGLE — flip ON to auto-fill the standard loadout
+               for the selected bedroom; OFF clears it. Tick items manually
+               via the "Or tick items manually" link. -->
+          <div class="qc-inv-prompt" id="inventory-prompt" hidden>
+            <label class="qc-inv-toggle">
+              <input type="checkbox" id="inventory-toggle" class="qc-inv-toggle-input" aria-describedby="inventory-prompt-detail">
+              <span class="qc-inv-toggle-switch" aria-hidden="true"></span>
+              <span class="qc-inv-toggle-text">
+                <strong>Use our <span id="inventory-toggle-bed">3-bed home</span> inventory list?</strong>
+                <small id="inventory-prompt-detail">Auto-fills a standard loadout — adjust quantities below after.</small>
+              </span>
+            </label>
+            <button type="button" id="add-inventory-manually" class="qc-inv-manual-link">Or tick items manually &rarr;</button>
+          </div>
 
           <!-- Inventory editor — appears in-card after the customer clicks Load. -->
           <div class="qc-inventory" id="inventory-section" hidden>
@@ -3395,6 +3397,6 @@
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260623"></script>
+  <script defer src="../js/storage-calculator.js?v=20260624"></script>
 </body>
 </html>
