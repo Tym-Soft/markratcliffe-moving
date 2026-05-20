@@ -803,7 +803,7 @@ def page_html() -> str:
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="3bed" checked>
                 <span class="qc-bed-icon">__ICON_BED_3__</span>
-                <span class="qc-bed-text"><strong>3-bed</strong><small>£900 base · 1,200 cu ft</small></span>
+                <span class="qc-bed-text"><strong>3-bed</strong><small>£900 base · 1,000 cu ft</small></span>
               </label>
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="4bed">
@@ -983,7 +983,7 @@ def page_html() -> str:
           <tr><td><strong>Tiny move</strong> (few boxes, single items)</td><td><strong>£300</strong></td><td>first 300 cu ft</td><td>£1.00</td></tr>
           <tr><td><strong>1-bed</strong> flat or studio</td><td><strong>£500</strong></td><td>first 500 cu ft</td><td>£1.51+v</td></tr>
           <tr><td><strong>2-bed</strong> home</td><td><strong>£650</strong></td><td>first 800 cu ft</td><td>£1.51+v</td></tr>
-          <tr><td><strong>3-bed</strong> home</td><td><strong>£900</strong></td><td>first 1,200 cu ft</td><td>£1.71+v</td></tr>
+          <tr><td><strong>3-bed</strong> home</td><td><strong>£900</strong></td><td>first 1,000 cu ft</td><td>£1.71+v</td></tr>
           <tr><td><strong>4-bed</strong> home</td><td><strong>£1,500</strong></td><td>first 1,800 cu ft</td><td>£1.71+v</td></tr>
           <tr><td><strong>5+ bed</strong> / antiques / country</td><td><strong>£2,500</strong></td><td>first 2,800 cu ft</td><td>£1.71+v</td></tr>
         </tbody>
@@ -1036,7 +1036,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260612"></script>
+  <script defer src="../js/storage-calculator.js?v=20260613"></script>
 </body>
 </html>
 """

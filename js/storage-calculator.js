@@ -101,7 +101,7 @@
     'tiny': { label: 'Tiny move',                    typicalCuft:  300, base:  300, rate: 1.00 },
     '1bed': { label: '1-bed flat or studio',         typicalCuft:  500, base:  500, rate: 1.51 },
     '2bed': { label: '2-bed home',                   typicalCuft:  800, base:  650, rate: 1.51 },
-    '3bed': { label: '3-bed home',                   typicalCuft: 1200, base:  900, rate: 1.71 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1000, base:  900, rate: 1.71 },
     '4bed': { label: '4-bed home',                   typicalCuft: 1800, base: 1500, rate: 1.71 },
     '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800, base: 2500, rate: 1.71 }
   };
