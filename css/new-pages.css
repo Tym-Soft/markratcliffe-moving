@@ -1965,13 +1965,46 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
 }
 .quote-card .qc-inventory-summary-item .qc-isum-name {
   flex: 1;
+  min-width: 0;
 }
 .quote-card .qc-inventory-summary-item .qc-isum-cuft {
   color: rgba(255,255,255,0.7);
   font-variant-numeric: tabular-nums;
   flex: 0 0 auto;
   font-size: 0.78rem;
+  min-width: 4.2rem;
+  text-align: right;
 }
+.quote-card .qc-isum-stepper {
+  display: inline-flex;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+}
+.quote-card .qc-isum-btn {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.14);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.28);
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .12s, border-color .12s;
+}
+.quote-card .qc-isum-btn:hover,
+.quote-card .qc-isum-btn:focus-visible {
+  background: rgba(255,255,255,0.28);
+  border-color: var(--brand-bronze, #C8A876);
+  outline: none;
+}
+.quote-card .qc-isum-btn:active { transform: translateY(1px); }
 
 /* In-card inventory editor — light inset panel sitting on the dark card.
    Revealed by the Load button. The .storage-calc inside keeps its

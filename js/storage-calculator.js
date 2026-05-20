@@ -107,6 +107,10 @@
         roomHtml +=
           '<div class="qc-inventory-summary-item">' +
             '<span class="qc-isum-name">' + qty + ' × ' + escapeHtml(name) + '</span>' +
+            '<div class="qc-isum-stepper">' +
+              '<button type="button" class="qc-isum-btn" data-action="minus" data-target="' + escapeHtml(inp.id) + '" aria-label="Decrease ' + escapeHtml(name) + '">−</button>' +
+              '<button type="button" class="qc-isum-btn" data-action="plus"  data-target="' + escapeHtml(inp.id) + '" aria-label="Increase ' + escapeHtml(name) + '">+</button>' +
+            '</div>' +
             '<span class="qc-isum-cuft">' + Math.round(itemCuft) + ' cu ft</span>' +
           '</div>';
       }
@@ -133,6 +137,27 @@
     } else {
       inventorySummary.hidden = true;
     }
+  }
+
+  // Event delegation on the summary container — handles + / − clicks on
+  // every rendered item, drives the source input qty (which is what the
+  // rest of the calculator reads from), then recalcs.
+  if (inventorySummaryRooms) {
+    inventorySummaryRooms.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('.qc-isum-btn');
+      if (!btn) return;
+      var id = btn.getAttribute('data-target');
+      if (!id) return;
+      var srcInput = document.getElementById(id);
+      if (!srcInput) return;
+      var qty = parseInt(srcInput.value, 10) || 0;
+      if (btn.getAttribute('data-action') === 'minus') {
+        srcInput.value = Math.max(0, qty - 1);
+      } else {
+        srcInput.value = qty + 1;
+      }
+      recalc();
+    });
   }
 
   // Returns an array of { unit, qty } pairs that cover the required sqft.
