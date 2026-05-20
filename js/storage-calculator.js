@@ -77,10 +77,24 @@
     { max: Infinity, vehicle: '44 Tonne Artic',  rateMin: 1.00, rateMax: 1.40, minMin: 2500, minMax: 5000, mileRate: 4.00 }
   ];
 
-  function poundsRange(lo, hi) {
-    var l = Math.round(lo), h = Math.round(hi);
-    if (l === h) return '£' + l.toLocaleString('en-GB');
-    return '£' + l.toLocaleString('en-GB') + ' – £' + h.toLocaleString('en-GB');
+  function pounds(n) {
+    return '£' + Math.round(n).toLocaleString('en-GB');
+  }
+
+  // Single rate per home size: small = bottom of band, medium = mid,
+  // large = top. Same idea for the minimum charge.
+  function rateForSize(band, size) {
+    if (size === 'small') return { rate: band.rateMin, min: band.minMin };
+    if (size === 'large') return { rate: band.rateMax, min: band.minMax };
+    return {
+      rate: (band.rateMin + band.rateMax) / 2,
+      min:  (band.minMin  + band.minMax) / 2
+    };
+  }
+
+  function getHomeSize() {
+    var checked = document.querySelector('input[name="home-size"]:checked');
+    return checked ? checked.value : 'medium';
   }
 
   function loadSizeLabel(cuft) {
@@ -119,33 +133,34 @@
       if (cuft <= BANDS[i].max) { band = BANDS[i]; break; }
     }
 
+    var size = getHomeSize();
+    var rs   = rateForSize(band, size);
+
     if (cuft === 0) {
       costVehicle.textContent = 'Add items above to see your vehicle band';
       costVolume.textContent  = '£0';
-      costMileage.textContent = '£' + (miles * band.mileRate).toLocaleString('en-GB');
-      costMinimum.textContent = poundsRange(band.minMin, band.minMax);
-      costTotal.textContent   = poundsRange(band.minMin + miles * band.mileRate, band.minMax + miles * band.mileRate);
+      costMileage.textContent = pounds(miles * band.mileRate);
+      costMinimum.textContent = pounds(rs.min);
+      costTotal.textContent   = pounds(rs.min + miles * band.mileRate);
+      updateStorage(cuft, rs.min + miles * band.mileRate);
       return;
     }
 
-    var volMin   = cuft * band.rateMin;
-    var volMax   = cuft * band.rateMax;
+    var volCost  = cuft * rs.rate;
     var mileCost = miles * band.mileRate;
-    var baseMin  = Math.max(band.minMin, volMin);
-    var baseMax  = Math.max(band.minMax, volMax);
-    var totalMin = baseMin + mileCost;
-    var totalMax = baseMax + mileCost;
+    var base     = Math.max(rs.min, volCost);
+    var total    = base + mileCost;
 
     costVehicle.textContent = band.vehicle;
-    costVolume.textContent  = poundsRange(volMin, volMax) + ' (' + cuft + ' cu ft × £' + band.rateMin.toFixed(2) + '–£' + band.rateMax.toFixed(2) + '/cu ft)';
-    costMileage.textContent = '£' + mileCost.toLocaleString('en-GB') + ' (' + miles + ' mi × £' + band.mileRate.toFixed(2) + '/mi)';
-    costMinimum.textContent = poundsRange(band.minMin, band.minMax);
-    costTotal.textContent   = poundsRange(totalMin, totalMax);
+    costVolume.textContent  = pounds(volCost) + ' (' + cuft + ' cu ft × £' + rs.rate.toFixed(2) + '/cu ft, ' + size + ' home)';
+    costMileage.textContent = pounds(mileCost) + ' (' + miles + ' mi × £' + band.mileRate.toFixed(2) + '/mi)';
+    costMinimum.textContent = pounds(rs.min);
+    costTotal.textContent   = pounds(total);
 
-    updateStorage(cuft, totalMin, totalMax);
+    updateStorage(cuft, total);
   }
 
-  function updateStorage(cuft, removalsMin, removalsMax) {
+  function updateStorage(cuft, removalsTotal) {
     if (!storageEnabled || !storageDetails) return;
     var enabled = storageEnabled.checked;
     storageDetails.hidden = !enabled;
@@ -176,7 +191,7 @@
     storageTotalEl.textContent  = '£' + storageTotal.toFixed(2) + ' (' + weeks + ' wk × £' + unit.weekly.toFixed(2) + ')';
 
     if (grandTotalRow && grandTotalValue) {
-      grandTotalValue.textContent = poundsRange(removalsMin + storageTotal, removalsMax + storageTotal);
+      grandTotalValue.textContent = pounds(removalsTotal + storageTotal);
       grandTotalRow.hidden = false;
     }
   }
@@ -286,6 +301,12 @@
     milesInput.addEventListener('change', recalc);
   }
 
+  // Home size radios
+  var homeSizeRadios = document.querySelectorAll('input[name="home-size"]');
+  for (var hs = 0; hs < homeSizeRadios.length; hs++) {
+    homeSizeRadios[hs].addEventListener('change', recalc);
+  }
+
   // Storage toggle + weeks
   if (storageEnabled)    storageEnabled.addEventListener('change', recalc);
   if (storageWeeksInput) {
@@ -358,6 +379,7 @@
         '  Vehicle band:  ' + vehicle,
         '',
         'ESTIMATED REMOVALS COST',
+        '  Home size:       ' + getHomeSize(),
         '  Distance:        ' + miles + ' miles',
         '  Volume cost:     ' + volumeCost,
         '  Mileage cost:    ' + mileageCost,

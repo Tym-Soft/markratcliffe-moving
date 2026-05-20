@@ -540,7 +540,54 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
   padding: 1.25rem 1.5rem;
   margin: 1rem 0 0.75rem;
 }
+.cost-inputs { display: flex; flex-direction: column; gap: 1.1rem; }
 .cost-input { display: flex; flex-direction: column; gap: 0.4rem; }
+.cost-size-input {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.cost-size-input legend {
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  color: var(--brand-navy, #4d2e8f);
+  font-size: 0.95rem;
+}
+.cost-size-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--np-border, #e5e7eb);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  font-family: "Inter", sans-serif;
+  font-size: 0.94rem;
+  color: var(--brand-navy, #4d2e8f);
+}
+.cost-size-option:hover { background: rgba(200,168,118,0.08); border-color: var(--brand-bronze, #C8A876); }
+.cost-size-option input[type="radio"] {
+  margin: 0.25rem 0 0;
+  accent-color: var(--brand-bronze, #C8A876);
+  cursor: pointer;
+}
+.cost-size-option strong { display: block; }
+.cost-size-option small {
+  display: block;
+  color: var(--np-muted, #6b7280);
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-top: 0.1rem;
+}
+.cost-size-option:has(input:checked) {
+  background: rgba(200,168,118,0.15);
+  border-color: var(--brand-bronze, #C8A876);
+}
 .cost-input-label {
   font-family: "Inter", sans-serif;
   font-weight: 600;
