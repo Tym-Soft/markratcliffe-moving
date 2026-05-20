@@ -79,8 +79,9 @@
   //   • Nett total  = volume cost + miles × picked-vehicle mile rate
   //   • VAT         = nett × 20%
   //   • Inc-VAT     = nett × 1.20 (storage rates already include VAT)
-  var EXCESS_RATE = 1.41;
-  var VAT_RATE    = 0.20;
+  // Default excess £/cu ft if a property doesn't override its own rate.
+  var DEFAULT_EXCESS_RATE = 1.41;
+  var VAT_RATE            = 0.20;
   var VEHICLE_TIERS = [
     { name: 'Luton Van (3.5t)', maxCuft:  800, mileRate: 2.00 },
     { name: '7.5 Tonne Lorry',  maxCuft: 1500, mileRate: 2.75 },
@@ -92,17 +93,18 @@
   // and also defines the volume the property's base charge already
   // covers. Above typicalCuft, each extra cu ft adds £1.21.
   var BED_DEFAULTS = {
-    'tiny': { label: 'Tiny move',                    typicalCuft:  100, base:  300 },
-    '1bed': { label: '1-bed flat or studio',         typicalCuft:  500, base:  500 },
-    '2bed': { label: '2-bed home',                   typicalCuft:  800, base:  650 },
-    '3bed': { label: '3-bed home',                   typicalCuft: 1200, base:  900 },
-    '4bed': { label: '4-bed home',                   typicalCuft: 1800, base: 1500 },
-    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800, base: 2500 }
+    'tiny': { label: 'Tiny move',                    typicalCuft:  100, base:  360, rate: 0.35 },
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  500, base:  500, rate: 1.41 },
+    '2bed': { label: '2-bed home',                   typicalCuft:  800, base:  650, rate: 1.41 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1200, base:  900, rate: 1.41 },
+    '4bed': { label: '4-bed home',                   typicalCuft: 1800, base: 1500, rate: 1.41 },
+    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800, base: 2500, rate: 1.41 }
   };
 
   function computeVolumeCost(cuft, bed) {
     var excess = Math.max(0, cuft - bed.typicalCuft);
-    return bed.base + excess * EXCESS_RATE;
+    var rate = (typeof bed.rate === 'number') ? bed.rate : DEFAULT_EXCESS_RATE;
+    return bed.base + excess * rate;
   }
   function pickVehicle(cuft) {
     for (var i = 0; i < VEHICLE_TIERS.length; i++) {
@@ -116,6 +118,10 @@
 
   function pounds(n) {
     return '£' + Math.round(n).toLocaleString('en-GB');
+  }
+  // Pounds with pence — used for the headline estimate so VAT pence show.
+  function poundsPence(n) {
+    return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
   function getBed() {
@@ -237,7 +243,7 @@
     } else if (excessCuft === 0) {
       costVolume.textContent = pounds(bed.base) + ' (' + bed.label + ' base · ' + cuft + ' / ' + bed.typicalCuft + ' cu ft included)';
     } else {
-      costVolume.textContent = pounds(volCost) + ' (' + pounds(bed.base) + ' base + ' + excessCuft + ' extra × £' + EXCESS_RATE.toFixed(2) + ')';
+      costVolume.textContent = pounds(volCost) + ' (' + pounds(bed.base) + ' base + ' + excessCuft + ' extra × £' + (bed.rate || DEFAULT_EXCESS_RATE).toFixed(2) + ')';
     }
     costMileage.textContent = pounds(mileCost) + ' (' + miles + ' × £' + vehicle.mileRate.toFixed(2) + ')';
     if (costNettTotal) costNettTotal.textContent = pounds(removalsNett);
@@ -247,7 +253,7 @@
     // --- STORAGE leg + GRAND TOTAL (inc VAT for removals; storage already inc) ---
     var storageTotal = updateStorage(cuft, mode);
     var grandTotal = removalsInc + storageTotal;
-    if (grandTotalValue) grandTotalValue.textContent = pounds(grandTotal);
+    if (grandTotalValue) grandTotalValue.textContent = poundsPence(grandTotal);
 
     if (headlineLabel) {
       var bits = [];

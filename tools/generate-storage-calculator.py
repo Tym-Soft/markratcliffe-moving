@@ -718,7 +718,7 @@ def page_html() -> str:
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260607" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260608" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -788,7 +788,7 @@ def page_html() -> str:
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="tiny">
                 <span class="qc-bed-icon">__ICON_TINY__</span>
-                <span class="qc-bed-text"><strong>Tiny</strong><small>£300 base · 100 cu ft</small></span>
+                <span class="qc-bed-text"><strong>Tiny</strong><small>£360 base · 100 cu ft · £0.35/cu ft</small></span>
               </label>
               <label class="qc-bed-card">
                 <input type="radio" name="home-size" value="1bed">
@@ -980,7 +980,7 @@ def page_html() -> str:
           </tr>
         </thead>
         <tbody>
-          <tr><td><strong>Tiny move</strong> (few boxes, single items)</td><td><strong>£300</strong></td><td>first 100 cu ft</td><td>£1.41</td></tr>
+          <tr><td><strong>Tiny move</strong> (few boxes, single items)</td><td><strong>£360</strong></td><td>first 100 cu ft</td><td>£0.35</td></tr>
           <tr><td><strong>1-bed</strong> flat or studio</td><td><strong>£500</strong></td><td>first 500 cu ft</td><td>£1.41</td></tr>
           <tr><td><strong>2-bed</strong> home</td><td><strong>£650</strong></td><td>first 800 cu ft</td><td>£1.41</td></tr>
           <tr><td><strong>3-bed</strong> home</td><td><strong>£900</strong></td><td>first 1,200 cu ft</td><td>£1.41</td></tr>
@@ -1036,7 +1036,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260607"></script>
+  <script defer src="../js/storage-calculator.js?v=20260608"></script>
 </body>
 </html>
 """
