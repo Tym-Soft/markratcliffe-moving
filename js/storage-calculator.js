@@ -365,6 +365,7 @@
     recalcCost(effectiveCuft);
     updateInventorySummary();
     updateTabCounts();
+    updateQuotePreview(effectiveCuft, invKg);
   }
 
   // Update the per-tab item-count badge — shows total qty of all ticked
@@ -392,6 +393,117 @@
         badge.hidden = true;
       }
     }
+  }
+
+  // Build the live quote-preview panel inside the contact form (shows
+  // the customer exactly what will be emailed).
+  function updateQuotePreview(cuft, invKg) {
+    var mode = getCalcMode();
+    var modeLabel = mode === 'storage' ? 'Storage only'
+                  : mode === 'removals' ? 'Removals only'
+                  : 'Removals + Storage';
+    var fromInput = document.getElementById('qf-from');
+    var toInput   = document.getElementById('qf-to');
+    var fromPC = fromInput ? fromInput.value.trim().toUpperCase() : '';
+    var toPC   = toInput   ? toInput.value.trim().toUpperCase()   : '';
+    var miles = parseInt((milesInput && milesInput.value) || '0', 10) || 0;
+    var days  = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10) || 0;
+
+    var bedForLabel = getBed();         // customer's bedroom radio (label only)
+    var bedForPrice = pickCheapestBed(cuft);
+    var vehicle = pickVehicle(cuft);
+    var kg = invKg > 0 ? Math.round(invKg) : Math.round(cuft * 6.5);
+    var cum = (cuft * 0.02832).toFixed(2);
+
+    function setText(id, text) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
+    setText('qp-mode',  modeLabel);
+    setText('qp-from',  fromPC || '—');
+    setText('qp-to',    toPC   || '—');
+    setText('qp-miles', miles + ' mile' + (miles === 1 ? '' : 's'));
+    setText('qp-storage-duration', days + ' day' + (days === 1 ? '' : 's') +
+      ' (~' + (days / 7).toFixed(days % 7 === 0 ? 0 : 1) + ' wk)');
+    setText('qp-bedroom', bedForLabel.label);
+    setText('qp-volume',  cuft.toLocaleString('en-GB') + ' cu ft · ' + cum + ' cu m');
+    setText('qp-weight',  kg.toLocaleString('en-GB') + ' kg');
+    setText('qp-vehicle', vehicle.name);
+
+    // Storage room
+    var picks = pickStorageUnits(cuft);
+    var totalSqft = 0;
+    var roomBits = [];
+    for (var p = 0; p < picks.length; p++) {
+      totalSqft += picks[p].unit.sqft * picks[p].qty;
+      roomBits.push((picks[p].qty > 1 ? picks[p].qty + ' × ' : '') + picks[p].unit.sqft + ' sqft');
+    }
+    setText('qp-storage-room', roomBits.join(' + '));
+
+    // Pricing (nett)
+    var rmExcess = Math.max(0, cuft - bedForPrice.typicalCuft);
+    var rmRate   = (typeof bedForPrice.rate === 'number') ? bedForPrice.rate : DEFAULT_EXCESS_RATE;
+    var rmVolCost = bedForPrice.base + rmExcess * rmRate;
+    var rmMileCost = miles * vehicle.mileRate;
+    var rmNett = (mode === 'storage') ? 0 : rmVolCost + rmMileCost;
+    var stPerDay = 0;
+    for (var s = 0; s < picks.length; s++) stPerDay += picks[s].unit.daily * picks[s].qty;
+    var stNett = (mode === 'removals' || cuft === 0) ? 0 : stPerDay * days;
+
+    function moneyNett(n) { return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    setText('qp-removals-price', moneyNett(rmNett));
+    setText('qp-storage-price',  moneyNett(stNett));
+    setText('qp-total-price',    moneyNett(rmNett + stNett));
+
+    // Inventory list grouped by room
+    var roomsEl = document.getElementById('qp-inventory-rooms');
+    var totalEl = document.getElementById('qp-inventory-total');
+    if (!roomsEl || !totalEl) return;
+    var html = '';
+    var totalItems = 0;
+    var totalCuft  = 0;
+    for (var pi = 0; pi < panels.length; pi++) {
+      var panel = panels[pi];
+      var roomLabel = '';
+      for (var ti = 0; ti < tabs.length; ti++) {
+        if (tabs[ti].dataset.target === panel.id) {
+          var lab = tabs[ti].querySelector('.calc-tab-label');
+          if (lab) roomLabel = lab.textContent;
+          break;
+        }
+      }
+      var items = panel.querySelectorAll('.calc-item');
+      var roomHtml = '';
+      var roomCuft = 0;
+      var roomCount = 0;
+      for (var ii = 0; ii < items.length; ii++) {
+        var inp = items[ii].querySelector('input[type="number"][data-cuft]');
+        if (!inp) continue;
+        var qty = parseInt(inp.value, 10) || 0;
+        if (qty <= 0) continue;
+        var nameEl = items[ii].querySelector('.calc-item-name');
+        var name = nameEl ? nameEl.textContent : 'Item';
+        var cuftPer = parseFloat(inp.dataset.cuft) || 0;
+        var itemCuft = qty * cuftPer;
+        roomCuft += itemCuft;
+        roomCount += qty;
+        roomHtml +=
+          '<div class="qp-inv-row"><span class="qp-inv-name">' + qty + ' × ' + escapeHtml(name) + '</span>' +
+          '<span class="qp-inv-cuft">' + Math.round(itemCuft) + ' cu ft</span></div>';
+      }
+      if (roomCount > 0) {
+        totalItems += roomCount;
+        totalCuft  += roomCuft;
+        html += '<div class="qp-inv-room"><div class="qp-inv-room-head"><span>' +
+          escapeHtml(roomLabel) + '</span><span>' + Math.round(roomCuft) + ' cu ft</span></div>' +
+          roomHtml + '</div>';
+      }
+    }
+    roomsEl.innerHTML = html;
+    totalEl.textContent = totalItems > 0
+      ? totalItems + ' items · ' + Math.round(totalCuft).toLocaleString('en-GB') + ' cu ft'
+      : '0 items';
   }
 
   function recalcCost(cuft) {
@@ -800,120 +912,183 @@
     storageDaysInput.addEventListener('change', recalc);
   }
 
+  // Keep the live preview in sync when the customer types postcodes etc.
+  ['qf-from', 'qf-to'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', recalc);
+  });
+
   // Quote request form — build a pre-filled mailto: with all the
   // calculator output + the customer's contact details.
   var quoteForm = document.getElementById('quote-request-form');
   if (quoteForm) {
     quoteForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      var email   = document.getElementById('qf-email').value.trim();
-      var phone   = document.getElementById('qf-phone').value.trim();
-      var fromPC  = document.getElementById('qf-from').value.trim().toUpperCase();
-      var toPC    = document.getElementById('qf-to').value.trim().toUpperCase();
-      var notes   = document.getElementById('qf-notes').value.trim();
-      var status  = document.getElementById('qf-status');
-
-      var cuft        = (totalCuft  && totalCuft.textContent)  || '0';
-      var cum         = (totalCum   && totalCum.textContent)   || '0';
-      var kg          = (totalKg    && totalKg.textContent)    || '0';
-      var van         = (vanEstimate && vanEstimate.textContent) || '';
-      var vehicle     = (costVehicle && costVehicle.textContent) || '';
-      var volumeCost  = (costVolume && costVolume.textContent) || '';
-      var mileageCost = (costMileage && costMileage.textContent) || '';
-      var minimumCost = (costMinimum && costMinimum.textContent) || '';
-      var totalCost   = (costTotal && costTotal.textContent) || '';
-      var miles       = (milesInput && milesInput.value) || '0';
-
-      // Storage details (if enabled)
-      var storageWanted = !!(storageEnabled && storageEnabled.checked);
-      var storageDays   = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10);
-      var storageUnitTxt  = (storageUnitEl && storageUnitEl.textContent) || '';
-      var storageDailyTxt = (storageDailyEl && storageDailyEl.textContent) || '';
-      var storageTotalTxt = (storageTotalEl && storageTotalEl.textContent) || '';
-      var grandTotalTxt   = (grandTotalValue && grandTotalValue.textContent) || '';
-
-      var picked = [];
-      var anyItems = false;
-      for (var i = 0; i < inputs.length; i++) {
-        var q = parseInt(inputs[i].value, 10);
-        if (!q || q < 0) continue;
-        anyItems = true;
-        var item = inputs[i].closest('.calc-item');
-        var nameEl = item ? item.querySelector('.calc-item-name') : null;
-        var name = nameEl ? nameEl.textContent : 'Item';
-        picked.push('  - ' + q + ' x ' + name);
-      }
-      if (!anyItems) picked.push('  (no items selected on the calculator)');
+      var email  = document.getElementById('qf-email').value.trim();
+      var phone  = document.getElementById('qf-phone').value.trim();
+      var fromPC = document.getElementById('qf-from').value.trim().toUpperCase();
+      var toPC   = document.getElementById('qf-to').value.trim().toUpperCase();
+      var notes  = document.getElementById('qf-notes').value.trim();
+      var status = document.getElementById('qf-status');
 
       var calcMode = getCalcMode();
       var modeLabel = calcMode === 'storage' ? 'Storage only'
                     : calcMode === 'removals' ? 'Removals only'
-                    : 'Removals + storage';
-      var subjectParts = [modeLabel + ' quote request', cuft + ' cu ft', fromPC + ' -> ' + toPC];
-      var subject = subjectParts.join(' | ');
+                    : 'Removals + Storage';
 
-      var body = [
-        'Hi Mark Ratcliffe Moving,',
-        '',
-        'Please prepare a quote for my move.',
-        '',
-        'CONTACT',
-        '  Email: ' + email,
-        '  Phone: ' + phone,
-        '  Moving from postcode: ' + fromPC,
-        '  Moving to postcode:   ' + toPC,
-        '',
-        'CALCULATOR TOTALS',
-        '  Quote type:    ' + modeLabel,
-        '  Volume:        ' + cuft + ' cu ft (' + cum + ' cu m / ' + kg + ' kg)',
-        '  Load size:     ' + van,
-        ''
-      ];
+      // Pull the live figures the page already computed.
+      var cuft = parseInt((totalCuft && totalCuft.textContent) || '0', 10) || 0;
+      var cum  = (totalCum && totalCum.textContent) || '0';
+      var kg   = parseInt((totalKg && totalKg.textContent) || '0', 10) || 0;
+      var miles = parseInt((milesInput && milesInput.value) || '0', 10) || 0;
+      var days  = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10) || 0;
+      var bedSelected = getBed();
+      var bedForPrice = pickCheapestBed(cuft);
+      var vehicle = pickVehicle(cuft);
+
+      // Removals pricing (nett — VAT added at booking)
+      var rmExcess   = Math.max(0, cuft - bedForPrice.typicalCuft);
+      var rmRate     = (typeof bedForPrice.rate === 'number') ? bedForPrice.rate : DEFAULT_EXCESS_RATE;
+      var rmVolCost  = bedForPrice.base + rmExcess * rmRate;
+      var rmMileCost = miles * vehicle.mileRate;
+      var rmNett     = (calcMode === 'storage') ? 0 : rmVolCost + rmMileCost;
+
+      // Storage pricing (nett)
+      var picks      = pickStorageUnits(cuft);
+      var stPerDay   = 0;
+      var stTotalSqft = 0;
+      var stBits     = [];
+      for (var i = 0; i < picks.length; i++) {
+        stPerDay   += picks[i].unit.daily * picks[i].qty;
+        stTotalSqft += picks[i].unit.sqft  * picks[i].qty;
+        stBits.push((picks[i].qty > 1 ? picks[i].qty + ' × ' : '') + picks[i].unit.sqft + ' sqft');
+      }
+      var stNett = (calcMode === 'removals' || cuft === 0) ? 0 : stPerDay * days;
+
+      function fp(n) { return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+      function pad(label, val) { while (label.length < 22) label += ' '; return label + val; }
+
+      // Items grouped by room
+      var roomLines = [];
+      var totalItems = 0;
+      for (var p = 0; p < panels.length; p++) {
+        var panel = panels[p];
+        var roomLabel = '';
+        for (var t = 0; t < tabs.length; t++) {
+          if (tabs[t].dataset.target === panel.id) {
+            var lab = tabs[t].querySelector('.calc-tab-label');
+            if (lab) roomLabel = lab.textContent;
+            break;
+          }
+        }
+        var items = panel.querySelectorAll('.calc-item');
+        var rows = [];
+        var roomCuft = 0;
+        var roomCount = 0;
+        for (var ii = 0; ii < items.length; ii++) {
+          var inp = items[ii].querySelector('input[type="number"][data-cuft]');
+          if (!inp) continue;
+          var qty = parseInt(inp.value, 10) || 0;
+          if (qty <= 0) continue;
+          var nameEl = items[ii].querySelector('.calc-item-name');
+          var name = nameEl ? nameEl.textContent : 'Item';
+          var cuftPer = parseFloat(inp.dataset.cuft) || 0;
+          var itemCuft = qty * cuftPer;
+          roomCuft += itemCuft;
+          roomCount += qty;
+          rows.push('    ' + qty + ' × ' + name + ' — ' + Math.round(itemCuft) + ' cu ft');
+        }
+        if (roomCount > 0) {
+          totalItems += roomCount;
+          roomLines.push('  ' + roomLabel + ' (' + Math.round(roomCuft) + ' cu ft)');
+          roomLines = roomLines.concat(rows);
+          roomLines.push('');
+        }
+      }
+
+      // Compose the email body — readable for the customer (who's CC'd)
+      // AND comprehensive for the office.
+      var lines = [];
+      lines.push('QUOTE REQUEST — Mark Ratcliffe Moving & Storage');
+      lines.push('==================================================');
+      lines.push('');
+      lines.push('Hi Mark Ratcliffe Moving,');
+      lines.push('');
+      lines.push('Please prepare a quote for the move detailed below.');
+      lines.push('All figures are nett — VAT (20%) will be added at booking.');
+      lines.push('');
+      lines.push('CONTACT');
+      lines.push(pad('  Email:', email));
+      lines.push(pad('  Phone:', phone));
+      lines.push(pad('  Moving FROM:', fromPC));
+      lines.push(pad('  Moving TO:', toPC));
+      lines.push(pad('  Round-trip distance:', miles + ' mile' + (miles === 1 ? '' : 's')));
+      lines.push(pad('  Service type:', modeLabel));
+      lines.push('');
+      lines.push('PROPERTY & VOLUME');
+      lines.push(pad('  Home size selected:', bedSelected.label));
+      lines.push(pad('  Total volume:', cuft.toLocaleString('en-GB') + ' cu ft'));
+      lines.push(pad('  Cubic metres:', cum + ' cu m'));
+      lines.push(pad('  Estimated weight:', kg.toLocaleString('en-GB') + ' kg'));
+      lines.push(pad('  Load size:', (vanEstimate && vanEstimate.textContent) || ''));
+      lines.push('');
       if (calcMode !== 'storage') {
-        var prof = getBed();
-        var nettTotalTxt = (costNettTotal && costNettTotal.textContent) || '';
-        var vatTxt       = (costVAT && costVAT.textContent) || '';
-        body.push('ESTIMATED REMOVALS COST');
-        body.push('  Vehicle band:    ' + vehicle);
-        body.push('  Home size:       ' + prof.label);
-        body.push('  Distance:        ' + miles + ' miles');
-        body.push('  Volume cost:     ' + volumeCost);
-        body.push('  Mileage cost:    ' + mileageCost);
-        body.push('  Nett subtotal:   ' + nettTotalTxt);
-        body.push('  VAT (20%):       ' + vatTxt);
-        body.push('  Removals quote:  ' + totalCost + ' (nett — VAT added at booking)');
-        body.push('');
+        lines.push('REMOVALS (nett — VAT added at booking)');
+        lines.push(pad('  Vehicle recommended:', vehicle.name + '  (' + fp(vehicle.mileRate) + '/mi)'));
+        lines.push(pad('  Pricing tier:',        bedForPrice.label));
+        lines.push(pad('  Base charge:',         fp(bedForPrice.base) + '  (covers first ' + bedForPrice.typicalCuft + ' cu ft)'));
+        if (rmExcess > 0) {
+          lines.push(pad('  Excess volume:',     rmExcess + ' cu ft × ' + fp(rmRate) + ' = ' + fp(rmExcess * rmRate)));
+        }
+        lines.push(pad('  Mileage cost:',        fp(rmMileCost) + '  (' + miles + ' × ' + fp(vehicle.mileRate) + ')'));
+        lines.push(pad('  REMOVALS TOTAL:',      fp(rmNett) + '  nett'));
+        lines.push('');
       }
-      if (storageWanted) {
-        body.push('STORAGE REQUIRED');
-        body.push('  Unit:            ' + storageUnitTxt);
-        body.push('  Daily rate:      ' + storageDailyTxt + ' (nett, +VAT at booking)');
-        body.push('  Duration:        ' + storageDays + ' days (~' + (storageDays / 7).toFixed(storageDays % 7 === 0 ? 0 : 1) + ' weeks)');
-        body.push('  Storage total:   ' + storageTotalTxt);
-        body.push('  Grand total:     ' + grandTotalTxt + ' (removals + storage)');
-        body.push('');
-      } else {
-        body.push('STORAGE: not required');
-        body.push('');
+      if (calcMode !== 'removals') {
+        lines.push('STORAGE (nett — VAT added at booking)');
+        lines.push(pad('  Room(s) required:',    stBits.join(' + ') + (picks.length > 1 || picks[0].qty > 1 ? '  (' + stTotalSqft + ' sqft total, ' + (stTotalSqft * 7).toLocaleString('en-GB') + ' cu ft capacity)' : '')));
+        lines.push(pad('  Daily rate:',          fp(stPerDay)));
+        lines.push(pad('  Duration:',            days + ' day' + (days === 1 ? '' : 's') + '  (~' + (days / 7).toFixed(days % 7 === 0 ? 0 : 1) + ' weeks)'));
+        lines.push(pad('  STORAGE TOTAL:',       fp(stNett) + '  nett'));
+        lines.push('');
       }
-      body.push('ITEMS SELECTED');
-      body.push(picked.join('\n'));
-      body.push('');
-      if (notes) {
-        body.push('NOTES');
-        body.push('  ' + notes.split('\n').join('\n  '));
-        body.push('');
-      }
-      body.push('Sent from the Mark Ratcliffe Moving online removals calculator.');
+      lines.push('QUOTE SUMMARY');
+      if (calcMode !== 'storage') lines.push(pad('  Removals (nett):',  fp(rmNett)));
+      if (calcMode !== 'removals') lines.push(pad('  Storage (nett):',   fp(stNett)));
+      lines.push('  ──────────────────────────────────────────────');
+      lines.push(pad('  TOTAL (nett):',          fp(rmNett + stNett) + '  (+ VAT at booking)'));
+      lines.push('');
 
-      var mailto =
-        'mailto:office@markratcliffemoving.co.uk?subject=' +
-        encodeURIComponent(subject) +
-        '&body=' +
-        encodeURIComponent(body.join('\n'));
+      if (roomLines.length > 0) {
+        lines.push('INVENTORY  (' + totalItems + ' items · ' + cuft.toLocaleString('en-GB') + ' cu ft)');
+        lines.push('');
+        lines = lines.concat(roomLines);
+      } else {
+        lines.push('INVENTORY');
+        lines.push('  (No specific items ticked — quote calculated from the cu ft figure.)');
+        lines.push('');
+      }
+      if (notes) {
+        lines.push('NOTES FROM CUSTOMER');
+        lines.push('  ' + notes.split('\n').join('\n  '));
+        lines.push('');
+      }
+      lines.push('──────────────────────────────────────────────');
+      lines.push('Sent from the Mark Ratcliffe Moving online quote calculator.');
+      lines.push('Office reply within 48 hours. EMV London Ltd t/a Mark');
+      lines.push('Ratcliffe Moving & Storage. Family-run since 1982.');
+
+      var totalNett = rmNett + stNett;
+      var subject = 'Quote request — ' + bedSelected.label + ' · ' + (fromPC || 'FROM') +
+        ' → ' + (toPC || 'TO') + ' · ' + cuft.toLocaleString('en-GB') + ' cu ft · ' + fp(totalNett) + ' nett';
+
+      var params = 'subject=' + encodeURIComponent(subject) +
+                   '&body='  + encodeURIComponent(lines.join('\n'));
+      if (email) params = 'cc=' + encodeURIComponent(email) + '&' + params;
+      var mailto = 'mailto:office@markratcliffemoving.co.uk?' + params;
 
       if (status) {
-        status.textContent = 'Opening your email app... if nothing happens, email office@markratcliffemoving.co.uk and we will fill in the details from your message.';
+        status.textContent = 'Opening your email app… we send to office@markratcliffemoving.co.uk and CC you a copy. If nothing happens, email office@markratcliffemoving.co.uk directly with the figures from the preview above.';
       }
       window.location.href = mailto;
     });
