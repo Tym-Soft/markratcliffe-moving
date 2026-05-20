@@ -1401,7 +1401,7 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
 }
 .quote-line.quote-line-subtotal dt { color: #fff; font-weight: 600; }
 .quote-line.quote-line-subtotal strong { color: var(--brand-bronze-light, #D6B274); }
-.quote-card-alt {
+.quote-card .quote-card-alt {
   margin: 0 0 0.85rem;
   font-size: 0.78rem;
   color: rgba(255,255,255,0.78);
@@ -1411,7 +1411,7 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
   border-left: 3px solid var(--brand-bronze, #C8A876);
   line-height: 1.4;
 }
-.quote-card-alt strong { color: #fff; }
+.quote-card .quote-card-alt strong { color: #fff; }
 .quote-card-cta {
   display: block;
   width: 100%;
@@ -1429,13 +1429,13 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 .quote-card-cta:hover { background: #D6B274; transform: translateY(-1px); }
-.quote-card-disclaimer {
+.quote-card .quote-card-disclaimer {
   margin: 0.9rem 0 0;
   font-size: 0.72rem;
   color: rgba(255,255,255,0.7);
   line-height: 1.5;
 }
-.quote-card-disclaimer a { color: var(--brand-bronze-light, #D6B274); text-decoration: underline; }
+.quote-card .quote-card-disclaimer a { color: var(--brand-bronze-light, #D6B274); text-decoration: underline; }
 
 /* Mobile: shrink the quote card slightly */
 @media (max-width: 640px) {
