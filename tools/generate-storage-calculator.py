@@ -413,13 +413,6 @@ def page_html() -> str:
     <div class="np-inner">
       <h2>Volume calculator — pick a room</h2>
 
-      <div class="calc-totals" aria-live="polite" id="calc-totals">
-        <div><strong id="total-cuft">0</strong><span>cu ft</span></div>
-        <div><strong id="total-cum">0.00</strong><span>cu m</span></div>
-        <div><strong id="total-kg">0</strong><span>kg</span></div>
-        <div><strong id="van-estimate">No items selected</strong><span>load size</span></div>
-      </div>
-
       <div class="storage-calc" id="storage-calc">
         <div class="calc-tabs" role="tablist" aria-label="Room categories">
 {tabs_html}
@@ -445,6 +438,14 @@ def page_html() -> str:
   <section class="np-section">
     <div class="np-inner">
       <h2>Estimate your removals cost</h2>
+
+      <div class="calc-totals" aria-live="polite" id="calc-totals">
+        <div><strong id="total-cuft">0</strong><span>cu ft</span></div>
+        <div><strong id="total-cum">0.00</strong><span>cu m</span></div>
+        <div><strong id="total-kg">0</strong><span>kg</span></div>
+        <div><strong id="van-estimate">No items selected</strong><span>load size</span></div>
+      </div>
+
       <p>Enter the round-trip distance for the move below. The calculator finds your vehicle band from the volume above, multiplies the volume by the suggested £/cu ft rate, adds the mileage at £2/mile, and applies the minimum charge if the volume cost would be lower. Output is a range that covers our typical Sussex quote.</p>
 
       <div class="cost-estimator" id="cost-estimator">
