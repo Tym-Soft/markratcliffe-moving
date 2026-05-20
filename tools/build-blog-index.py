@@ -370,6 +370,111 @@ def render_auto_block(posts: list[dict]) -> str:
 MARKER_START = '<!-- BLOG_INDEX_AUTO_START -->'
 MARKER_END   = '<!-- BLOG_INDEX_AUTO_END -->'
 
+# Markers in resources/blog.html (the magazine-style featured page)
+RES_MARKER_START = '<!-- RESOURCES_BLOG_AUTO_START -->'
+RES_MARKER_END   = '<!-- RESOURCES_BLOG_AUTO_END -->'
+RES_PATH         = 'resources/blog.html'
+RES_FEATURED     = 6      # newest N cards
+RES_SIDEBAR_RECENT = 6    # next N in sidebar list
+
+
+def render_res_card(post: dict) -> str:
+    """Featured card for /resources/blog.html — same per-card descriptive
+    anchor pattern as /blog/index.html (Rule 16 compliant). Card image path
+    needs to be one directory up (/resources/ is one level deep just like
+    /blog/, so the existing ../images/ prefix works as-is)."""
+    cat_label = next((label for key, label in CATEGORIES if key == post['category']), 'Moving Tips')
+    return (
+        '          <article class="np-blog-card">\n'
+        f'            <img src="{post["image"]}" alt="{post["title"]}" loading="lazy" decoding="async" width="600" height="360">\n'
+        '            <div class="np-blog-card-body">\n'
+        f'              <div class="np-blog-card-meta">{cat_label} &middot; {post["date"]}</div>\n'
+        f'              <h3><a href="../blog/{post["slug"]}">{post["title"]}</a></h3>\n'
+        f'              <p>{post["description"]}</p>\n'
+        f'              <a href="../blog/{post["slug"]}" class="np-blog-card-cta"><strong>Read: {post["title"]} &rarr;</strong></a>\n'
+        '            </div>\n'
+        '          </article>'
+    )
+
+
+def render_res_sidebar_recent(posts: list[dict]) -> str:
+    items = '\n'.join(
+        f'            <li><a href="../blog/{p["slug"]}">{p["title"]}</a></li>' for p in posts
+    )
+    return (
+        '        <div class="np-sidebar-block">\n'
+        '          <h3>Recent posts</h3>\n'
+        '          <ul class="np-sidebar-list">\n'
+        f'{items}\n'
+        '          </ul>\n'
+        '        </div>'
+    )
+
+
+def render_res_sidebar_categories(by_cat: dict[str, list[dict]]) -> str:
+    items = '\n'.join(
+        f'            <li><a href="../blog/#cat-{key}">{label} <span class="np-sidebar-list-count">({len(by_cat[key])})</span></a></li>'
+        for key, label in CATEGORIES if by_cat.get(key)
+    )
+    return (
+        '        <div class="np-sidebar-block np-sidebar-categories">\n'
+        '          <h3>Browse by category</h3>\n'
+        '          <ul class="np-sidebar-list">\n'
+        f'{items}\n'
+        '          </ul>\n'
+        '        </div>'
+    )
+
+
+RES_SIDEBAR_CTA = """        <div class="np-sidebar-block np-sidebar-cta">
+          <h3>Quote or question?</h3>
+          <p>Call us on <a href="tel:01323848008">01323 848 008</a> &mdash; or send a free quote request and we&rsquo;ll come back within 48 hours.</p>
+          <a class="np-btn np-btn-primary np-sidebar-btn" href="../mark-ratcliffe-moving-online-removals-quote.html">Get a Free Quote</a>
+        </div>"""
+
+
+def render_resources_blog_block(posts: list[dict]) -> str:
+    posts_sorted = sorted(posts, key=lambda p: (p['date'] or '', p['slug'] or ''), reverse=True)
+    featured = posts_sorted[:RES_FEATURED]
+    sidebar_recent = posts_sorted[RES_FEATURED:RES_FEATURED + RES_SIDEBAR_RECENT]
+
+    by_cat: dict[str, list[dict]] = {key: [] for key, _ in CATEGORIES}
+    for p in posts_sorted:
+        if p['category'] in by_cat:
+            by_cat[p['category']].append(p)
+
+    featured_html = '<div class="np-blog-grid">\n' + '\n'.join(render_res_card(p) for p in featured) + '\n          </div>'
+    sidebar_recent_html = render_res_sidebar_recent(sidebar_recent)
+    sidebar_categories_html = render_res_sidebar_categories(by_cat)
+
+    return f"""<!-- RESOURCES_BLOG_AUTO_START -->
+  <section class="np-section">
+    <div class="np-inner">
+      <p style="font-size:1.15rem;">Our blog is where we share what we&rsquo;ve learned in forty-plus years of moving Sussex households &mdash; the practical stuff that doesn&rsquo;t fit on a service page, the longer reads about how the removals industry actually works, the customer stories that explain why we do things the way we do. Below are the latest articles; for the full categorised library of all {len(posts_sorted)} posts, jump to the <a href="../blog/">blog archive</a>.</p>
+    </div>
+  </section>
+
+  <section class="np-section np-section-soft np-blog-layout-section">
+    <div class="np-inner np-blog-layout">
+      <div class="np-blog-main">
+        <h2>News and updates</h2>
+        {featured_html}
+        <div class="np-blog-archive-link">
+          <a class="np-btn np-btn-primary" href="../blog/">Browse all {len(posts_sorted)} articles in the blog archive &rarr;</a>
+        </div>
+      </div>
+      <aside class="np-blog-sidebar" aria-label="Sidebar">
+{sidebar_recent_html}
+
+{RES_SIDEBAR_CTA}
+
+{sidebar_categories_html}
+      </aside>
+    </div>
+  </section>
+  <!-- RESOURCES_BLOG_AUTO_END -->"""
+
+
 
 def main() -> int:
     posts = []
@@ -398,6 +503,20 @@ def main() -> int:
     n_total = len(posts)
     n_visible = min(MAX_CARDS, n_total)
     print(f'Rebuilt {INDEX}: latest {n_visible} cards + {n_total} categorised links.')
+
+    # Also rebuild /resources/blog.html — featured 6 + sidebar (Yoast-style)
+    res_path = os.path.join(ROOT, RES_PATH)
+    if os.path.isfile(res_path):
+        res_html = open(res_path, encoding='utf-8').read()
+        rs = res_html.find(RES_MARKER_START)
+        re_ = res_html.find(RES_MARKER_END)
+        if rs >= 0 and re_ > rs:
+            res_block = render_resources_blog_block(posts)
+            new_res = res_html[:rs] + res_block + res_html[re_ + len(RES_MARKER_END):]
+            open(res_path, 'w', encoding='utf-8').write(new_res)
+            print(f'Rebuilt {RES_PATH}: featured {RES_FEATURED} + sidebar with {RES_SIDEBAR_RECENT} recent + categories.')
+        else:
+            print(f'WARN — markers missing in {RES_PATH}', file=sys.stderr)
     return 0
 
 
