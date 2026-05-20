@@ -135,17 +135,34 @@
     }
   }
 
-  function pickStorageUnit(cuft) {
+  // Returns an array of { unit, qty } pairs that cover the required sqft.
+  // For volumes that fit a single room, returns [{ unit, qty: 1 }].
+  // For volumes that need multiple rooms, fills with as many of the
+  // biggest (280 sqft) as needed, then tops up with the SMALLEST single
+  // room that covers the remainder — so customers don't pay for two
+  // 280 sqft rooms when they only need 286 sqft total.
+  function pickStorageUnits(cuft) {
     var sqftNeeded = Math.ceil(cuft / STORAGE_CUFT_PER_SQFT);
+    // Single-room case
     for (var i = 0; i < STORAGE_UNITS.length; i++) {
       if (STORAGE_UNITS[i].sqft >= sqftNeeded) {
-        return { unit: STORAGE_UNITS[i], qty: 1 };
+        return [{ unit: STORAGE_UNITS[i], qty: 1 }];
       }
     }
-    // Bigger than the largest single room — provision multiples of the
-    // 280 sqft room to fit, charged accordingly.
+    // Multi-room mix
     var biggest = STORAGE_UNITS[STORAGE_UNITS.length - 1];
-    return { unit: biggest, qty: Math.ceil(sqftNeeded / biggest.sqft) };
+    var nFull = Math.floor(sqftNeeded / biggest.sqft);
+    var picks = [{ unit: biggest, qty: nFull }];
+    var remainder = sqftNeeded - nFull * biggest.sqft;
+    if (remainder > 0) {
+      for (var j = 0; j < STORAGE_UNITS.length; j++) {
+        if (STORAGE_UNITS[j].sqft >= remainder) {
+          picks.push({ unit: STORAGE_UNITS[j], qty: 1 });
+          break;
+        }
+      }
+    }
+    return picks;
   }
 
   // Pricing model (per-property base + monotonic excess):
@@ -231,8 +248,10 @@
     // In storage-only mode the load size should describe a storage room,
     // not a removals lorry.
     if (getCalcMode() === 'storage') {
-      var unit = pickStorageUnit(cuft);
-      return '~ ' + unit.sqft + ' sqft room';
+      var picks = pickStorageUnits(cuft);
+      var totalSqft = 0;
+      for (var p = 0; p < picks.length; p++) totalSqft += picks[p].unit.sqft * picks[p].qty;
+      return '~ ' + totalSqft + ' sqft room' + (totalSqft >= picks[0].unit.sqft * 2 ? 's' : '');
     }
     if (cuft <= 600)   return '~ Luton Van (3.5t) load';
     if (cuft <= 1100)  return '~ 7.5 Tonne Lorry load';
@@ -421,28 +440,35 @@
       return 0;
     }
 
-    var picked = pickStorageUnit(cuft);
-    var unit   = picked.unit;
-    var qty    = picked.qty;
-    var perDay = unit.daily * qty;
+    var picks = pickStorageUnits(cuft);
+    var perDay = 0;
+    var totalSqft = 0;
+    var labelParts = [];
+    var dailyParts = [];
+    for (var k = 0; k < picks.length; k++) {
+      var pu = picks[k].unit;
+      var pq = picks[k].qty;
+      perDay   += pu.daily * pq;
+      totalSqft += pu.sqft  * pq;
+      labelParts.push((pq > 1 ? pq + ' × ' : '') + pu.sqft + ' sqft');
+      dailyParts.push((pq > 1 ? pq + ' × ' : '') + '£' + pu.daily.toFixed(2));
+    }
     var storageTotal = perDay * days;
-    var totalSqft = unit.sqft * qty;
     var totalCuft = totalSqft * STORAGE_CUFT_PER_SQFT;
     var totalCum  = totalCuft * 0.02832;
+    var isMulti   = picks.length > 1 || picks[0].qty > 1;
 
-    storageUnitEl.textContent  = qty > 1
-      ? qty + ' × ' + unit.sqft + ' sqft Prestige steel rooms'
-      : unit.sqft + ' sqft Prestige steel room';
-    storageDailyEl.textContent = qty > 1
-      ? '£' + perDay.toFixed(2) + ' (' + qty + ' × £' + unit.daily.toFixed(2) + ')'
-      : '£' + unit.daily.toFixed(2);
+    storageUnitEl.textContent  = labelParts.join(' + ') + ' Prestige steel room' + (isMulti ? 's' : '');
+    storageDailyEl.textContent = isMulti
+      ? '£' + perDay.toFixed(2) + ' (' + dailyParts.join(' + ') + ')'
+      : '£' + perDay.toFixed(2);
     storageTotalEl.textContent = '£' + storageTotal.toFixed(2);
 
-    // Customer-facing summary (sqft / cu ft / cu m of the picked room)
+    // Customer-facing summary (sqft / cu ft / cu m of the picked rooms)
     if (storageSummarySqft) {
-      storageSummarySqft.textContent = qty > 1
-        ? qty + ' × ' + unit.sqft + ' sqft (' + totalSqft + ' sqft total)'
-        : unit.sqft + ' sqft';
+      storageSummarySqft.textContent = isMulti
+        ? labelParts.join(' + ') + ' (' + totalSqft + ' sqft total)'
+        : totalSqft + ' sqft';
     }
     if (storageSummaryCuft) storageSummaryCuft.textContent = totalCuft.toLocaleString('en-GB') + ' cu ft';
     if (storageSummaryCum)  storageSummaryCum.textContent  = totalCum.toFixed(2) + ' cu m';
