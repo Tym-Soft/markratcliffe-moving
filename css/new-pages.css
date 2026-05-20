@@ -328,6 +328,118 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
 .np-sidebar-services p { font-size: 0.95rem; margin: 0 0 1rem; }
 .np-sidebar-btn { display: block; width: 100%; text-align: center; padding: 0.7rem 1rem; }
 
+/* =========================================================
+   Storage Calculator — /resources/storage-calculator.html
+   ========================================================= */
+.calc-totals {
+  position: sticky;
+  top: 96px;
+  z-index: 5;
+  background: var(--brand-navy, #4d2e8f);
+  color: #fff;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+}
+.calc-totals > div { text-align: center; }
+.calc-totals strong {
+  display: block;
+  font-size: 1.85rem;
+  line-height: 1.1;
+  color: var(--brand-bronze-light, #D6B274);
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+}
+.calc-totals span {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.78);
+  margin-top: 0.25rem;
+}
+.storage-calc .calc-cat {
+  background: #fff;
+  border: 1px solid var(--np-border, #e5e7eb);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+.storage-calc summary {
+  padding: 0.85rem 1.15rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  color: var(--brand-navy, #4d2e8f);
+  font-size: 1.05rem;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  border-bottom: 1px solid transparent;
+}
+.storage-calc summary::-webkit-details-marker { display: none; }
+.storage-calc summary::after {
+  content: "+";
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--brand-bronze, #C8A876);
+  font-weight: 300;
+  margin-left: 0.6rem;
+}
+.storage-calc details[open] > summary { border-bottom: 1px solid var(--np-border, #e5e7eb); }
+.storage-calc details[open] > summary::after { content: "−"; }
+.calc-count { color: var(--np-muted, #6b7280); font-weight: 500; font-size: 0.85rem; }
+.calc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.calc-table td {
+  padding: 0.6rem 1.15rem;
+  border-bottom: 1px solid #f1f1f1;
+  vertical-align: middle;
+}
+.calc-table tr:last-child td { border-bottom: 0; }
+.calc-table td:first-child {
+  font-weight: 500;
+  color: var(--brand-navy, #4d2e8f);
+  font-size: 0.97rem;
+}
+.calc-table .calc-vol {
+  color: var(--np-muted, #6b7280);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+.calc-table .calc-qty { width: 110px; text-align: right; }
+.calc-table input[type="number"] {
+  width: 84px;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--np-border, #d1d5db);
+  border-radius: 6px;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+.calc-table input[type="number"]:focus {
+  outline: 2px solid var(--brand-bronze, #C8A876);
+  outline-offset: 1px;
+  border-color: var(--brand-bronze, #C8A876);
+}
+.calc-actions { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+@media (max-width: 640px) {
+  .calc-totals { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .calc-totals strong { font-size: 1.45rem; }
+  .calc-table td { padding: 0.5rem 0.7rem; }
+  .calc-table .calc-vol { display: none; }
+}
+
 .np-blog-archive-link { margin-top: 1.75rem; }
 .np-blog-archive-link .np-btn { display: inline-flex; align-items: center; gap: 0.4rem; }
 .np-sidebar-list-count { color: var(--np-muted); font-weight: 500; margin-left: 0.25rem; font-size: 0.85em; }
