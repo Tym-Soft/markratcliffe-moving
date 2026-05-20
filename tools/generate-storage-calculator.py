@@ -458,7 +458,33 @@ def page_html() -> str:
         </div>
       </div>
 
-      <p class="cost-disclaimer"><strong>Estimate only.</strong> The exact quote depends on access, stairs, the listed-property quotient, packing materials, antiques handling and timing. For an accurate, written, BAR-Advance-Payment-Guarantee-protected quote please <a href="../mark-ratcliffe-moving-online-removals-quote.html">request a free survey</a> — we respond within 48 hours.</p>
+      <div class="storage-block" id="storage-block">
+        <label class="storage-toggle">
+          <input type="checkbox" id="storage-enabled">
+          <span><strong>Do you also need storage?</strong> Add our self-storage to the estimate.</span>
+        </label>
+        <div class="storage-details" id="storage-details" hidden>
+          <div class="storage-fields">
+            <label class="storage-weeks-field">
+              <span class="storage-label">Weeks of storage</span>
+              <input type="number" id="storage-weeks" min="1" value="4">
+            </label>
+            <p class="storage-help">Unit size is picked automatically from your selected volume — a Prestige steel storage room at our Lower Dicker depot. Rates include VAT and goods-in-storage insurance.</p>
+          </div>
+          <div class="storage-output">
+            <div class="cost-line"><span>Recommended unit</span><strong id="storage-unit">—</strong></div>
+            <div class="cost-line"><span>Weekly rate (inc VAT &amp; insurance)</span><strong id="storage-weekly">£0.00</strong></div>
+            <div class="cost-line cost-total"><span>Storage total</span><strong id="storage-total">£0.00</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cost-grand-total" id="cost-grand-total" hidden>
+        <span>Removals + storage estimate</span>
+        <strong id="cost-grand-total-value">£0</strong>
+      </div>
+
+      <p class="cost-disclaimer"><strong>Estimate only.</strong> The exact quote depends on access, stairs, the listed-property quotient, packing materials, antiques handling, timing and the actual storage duration you book. For an accurate, written, BAR-Advance-Payment-Guarantee-protected quote please <a href="../mark-ratcliffe-moving-online-removals-quote.html">request a free survey</a> — we respond within 48 hours.</p>
     </div>
   </section>
 
@@ -563,7 +589,7 @@ def page_html() -> str:
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260565"></script>
+  <script defer src="../js/storage-calculator.js?v=20260566"></script>
 </body>
 </html>
 """

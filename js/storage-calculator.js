@@ -31,6 +31,41 @@
   var costMinimum  = document.getElementById('cost-minimum');
   var costTotal    = document.getElementById('cost-total');
 
+  // Storage-unit price list (sqft, weekly rate inc VAT & insurance).
+  // Source: Mark Ratcliffe Moving Prestige steel storage rate table.
+  var STORAGE_UNITS = [
+    { sqft:  25, weekly:  2.59 },
+    { sqft:  30, weekly:  3.02 },
+    { sqft:  40, weekly:  4.50 },
+    { sqft:  50, weekly:  5.96 },
+    { sqft:  60, weekly:  6.48 },
+    { sqft:  65, weekly:  7.44 },
+    { sqft:  75, weekly:  8.90 },
+    { sqft: 100, weekly: 11.93 },
+    { sqft: 120, weekly: 13.68 },
+    { sqft: 145, weekly: 15.54 },
+    { sqft: 200, weekly: 21.60 },
+    { sqft: 280, weekly: 24.48 }
+  ];
+  var STORAGE_CUFT_PER_SQFT = 7; // packing efficiency: 7 cu ft per sqft of floor
+
+  var storageEnabled    = document.getElementById('storage-enabled');
+  var storageWeeksInput = document.getElementById('storage-weeks');
+  var storageDetails    = document.getElementById('storage-details');
+  var storageUnitEl     = document.getElementById('storage-unit');
+  var storageWeeklyEl   = document.getElementById('storage-weekly');
+  var storageTotalEl    = document.getElementById('storage-total');
+  var grandTotalRow     = document.getElementById('cost-grand-total');
+  var grandTotalValue   = document.getElementById('cost-grand-total-value');
+
+  function pickStorageUnit(cuft) {
+    var sqftNeeded = Math.ceil(cuft / STORAGE_CUFT_PER_SQFT);
+    for (var i = 0; i < STORAGE_UNITS.length; i++) {
+      if (STORAGE_UNITS[i].sqft >= sqftNeeded) return STORAGE_UNITS[i];
+    }
+    return STORAGE_UNITS[STORAGE_UNITS.length - 1]; // bigger than largest — flag this
+  }
+
   // Rate bands from the published Mark Ratcliffe Moving rate table.
   // Each band: max volume in cu ft, vehicle label, £/cu ft range,
   // minimum charge range, and the per-mile mileage charge for that
@@ -106,6 +141,44 @@
     costMileage.textContent = '£' + mileCost.toLocaleString('en-GB') + ' (' + miles + ' mi × £' + band.mileRate.toFixed(2) + '/mi)';
     costMinimum.textContent = poundsRange(band.minMin, band.minMax);
     costTotal.textContent   = poundsRange(totalMin, totalMax);
+
+    updateStorage(cuft, totalMin, totalMax);
+  }
+
+  function updateStorage(cuft, removalsMin, removalsMax) {
+    if (!storageEnabled || !storageDetails) return;
+    var enabled = storageEnabled.checked;
+    storageDetails.hidden = !enabled;
+
+    if (!enabled) {
+      if (grandTotalRow) grandTotalRow.hidden = true;
+      return;
+    }
+
+    var weeks = parseInt((storageWeeksInput && storageWeeksInput.value) || '0', 10);
+    if (isNaN(weeks) || weeks < 0) weeks = 0;
+
+    if (cuft === 0) {
+      storageUnitEl.textContent = 'Select items first to see your unit size';
+      storageWeeklyEl.textContent = '£0.00';
+      storageTotalEl.textContent  = '£0.00';
+      if (grandTotalRow) grandTotalRow.hidden = true;
+      return;
+    }
+
+    var unit = pickStorageUnit(cuft);
+    var storageTotal = unit.weekly * weeks;
+    var sqftNeeded   = Math.ceil(cuft / STORAGE_CUFT_PER_SQFT);
+    var biggerNote   = (sqftNeeded > unit.sqft) ? ' (or split across multiple ' + unit.sqft + ' sqft rooms)' : '';
+
+    storageUnitEl.textContent   = unit.sqft + ' sqft Prestige steel room' + biggerNote;
+    storageWeeklyEl.textContent = '£' + unit.weekly.toFixed(2);
+    storageTotalEl.textContent  = '£' + storageTotal.toFixed(2) + ' (' + weeks + ' wk × £' + unit.weekly.toFixed(2) + ')';
+
+    if (grandTotalRow && grandTotalValue) {
+      grandTotalValue.textContent = poundsRange(removalsMin + storageTotal, removalsMax + storageTotal);
+      grandTotalRow.hidden = false;
+    }
   }
 
   function activateTab(targetId) {
@@ -213,6 +286,13 @@
     milesInput.addEventListener('change', recalc);
   }
 
+  // Storage toggle + weeks
+  if (storageEnabled)    storageEnabled.addEventListener('change', recalc);
+  if (storageWeeksInput) {
+    storageWeeksInput.addEventListener('input', recalc);
+    storageWeeksInput.addEventListener('change', recalc);
+  }
+
   // Quote request form — build a pre-filled mailto: with all the
   // calculator output + the customer's contact details.
   var quoteForm = document.getElementById('quote-request-form');
@@ -236,6 +316,14 @@
       var minimumCost = (costMinimum && costMinimum.textContent) || '';
       var totalCost   = (costTotal && costTotal.textContent) || '';
       var miles       = (milesInput && milesInput.value) || '0';
+
+      // Storage details (if enabled)
+      var storageWanted = !!(storageEnabled && storageEnabled.checked);
+      var storageWeeks  = parseInt((storageWeeksInput && storageWeeksInput.value) || '0', 10);
+      var storageUnitTxt   = (storageUnitEl && storageUnitEl.textContent) || '';
+      var storageWeeklyTxt = (storageWeeklyEl && storageWeeklyEl.textContent) || '';
+      var storageTotalTxt  = (storageTotalEl && storageTotalEl.textContent) || '';
+      var grandTotalTxt    = (grandTotalValue && grandTotalValue.textContent) || '';
 
       var picked = [];
       var anyItems = false;
@@ -269,17 +357,29 @@
         '  Load size:     ' + van,
         '  Vehicle band:  ' + vehicle,
         '',
-        'ESTIMATED COST',
+        'ESTIMATED REMOVALS COST',
         '  Distance:        ' + miles + ' miles',
         '  Volume cost:     ' + volumeCost,
         '  Mileage cost:    ' + mileageCost,
         '  Minimum charge:  ' + minimumCost,
-        '  Estimated total: ' + totalCost,
-        '',
-        'ITEMS SELECTED',
-        picked.join('\n'),
+        '  Removals total:  ' + totalCost,
         ''
       ];
+      if (storageWanted) {
+        body.push('STORAGE REQUIRED');
+        body.push('  Unit:            ' + storageUnitTxt);
+        body.push('  Weekly rate:     ' + storageWeeklyTxt + ' (inc VAT & insurance)');
+        body.push('  Duration:        ' + storageWeeks + ' weeks');
+        body.push('  Storage total:   ' + storageTotalTxt);
+        body.push('  Grand total:     ' + grandTotalTxt + ' (removals + storage)');
+        body.push('');
+      } else {
+        body.push('STORAGE: not required');
+        body.push('');
+      }
+      body.push('ITEMS SELECTED');
+      body.push(picked.join('\n'));
+      body.push('');
       if (notes) {
         body.push('NOTES');
         body.push('  ' + notes.split('\n').join('\n  '));

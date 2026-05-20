@@ -604,6 +604,108 @@ a.button:hover, a.w-button:hover, .button.w-button:hover,
 }
 .cost-line.cost-total span { color: var(--brand-navy, #4d2e8f); font-weight: 700; font-size: 1rem; }
 .cost-line.cost-total strong { font-size: 1.35rem; color: var(--brand-navy, #4d2e8f); }
+/* Storage block — optional add-on inside the cost estimator */
+.storage-block {
+  margin-top: 1.25rem;
+  background: #fff;
+  border: 1px solid var(--np-border, #e5e7eb);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.storage-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-size: 0.97rem;
+  color: var(--brand-navy, #4d2e8f);
+}
+.storage-toggle input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--brand-bronze, #C8A876);
+  cursor: pointer;
+}
+.storage-details {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 2fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+.storage-details[hidden] { display: none; }
+.storage-weeks-field { display: flex; flex-direction: column; gap: 0.4rem; }
+.storage-label {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  color: var(--brand-navy, #4d2e8f);
+  font-size: 0.88rem;
+}
+.storage-weeks-field input {
+  font-family: "Inter", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--brand-navy, #4d2e8f);
+  border: 1px solid var(--np-border, #e5e7eb);
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+.storage-weeks-field input:focus {
+  outline: 2px solid var(--brand-bronze, #C8A876);
+  outline-offset: -1px;
+  border-color: var(--brand-bronze, #C8A876);
+}
+.storage-help {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--np-muted, #6b7280);
+  line-height: 1.45;
+}
+.storage-output {
+  display: grid;
+  gap: 0.55rem;
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+}
+
+/* Grand total row shown when storage is added */
+.cost-grand-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  background: var(--brand-navy, #4d2e8f);
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.9rem 1.25rem;
+  margin: 1rem 0;
+}
+.cost-grand-total[hidden] { display: none; }
+.cost-grand-total span {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.85);
+}
+.cost-grand-total strong {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 1.45rem;
+  color: var(--brand-bronze-light, #D6B274);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  .storage-details { grid-template-columns: 1fr; }
+  .cost-grand-total strong { font-size: 1.2rem; }
+}
+
 .cost-disclaimer {
   background: rgba(200,168,118,0.12);
   border-left: 3px solid var(--brand-bronze, #C8A876);
