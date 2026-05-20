@@ -147,21 +147,61 @@
     return '~ 44 Tonne Artic load';
   }
 
+  // Typical cu ft figures used when no inventory items are selected —
+  // pre-fills the manual cu ft input as the customer changes home size.
+  var TYPICAL_CUFT = { small: 700, medium: 1350, large: 2500 };
+  var TYPICAL_RANGE = {
+    small:  '500–900 cu ft',
+    medium: '900–1,800 cu ft',
+    large:  '1,800–4,000+ cu ft'
+  };
+  var manualCuftInput = document.getElementById('cost-manual-cuft');
+  var manualCuftHelp  = document.getElementById('cost-manual-cuft-help');
+  var manualCuftTouched = false;
+
+  function applyHomeSizeDefault() {
+    if (manualCuftInput && !manualCuftTouched) {
+      var size = getHomeSize();
+      manualCuftInput.value = TYPICAL_CUFT[size] || TYPICAL_CUFT.medium;
+    }
+    if (manualCuftHelp) {
+      var sz = getHomeSize();
+      var rng = TYPICAL_RANGE[sz] || '';
+      manualCuftHelp.textContent = 'Typical ' + sz + ' home: ' + rng +
+        '. Auto-fills with this figure; tick items above to override with a precise volume.';
+    }
+  }
+
   function recalc() {
-    var cuft = 0, cum = 0, kg = 0;
+    var invCuft = 0, invCum = 0, invKg = 0;
     for (var i = 0; i < inputs.length; i++) {
       var q = parseInt(inputs[i].value, 10);
       if (!q || q < 0) continue;
-      cuft += q * parseFloat(inputs[i].dataset.cuft);
-      cum  += q * parseFloat(inputs[i].dataset.cum);
-      kg   += q * parseFloat(inputs[i].dataset.kg);
+      invCuft += q * parseFloat(inputs[i].dataset.cuft);
+      invCum  += q * parseFloat(inputs[i].dataset.cum);
+      invKg   += q * parseFloat(inputs[i].dataset.kg);
     }
-    var roundedCuft = Math.round(cuft);
-    totalCuft.textContent   = roundedCuft;
-    totalCum.textContent    = cum.toFixed(2);
-    totalKg.textContent     = Math.round(kg);
-    vanEstimate.textContent = loadSizeLabel(roundedCuft);
-    recalcCost(roundedCuft);
+    var hasInventory = invCuft > 0;
+    var manualCuft = 0;
+    if (manualCuftInput) {
+      manualCuft = parseInt(manualCuftInput.value, 10);
+      if (isNaN(manualCuft) || manualCuft < 0) manualCuft = 0;
+      // Disable the manual input while inventory drives the figure
+      manualCuftInput.disabled = hasInventory;
+    }
+    var effectiveCuft = hasInventory ? Math.round(invCuft) : manualCuft;
+
+    totalCuft.textContent = effectiveCuft;
+    if (hasInventory) {
+      totalCum.textContent = invCum.toFixed(2);
+      totalKg.textContent  = Math.round(invKg);
+    } else {
+      // Convert cu ft → cu m precisely; estimate kg at ~6.5 kg/cu ft.
+      totalCum.textContent = (effectiveCuft * 0.02832).toFixed(2);
+      totalKg.textContent  = Math.round(effectiveCuft * 6.5);
+    }
+    vanEstimate.textContent = loadSizeLabel(effectiveCuft);
+    recalcCost(effectiveCuft);
   }
 
   function recalcCost(cuft) {
@@ -350,10 +390,26 @@
   // Apply the initial mode on load so the right sections show
   applyCalcMode();
 
-  // Home size radios
+  // Home size radios — update the manual cu ft default (if user hasn't typed)
+  // then recalc.
   var homeSizeRadios = document.querySelectorAll('input[name="home-size"]');
   for (var hs = 0; hs < homeSizeRadios.length; hs++) {
-    homeSizeRadios[hs].addEventListener('change', recalc);
+    homeSizeRadios[hs].addEventListener('change', function () {
+      applyHomeSizeDefault();
+      recalc();
+    });
+  }
+
+  // Manual cu ft input — flag as touched so future home-size changes don't
+  // overwrite the user's value.
+  if (manualCuftInput) {
+    manualCuftInput.addEventListener('input', function () {
+      manualCuftTouched = true;
+      recalc();
+    });
+    manualCuftInput.addEventListener('change', recalc);
+    // Set the initial default + help text on load
+    applyHomeSizeDefault();
   }
 
   // Storage toggle + weeks
