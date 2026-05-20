@@ -62,6 +62,79 @@
   var storageSummaryCum  = document.getElementById('storage-summary-cum');
   var grandTotalValue    = document.getElementById('cost-grand-total-value');
 
+  // Inventory summary (in-card list of selected items grouped by room).
+  var inventorySummary           = document.getElementById('inventory-summary');
+  var inventorySummaryRooms      = document.getElementById('inventory-summary-rooms');
+  var inventorySummaryTotalLine  = document.getElementById('inventory-summary-total-line');
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function updateInventorySummary() {
+    if (!inventorySummary || !inventorySummaryRooms) return;
+    var html = '';
+    var anyItems = false;
+    var totalItems = 0;
+    var totalCuft  = 0;
+    for (var p = 0; p < panels.length; p++) {
+      var panel = panels[p];
+      var roomLabel = '';
+      for (var t = 0; t < tabs.length; t++) {
+        if (tabs[t].dataset.target === panel.id) {
+          var lab = tabs[t].querySelector('.calc-tab-label');
+          if (lab) roomLabel = lab.textContent;
+          break;
+        }
+      }
+      var items = panel.querySelectorAll('.calc-item');
+      var roomHtml = '';
+      var roomCuft = 0;
+      var roomCount = 0;
+      for (var i = 0; i < items.length; i++) {
+        var inp = items[i].querySelector('input[type="number"][data-cuft]');
+        if (!inp) continue;
+        var qty = parseInt(inp.value, 10) || 0;
+        if (qty <= 0) continue;
+        var nameEl = items[i].querySelector('.calc-item-name');
+        var name = nameEl ? nameEl.textContent : 'Item';
+        var cuftPer = parseFloat(inp.dataset.cuft) || 0;
+        var itemCuft = qty * cuftPer;
+        roomCuft += itemCuft;
+        roomCount += qty;
+        roomHtml +=
+          '<div class="qc-inventory-summary-item">' +
+            '<span class="qc-isum-name">' + qty + ' × ' + escapeHtml(name) + '</span>' +
+            '<span class="qc-isum-cuft">' + Math.round(itemCuft) + ' cu ft</span>' +
+          '</div>';
+      }
+      if (roomCount > 0) {
+        anyItems = true;
+        totalItems += roomCount;
+        totalCuft  += roomCuft;
+        html +=
+          '<div class="qc-inventory-summary-room">' +
+            '<div class="qc-inventory-summary-room-name">' +
+              escapeHtml(roomLabel) +
+              ' <span class="qc-isum-room-cuft">' + Math.round(roomCuft) + ' cu ft</span>' +
+            '</div>' +
+            roomHtml +
+          '</div>';
+      }
+    }
+    if (anyItems) {
+      inventorySummaryRooms.innerHTML = html;
+      if (inventorySummaryTotalLine) {
+        inventorySummaryTotalLine.textContent = totalItems + ' items · ' + Math.round(totalCuft).toLocaleString('en-GB') + ' cu ft';
+      }
+      inventorySummary.hidden = false;
+    } else {
+      inventorySummary.hidden = true;
+    }
+  }
+
   function pickStorageUnit(cuft) {
     var sqftNeeded = Math.ceil(cuft / STORAGE_CUFT_PER_SQFT);
     for (var i = 0; i < STORAGE_UNITS.length; i++) {
@@ -223,6 +296,7 @@
     }
     vanEstimate.textContent = loadSizeLabel(effectiveCuft);
     recalcCost(effectiveCuft);
+    updateInventorySummary();
   }
 
   function recalcCost(cuft) {
@@ -535,6 +609,21 @@
     skipInventoryBtn.addEventListener('click', function () {
       inventoryPromptDismissed = true;
       if (inventoryPrompt) inventoryPrompt.hidden = true;
+    });
+  }
+
+  // "Add manually" — open the inventory editor empty so the customer can
+  // tick items without the auto-fill.
+  var addManuallyBtn = document.getElementById('add-inventory-manually');
+  if (addManuallyBtn) {
+    addManuallyBtn.addEventListener('click', function () {
+      inventoryPromptDismissed = true;
+      if (inventoryPrompt) inventoryPrompt.hidden = true;
+      var invSection = document.getElementById('inventory-section');
+      if (invSection) {
+        invSection.hidden = false;
+        invSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   }
 
