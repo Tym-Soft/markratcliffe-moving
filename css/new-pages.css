@@ -2166,27 +2166,53 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
   color: #fff;
 }
 .quote-card .qc-inventory-summary[hidden] { display: none; }
-.quote-card .qc-inventory-summary-header {
+.quote-card .qc-inventory-summary > summary {
+  list-style: none;
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 0.75rem;
-  padding-bottom: 0.6rem;
-  margin-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(255,255,255,0.18);
+  padding: 0.1rem 0;
+  user-select: none;
 }
-.quote-card .qc-inventory-summary-header strong {
+.quote-card .qc-inventory-summary > summary::-webkit-details-marker { display: none; }
+.quote-card .qc-inventory-summary > summary::marker { content: ''; }
+.quote-card .qc-isum-head-label {
   font-family: "Inter", sans-serif;
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: #fff;
+  font-weight: 700;
+  flex: 1 1 auto;
 }
-.quote-card .qc-inventory-summary-header span {
+.quote-card .qc-inventory-summary > summary #inventory-summary-total-line {
   font-size: 0.86rem;
   font-weight: 600;
   color: var(--brand-bronze-light, #D6B274);
   font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+.quote-card .qc-isum-chevron {
+  flex: 0 0 auto;
+  font-size: 0.9rem;
+  color: var(--brand-bronze-light, #D6B274);
+  transition: transform .2s ease;
+  display: inline-block;
+}
+.quote-card .qc-inventory-summary[open] .qc-isum-chevron {
+  transform: rotate(180deg);
+}
+.quote-card .qc-inventory-summary[open] > summary {
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+}
+.quote-card .qc-inventory-summary > summary:focus-visible {
+  outline: 2px solid var(--brand-bronze, #C8A876);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 .quote-card .qc-inventory-summary-room {
   margin-bottom: 0.85rem;
