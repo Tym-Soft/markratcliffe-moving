@@ -1402,6 +1402,51 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
 }
 .quote-line.quote-line-subtotal dt { color: #fff; font-weight: 600; }
 .quote-line.quote-line-subtotal strong { color: var(--brand-bronze-light, #D6B274); }
+/* Both-mode split panel — Removals / Storage / Total laid out clearly. */
+.quote-card .quote-card-split {
+  margin: 0.4rem auto 1.4rem;
+  max-width: 460px;
+  padding: 1rem 1.25rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.quote-card .qc-split-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: "Inter", sans-serif;
+}
+.quote-card .qc-split-label {
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.82);
+}
+.quote-card .qc-split-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.quote-card .qc-split-row-total {
+  border-top: 1px solid rgba(255,255,255,0.2);
+  padding-top: 0.55rem;
+  margin-top: 0.2rem;
+}
+.quote-card .qc-split-row-total .qc-split-label {
+  color: #fff;
+  font-weight: 600;
+}
+.quote-card .qc-split-row-total .qc-split-value {
+  color: var(--brand-bronze-light, #D6B274);
+  font-size: 1.35rem;
+}
+body[data-calc-mode="removals"] .quote-card-split,
+body[data-calc-mode="storage"] .quote-card-split { display: none !important; }
+
 /* Storage-mode summary — visible only in storage / both modes, shows the
    recommended room size in sqft + cu ft + cu m. */
 .quote-card .quote-card-storage {

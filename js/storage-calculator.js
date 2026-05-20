@@ -263,6 +263,21 @@
     var grandTotalNett = removalsNett + storageTotal;
     if (grandTotalValue) grandTotalValue.textContent = poundsPence(grandTotalNett);
 
+    // Both-mode split panel: show removals + storage + total separately.
+    if (mode === 'both') {
+      var splitRm = document.getElementById('split-removals');
+      var splitSt = document.getElementById('split-storage');
+      var splitTo = document.getElementById('split-total');
+      var splitStLabel = document.getElementById('split-storage-label');
+      if (splitRm) splitRm.textContent = poundsPence(removalsNett);
+      if (splitSt) splitSt.textContent = poundsPence(storageTotal);
+      if (splitTo) splitTo.textContent = poundsPence(grandTotalNett);
+      if (splitStLabel) {
+        var days = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10) || 0;
+        splitStLabel.textContent = 'Storage (' + days + ' days)';
+      }
+    }
+
     if (headlineLabel) {
       var bits = [];
       if (mode !== 'storage') bits.push(vehicle.name);

@@ -718,7 +718,7 @@ def page_html() -> str:
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260615" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260617" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -858,6 +858,22 @@ def page_html() -> str:
           <div class="quote-card-eyebrow">Your estimate (+ VAT at booking)</div>
           <div class="quote-card-amount" id="cost-grand-total-value">£0</div>
           <div class="quote-card-label" id="cost-headline-label">Live estimate · updates as you type</div>
+
+          <!-- Split panel — visible only in "Both" mode -->
+          <div class="quote-card-split" data-show-modes="both">
+            <div class="qc-split-row">
+              <span class="qc-split-label">Removals</span>
+              <strong class="qc-split-value" id="split-removals">£0.00</strong>
+            </div>
+            <div class="qc-split-row">
+              <span class="qc-split-label" id="split-storage-label">Storage</span>
+              <strong class="qc-split-value" id="split-storage">£0.00</strong>
+            </div>
+            <div class="qc-split-row qc-split-row-total">
+              <span class="qc-split-label">Total (+ VAT)</span>
+              <strong class="qc-split-value" id="split-total">£0.00</strong>
+            </div>
+          </div>
 
           <div class="quote-card-meta">
             <div class="quote-card-meta-item"><strong id="total-cuft">0</strong><span>cu ft</span></div>
@@ -1046,7 +1062,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260616"></script>
+  <script defer src="../js/storage-calculator.js?v=20260617"></script>
 </body>
 </html>
 """
