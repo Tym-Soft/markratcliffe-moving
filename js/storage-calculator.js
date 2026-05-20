@@ -125,7 +125,7 @@
 
   function getCalcMode() {
     var checked = document.querySelector('input[name="calc-mode"]:checked');
-    return checked ? checked.value : 'both';
+    return checked ? checked.value : 'removals';
   }
 
   function applyCalcMode() {

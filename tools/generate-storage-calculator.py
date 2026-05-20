@@ -763,7 +763,7 @@ def page_html() -> str:
             <legend class="qc-step-label"><span class="qc-step-num">1</span> What are you calculating?</legend>
             <div class="qc-mode-row">
               <label class="qc-mode-card">
-                <input type="radio" name="calc-mode" value="removals">
+                <input type="radio" name="calc-mode" value="removals" checked>
                 <span class="qc-mode-icon">__ICON_TRUCK__</span>
                 <span class="qc-mode-text"><strong>Removals only</strong><small>Move your items to a new home.</small></span>
               </label>
@@ -773,7 +773,7 @@ def page_html() -> str:
                 <span class="qc-mode-text"><strong>Storage only</strong><small>Store in a Prestige steel room.</small></span>
               </label>
               <label class="qc-mode-card">
-                <input type="radio" name="calc-mode" value="both" checked>
+                <input type="radio" name="calc-mode" value="both">
                 <span class="qc-mode-icon">__ICON_TRUCKBOX__</span>
                 <span class="qc-mode-text"><strong>Both</strong><small>Removals + storage combined.</small></span>
               </label>
@@ -1044,7 +1044,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260594"></script>
+  <script defer src="../js/storage-calculator.js?v=20260595"></script>
 </body>
 </html>
 """
