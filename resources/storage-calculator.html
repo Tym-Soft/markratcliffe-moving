@@ -19,7 +19,7 @@
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260622" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260623" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -360,54 +360,67 @@
         <button type="button" class="calc-tab active" role="tab" id="tab-cat-boxes-cartons" aria-controls="cat-boxes-cartons" aria-selected="true" data-target="cat-boxes-cartons">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="4" y="14" width="14" height="14" rx="1"/><rect x="22" y="14" width="14" height="14" rx="1"/><rect x="13" y="6" width="14" height="10" rx="1"/></svg></span>
           <span class="calc-tab-label">Boxes & cartons</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-hall-foyer" aria-controls="cat-hall-foyer" aria-selected="false" data-target="cat-hall-foyer">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M10 34V14a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6v20"/><line x1="6" y1="34" x2="34" y2="34"/><circle cx="24" cy="22" r="0.8" fill="currentColor"/></svg></span>
           <span class="calc-tab-label">Hall / Foyer</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-living-room" aria-controls="cat-living-room" aria-selected="false" data-target="cat-living-room">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 24v6h28v-6"/><path d="M8 24v-6a3 3 0 0 1 3-3h18a3 3 0 0 1 3 3v6"/><path d="M11 24v-4h18v4"/></svg></span>
           <span class="calc-tab-label">Living room</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-dining-room" aria-controls="cat-dining-room" aria-selected="false" data-target="cat-dining-room">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><line x1="6" y1="22" x2="34" y2="22"/><line x1="10" y1="22" x2="10" y2="32"/><line x1="30" y1="22" x2="30" y2="32"/><circle cx="20" cy="16" r="3"/><line x1="20" y1="19" x2="20" y2="22"/></svg></span>
           <span class="calc-tab-label">Dining room</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-kitchen-utility" aria-controls="cat-kitchen-utility" aria-selected="false" data-target="cat-kitchen-utility">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="6" y="10" width="28" height="22" rx="1"/><line x1="6" y1="18" x2="34" y2="18"/><circle cx="13" cy="25" r="2.5"/><circle cx="27" cy="25" r="2.5"/></svg></span>
           <span class="calc-tab-label">Kitchen / utility</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-conservatory" aria-controls="cat-conservatory" aria-selected="false" data-target="cat-conservatory">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 34V18l14-10 14 10v16"/><line x1="20" y1="8" x2="20" y2="34"/><line x1="6" y1="22" x2="34" y2="22"/></svg></span>
           <span class="calc-tab-label">Conservatory</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-bathroom" aria-controls="cat-bathroom" aria-selected="false" data-target="cat-bathroom">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 22h28v6a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4v-6Z"/><path d="M10 22v-8a3 3 0 0 1 6 0"/><line x1="6" y1="34" x2="10" y2="36"/><line x1="34" y1="34" x2="30" y2="36"/></svg></span>
           <span class="calc-tab-label">Bathroom</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-bedroom-master" aria-controls="cat-bedroom-master" aria-selected="false" data-target="cat-bedroom-master">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 28v-4a4 4 0 0 1 4-4h22a4 4 0 0 1 4 4v4"/><line x1="5" y1="28" x2="35" y2="28"/><line x1="5" y1="32" x2="35" y2="32"/><rect x="11" y="16" width="9" height="4" rx="1.5"/></svg></span>
           <span class="calc-tab-label">Bedroom (master)</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-kids-bedroom" aria-controls="cat-kids-bedroom" aria-selected="false" data-target="cat-kids-bedroom">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 28v-3a3 3 0 0 1 3-3h22a3 3 0 0 1 3 3v3"/><line x1="6" y1="28" x2="34" y2="28"/><path d="M30 16l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z"/></svg></span>
           <span class="calc-tab-label">Kids bedroom</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-office-study" aria-controls="cat-office-study" aria-selected="false" data-target="cat-office-study">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="6" y="9" width="22" height="14" rx="1"/><line x1="14" y1="23" x2="14" y2="27"/><line x1="20" y1="23" x2="20" y2="27"/><line x1="11" y1="27" x2="23" y2="27"/><rect x="29" y="18" width="6" height="14" rx="0.5"/></svg></span>
           <span class="calc-tab-label">Office / study</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-garage-shed" aria-controls="cat-garage-shed" aria-selected="false" data-target="cat-garage-shed">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 34V14l14-8 14 8v20"/><rect x="11" y="20" width="18" height="14"/><line x1="11" y1="26" x2="29" y2="26"/></svg></span>
           <span class="calc-tab-label">Garage / shed</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-garden-outdoor" aria-controls="cat-garden-outdoor" aria-selected="false" data-target="cat-garden-outdoor">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="20" cy="14" r="6"/><path d="M14 18a8 8 0 0 0 12 0"/><line x1="20" y1="20" x2="20" y2="34"/><line x1="14" y1="34" x2="26" y2="34"/></svg></span>
           <span class="calc-tab-label">Garden &amp; outdoor</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
         <button type="button" class="calc-tab" role="tab" id="tab-cat-specialist-other" aria-controls="cat-specialist-other" aria-selected="false" data-target="cat-specialist-other">
           <span class="calc-tab-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="6" y="14" width="28" height="14" rx="1"/><line x1="12" y1="14" x2="12" y2="22"/><line x1="16" y1="14" x2="16" y2="22"/><line x1="20" y1="14" x2="20" y2="22"/><line x1="24" y1="14" x2="24" y2="22"/><line x1="28" y1="14" x2="28" y2="22"/><line x1="6" y1="22" x2="34" y2="22"/></svg></span>
           <span class="calc-tab-label">Specialist &amp; other</span>
+          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>
         </button>
               </div>
               <label class="calc-search" aria-label="Search items">
@@ -3382,6 +3395,6 @@
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260622"></script>
+  <script defer src="../js/storage-calculator.js?v=20260623"></script>
 </body>
 </html>

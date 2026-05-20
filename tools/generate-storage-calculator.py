@@ -667,6 +667,7 @@ def page_html() -> str:
             f'aria-controls="{slug}" aria-selected="{aria_selected}" data-target="{slug}">\n'
             f'          <span class="calc-tab-icon">{icon_svg}</span>\n'
             f'          <span class="calc-tab-label">{cat_name}</span>\n'
+            f'          <span class="calc-tab-count" hidden aria-label="Items in this room">0</span>\n'
             f'        </button>'
         )
         rows: list[str] = []
@@ -718,7 +719,7 @@ def page_html() -> str:
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260622" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260623" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -1069,7 +1070,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260622"></script>
+  <script defer src="../js/storage-calculator.js?v=20260623"></script>
 </body>
 </html>
 """

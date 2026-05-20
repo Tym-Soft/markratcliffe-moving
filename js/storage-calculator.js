@@ -297,6 +297,34 @@
     vanEstimate.textContent = loadSizeLabel(effectiveCuft);
     recalcCost(effectiveCuft);
     updateInventorySummary();
+    updateTabCounts();
+  }
+
+  // Update the per-tab item-count badge — shows total qty of all ticked
+  // items inside each room panel, hidden when zero.
+  function updateTabCounts() {
+    for (var p = 0; p < panels.length; p++) {
+      var panel = panels[p];
+      var panelInputs = panel.querySelectorAll('input[type="number"][data-cuft]');
+      var count = 0;
+      for (var i = 0; i < panelInputs.length; i++) {
+        var q = parseInt(panelInputs[i].value, 10);
+        if (q && q > 0) count += q;
+      }
+      var tab = null;
+      for (var t = 0; t < tabs.length; t++) {
+        if (tabs[t].dataset.target === panel.id) { tab = tabs[t]; break; }
+      }
+      if (!tab) continue;
+      var badge = tab.querySelector('.calc-tab-count');
+      if (!badge) continue;
+      if (count > 0) {
+        badge.textContent = count;
+        badge.hidden = false;
+      } else {
+        badge.hidden = true;
+      }
+    }
   }
 
   function recalcCost(cuft) {
