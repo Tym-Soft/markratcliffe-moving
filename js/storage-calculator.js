@@ -915,18 +915,62 @@
   // CTA → toggle the in-card quote dropdown (form + preview).
   var quoteCtaToggle = document.getElementById('quote-cta-toggle');
   var quoteDropdown  = document.getElementById('quote-dropdown');
+  var quoteStep1     = document.getElementById('quote-step-1');
+  var quoteStep2     = document.getElementById('quote-step-2');
+  var quoteNextBtn   = document.getElementById('quote-next-btn');
+  var quoteBackBtn   = document.getElementById('quote-back-btn');
+
+  function showQuoteStep(n) {
+    if (!quoteStep1 || !quoteStep2) return;
+    quoteStep1.hidden = (n !== 1);
+    quoteStep2.hidden = (n !== 2);
+  }
+
   if (quoteCtaToggle && quoteDropdown) {
     quoteCtaToggle.addEventListener('click', function () {
       var willOpen = quoteDropdown.hidden;
       quoteDropdown.hidden = !willOpen;
       quoteCtaToggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
       if (willOpen) {
+        // Always start at step 1 when re-opening.
+        showQuoteStep(1);
         requestAnimationFrame(function () {
           quoteDropdown.scrollIntoView({ behavior: 'smooth', block: 'start' });
           var emailField = document.getElementById('qf-email');
           if (emailField) emailField.focus({ preventScroll: true });
         });
       }
+    });
+  }
+
+  // STEP 1 → STEP 2: validate contact fields, then reveal the summary.
+  if (quoteNextBtn) {
+    quoteNextBtn.addEventListener('click', function () {
+      var required = ['qf-email', 'qf-phone', 'qf-from', 'qf-to'];
+      for (var i = 0; i < required.length; i++) {
+        var el = document.getElementById(required[i]);
+        if (el && !el.checkValidity()) {
+          el.reportValidity();
+          el.focus();
+          return;
+        }
+      }
+      // Refresh the preview with latest values, then transition.
+      recalc();
+      showQuoteStep(2);
+      requestAnimationFrame(function () {
+        if (quoteStep2) quoteStep2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  // STEP 2 → STEP 1: back link.
+  if (quoteBackBtn) {
+    quoteBackBtn.addEventListener('click', function () {
+      showQuoteStep(1);
+      requestAnimationFrame(function () {
+        if (quoteStep1) quoteStep1.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     });
   }
 

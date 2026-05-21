@@ -1133,6 +1133,59 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
   border: 0;
   box-shadow: none;
 }
+
+/* Two-step flow inside the quote dropdown */
+.qc-quote-step[hidden] { display: none; }
+.qc-quote-step:not([hidden]) {
+  animation: qcQuoteStepIn 0.28s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+@keyframes qcQuoteStepIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.qc-quote-step-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.85rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--np-border, #e5e7eb);
+}
+.qc-quote-step-num {
+  display: inline-flex;
+  align-items: center;
+  font-family: "Inter", sans-serif;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--brand-bronze, #C8A876);
+  color: var(--brand-navy, #4d2e8f);
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+}
+.qc-quote-step-title {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--brand-navy, #4d2e8f);
+}
+.qc-quote-back {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--brand-navy, #4d2e8f);
+  margin-right: auto;
+}
+.qc-quote-back:hover, .qc-quote-back:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
 /* Slight rotate on the CTA arrow when the dropdown is open. */
 .quote-card-cta[aria-expanded="true"]::after {
   content: '';
