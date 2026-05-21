@@ -1605,8 +1605,13 @@ body[data-calc-mode="both"]     .quote-preview-block dl > div[data-show-modes]:n
 }
 .calc-numfields-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.85rem;
+}
+/* Both-mode shows three fields (cu ft + miles + days) — give them one
+   even row of three matched cards instead of a 2 + 1 wrap. */
+body[data-calc-mode="both"] .calc-numfields-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .calc-numfield {
   display: flex;
