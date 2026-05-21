@@ -192,7 +192,16 @@ def all_pages() -> list[str]:
         + glob.glob('services/*.html')
         + glob.glob('resources/*.html')
     )
-    return sorted(p for p in paths if os.path.isfile(p))
+    # Skip Google / Bing / Yandex search-console verification stubs — they're
+    # tiny one-line files whose content must stay byte-exact for the provider
+    # to verify ownership, so they can't carry the boilerplate audit rules
+    # expect (title, canonical, CSP, etc.).
+    def is_verification_stub(p: str) -> bool:
+        name = os.path.basename(p)
+        return (name.startswith('google') and len(name) > 16
+                or name.startswith('BingSiteAuth')
+                or name.startswith('yandex_'))
+    return sorted(p for p in paths if os.path.isfile(p) and not is_verification_stub(p))
 
 def is_blog_post(path: str) -> bool:
     return path.startswith('blog/') and os.path.basename(path) != 'index.html'

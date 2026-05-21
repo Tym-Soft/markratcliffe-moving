@@ -39,6 +39,13 @@ BUCKETS = [
 
 
 def is_indexable(path: str) -> bool:
+    # Skip search-console verification stubs (one-line files whose content
+    # must stay byte-exact for the provider — see audit.py for the same rule).
+    name = os.path.basename(path)
+    if (name.startswith('google') and len(name) > 16
+            or name.startswith('BingSiteAuth')
+            or name.startswith('yandex_')):
+        return False
     try:
         with open(path, encoding='utf-8') as f:
             html = f.read(4096)
