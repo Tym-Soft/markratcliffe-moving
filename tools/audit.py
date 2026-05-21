@@ -35,9 +35,14 @@ Verifies thirty-four build rules:
      declared via <meta> tags.
  21. Every image in /images/ is ≤200 KB on disk.
  22. /_headers file present with X-Frame-Options + X-Content-Type-
-     Options + Referrer-Policy + Strict-Transport-Security (delivered
-     by Cloudflare Pages / Netlify; GitHub Pages ignores it but the
-     file is staged for the production deployment).
+     Options + Referrer-Policy + Strict-Transport-Security. NOTE:
+     the site currently deploys on GitHub Pages, which ignores
+     _headers, so HSTS / XFO / XCTO are not actually served. CSP
+     and Referrer-Policy still apply via <meta http-equiv> in each
+     page (Rule 20). The _headers file is kept in-repo so a future
+     migration to Cloudflare Pages or Netlify activates the full
+     header set with zero further work — user explicitly chose to
+     accept this trade-off (2026-05-22) rather than migrate hosts.
  23. /_redirects file present with mappings for every legacy noindex
      stub (delivered by Cloudflare Pages / Netlify).
  24. No internal <a href> carries URL parameters (clean, static URLs
