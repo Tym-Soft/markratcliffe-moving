@@ -721,7 +721,7 @@ def page_html() -> str:
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260639" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260640" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -739,7 +739,7 @@ def page_html() -> str:
 </head>
 {navbar}
 
-  <header class="np-hero">
+  <header class="np-hero np-hero-calc">
     <div class="np-hero-inner">
       <div class="np-kicker">Free tool · BAR-style volumes · Sussex removers since 1982</div>
       <h1>Removals Cost &amp; Volume Calculator</h1>
