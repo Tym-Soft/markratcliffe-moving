@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies twenty-nine build rules:
+Verifies thirty-two build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -62,6 +62,20 @@ Verifies twenty-nine build rules:
        • "our crew" / "our team" / "we've" / "we have" (first-person
          experience)
        • "01323" or other contact specifics (trust signal)
+ 30. Every indexable page carries a JSON-LD block whose @graph
+     references the canonical organization @id
+     `https://www.markratcliffemoving.co.uk/#organization` — gives
+     every SERP entry point a LocalBusiness/MovingCompany card and
+     powers Knowledge Panel / local-pack rich results.
+     Injected sitewide by tools/build-schema.py.
+ 31. Every <script type="application/ld+json"> body is valid JSON.
+     (Malformed JSON-LD is silently ignored by Google — no error,
+     no rich result. This rule catches the silent failure mode.)
+ 32. Pages with user-visible FAQ content (one or more <details>
+     <summary>question?</summary>…</details> blocks) declare
+     FAQPage schema in some JSON-LD block, so the FAQ rich result
+     can render. tools/build-schema.py auto-generates FAQPage from
+     visible Q&A if the page doesn't already have one.
 
 Items the user's checklist mentioned that this static audit cannot
 verify (need separate runtime tooling or deployment-level checks):
@@ -986,6 +1000,87 @@ def audit():
          f'{len(indexable)} pages: every body demonstrates expertise/experience/authority/trust',
          failures['eeat'])
 
+    # Rule 30 — every indexable page carries a JSON-LD block whose
+    # graph references the canonical organization @id. This gives every
+    # SERP entry point a LocalBusiness/MovingCompany card and powers
+    # rich results (knowledge panel, local pack, sitelinks).
+    ORG_ID = 'https://www.markratcliffemoving.co.uk/#organization'
+    org_id_failures: list[str] = []
+    json_parse_failures: list[str] = []
+    for p in indexable:
+        html = open(p, encoding='utf-8').read()
+        found_org = False
+        for m in re.finditer(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', html, re.S):
+            raw = m.group(1).strip()
+            try:
+                data = json.loads(raw)
+            except json.JSONDecodeError as e:
+                json_parse_failures.append(f'{p}  invalid JSON: {e.msg} at line {e.lineno}')
+                continue
+            # Walk the data — could be a dict, a list, or a graph.
+            stack = [data]
+            while stack:
+                node = stack.pop()
+                if isinstance(node, list):
+                    stack.extend(node)
+                elif isinstance(node, dict):
+                    if node.get('@id') == ORG_ID:
+                        found_org = True
+                        break
+                    if '@graph' in node:
+                        stack.append(node['@graph'])
+            if found_org:
+                break
+        if not found_org:
+            org_id_failures.append(p)
+    rule('Rule 30 — every page carries canonical LocalBusiness JSON-LD',
+         f'{len(indexable)} pages: all reference the #organization @id',
+         org_id_failures)
+    rule('Rule 31 — every JSON-LD block parses as valid JSON',
+         f'{len(indexable)} pages: every <script type="application/ld+json"> body is valid',
+         json_parse_failures)
+
+    # Rule 32 — pages with user-visible FAQ content (one or more
+    # <details>…<summary>question?</summary>…</details> blocks) must
+    # declare FAQPage in some JSON-LD block so search engines render
+    # the FAQ rich result.
+    DETAILS_FAQ_RE = re.compile(
+        r'<details[^>]*>\s*<summary[^>]*>[^<]*\?</summary>',
+        re.S | re.I,
+    )
+    faq_schema_failures: list[str] = []
+    faq_pages_counted = 0
+    for p in indexable:
+        html = open(p, encoding='utf-8').read()
+        if not DETAILS_FAQ_RE.search(html):
+            continue
+        faq_pages_counted += 1
+        has_faq = False
+        for m in re.finditer(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', html, re.S):
+            try:
+                data = json.loads(m.group(1).strip())
+            except json.JSONDecodeError:
+                continue
+            stack = [data]
+            while stack:
+                node = stack.pop()
+                if isinstance(node, list):
+                    stack.extend(node)
+                elif isinstance(node, dict):
+                    t = node.get('@type')
+                    if t == 'FAQPage' or (isinstance(t, list) and 'FAQPage' in t):
+                        has_faq = True
+                        break
+                    if '@graph' in node:
+                        stack.append(node['@graph'])
+            if has_faq:
+                break
+        if not has_faq:
+            faq_schema_failures.append(p)
+    rule('Rule 32 — pages with visible FAQ content declare FAQPage schema',
+         f'{faq_pages_counted} pages have <details><summary>?</summary>; all carry FAQPage JSON-LD',
+         faq_schema_failures)
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -993,8 +1088,10 @@ def audit():
         print('    python3 tools/build-blog-index.py')
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
+        print('To re-inject canonical schema.org JSON-LD on every page:')
+        print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all twenty-nine content rules satisfied.')
+    print('PASS — all thirty-two content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
