@@ -24,7 +24,7 @@ SOURCES = [
     'css/new-pages.css',
 ]
 OUT_PATH = 'css/site.css'
-CACHE_VERSION = '20260650'
+CACHE_VERSION = '20260651'
 
 # Each replacement matches BOTH the `css/...` (root pages) and
 # `../css/...` (subdirectory pages) variants. We use re.escape on the
@@ -50,17 +50,24 @@ def minify(css: str) -> str:
 
 
 def build_combined_css() -> int:
+    """Concatenate the four sources verbatim.
+
+    We deliberately do NOT minify here — the cascade depends on a few
+    nav rules that the minifier mangled (mega-menu wrap regression
+    seen 2026-05-22). CloudFlare Pages / GitHub Pages will gzip the
+    combined file in transit, so the uncompressed size matters less
+    than perfect cascade fidelity.
+    """
     chunks = []
     for src in SOURCES:
         try:
-            chunks.append(f'/* {os.path.basename(src)} */\n' + open(src, encoding='utf-8').read())
+            chunks.append(f'/* === {os.path.basename(src)} === */\n' + open(src, encoding='utf-8').read())
         except OSError as e:
             print(f'  ! cannot read {src}: {e}', file=sys.stderr)
             return 1
     combined = '\n'.join(chunks)
-    minified = minify(combined)
-    open(OUT_PATH, 'w', encoding='utf-8').write(minified + '\n')
-    print(f'  wrote {OUT_PATH}  {len(minified):,} bytes (was {sum(len(c) for c in chunks):,} bytes raw)')
+    open(OUT_PATH, 'w', encoding='utf-8').write(combined)
+    print(f'  wrote {OUT_PATH}  {len(combined):,} bytes (4 sources concatenated, no minify)')
     return 0
 
 
