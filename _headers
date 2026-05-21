@@ -4,3 +4,20 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# Versioned static assets — every reference carries a ?v= query string,
+# so the URL itself changes on each update. Safe to mark immutable + 1y.
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Unversioned binary assets. Cache for a month — long enough for repeat
+# visitors, short enough that swapping an image with the same filename
+# will refresh within reasonable time.
+/images/*
+  Cache-Control: public, max-age=2592000
+
+# HTML pages must always revalidate so content updates show up quickly.
+/*.html
+  Cache-Control: public, max-age=300, must-revalidate
