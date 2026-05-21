@@ -1087,45 +1087,30 @@
       lines.push('Please prepare a quote for the move detailed below.');
       lines.push('All figures are nett — VAT (20%) will be added at booking.');
       lines.push('');
+      // === CUSTOMER-FACING SECTION =====================================
+      // What the customer sees at the top — contact, move overview, the
+      // quote totals, the inventory. No vehicle, no weight, no internal
+      // pricing breakdown.
       lines.push('CONTACT');
       lines.push(pad('  Email:', email));
       lines.push(pad('  Phone:', phone));
       lines.push(pad('  Moving FROM:', fromPC));
       lines.push(pad('  Moving TO:', toPC));
-      lines.push(pad('  Round-trip distance:', miles + ' mile' + (miles === 1 ? '' : 's')));
+      lines.push(pad('  Round-trip:', miles + ' mile' + (miles === 1 ? '' : 's')));
       lines.push(pad('  Service type:', modeLabel));
       lines.push('');
-      lines.push('PROPERTY & VOLUME');
-      lines.push(pad('  Home size selected:', bedSelected.label));
-      lines.push(pad('  Total volume:', cuft.toLocaleString('en-GB') + ' cu ft'));
-      lines.push(pad('  Cubic metres:', cum + ' cu m'));
-      lines.push(pad('  Estimated weight:', kg.toLocaleString('en-GB') + ' kg'));
-      lines.push('');
-      if (calcMode !== 'storage') {
-        lines.push('REMOVALS (nett — VAT added at booking)');
-        lines.push(pad('  Vehicle recommended:', vehicle.name + '  (' + fp(vehicle.mileRate) + '/mi)'));
-        lines.push(pad('  Pricing tier:',        bedForPrice.label));
-        lines.push(pad('  Base charge:',         fp(bedForPrice.base) + '  (covers first ' + bedForPrice.typicalCuft + ' cu ft)'));
-        if (rmExcess > 0) {
-          lines.push(pad('  Excess volume:',     rmExcess + ' cu ft × ' + fp(rmRate) + ' = ' + fp(rmExcess * rmRate)));
-        }
-        lines.push(pad('  Mileage cost:',        fp(rmMileCost) + '  (' + miles + ' × ' + fp(vehicle.mileRate) + ')'));
-        lines.push(pad('  REMOVALS TOTAL:',      fp(rmNett) + '  nett'));
-        lines.push('');
-      }
+      lines.push('MOVE OVERVIEW');
+      lines.push(pad('  Home size:', bedSelected.label));
+      lines.push(pad('  Total volume:', cuft.toLocaleString('en-GB') + ' cu ft  (' + cum + ' cu m)'));
       if (calcMode !== 'removals') {
-        lines.push('STORAGE (nett — VAT added at booking)');
-        lines.push(pad('  Room(s) required:',    stBits.join(' + ') + (picks.length > 1 || picks[0].qty > 1 ? '  (' + stTotalSqft + ' sqft total, ' + (stTotalSqft * 7).toLocaleString('en-GB') + ' cu ft capacity)' : '')));
-        lines.push(pad('  Daily rate:',          fp(stPerDay)));
-        lines.push(pad('  Duration:',            days + ' day' + (days === 1 ? '' : 's') + '  (~' + (days / 7).toFixed(days % 7 === 0 ? 0 : 1) + ' weeks)'));
-        lines.push(pad('  STORAGE TOTAL:',       fp(stNett) + '  nett'));
-        lines.push('');
+        lines.push(pad('  Storage duration:', days + ' day' + (days === 1 ? '' : 's') + '  (~' + (days / 7).toFixed(days % 7 === 0 ? 0 : 1) + ' weeks)'));
       }
-      lines.push('QUOTE SUMMARY');
-      if (calcMode !== 'storage') lines.push(pad('  Removals (nett):',  fp(rmNett)));
-      if (calcMode !== 'removals') lines.push(pad('  Storage (nett):',   fp(stNett)));
+      lines.push('');
+      lines.push('QUOTE (nett — VAT added at booking)');
+      if (calcMode !== 'storage') lines.push(pad('  Removals:', fp(rmNett)));
+      if (calcMode !== 'removals') lines.push(pad('  Storage:',  fp(stNett)));
       lines.push('  ──────────────────────────────────────────────');
-      lines.push(pad('  TOTAL (nett):',          fp(rmNett + stNett) + '  (+ VAT at booking)'));
+      lines.push(pad('  TOTAL nett:', fp(rmNett + stNett) + '  (+ VAT at booking)'));
       lines.push('');
 
       if (roomLines.length > 0) {
@@ -1142,6 +1127,31 @@
         lines.push('  ' + notes.split('\n').join('\n  '));
         lines.push('');
       }
+
+      // === OFFICE-REFERENCE SECTION ====================================
+      // Internal calculation detail the customer doesn't need but the
+      // office uses for crew/vehicle planning. Sits below a clear
+      // separator so it's obviously not part of the customer-facing
+      // summary above.
+      lines.push('══════════════════════════════════════════════════');
+      lines.push('OFFICE REFERENCE — internal calculation details');
+      lines.push('══════════════════════════════════════════════════');
+      lines.push('');
+      lines.push(pad('  Estimated weight:', kg.toLocaleString('en-GB') + ' kg'));
+      if (calcMode !== 'storage') {
+        lines.push(pad('  Vehicle recommended:', vehicle.name + '  (' + fp(vehicle.mileRate) + '/mi)'));
+        lines.push(pad('  Pricing tier:',        bedForPrice.label));
+        lines.push(pad('  Base charge:',         fp(bedForPrice.base) + '  (covers first ' + bedForPrice.typicalCuft + ' cu ft)'));
+        if (rmExcess > 0) {
+          lines.push(pad('  Excess volume:',     rmExcess + ' cu ft × ' + fp(rmRate) + ' = ' + fp(rmExcess * rmRate)));
+        }
+        lines.push(pad('  Mileage cost:',        fp(rmMileCost) + '  (' + miles + ' × ' + fp(vehicle.mileRate) + ')'));
+      }
+      if (calcMode !== 'removals') {
+        lines.push(pad('  Storage room(s):', stBits.join(' + ') + (picks.length > 1 || picks[0].qty > 1 ? '  (' + stTotalSqft + ' sqft total, ' + (stTotalSqft * 7).toLocaleString('en-GB') + ' cu ft capacity)' : '')));
+        lines.push(pad('  Daily rate (nett):', fp(stPerDay)));
+      }
+      lines.push('');
       lines.push('──────────────────────────────────────────────');
       lines.push('Sent from the Mark Ratcliffe Moving online quote calculator.');
       lines.push('Office reply within 48 hours. EMV London Ltd t/a Mark');
