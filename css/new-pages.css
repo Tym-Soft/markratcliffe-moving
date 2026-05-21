@@ -2021,10 +2021,8 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
 }
 .qc-bed-card { min-width: 0; }
 @media (max-width: 760px) {
+  /* 3 per row on mobile — keeps Tiny/1/2-bed and 3/4/5+ on two clean rows */
   .qc-bed-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-@media (max-width: 460px) {
-  .qc-bed-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .qc-bed-card {
   display: flex;
