@@ -1062,46 +1062,6 @@ def page_html() -> str:
     </div>
   </section>
 
-  <section class="np-section">
-    <div class="np-inner">
-      <h2>How to use the calculator</h2>
-      <p>Walk through your home one room at a time. Across the {len(ITEMS)} category tabs above we cover {n_items} common household items. Click a tab to switch rooms, use the search box to jump to a specific item, then tap &minus; or + to set the quantity. The totals box at the top updates live. Three things to remember:</p>
-      <ul>
-        <li><strong>Estimates, not exact.</strong> Our crews see the same item dimensions vary by 10-20%. The figures here are the BAR-style averages we use to plan a Sussex job; they get you in the right ballpark.</li>
-        <li><strong>Allow for boxes.</strong> A typical three-bedroom Sussex house has 60-80 standard removal boxes once everything is packed; if you don&rsquo;t know yet, allow 75 tea-chest-sized boxes for planning purposes.</li>
-        <li><strong>Storage versus lorry.</strong> The same volume of contents takes a different shape in a storage container than on a lorry — your storage quote and your removals quote may both reference the cu ft figure but the practical implications differ. We&rsquo;ll explain on the survey.</li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="np-section np-section-soft">
-    <div class="np-inner">
-      <h2>Mark Ratcliffe Moving pricing model</h2>
-      <p>Each property type carries its own base charge that covers the typical volume for that home. Every cu ft above the property's typical adds <strong>£1.51+v</strong>. Mileage is added at the per-vehicle rate (vehicle is auto-picked from the volume you enter). All prices below are <em>nett</em> — 20% VAT is added to the final quote.</p>
-      <table class="rate-table">
-        <thead>
-          <tr>
-            <th>Property</th>
-            <th>Base charge (nett)</th>
-            <th>Volume included</th>
-            <th>Each extra cu ft</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Tiny move</strong> (few boxes, single items)</td><td><strong>£300</strong></td><td>first 300 cu ft</td><td>£1.00</td></tr>
-          <tr><td><strong>1-bed</strong> flat or studio</td><td><strong>£500</strong></td><td>first 500 cu ft</td><td>£1.51+v</td></tr>
-          <tr><td><strong>2-bed</strong> home</td><td><strong>£650</strong></td><td>first 800 cu ft</td><td>£1.51+v</td></tr>
-          <tr><td><strong>3-bed</strong> home</td><td><strong>£900</strong></td><td>first 1,000 cu ft</td><td>£1.51+v</td></tr>
-          <tr><td><strong>4-bed</strong> home</td><td><strong>£1,500</strong></td><td>first 1,800 cu ft</td><td>£1.51+v</td></tr>
-          <tr><td><strong>5+ bed</strong> / antiques / country</td><td><strong>£2,500</strong></td><td>first 2,800 cu ft</td><td>£1.51+v</td></tr>
-        </tbody>
-      </table>
-      <p>Vehicle is auto-picked from your cu ft for the mileage rate: <strong>Luton Van (3.5t)</strong> £2.00/mi up to 800 cu ft, <strong>7.5 Tonne Lorry</strong> £2.75/mi up to 1,500 cu ft, <strong>18 Tonne Lorry</strong> £4.00/mi up to 2,500 cu ft, <strong>44 Tonne Artic</strong> £4.00/mi above 2,500 cu ft.</p>
-      <p>The cost formula: <strong>(base charge + max(0, cu ft − typical) × £1.51 + miles × £/mile) × 1.20 VAT</strong>. The calculator shows nett figures plus a 20% VAT line so you can see exactly what the VAT addition is. Specialist services (piano moving, antique handling, custom crating, white-glove relocation, international shipping) sit on top of the base figure. Every customer deposit is covered by the BAR Advance Payment Guarantee, and our processes are certified to the BS 8564 international removals standard.</p>
-      <p>For an accurate price, book a <a href="../mark-ratcliffe-moving-online-removals-quote.html">free in-home survey</a>. We respond within 48 hours.</p>
-    </div>
-  </section>
-
   <section class="np-section np-related" aria-label="Related resources">
     <div class="np-inner">
       <h2>Related resources</h2>
