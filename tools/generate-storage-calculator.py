@@ -721,7 +721,7 @@ def page_html() -> str:
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260646" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260648" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -825,12 +825,12 @@ def page_html() -> str:
           <fieldset class="qc-step">
             <legend class="qc-step-label"><span class="qc-step-num">3</span> Volume &amp; distance</legend>
             <div class="qc-num-row">
-              <label class="qc-num">
+              <label class="qc-num qc-num-attention">
                 <span class="qc-num-label">Adjust cubic ft</span>
                 <input type="number" id="cost-manual-cuft" min="0" step="50" value="1200" inputmode="numeric" aria-describedby="cost-manual-cuft-help">
                 <span class="qc-num-help" id="cost-manual-cuft-help">Auto-fills typical figure; tick items below for a precise volume.</span>
               </label>
-              <label class="qc-num" data-show-modes="removals both">
+              <label class="qc-num qc-num-attention" data-show-modes="removals both">
                 <span class="qc-num-label">Adjust total job miles</span>
                 <input type="number" id="cost-miles" min="0" value="0" inputmode="numeric" aria-describedby="cost-miles-help">
                 <span class="qc-num-help" id="cost-miles-help">Round-trip: depot → home → new home → depot.</span>
@@ -967,6 +967,29 @@ def page_html() -> str:
                   <span class="qc-quote-step-title">Your contact details</span>
                 </div>
                 <div class="quote-form-grid">
+                  <div class="quote-form-name-row">
+                    <label>
+                      <span class="quote-form-label">Title</span>
+                      <select name="title" id="qf-title" required autocomplete="honorific-prefix">
+                        <option value="" disabled selected>Choose&hellip;</option>
+                        <option>Mr</option>
+                        <option>Mrs</option>
+                        <option>Miss</option>
+                        <option>Ms</option>
+                        <option>Mx</option>
+                        <option>Dr</option>
+                        <option>Prof</option>
+                      </select>
+                    </label>
+                    <label>
+                      <span class="quote-form-label">First name</span>
+                      <input type="text" name="first_name" id="qf-first" required autocomplete="given-name" placeholder="Jane">
+                    </label>
+                    <label>
+                      <span class="quote-form-label">Last name</span>
+                      <input type="text" name="last_name" id="qf-last" required autocomplete="family-name" placeholder="Smith">
+                    </label>
+                  </div>
                   <label>
                     <span class="quote-form-label">Your email</span>
                     <input type="email" name="email" id="qf-email" required autocomplete="email" placeholder="you@example.com">
@@ -1103,7 +1126,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260645"></script>
+  <script defer src="../js/storage-calculator.js?v=20260649"></script>
 </body>
 </html>
 """

@@ -1053,6 +1053,7 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
   font-size: 0.88rem;
 }
 .quote-form-grid input,
+.quote-form-grid select,
 .quote-form-grid textarea {
   font-family: "Inter", sans-serif;
   font-size: 1rem;
@@ -1063,7 +1064,17 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
   background: #fff;
   width: 100%;
 }
+.quote-form-grid select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='%234d2e8f'><path d='M6 8 0 0h12z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 10px 7px;
+  padding-right: 1.8rem;
+}
 .quote-form-grid input:focus,
+.quote-form-grid select:focus,
 .quote-form-grid textarea:focus {
   outline: 2px solid var(--brand-bronze, #C8A876);
   outline-offset: -1px;
@@ -1071,6 +1082,22 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
 }
 .quote-form-grid textarea { resize: vertical; min-height: 4em; font-family: inherit; }
 .quote-form-full { grid-column: 1 / -1; }
+
+/* Title + first name + last name share a single row across the full
+   width of the quote-form-grid. Title is narrower since the dropdown
+   only needs to show short honorifics. */
+.quote-form-name-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(90px, 0.55fr) 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 640px) {
+  .quote-form-name-row {
+    grid-template-columns: minmax(80px, 0.7fr) 1fr 1fr;
+    gap: 0.6rem;
+  }
+}
 .quote-form-actions {
   margin-top: 1.25rem;
   display: flex;
@@ -2136,6 +2163,30 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
   outline: none;
 }
 .qc-num input:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Slow, gentle pulse on the cu ft + miles cards so customers spot the
+   editable controls. Pulse stops on focus (they're already engaged) and
+   is fully disabled for users with prefers-reduced-motion. */
+@keyframes qcNumAttention {
+  0%, 100% {
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 0 0 0 rgba(200,168,118,0);
+  }
+  50% {
+    border-color: var(--brand-bronze, #C8A876);
+    box-shadow: 0 0 0 4px rgba(200,168,118,0.22);
+  }
+}
+.qc-num-attention {
+  animation: qcNumAttention 2.4s ease-in-out infinite;
+}
+.qc-num-attention:focus-within,
+.qc-num-attention:hover {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .qc-num-attention { animation: none; }
+}
 .qc-num-help {
   font-size: 0.7rem;
   color: rgba(255,255,255,0.62);

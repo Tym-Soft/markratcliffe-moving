@@ -190,19 +190,26 @@
     return picks;
   }
 
-  // Pricing model (per-property base + monotonic excess):
-  //   • Each bedroom selection has its own base charge that covers the
-  //     property's typical cu ft volume.
-  //   • Every cu ft above the property's typical adds £1.21 — price
-  //     rises continuously, no plateaus.
+  // Pricing model (piecewise-linear anchors):
+  //   • PRICE_ANCHORS defines [cu ft, £] anchors at each property type's
+  //     typical volume. Between adjacent anchors the cost ramps linearly,
+  //     so every additional cu ft changes the total — no plateau zones.
+  //   • Anchor prices match the marketed tier costs at typical volumes.
+  //   • Above the highest anchor, the slope of the last segment extends.
   //   • Vehicle is auto-picked by cu ft for the mileage rate only.
-  //   • Volume cost = bed.base + max(0, cuft − bed.typicalCuft) × £1.21
   //   • Nett total  = volume cost + miles × picked-vehicle mile rate
   //   • VAT         = nett × 20%
   //   • Inc-VAT     = nett × 1.20 (storage rates already include VAT)
-  // Default excess £/cu ft if a property doesn't override its own rate.
-  var DEFAULT_EXCESS_RATE = 1.51;
-  var VAT_RATE            = 0.20;
+  var PRICE_ANCHORS = [
+    [0,       0],
+    [300,   300],   // tiny move
+    [500,   500],   // 1-bed flat / studio
+    [800,   650],   // 2-bed home
+    [1000,  900],   // 3-bed home
+    [1800, 1500],   // 4-bed home
+    [2800, 2500]    // 5+ bed / antiques / country
+  ];
+  var VAT_RATE = 0.20;
   var VEHICLE_TIERS = [
     { name: 'Luton Van (3.5t)', maxCuft:  800, mileRate: 2.00 },
     { name: '7.5 Tonne Lorry',  maxCuft: 1500, mileRate: 2.75 },
@@ -210,39 +217,48 @@
     { name: '44 Tonne Artic',   maxCuft: Infinity, mileRate: 4.00 }
   ];
 
-  // Per-property pricing tiers. typicalCuft auto-fills the cu ft input
-  // and also defines the volume the property's base charge already
-  // covers. Above typicalCuft, each extra cu ft adds £1.21.
+  // Per-property tier metadata. typicalCuft auto-fills the cu ft input
+  // when the customer picks a bedroom card and is used to label the
+  // pricing row (e.g. "2-bed home · 850 cu ft"). The actual price comes
+  // from PRICE_ANCHORS, so adjacent tiers' prices interpolate smoothly.
   var BED_DEFAULTS = {
-    // Tiny is capped at 500 cu ft — above that we always defer to a real
-    // bed tier so the £1/cu ft Tiny rate can't undercut larger jobs.
-    'tiny': { label: 'Tiny move',                    typicalCuft:  300, base:  300, rate: 1.00, maxCuft: 500 },
-    '1bed': { label: '1-bed flat or studio',         typicalCuft:  500, base:  500, rate: 1.51 },
-    '2bed': { label: '2-bed home',                   typicalCuft:  800, base:  650, rate: 1.51 },
-    '3bed': { label: '3-bed home',                   typicalCuft: 1000, base:  900, rate: 1.51 },
-    '4bed': { label: '4-bed home',                   typicalCuft: 1800, base: 1500, rate: 1.51 },
-    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800, base: 2500, rate: 1.51 }
+    'tiny': { label: 'Tiny move',                    typicalCuft:  300 },
+    '1bed': { label: '1-bed flat or studio',         typicalCuft:  500 },
+    '2bed': { label: '2-bed home',                   typicalCuft:  800 },
+    '3bed': { label: '3-bed home',                   typicalCuft: 1000 },
+    '4bed': { label: '4-bed home',                   typicalCuft: 1800 },
+    '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800 }
   };
 
-  function computeVolumeCost(cuft, bed) {
-    var excess = Math.max(0, cuft - bed.typicalCuft);
-    var rate = (typeof bed.rate === 'number') ? bed.rate : DEFAULT_EXCESS_RATE;
-    return bed.base + excess * rate;
+  // Piecewise-linear volume cost. `bed` is accepted for backwards
+  // compatibility but ignored — price is purely a function of cu ft.
+  function computeVolumeCost(cuft /*, bed */) {
+    if (cuft <= PRICE_ANCHORS[0][0]) return PRICE_ANCHORS[0][1];
+    for (var i = 1; i < PRICE_ANCHORS.length; i++) {
+      var x1 = PRICE_ANCHORS[i - 1][0], y1 = PRICE_ANCHORS[i - 1][1];
+      var x2 = PRICE_ANCHORS[i][0],     y2 = PRICE_ANCHORS[i][1];
+      if (cuft <= x2) {
+        return y1 + (cuft - x1) * (y2 - y1) / (x2 - x1);
+      }
+    }
+    var last = PRICE_ANCHORS[PRICE_ANCHORS.length - 1];
+    var prev = PRICE_ANCHORS[PRICE_ANCHORS.length - 2];
+    var slope = (last[1] - prev[1]) / (last[0] - prev[0]);
+    return last[1] + (cuft - last[0]) * slope;
   }
-  // Picks the cheapest valid bed tier for a given cu ft. Tiers with a
-  // maxCuft are skipped when the volume exceeds it (so the £1/cu ft Tiny
-  // rate can't take over at high volumes). Mirrors the
-  // pickStorageUnits/pickVehicle "always cheapest" logic.
+
+  // Display label only — picks the tier whose typical cu ft is closest
+  // to the actual cu ft so the pricing row reads sensibly. Has no
+  // effect on the £ figure.
   function pickCheapestBed(cuft) {
-    var bestBed = null;
-    var bestCost = Infinity;
+    var bestBed = BED_DEFAULTS['1bed'];
+    var bestDelta = Infinity;
     Object.keys(BED_DEFAULTS).forEach(function (key) {
       var b = BED_DEFAULTS[key];
-      if (typeof b.maxCuft === 'number' && cuft > b.maxCuft) return;
-      var c = computeVolumeCost(cuft, b);
-      if (c < bestCost) { bestCost = c; bestBed = b; }
+      var delta = Math.abs(cuft - b.typicalCuft);
+      if (delta < bestDelta) { bestDelta = delta; bestBed = b; }
     });
-    return bestBed || BED_DEFAULTS['3bed'];
+    return bestBed;
   }
   function pickVehicle(cuft) {
     for (var i = 0; i < VEHICLE_TIERS.length; i++) {
@@ -441,10 +457,8 @@
     }
     setText('qp-storage-room', roomBits.join(' + '));
 
-    // Pricing (nett)
-    var rmExcess = Math.max(0, cuft - bedForPrice.typicalCuft);
-    var rmRate   = (typeof bedForPrice.rate === 'number') ? bedForPrice.rate : DEFAULT_EXCESS_RATE;
-    var rmVolCost = bedForPrice.base + rmExcess * rmRate;
+    // Pricing (nett) — piecewise-linear volume cost from PRICE_ANCHORS
+    var rmVolCost  = computeVolumeCost(cuft);
     var rmMileCost = miles * vehicle.mileRate;
     var rmNett = (mode === 'storage') ? 0 : rmVolCost + rmMileCost;
     var stPerDay = 0;
@@ -520,25 +534,19 @@
     var headlineLabel = document.getElementById('cost-headline-label');
 
     // --- REMOVALS leg ---
-    var excessCuft = Math.max(0, cuft - bed.typicalCuft);
-    var volCost    = computeVolumeCost(cuft, bed);
+    var volCost    = computeVolumeCost(cuft);
     var mileCost   = miles * vehicle.mileRate;
     var removalsNett = (mode === 'storage') ? 0 : (volCost + mileCost);
     var removalsVAT  = removalsNett * VAT_RATE;
     var removalsInc  = removalsNett + removalsVAT;
 
     costVehicle.textContent = vehicle.name;
-    if (cuft === 0) {
-      costVolume.textContent = pounds(bed.base) + ' (' + bed.label + ' base · first ' + bed.typicalCuft + ' cu ft)';
-    } else if (excessCuft === 0) {
-      costVolume.textContent = pounds(bed.base) + ' (' + bed.label + ' base · ' + cuft + ' / ' + bed.typicalCuft + ' cu ft included)';
-    } else {
-      costVolume.textContent = pounds(volCost) + ' (' + pounds(bed.base) + ' base + ' + excessCuft + ' extra × £' + (bed.rate || DEFAULT_EXCESS_RATE).toFixed(2) + ')';
-    }
-    costMileage.textContent = pounds(mileCost) + ' (' + miles + ' × £' + vehicle.mileRate.toFixed(2) + ')';
-    if (costNettTotal) costNettTotal.textContent = pounds(removalsNett);
-    if (costVAT)       costVAT.textContent       = pounds(removalsVAT);
-    costTotal.textContent = (mode === 'storage') ? '£0' : pounds(removalsNett);
+    costVolume.textContent = poundsPence(volCost) + ' (' + bed.label + ' · ' +
+      cuft.toLocaleString('en-GB') + ' cu ft)';
+    costMileage.textContent = poundsPence(mileCost) + ' (' + miles + ' × £' + vehicle.mileRate.toFixed(2) + ')';
+    if (costNettTotal) costNettTotal.textContent = poundsPence(removalsNett);
+    if (costVAT)       costVAT.textContent       = poundsPence(removalsVAT);
+    costTotal.textContent = (mode === 'storage') ? '£0.00' : poundsPence(removalsNett);
 
     // --- STORAGE leg + GRAND TOTAL (NETT — VAT added at booking) ---
     var storageTotal = updateStorage(cuft, mode);
@@ -571,10 +579,8 @@
       var prefix;
       if (mode === 'storage') {
         prefix = 'Live estimate (+ VAT)';
-      } else if (excessCuft > 0) {
-        prefix = excessCuft + ' cu ft above ' + bed.typicalCuft + ' included · + VAT';
       } else {
-        prefix = bed.label + ' base · + VAT';
+        prefix = bed.label + ' · ' + cuft.toLocaleString('en-GB') + ' cu ft · + VAT';
       }
       headlineLabel.textContent = prefix + ' · ' + bits.join(' · ');
     }
@@ -954,7 +960,7 @@
   // STEP 1 → STEP 2: validate contact fields, then reveal the summary.
   if (quoteNextBtn) {
     quoteNextBtn.addEventListener('click', function () {
-      var required = ['qf-email', 'qf-phone', 'qf-from', 'qf-to'];
+      var required = ['qf-title', 'qf-first', 'qf-last', 'qf-email', 'qf-phone', 'qf-from', 'qf-to'];
       for (var i = 0; i < required.length; i++) {
         var el = document.getElementById(required[i]);
         if (el && !el.checkValidity()) {
@@ -994,11 +1000,15 @@
   if (quoteForm) {
     quoteForm.addEventListener('submit', function (e) {
       e.preventDefault();
+      var title  = document.getElementById('qf-title').value.trim();
+      var first  = document.getElementById('qf-first').value.trim();
+      var last   = document.getElementById('qf-last').value.trim();
       var email  = document.getElementById('qf-email').value.trim();
       var phone  = document.getElementById('qf-phone').value.trim();
       var fromPC = document.getElementById('qf-from').value.trim().toUpperCase();
       var toPC   = document.getElementById('qf-to').value.trim().toUpperCase();
       var notes  = document.getElementById('qf-notes').value.trim();
+      var fullName = [title, first, last].filter(function (p) { return p; }).join(' ');
       var status = document.getElementById('qf-status');
 
       var calcMode = getCalcMode();
@@ -1017,9 +1027,7 @@
       var vehicle = pickVehicle(cuft);
 
       // Removals pricing (nett — VAT added at booking)
-      var rmExcess   = Math.max(0, cuft - bedForPrice.typicalCuft);
-      var rmRate     = (typeof bedForPrice.rate === 'number') ? bedForPrice.rate : DEFAULT_EXCESS_RATE;
-      var rmVolCost  = bedForPrice.base + rmExcess * rmRate;
+      var rmVolCost  = computeVolumeCost(cuft);
       var rmMileCost = miles * vehicle.mileRate;
       var rmNett     = (calcMode === 'storage') ? 0 : rmVolCost + rmMileCost;
 
@@ -1092,6 +1100,7 @@
       // quote totals, the inventory. No vehicle, no weight, no internal
       // pricing breakdown.
       lines.push('CONTACT');
+      lines.push(pad('  Name:', fullName));
       lines.push(pad('  Email:', email));
       lines.push(pad('  Phone:', phone));
       lines.push(pad('  Moving FROM:', fromPC));
@@ -1134,8 +1143,9 @@
       lines.push('Ratcliffe Moving & Storage. Family-run since 1982.');
 
       var totalNett = rmNett + stNett;
-      var subject = 'Quote request — ' + bedSelected.label + ' · ' + (fromPC || 'FROM') +
-        ' → ' + (toPC || 'TO') + ' · ' + cuft.toLocaleString('en-GB') + ' cu ft · ' + fp(totalNett) + ' nett';
+      var subject = 'Quote request — ' + (fullName || 'Customer') + ' · ' + bedSelected.label +
+        ' · ' + (fromPC || 'FROM') + ' → ' + (toPC || 'TO') + ' · ' +
+        cuft.toLocaleString('en-GB') + ' cu ft · ' + fp(totalNett) + ' nett';
 
       // Send only to office — the customer's email is already in the body
       // (so office can reply to it). No CC means the customer's inbox
