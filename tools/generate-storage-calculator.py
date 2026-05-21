@@ -718,10 +718,7 @@ def page_html() -> str:
   <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://cdn.yoshki.com" crossorigin>
-  <link href="../css/normalize.css?v=20260560" rel="stylesheet">
-  <link href="../css/components.css?v=20260560" rel="stylesheet">
-  <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260648" rel="stylesheet">
+  <link href="../css/site.css?v=20260650" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
