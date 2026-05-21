@@ -730,10 +730,18 @@
     input.addEventListener('change', recalc);
   });
 
-  // Reset
+  // Reset all quantities — fully wipes inventory state:
+  //   • every item qty → 0
+  //   • auto-fill toggle flips OFF
+  //   • manualCuftTouched cleared so cu ft snaps back to bedroom default
+  //   • cu ft input re-enabled (was disabled by inventory)
+  //   • tab badges + summary clear via recalc
   if (resetBtn) {
     resetBtn.addEventListener('click', function () {
-      inputs.forEach(function (input) { input.value = 0; });
+      for (var i = 0; i < inputs.length; i++) inputs[i].value = 0;
+      if (inventoryToggle) inventoryToggle.checked = false;
+      manualCuftTouched = false;
+      applyHomeSizeDefault();
       recalc();
     });
   }
