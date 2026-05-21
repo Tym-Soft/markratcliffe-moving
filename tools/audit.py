@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies thirty-two build rules:
+Verifies thirty-four build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -76,6 +76,13 @@ Verifies thirty-two build rules:
      FAQPage schema in some JSON-LD block, so the FAQ rich result
      can render. tools/build-schema.py auto-generates FAQPage from
      visible Q&A if the page doesn't already have one.
+ 33. Exactly one <meta name="description"> per page — multiple
+     meta descriptions are invalid HTML and Google may pick the
+     wrong one. Fixed by tools/cleanup-html.py.
+ 34. No JS-injected <link rel="canonical"> tags. Crawlers without
+     JS execution (Screaming Frog, many SERP previews) can't see
+     a runtime-created canonical, so it must be hardcoded static
+     markup in <head>. Fixed by tools/cleanup-html.py.
 
 Items the user's checklist mentioned that this static audit cannot
 verify (need separate runtime tooling or deployment-level checks):
@@ -1081,6 +1088,39 @@ def audit():
          f'{faq_pages_counted} pages have <details><summary>?</summary>; all carry FAQPage JSON-LD',
          faq_schema_failures)
 
+    # Rule 33 — exactly one <meta name="description"> per page. Multiple
+    # meta descriptions are invalid HTML and confuse search engines —
+    # Google may use whichever it picks, often the wrong one.
+    META_DESC_PAGE_RE = re.compile(
+        r'<meta\s+[^>]*?name\s*=\s*["\']description["\']',
+        re.I,
+    )
+    multi_desc_failures: list[str] = []
+    for p in indexable:
+        n = len(META_DESC_PAGE_RE.findall(open(p, encoding='utf-8').read()))
+        if n > 1:
+            multi_desc_failures.append(f'{p}  ({n} meta descriptions)')
+    rule('Rule 33 — exactly one <meta name="description"> per page',
+         f'{len(indexable)} pages: each declares a single meta description',
+         multi_desc_failures)
+
+    # Rule 34 — no JS-injected canonicals. Crawlers like Screaming Frog
+    # and many SERP previews don't execute JavaScript, so a canonical
+    # created at runtime via createElement('link') / setAttribute('rel',
+    # 'canonical') is invisible to them. Canonicals must be hardcoded
+    # in the <head> as static markup.
+    JS_CANON_RE = re.compile(
+        r'setAttribute\(\s*["\']rel["\']\s*,\s*["\']canonical["\']',
+        re.I,
+    )
+    js_canon_failures: list[str] = []
+    for p in indexable:
+        if JS_CANON_RE.search(open(p, encoding='utf-8').read()):
+            js_canon_failures.append(p)
+    rule('Rule 34 — no JS-injected <link rel="canonical">',
+         f'{len(indexable)} pages: every canonical is hardcoded static HTML',
+         js_canon_failures)
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -1091,7 +1131,7 @@ def audit():
         print('To re-inject canonical schema.org JSON-LD on every page:')
         print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all thirty-two content rules satisfied.')
+    print('PASS — all thirty-four content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
