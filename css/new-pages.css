@@ -2219,6 +2219,10 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
   color: #fff;
 }
 .quote-card .qc-inventory-summary[hidden] { display: none; }
+/* Hide the in-card inventory disclosure — the same list appears in the
+   step-2 review panel of the Send-for-a-quote dropdown, so showing it
+   here too is redundant noise before the CTA. */
+.quote-card .qc-inventory-summary { display: none !important; }
 .quote-card .qc-inventory-summary > summary {
   list-style: none;
   cursor: pointer;
