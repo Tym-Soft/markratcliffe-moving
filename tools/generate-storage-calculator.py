@@ -721,7 +721,7 @@ def page_html() -> str:
   <link href="../css/normalize.css?v=20260560" rel="stylesheet">
   <link href="../css/components.css?v=20260560" rel="stylesheet">
   <link href="../css/mark-ratcliffe-moving.css?v=20260560" rel="stylesheet">
-  <link href="../css/new-pages.css?v=20260635" rel="stylesheet">
+  <link href="../css/new-pages.css?v=20260636" rel="stylesheet">
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -955,7 +955,7 @@ def page_html() -> str:
           <div class="qc-quote-dropdown" id="quote-dropdown" hidden>
             <div class="qc-quote-dropdown-header">
               <strong>Send these figures with a quote request</strong>
-              <p>Two quick steps. We send the full summary — every item, the cube, the recommended vehicle and the nett pricing — to <a href="mailto:office@markratcliffemoving.co.uk">office@markratcliffemoving.co.uk</a> and CC you in. Reply within 48 hours.</p>
+              <p>Two quick steps. We send the full summary — every item, the cube, the recommended vehicle and the nett pricing — to <a href="mailto:office@markratcliffemoving.co.uk">office@markratcliffemoving.co.uk</a> — reply within 48 hours. Reply within 48 hours.</p>
             </div>
 
             <form class="quote-form" id="quote-request-form">
@@ -1005,7 +1005,7 @@ def page_html() -> str:
                 <div class="quote-preview" id="quote-preview">
                   <div class="quote-preview-header">
                     <strong>Your quote summary</strong>
-                    <span>This is exactly what we&rsquo;ll send to the office — and CC to your email. Updates live.</span>
+                    <span>This is exactly what we&rsquo;ll send to the office Updates live.</span>
                   </div>
                   <div class="quote-preview-grid">
                     <div class="quote-preview-block">
@@ -1019,12 +1019,10 @@ def page_html() -> str:
                       </dl>
                     </div>
                     <div class="quote-preview-block">
-                      <span class="qp-block-title">Property &amp; vehicle</span>
+                      <span class="qp-block-title">Property</span>
                       <dl>
                         <div><dt>Home size</dt><dd id="qp-bedroom">—</dd></div>
                         <div><dt>Volume</dt><dd id="qp-volume">—</dd></div>
-                        <div><dt>Weight</dt><dd id="qp-weight">—</dd></div>
-                        <div data-show-modes="removals both"><dt>Vehicle</dt><dd id="qp-vehicle">—</dd></div>
                         <div data-show-modes="storage both"><dt>Storage room</dt><dd id="qp-storage-room">—</dd></div>
                       </dl>
                     </div>
@@ -1049,7 +1047,7 @@ def page_html() -> str:
 
                 <div class="quote-form-actions">
                   <button type="submit" class="np-btn np-btn-primary">Send quote request</button>
-                  <p class="quote-form-help">Opens your email app with the full summary pre-filled. Sends to <a href="mailto:office@markratcliffemoving.co.uk">office@markratcliffemoving.co.uk</a>, CC&rsquo;s you.</p>
+                  <p class="quote-form-help">Opens your email app with the full summary pre-filled. Sends to <a href="mailto:office@markratcliffemoving.co.uk">office@markratcliffemoving.co.uk</a>.</p>
                 </div>
                 <div class="quote-form-status" id="qf-status" role="status" aria-live="polite"></div>
               </div>
@@ -1146,7 +1144,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260635"></script>
+  <script defer src="../js/storage-calculator.js?v=20260636"></script>
 </body>
 </html>
 """

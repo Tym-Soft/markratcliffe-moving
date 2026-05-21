@@ -1092,7 +1092,6 @@
       lines.push(pad('  Total volume:', cuft.toLocaleString('en-GB') + ' cu ft'));
       lines.push(pad('  Cubic metres:', cum + ' cu m'));
       lines.push(pad('  Estimated weight:', kg.toLocaleString('en-GB') + ' kg'));
-      lines.push(pad('  Load size:', (vanEstimate && vanEstimate.textContent) || ''));
       lines.push('');
       if (calcMode !== 'storage') {
         lines.push('REMOVALS (nett — VAT added at booking)');
@@ -1144,13 +1143,15 @@
       var subject = 'Quote request — ' + bedSelected.label + ' · ' + (fromPC || 'FROM') +
         ' → ' + (toPC || 'TO') + ' · ' + cuft.toLocaleString('en-GB') + ' cu ft · ' + fp(totalNett) + ' nett';
 
-      var params = 'subject=' + encodeURIComponent(subject) +
-                   '&body='  + encodeURIComponent(lines.join('\n'));
-      if (email) params = 'cc=' + encodeURIComponent(email) + '&' + params;
-      var mailto = 'mailto:office@markratcliffemoving.co.uk?' + params;
+      // Send only to office — the customer's email is already in the body
+      // (so office can reply to it). No CC means the customer's inbox
+      // doesn't get a copy of the internal calculation details.
+      var mailto = 'mailto:office@markratcliffemoving.co.uk?' +
+        'subject=' + encodeURIComponent(subject) +
+        '&body='  + encodeURIComponent(lines.join('\n'));
 
       if (status) {
-        status.textContent = 'Opening your email app… we send to office@markratcliffemoving.co.uk and CC you a copy. If nothing happens, email office@markratcliffemoving.co.uk directly with the figures from the preview above.';
+        status.textContent = 'Opening your email app… we send to office@markratcliffemoving.co.uk and they reply within 48 hours. If nothing happens, email office@markratcliffemoving.co.uk directly with the figures from the preview above.';
       }
       window.location.href = mailto;
     });
