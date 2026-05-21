@@ -1186,9 +1186,10 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
   text-decoration: underline;
   outline: none;
 }
-/* Slight rotate on the CTA arrow when the dropdown is open. */
-.quote-card-cta[aria-expanded="true"]::after {
-  content: '';
+/* When the dropdown is open the CTA is redundant — hide it. The dropdown
+   itself sits where the CTA was, so the customer's focus stays in place. */
+.quote-card-cta[aria-expanded="true"] {
+  display: none !important;
 }
 
 /* Live quote preview — shows exactly what the email will contain. */
