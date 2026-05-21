@@ -1128,30 +1128,6 @@
         lines.push('');
       }
 
-      // === OFFICE-REFERENCE SECTION ====================================
-      // Internal calculation detail the customer doesn't need but the
-      // office uses for crew/vehicle planning. Sits below a clear
-      // separator so it's obviously not part of the customer-facing
-      // summary above.
-      lines.push('══════════════════════════════════════════════════');
-      lines.push('OFFICE REFERENCE — internal calculation details');
-      lines.push('══════════════════════════════════════════════════');
-      lines.push('');
-      lines.push(pad('  Estimated weight:', kg.toLocaleString('en-GB') + ' kg'));
-      if (calcMode !== 'storage') {
-        lines.push(pad('  Vehicle recommended:', vehicle.name + '  (' + fp(vehicle.mileRate) + '/mi)'));
-        lines.push(pad('  Pricing tier:',        bedForPrice.label));
-        lines.push(pad('  Base charge:',         fp(bedForPrice.base) + '  (covers first ' + bedForPrice.typicalCuft + ' cu ft)'));
-        if (rmExcess > 0) {
-          lines.push(pad('  Excess volume:',     rmExcess + ' cu ft × ' + fp(rmRate) + ' = ' + fp(rmExcess * rmRate)));
-        }
-        lines.push(pad('  Mileage cost:',        fp(rmMileCost) + '  (' + miles + ' × ' + fp(vehicle.mileRate) + ')'));
-      }
-      if (calcMode !== 'removals') {
-        lines.push(pad('  Storage room(s):', stBits.join(' + ') + (picks.length > 1 || picks[0].qty > 1 ? '  (' + stTotalSqft + ' sqft total, ' + (stTotalSqft * 7).toLocaleString('en-GB') + ' cu ft capacity)' : '')));
-        lines.push(pad('  Daily rate (nett):', fp(stPerDay)));
-      }
-      lines.push('');
       lines.push('──────────────────────────────────────────────');
       lines.push('Sent from the Mark Ratcliffe Moving online quote calculator.');
       lines.push('Office reply within 48 hours. EMV London Ltd t/a Mark');

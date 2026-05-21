@@ -2228,36 +2228,27 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
    here too is redundant noise before the CTA. */
 .quote-card .qc-inventory-summary { display: none !important; }
 
-/* Storage-calculator hero on mobile — hide the kicker / lead / CTA so
-   the customer drops straight into the calculator. The H1 is moved
-   off-screen via the visually-hidden idiom (not display:none) so SEO
-   + audit rule 18 (H1 first) and rule 26 (one H1) both still pass. */
+/* Storage-calculator hero on mobile — completely removed from layout
+   so the page drops the customer straight into the calculator. The
+   base .np-hero has min-height: 78vh + padding + display:flex which
+   produced an empty purple band even with partial overrides; nuking
+   with display:none is cleaner. H1 stays in the DOM (with the
+   visually-hidden idiom on the element itself) so audit rule 18
+   (H1 first heading) and rule 26 (one H1) both still pass. */
 @media (max-width: 760px) {
-  .np-hero-calc .np-kicker,
-  .np-hero-calc .np-hero-sub,
-  .np-hero-calc .np-hero-cta,
-  .np-hero-calc .np-hero-bg { display: none !important; }
-  .np-hero-calc {
-    min-height: 0;
-    padding: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-  .np-hero-calc .np-hero-inner {
-    padding: 0;
-    margin: 0;
-    background: transparent;
-    min-height: 0;
-  }
-  /* Breadcrumb on the calculator page — hidden on mobile (the page goes
-     straight from the navbar into the calculator card). */
-  .np-breadcrumb-calc { display: none !important; }
+  .np-hero-calc { display: none !important; }
   .np-hero-calc h1 {
+    /* applied via inline-block class on the H1 inside .np-hero-calc;
+       kept as a backup so even if display:none above is overridden
+       somehow, the H1 stays accessible-but-not-visible.            */
     position: absolute;
     width: 1px; height: 1px;
     padding: 0; margin: -1px; overflow: hidden;
     clip: rect(0,0,0,0); white-space: nowrap; border: 0;
   }
+  /* Breadcrumb on the calculator page — hidden on mobile (the page
+     goes straight from the navbar into the calculator card). */
+  .np-breadcrumb-calc { display: none !important; }
 }
 .quote-card .qc-inventory-summary > summary {
   list-style: none;
