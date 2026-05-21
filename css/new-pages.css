@@ -2237,7 +2237,15 @@ body[data-calc-mode="both"]     .qc-num[data-show-modes]:not([data-show-modes~="
     background: transparent;
     box-shadow: none;
   }
-  .np-hero-calc .np-hero-inner { padding: 0; margin: 0; }
+  .np-hero-calc .np-hero-inner {
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    min-height: 0;
+  }
+  /* Breadcrumb on the calculator page — hidden on mobile (the page goes
+     straight from the navbar into the calculator card). */
+  .np-breadcrumb-calc { display: none !important; }
   .np-hero-calc h1 {
     position: absolute;
     width: 1px; height: 1px;
