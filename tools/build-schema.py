@@ -89,6 +89,9 @@ AGGREGATE_RATING: dict = {
     "@type": "AggregateRating",
     "ratingValue": "4.9",
     "reviewCount": "120",
+    "ratingCount": "120",  # Google requires either ratingCount OR reviewCount;
+                            # we include both to satisfy strict Search Console
+                            # validation across all snippet rich-result types.
     "bestRating": "5",
     "worstRating": "1"
 }
@@ -99,6 +102,27 @@ PAGES_WITH_VISIBLE_RATING = {
     'index.html',
     'reviews.html',
 }
+
+# The reviews displayed on /reviews.html as user-facing testimonial cards.
+# These need to also exist as schema.org Review objects on that page so
+# Google's Review snippet rich result can render. They live here (rather
+# than being parsed off the page) so build-schema.py is the single source
+# of truth — re-runs always reinstate them, even if the surrounding HTML
+# changes. Update this list when new customer reviews are added to the
+# /reviews.html cards.
+REVIEWS_PAGE = 'reviews.html'
+EMBEDDED_REVIEWS: list[dict] = [
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "S. Patel"}, "reviewBody": "From the survey to the final box being unpacked, the Mark Ratcliffe team handled our Eastbourne-to-Lewes move with absolute care. Every piece of furniture was pad-wrapped and labelled — nothing arrived with a scratch. Our previous remover damaged our dining table in transit; the difference in approach is night and day."},
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "J. Williams"}, "reviewBody": "Used Mark Ratcliffe for our move from Newhaven to Brighton and then six months of storage at their Lower Dicker depot. Uniformed crew, immaculate vans, secure steel storage room — worth every penny. We collected six months later and everything came out exactly as it went in."},
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "Margaret K."}, "reviewBody": "After my mother passed away we needed her house in Hailsham cleared sensitively. The team treated her possessions with such respect, set aside everything we wanted to keep, donated what could be reused and recycled the rest. They handled the paperwork for the executor and were genuinely kind throughout. Would recommend to anyone in similar circumstances."},
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "Andrew & Liz Turner"}, "reviewBody": "We moved from Sovereign Harbour to the Costa Blanca and Mark Ratcliffe handled everything — the packing, the ToR1 customs paperwork, the shipping and the destination delivery. We had heard horror stories of post-Brexit moves to Spain, but ours was textbook. Furniture arrived in three weeks, intact, and the Spanish destination crew was excellent."},
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "Dr. Pongsak C."}, "reviewBody": "Returning to Bangkok after twenty years in the UK was emotional. The Mark Ratcliffe Thai removals team understood the practicalities — Thai customs, the address format, the timing around our Bangkok delivery slot. Container arrived on schedule and the destination unpack was professional. Highly recommended for any UK-Thailand move."},
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "Stephen R."}, "reviewBody": "We downsized from a 4-bedroom house in Polegate to a 2-bedroom bungalow. The team helped us identify what was going to the bungalow, what was going to family, and what was going to storage for later. The whole transition was completed in two days with zero stress."},
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "Caroline M."}, "reviewBody": "Just needed a single-day move from my flat in Bexhill to the new place in Eastbourne. Man-and-van service was perfectly suited, two crew arrived on time, were polite, careful and efficient. Hourly billing was honest — they did not pad the hours. Less than half the price of the full-service quotes I had received elsewhere."},
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "The Harrison Family"}, "reviewBody": "We had used a national firm for our previous move ten years ago and ended up with a broken dining chair and a chipped antique cabinet. This time we used Mark Ratcliffe on the recommendation of a neighbour. Everything pad-wrapped before it left the room. Zero damage. The 'do not unwrap until placed' approach genuinely makes the difference."},
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "Peter & Susan B."}, "reviewBody": "Our 5-bedroom country house in Heathfield was a complex move with antique furniture, a piano and a large wine collection. Mark Ratcliffe sent a four-person crew and two lorries over two days. Everything was handled with care. The wine collection was packed in dedicated temperature-tolerant boxes. Professional service from quote to completion."},
+    {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "Office Manager"}, "reviewBody": "We moved our 30-person office from Eastbourne town centre to a new building near Sovereign Harbour over a single weekend. Mark Ratcliffe planned the move, labelled every workstation, coordinated with our IT contractor, and we were open for business on Monday morning with no delays. The cleanest office move I have ever managed."},
+]
 
 SENTINEL_START = '<!-- mrm-schema:org:start -->'
 SENTINEL_END = '<!-- mrm-schema:org:end -->'
@@ -290,7 +314,12 @@ def upgrade_html(path: str, rel_path: str) -> tuple[bool, bool]:
     org = dict(CANONICAL_ORG)
     if rel_path in PAGES_WITH_VISIBLE_RATING:
         org['aggregateRating'] = AGGREGATE_RATING
-    if absorbed_reviews:
+    # Reviews are sourced from EMBEDDED_REVIEWS (the canonical list) on
+    # the reviews page; any reviews absorbed from existing JSON-LD blocks
+    # on other pages are kept too.
+    if rel_path == REVIEWS_PAGE:
+        org['review'] = EMBEDDED_REVIEWS
+    elif absorbed_reviews:
         org['review'] = absorbed_reviews
     body = json.dumps(org, ensure_ascii=False, separators=(',', ':'))
     block = (
