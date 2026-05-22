@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies thirty-eight build rules:
+Verifies thirty-nine build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -102,6 +102,12 @@ Verifies thirty-eight build rules:
      Rule 12 — "no 404 on click" guarantee.
  38. No trailing slash on a .html file URL. /foo.html/ is a 404
      on most static hosts and a needless 301 on the rest.
+ 39. Every <h2> text is unique across the entire site — no
+     cross-page <h2> duplicates. Duplicate H2s are a textbook
+     "templated content" signal Google penalises. Each <h2>
+     should describe the section content of its specific page.
+     tools/dedupe-h2s.py rewrites duplicates by weaving the
+     page's <h1> topic into each H2 so variants stay on-topic.
 
 Items the user's checklist mentioned that this static audit cannot
 verify (need separate runtime tooling or deployment-level checks):
@@ -1247,6 +1253,37 @@ def audit():
          f'{len(indexable)} pages: every .html href is a clean file URL',
          html_slash_failures)
 
+    # Rule 39 — every <h2> text is unique across the entire site.
+    # Cross-page H2 duplicates are a textbook "templated content"
+    # signal Google penalises — every <h2> should describe the
+    # specific section content of its page, not appear as a shared
+    # boilerplate string. tools/dedupe-h2s.py rewrites duplicates to
+    # weave the page's topic (from its <h1>) into each H2 so the
+    # variants stay on-topic and readable.
+    H2_ALL_RE = re.compile(r'<h2[^>]*>(.*?)</h2>', re.I | re.S)
+    NAV_END_RE_LOCAL = re.compile(r'</nav>\s*</div>|</nav>(?!\s*<)', re.I | re.S)
+    FOOTER_RE_LOCAL = re.compile(r'<footer\b', re.I)
+    def clean_h2(s: str) -> str:
+        t = re.sub(r'&[a-z]+;|&#\d+;', ' ', re.sub(r'<[^>]+>', '', s), flags=re.I)
+        return re.sub(r'\s+', ' ', t).strip().lower()
+    h2_to_pages: dict[str, list[str]] = {}
+    for p in indexable:
+        html = open(p, encoding='utf-8').read()
+        m = NAV_END_RE_LOCAL.search(html); s = m.end() if m else 0
+        m = FOOTER_RE_LOCAL.search(html); e = m.start() if m else len(html)
+        for mm in H2_ALL_RE.finditer(html[s:e]):
+            text = clean_h2(mm.group(1))
+            if not text: continue
+            h2_to_pages.setdefault(text, []).append(p)
+    h2_dup_failures: list[str] = []
+    for text, ps in h2_to_pages.items():
+        if len(ps) > 1:
+            sample = ', '.join(ps[:3]) + ('...' if len(ps) > 3 else '')
+            h2_dup_failures.append(f'"{text[:80]}" appears on {len(ps)} pages ({sample})')
+    rule('Rule 39 — every <h2> is unique site-wide',
+         f'{len(indexable)} pages: {len(h2_to_pages)} distinct H2 strings, zero cross-page duplicates',
+         h2_dup_failures)
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -1257,7 +1294,7 @@ def audit():
         print('To re-inject canonical schema.org JSON-LD on every page:')
         print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all thirty-eight content rules satisfied.')
+    print('PASS — all thirty-nine content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
