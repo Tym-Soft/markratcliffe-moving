@@ -14,7 +14,7 @@
   <meta content="summary_large_image" name="twitter:card">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <link rel="preload" as="image" href="images/mark-ratcliffe-modern-removal-lorry-eastbourne.webp" fetchpriority="high">
-  <link rel="preload" as="style" href="css/site.css?v=20260656" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260656"></noscript>
+  <link rel="preload" as="style" href="css/site.css?v=20260657" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260657"></noscript>
 <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script defer src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
@@ -83,6 +83,7 @@
   <!-- mrm-schema:faq:start -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Mark still personally involved in the day-to-day business?","acceptedAnswer":{"@type":"Answer","text":"Yes. Mark surveys every overseas job, every white-glove relocation , every antique-heavy move and every storage handover above a 3-bed volume. Routine local moves are surveyed by senior crew leads who&rsquo;ve been with the firm long enough that their judgement matches his. The phone number on the lorry is the same one Mark answers when the office is closed &mdash; this isn&rsquo;t a franchise, a holding company, or a private-equity rollup."}},{"@type":"Question","name":"What&rsquo;s the difference between Mark Ratcliffe Moving and A.1. Removals?","acceptedAnswer":{"@type":"Answer","text":"A.1. Removals was the trading name from 1982 until 2014, when we rebranded as Mark Ratcliffe Moving &amp; Storage. The company, the crews, the depot and the standards are unchanged &mdash; the new name simply puts Mark&rsquo;s personal accountability on the side of the lorry. Customers who used A.1. for moves in the 1990s and 2000s have used us again under the new name for downsizes, second-home moves and inheritance clearances."}},{"@type":"Question","name":"How big are your crews and lorries?","acceptedAnswer":{"@type":"Answer","text":"We run two-, three- and four-person crews depending on volume, and our fleet covers Luton vans for the smallest local moves, 7.5-tonne lorries for typical family homes, 18-tonne rigid lorries for larger houses, and articulated lorries for the biggest jobs and overseas containers. Crew and vehicle size are matched to your surveyed cubic-foot volume &mdash; you&rsquo;ll see the same figures on your written quote. Our storage calculator shows the same volume-to-vehicle relationship the office uses internally."}},{"@type":"Question","name":"Can I visit the depot before booking?","acceptedAnswer":{"@type":"Answer","text":"Yes, by appointment. Many customers booking storage want to see the steel strong rooms first &mdash; we&rsquo;ll show you the layout, the CCTV setup, and the antiques tier if you&rsquo;re storing anything high-value. We&rsquo;re at Unit J12 Swallow Business Park, Diamond Drive, Lower Dicker, East Sussex BN27 4EL. Mon&ndash;Fri 8:00&ndash;17:30, Sat 9:00&ndash;13:00 by appointment. Get in touch to book a slot."}}]}</script>
   <!-- mrm-schema:faq:end -->
+
 
 <!-- mrm:critical-css:start -->
 <style>html {
@@ -1223,19 +1224,23 @@ gap: 0;
 }
 .mega-col { padding: 0.5rem 1.25rem; }
 .mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }
-.dropdown.mega-areas .mega-col {
-display: grid;
-grid-template-columns: 1fr 1fr;
+.navbar.w-nav .dropdown.mega-areas .mega-col,
+.navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] {
+display: grid !important;
+grid-template-columns: 1fr 1fr !important;
 column-gap: 0.4rem;
 row-gap: 0;
 align-items: start;
 }
-.dropdown.mega-areas .mega-col .mega-h {
+.navbar.w-nav .dropdown.mega-areas .mega-col .mega-h {
 grid-column: 1 / -1;
 }
-.dropdown.mega-areas .mega-col a {
-padding: 0.45rem 0.5rem !important;
-font-size: 0.92rem !important;
+.navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] a {
+display: block !important;
+width: auto !important;
+flex: 0 1 auto !important;
+padding: 0.45rem 0.75rem !important;
+font-size: 0.9rem !important;
 }}
 :root {
 --brand-navy: #4d2e8f;
@@ -2084,7 +2089,7 @@ border-color: #fff;
             <a href="reviews.html" class="dropdown-navlink w-dropdown-link">Reviews</a>
           </nav>
         </div>
-        <a href="resources/storage-calculator.html" class="navlink w-nav-link">Moving &amp; Storage Calculator</a><div class="mob-menu-contact" aria-label="Quick contact">
+        <a href="resources/storage-calculator.html" class="navlink w-nav-link">MOVING &amp; STORAGE CALCULATOR</a><div class="mob-menu-contact" aria-label="Quick contact">
           <a href="tel:01323848008" class="is-call" aria-label="Call us on 01323 848 008">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.59l2.2-2.2a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1Z"/></svg>
             <span>Call us</span>

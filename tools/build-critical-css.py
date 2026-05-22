@@ -27,7 +27,7 @@ import glob, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
-CACHE_VERSION = "20260656"
+CACHE_VERSION = "20260657"
 
 # --- Critical selector patterns ---
 # Each entry is a fragment that we look for INSIDE the selector text.

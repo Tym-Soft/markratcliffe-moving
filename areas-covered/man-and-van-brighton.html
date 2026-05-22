@@ -12,7 +12,7 @@
   <meta content="summary_large_image" name="twitter:card">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <link rel="preload" as="image" href="../images/mark-ratcliffe-vans-front2.webp" fetchpriority="high">
-  <link rel="preload" as="style" href="../css/site.css?v=20260656" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="../css/site.css?v=20260656"></noscript>
+  <link rel="preload" as="style" href="../css/site.css?v=20260657" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="../css/site.css?v=20260657"></noscript>
 <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script defer src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
@@ -82,6 +82,7 @@
   <!-- mrm-schema:faq:start -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How far in advance should I book a Brighton move?","acceptedAnswer":{"@type":"Answer","text":"For end-of-month dates in the May&ndash;September peak, six to ten weeks ahead. Mid-week, mid-month dates can sometimes be booked two to three weeks ahead. The earlier you book, the more choice of slot and crew you&rsquo;ll have."}},{"@type":"Question","name":"Do you require a deposit?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; typically 20&ndash;25% of the quoted price on booking, with the balance payable on the day of completion. All deposits are protected under the British Association of Removers&rsquo; Advance Payment Guarantee."}},{"@type":"Question","name":"What is included in the Brighton quote?","acceptedAnswer":{"@type":"Answer","text":"Crew time, our own lorry, fuel, pad-wrap (industry-grade blankets washed between jobs), basic transit insurance and labour. Packing materials, fragile-only or full packing service, and any specialist handling (piano, antiques, art, marble) are quoted separately so you see the price of each."}},{"@type":"Question","name":"Are you BAR members?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; full British Association of Removers members and audited annually, including the BS 8564 international removal standard. Our membership number and current audit dates are on the BAR site."}},{"@type":"Question","name":"Can you handle short-notice Brighton moves?","acceptedAnswer":{"@type":"Answer","text":"Sometimes &mdash; depends on the date and the inventory size. Smaller jobs can often be slotted in within a week. Larger 3- and 4-bed moves usually need at least two weeks&rsquo; notice so we can crew correctly."}},{"@type":"Question","name":"Do you cover overseas moves from Brighton?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; FIDI-network shipments to over 200 countries. International moves route through our customs-controlled holding bay at the A22 depot, where the container is loaded after a final inventory check. We don&rsquo;t sub-contract international work to third-party brokers."}}]}</script>
   <!-- mrm-schema:faq:end -->
+
 
 <!-- mrm:critical-css:start -->
 <style>html {
@@ -1222,19 +1223,23 @@ gap: 0;
 }
 .mega-col { padding: 0.5rem 1.25rem; }
 .mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }
-.dropdown.mega-areas .mega-col {
-display: grid;
-grid-template-columns: 1fr 1fr;
+.navbar.w-nav .dropdown.mega-areas .mega-col,
+.navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] {
+display: grid !important;
+grid-template-columns: 1fr 1fr !important;
 column-gap: 0.4rem;
 row-gap: 0;
 align-items: start;
 }
-.dropdown.mega-areas .mega-col .mega-h {
+.navbar.w-nav .dropdown.mega-areas .mega-col .mega-h {
 grid-column: 1 / -1;
 }
-.dropdown.mega-areas .mega-col a {
-padding: 0.45rem 0.5rem !important;
-font-size: 0.92rem !important;
+.navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] a {
+display: block !important;
+width: auto !important;
+flex: 0 1 auto !important;
+padding: 0.45rem 0.75rem !important;
+font-size: 0.9rem !important;
 }}
 :root {
 --brand-navy: #4d2e8f;
@@ -2080,7 +2085,7 @@ border-color: #fff;
             <a href="../reviews.html" class="dropdown-navlink w-dropdown-link">Reviews</a>
           </nav>
         </div>
-        <a href="../resources/storage-calculator.html" class="navlink w-nav-link">Moving &amp; Storage Calculator</a><div class="mob-menu-contact" aria-label="Quick contact">
+        <a href="../resources/storage-calculator.html" class="navlink w-nav-link">MOVING &amp; STORAGE CALCULATOR</a><div class="mob-menu-contact" aria-label="Quick contact">
           <a href="tel:01323848008" class="is-call" aria-label="Call us on 01323 848 008">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.59l2.2-2.2a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1Z"/></svg>
             <span>Call us</span>

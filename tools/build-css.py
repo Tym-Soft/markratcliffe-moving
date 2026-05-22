@@ -24,7 +24,7 @@ SOURCES = [
     'css/new-pages.css',
 ]
 OUT_PATH = 'css/site.css'
-CACHE_VERSION = '20260652'
+CACHE_VERSION = '20260657'
 
 # Each replacement matches BOTH the `css/...` (root pages) and
 # `../css/...` (subdirectory pages) variants. We use re.escape on the

@@ -12,7 +12,7 @@
   <meta content="summary_large_image" name="twitter:card">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <link rel="preload" as="image" href="images/mark-ratcliffe-vans-front2.webp" fetchpriority="high">
-  <link rel="preload" as="style" href="css/site.css?v=20260656" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260656"></noscript>
+  <link rel="preload" as="style" href="css/site.css?v=20260657" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260657"></noscript>
 <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script defer src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
@@ -59,6 +59,7 @@
   <!-- mrm-schema:faq:start -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the deposit refundable?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; up to 48 hours before the move. Inside 48 hours the deposit is held to cover the slot we can no longer rebook, but it transfers to a future date with no admin fee."}},{"@type":"Question","name":"What happens if my new property completion is delayed on the day?","acceptedAnswer":{"@type":"Answer","text":"It happens often. We&rsquo;ll wait, deliver to storage if needed, or hold the load overnight depending on the timing &mdash; the contract handles all three scenarios without surprise fees."}},{"@type":"Question","name":"Do your terms cover international moves the same way?","acceptedAnswer":{"@type":"Answer","text":"The core T&amp;Cs apply, but international moves also engage the destination-country customs rules and any partner-agent contracts. The supplementary international-moves rider is sent with overseas quotes &mdash; ask if you&rsquo;d like to see it ahead of the survey."}},{"@type":"Question","name":"Where can I get a copy of your insurance certificate?","acceptedAnswer":{"@type":"Answer","text":"The current Confirmation of Cover Letter is the second PDF in the downloads section above &mdash; it&rsquo;s renewed annually and identifies our underwriters, policy number and the limit of liability. If you need a copy on letterhead for a landlord, lender or HR department, email the office and we&rsquo;ll send one within the working day."}},{"@type":"Question","name":"Are your storage terms separate from the removal terms?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; storage is a separate contract that takes effect when goods are delivered into the Lower Dicker depot. The storage T&amp;Cs cover access arrangements, monthly billing, notice periods, insurance levels for items in storage, and what happens if a customer becomes uncontactable. We send the storage T&amp;Cs with the initial booking confirmation; ask for them in advance if you&rsquo;d prefer to review before committing."}},{"@type":"Question","name":"What rights do I have under consumer law?","acceptedAnswer":{"@type":"Answer","text":"The Consumer Rights Act 2015 gives you the right to a service performed with reasonable care and skill, for the price agreed (or a reasonable price if none was agreed), within a reasonable time. Our T&amp;Cs don&rsquo;t override those rights &mdash; they sit alongside them. If a clause in our T&amp;Cs ever conflicts with your statutory rights, the statutory rights win, every time, without exception. Removals is one of the few household-services sectors with multiple statutory protections layered on top of each other &mdash; BAR membership, FHIO ombudsman cover, APG deposit protection and standard consumer law all apply to the same job."}}]}</script>
   <!-- mrm-schema:faq:end -->
+
 
 <!-- mrm:critical-css:start -->
 <style>html {
@@ -1199,19 +1200,23 @@ gap: 0;
 }
 .mega-col { padding: 0.5rem 1.25rem; }
 .mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }
-.dropdown.mega-areas .mega-col {
-display: grid;
-grid-template-columns: 1fr 1fr;
+.navbar.w-nav .dropdown.mega-areas .mega-col,
+.navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] {
+display: grid !important;
+grid-template-columns: 1fr 1fr !important;
 column-gap: 0.4rem;
 row-gap: 0;
 align-items: start;
 }
-.dropdown.mega-areas .mega-col .mega-h {
+.navbar.w-nav .dropdown.mega-areas .mega-col .mega-h {
 grid-column: 1 / -1;
 }
-.dropdown.mega-areas .mega-col a {
-padding: 0.45rem 0.5rem !important;
-font-size: 0.92rem !important;
+.navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] a {
+display: block !important;
+width: auto !important;
+flex: 0 1 auto !important;
+padding: 0.45rem 0.75rem !important;
+font-size: 0.9rem !important;
 }}
 :root {
 --brand-navy: #4d2e8f;
@@ -2060,7 +2065,7 @@ border-color: #fff;
             <a href="reviews.html" class="dropdown-navlink w-dropdown-link">Reviews</a>
           </nav>
         </div>
-        <a href="resources/storage-calculator.html" class="navlink w-nav-link">Moving &amp; Storage Calculator</a><div class="mob-menu-contact" aria-label="Quick contact">
+        <a href="resources/storage-calculator.html" class="navlink w-nav-link">MOVING &amp; STORAGE CALCULATOR</a><div class="mob-menu-contact" aria-label="Quick contact">
           <a href="tel:01323848008" class="is-call" aria-label="Call us on 01323 848 008">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.59l2.2-2.2a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1Z"/></svg>
             <span>Call us</span>

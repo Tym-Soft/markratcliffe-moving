@@ -3440,24 +3440,32 @@ footer.mr-footer span {
   .mega-col { padding: 0.5rem 1.25rem; }
   .mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }
 
-  /* AREAS COVERED on mobile: the towns list is 25+ items per county.
-     Lay them out as a 2-column grid so the dropdown is half as tall.
-     The county heading (.mega-h) spans both columns at the top. */
-  .dropdown.mega-areas .mega-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  /* AREAS COVERED on mobile: 25+ towns per county. Lay them out as
+     a 2-column grid so the dropdown is half as tall. Must override
+     the later .mega-col { display: flex !important } accordion rule
+     (line 3097-area) — same selector specificity won't beat it, so
+     we increase specificity with .navbar.w-nav and add !important. */
+  .navbar.w-nav .dropdown.mega-areas .mega-col,
+  .navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
     column-gap: 0.4rem;
     row-gap: 0;
     align-items: start;
   }
-  .dropdown.mega-areas .mega-col .mega-h {
+  .navbar.w-nav .dropdown.mega-areas .mega-col .mega-h {
     grid-column: 1 / -1;
   }
-  /* The dropdown links pick up the grid cell width; remove their
-     default flex sizing so they don't push to 100% inside a cell. */
-  .dropdown.mega-areas .mega-col a {
-    padding: 0.45rem 0.5rem !important;
-    font-size: 0.92rem !important;
+  /* Town links: when the accordion is open, they show as grid items.
+     Override the earlier `width: 100% !important` and `flex: 0 0 100%`
+     that were added for the orphaned CALCULATOR fix — those forced
+     full-width flex behaviour that breaks our grid cells. */
+  .navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] a {
+    display: block !important;
+    width: auto !important;
+    flex: 0 1 auto !important;
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.9rem !important;
   }
 }
 

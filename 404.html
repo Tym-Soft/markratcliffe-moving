@@ -15,7 +15,7 @@
   <meta property="og:site_name" content="Mark Ratcliffe Moving &amp; Storage">
   <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="preload" as="style" href="css/site.css?v=20260656" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260656"></noscript>
+  <link rel="preload" as="style" href="css/site.css?v=20260657" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260657"></noscript>
 <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -25,6 +25,7 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q111LKQEBP');window.addEventListener('load',function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-Q111LKQEBP';document.head.appendChild(s);});</script>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.yoshki.com https://yoshki.com https://d3e54v103j8qbb.cloudfront.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ajax.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com data:; frame-src https://www.google.com https://yoshki.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+
 
 
 <!-- mrm:critical-css:start -->
@@ -1166,19 +1167,23 @@ gap: 0;
 }
 .mega-col { padding: 0.5rem 1.25rem; }
 .mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }
-.dropdown.mega-areas .mega-col {
-display: grid;
-grid-template-columns: 1fr 1fr;
+.navbar.w-nav .dropdown.mega-areas .mega-col,
+.navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] {
+display: grid !important;
+grid-template-columns: 1fr 1fr !important;
 column-gap: 0.4rem;
 row-gap: 0;
 align-items: start;
 }
-.dropdown.mega-areas .mega-col .mega-h {
+.navbar.w-nav .dropdown.mega-areas .mega-col .mega-h {
 grid-column: 1 / -1;
 }
-.dropdown.mega-areas .mega-col a {
-padding: 0.45rem 0.5rem !important;
-font-size: 0.92rem !important;
+.navbar.w-nav .dropdown.mega-areas .mega-col[data-open="true"] a {
+display: block !important;
+width: auto !important;
+flex: 0 1 auto !important;
+padding: 0.45rem 0.75rem !important;
+font-size: 0.9rem !important;
 }}
 :root {
 --brand-navy: #4d2e8f;
@@ -2023,7 +2028,7 @@ border-color: #fff;
             <a href="reviews.html" class="dropdown-navlink w-dropdown-link">Reviews</a>
           </nav>
         </div>
-        <a href="resources/storage-calculator.html" class="navlink w-nav-link">Moving &amp; Storage Calculator</a>        <div class="mob-menu-contact" aria-label="Quick contact">
+        <a href="resources/storage-calculator.html" class="navlink w-nav-link">MOVING &amp; STORAGE CALCULATOR</a>        <div class="mob-menu-contact" aria-label="Quick contact">
           <a href="tel:01323848008" class="is-call" aria-label="Call us on 01323 848 008"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.59l2.2-2.2a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1Z"/></svg><span>Call us</span></a>
           <a href="mailto:office@markratcliffemoving.co.uk" class="is-email" aria-label="Email us"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg><span>Email us</span></a>
         <a href="mark-ratcliffe-moving-online-removals-quote.html" class="is-quote" aria-label="Request a free quote">
