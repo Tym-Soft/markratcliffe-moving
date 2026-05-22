@@ -1135,7 +1135,21 @@ grid-template-columns: 1fr;
 gap: 0;
 }
 .mega-col { padding: 0.5rem 1.25rem; }
-.mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }}
+.mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }
+.dropdown.mega-areas .mega-col {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 0.4rem;
+row-gap: 0;
+align-items: start;
+}
+.dropdown.mega-areas .mega-col .mega-h {
+grid-column: 1 / -1;
+}
+.dropdown.mega-areas .mega-col a {
+padding: 0.45rem 0.5rem !important;
+font-size: 0.92rem !important;
+}}
 :root {
 --brand-navy: #4d2e8f;
 --brand-navy-dark: #3a226d;

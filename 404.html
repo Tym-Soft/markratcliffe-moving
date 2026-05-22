@@ -15,7 +15,7 @@
   <meta property="og:site_name" content="Mark Ratcliffe Moving &amp; Storage">
   <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="preload" as="style" href="css/site.css?v=20260655" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260655"></noscript>
+  <link rel="preload" as="style" href="css/site.css?v=20260656" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260656"></noscript>
 <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -25,6 +25,7 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q111LKQEBP');window.addEventListener('load',function(){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-Q111LKQEBP';document.head.appendChild(s);});</script>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.yoshki.com https://yoshki.com https://d3e54v103j8qbb.cloudfront.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ajax.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com data:; frame-src https://www.google.com https://yoshki.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+
 
 <!-- mrm:critical-css:start -->
 <style>html {
@@ -1164,7 +1165,21 @@ grid-template-columns: 1fr;
 gap: 0;
 }
 .mega-col { padding: 0.5rem 1.25rem; }
-.mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }}
+.mega-col .mega-h { font-size: 0.65rem; margin-bottom: 0.3rem !important; }
+.dropdown.mega-areas .mega-col {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 0.4rem;
+row-gap: 0;
+align-items: start;
+}
+.dropdown.mega-areas .mega-col .mega-h {
+grid-column: 1 / -1;
+}
+.dropdown.mega-areas .mega-col a {
+padding: 0.45rem 0.5rem !important;
+font-size: 0.92rem !important;
+}}
 :root {
 --brand-navy: #4d2e8f;
 --brand-navy-dark: #3a226d;
