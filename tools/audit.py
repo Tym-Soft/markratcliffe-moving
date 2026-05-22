@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies thirty-nine build rules:
+Verifies forty-one build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -108,6 +108,14 @@ Verifies thirty-nine build rules:
      should describe the section content of its specific page.
      tools/dedupe-h2s.py rewrites duplicates by weaving the
      page's <h1> topic into each H2 so variants stay on-topic.
+ 40. Any schema.org Product JSON-LD must declare `name` AND at
+     least one of `offers` / `review` / `aggregateRating` —
+     Google's mandatory product-snippet fields. A Product without
+     these is silently dropped from rich results.
+ 41. No HTML microdata attributes (itemscope / itemtype /
+     itemprop). Structured data on the site is JSON-LD only.
+     Mixed-signal pages trigger Google's "Unparsable structured
+     data" report if a microdata itemtype URL is stale or wrong.
 
 Items the user's checklist mentioned that this static audit cannot
 verify (need separate runtime tooling or deployment-level checks):
@@ -1284,6 +1292,61 @@ def audit():
          f'{len(indexable)} pages: {len(h2_to_pages)} distinct H2 strings, zero cross-page duplicates',
          h2_dup_failures)
 
+    # Rule 40 — any schema.org Product JSON-LD must declare `name` AND
+    # at least one of `offers` / `review` / `aggregateRating`. These
+    # are Google's hard requirements for product-snippet rich results
+    # — a Product missing either is silently dropped from the SERP.
+    # Currently the site has no Product schema (we sell services, not
+    # products), so this rule trivially passes — its real job is to
+    # block any future regression that adds Product markup without
+    # the mandatory fields.
+    product_invalid: list[str] = []
+    products_seen = 0
+    for p in indexable:
+        html = open(p, encoding='utf-8').read()
+        for m in re.finditer(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', html, re.S):
+            try:
+                data = json.loads(m.group(1).strip())
+            except json.JSONDecodeError:
+                continue
+            stack = [data]
+            while stack:
+                node = stack.pop()
+                if isinstance(node, list):
+                    stack.extend(node); continue
+                if not isinstance(node, dict):
+                    continue
+                if '@graph' in node:
+                    stack.append(node['@graph'])
+                for v in node.values():
+                    if isinstance(v, (dict, list)):
+                        stack.append(v)
+                t = node.get('@type')
+                if t == 'Product' or (isinstance(t, list) and 'Product' in t):
+                    products_seen += 1
+                    if not node.get('name'):
+                        product_invalid.append(f'{p}  Product missing "name"')
+                    if not any(k in node for k in ('offers', 'review', 'aggregateRating')):
+                        product_invalid.append(f'{p}  Product missing one of offers/review/aggregateRating')
+    rule('Rule 40 — Product JSON-LD has name + offers/review/aggregateRating',
+         f'{len(indexable)} pages: {products_seen} Product schemas, all complete',
+         product_invalid)
+
+    # Rule 41 — no HTML microdata attributes. We use JSON-LD exclusively
+    # for structured data. Mixed signals (some pages microdata, some
+    # JSON-LD) confuse Google's parsers and trigger "Unparsable
+    # structured data" reports if a microdata itemtype value goes stale
+    # or mistypes a schema URL. Block any future microdata regression.
+    MICRODATA_RE = re.compile(r'\b(itemscope|itemtype|itemprop)\s*=', re.I)
+    microdata_failures: list[str] = []
+    for p in indexable:
+        html = open(p, encoding='utf-8').read()
+        if MICRODATA_RE.search(html):
+            microdata_failures.append(f'{p} contains microdata (itemscope/itemtype/itemprop) — use JSON-LD instead')
+    rule('Rule 41 — no HTML microdata (itemscope/itemtype/itemprop)',
+         f'{len(indexable)} pages: structured data is JSON-LD only',
+         microdata_failures)
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -1294,7 +1357,7 @@ def audit():
         print('To re-inject canonical schema.org JSON-LD on every page:')
         print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all thirty-nine content rules satisfied.')
+    print('PASS — all forty-one content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
