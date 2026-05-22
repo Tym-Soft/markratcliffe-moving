@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies thirty-five build rules:
+Verifies thirty-eight build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -92,6 +92,16 @@ Verifies thirty-five build rules:
      must carry a trailing slash. GitHub Pages 301-redirects
      /services → /services/, costing a crawl hop and leaking
      link equity. Every such href is one redirect we don't need.
+     Also catches the `/services#anchor` and `/services?q=…`
+     forms that strip the slash before the suffix.
+ 36. Every internal <script src> / <link href> / <img src>
+     resolves to a real file on disk — no 404s the moment a
+     page loads. (External http/https URLs are out of scope.)
+ 37. Every internal <a href> points to a real .html file (or a
+     directory with an index.html). The narrower companion to
+     Rule 12 — "no 404 on click" guarantee.
+ 38. No trailing slash on a .html file URL. /foo.html/ is a 404
+     on most static hosts and a needless 301 on the rest.
 
 Items the user's checklist mentioned that this static audit cannot
 verify (need separate runtime tooling or deployment-level checks):
@@ -1130,23 +1140,112 @@ def audit():
          f'{len(indexable)} pages: every canonical is hardcoded static HTML',
          js_canon_failures)
 
-    # Rule 35 — internal directory links must carry a trailing slash.
-    # GitHub Pages (and most static hosts) 301-redirect /services to
-    # /services/. Every such redirect costs a hop on first crawl and
-    # wastes link equity, so we link to /services/ directly.
+    # Rule 35 — internal directory links must carry a trailing slash,
+    # including when followed by a #fragment or ?query. GitHub Pages
+    # (and most static hosts) 301-redirect /services to /services/.
+    # Every such redirect costs a hop on first crawl and wastes link
+    # equity, so we link to /services/ directly.
     DIR_NAMES = ('services', 'areas-covered', 'blog', 'resources')
     BARE_DIR_RE = re.compile(
-        r'<a\b[^>]*?\bhref="(\.\./)?(' + '|'.join(DIR_NAMES) + r')"',
+        r'<a\b[^>]*?\bhref="(\.\./)?(' + '|'.join(DIR_NAMES) + r')(["#?])',
         re.I,
     )
     bare_dir_failures: list[str] = []
     for p in indexable:
         html = open(p, encoding='utf-8').read()
         for m in BARE_DIR_RE.finditer(html):
-            bare_dir_failures.append(f'{p}  href="{m.group(1) or ""}{m.group(2)}" (add trailing slash)')
+            bare_dir_failures.append(f'{p}  href="{m.group(1) or ""}{m.group(2)}{m.group(3)}…" (add trailing slash before {m.group(3)!r})')
     rule('Rule 35 — internal directory links use trailing slash',
          f'{len(indexable)} pages: no bare directory hrefs that would 301 redirect',
          bare_dir_failures)
+
+    # Rule 36 — every internal <script src>, <link href> (CSS/icon/
+    # preload), and <img src> must resolve to a real file on disk.
+    # A typo'd path here is a guaranteed 404 the moment the page
+    # loads — the kind of issue Screaming Frog surfaces under
+    # "Response Codes: Internal Client Error (4xx)".
+    on_disk: set[str] = set()
+    for root, dirs, files in os.walk('.'):
+        if '.git' in dirs: dirs.remove('.git')
+        if '.claude' in dirs: dirs.remove('.claude')
+        for f in files:
+            on_disk.add(os.path.relpath(os.path.join(root, f)))
+    def resolve_resource(href: str, pdir: str) -> str | None:
+        h = href.split('#')[0].split('?')[0]
+        if not h: return None
+        if h.startswith(('data:', 'mailto:', 'tel:', 'javascript:')): return None
+        if h.startswith(('http://', 'https://', '//')): return None
+        if h.startswith('/'):
+            return h.lstrip('/')
+        return os.path.normpath(os.path.join(pdir, h))
+    RES_PATTERNS = [
+        (re.compile(r'<script\b[^>]*?\bsrc="([^"]+)"', re.I), 'script-src'),
+        (re.compile(r'<link\b[^>]*?\bhref="([^"]+)"[^>]*?\brel="(?:stylesheet|icon|apple-touch-icon|shortcut icon|preload)"', re.I), 'link-href'),
+        (re.compile(r'<link\b[^>]*?\brel="(?:stylesheet|icon|apple-touch-icon|shortcut icon|preload)"[^>]*?\bhref="([^"]+)"', re.I), 'link-href'),
+        (re.compile(r'<img\b[^>]*?\bsrc="([^"]+)"', re.I), 'img-src'),
+    ]
+    resource_failures: list[str] = []
+    for p in indexable:
+        pdir = os.path.dirname(p) or '.'
+        html = open(p, encoding='utf-8').read()
+        seen_in_page: set[tuple[str, str]] = set()
+        for pat, kind in RES_PATTERNS:
+            for m in pat.finditer(html):
+                href = m.group(1)
+                target = resolve_resource(href, pdir)
+                if target is None: continue
+                if target not in on_disk:
+                    key = (kind, target)
+                    if key in seen_in_page: continue
+                    seen_in_page.add(key)
+                    resource_failures.append(f'{p}  {kind}="{href}" → missing {target!r}')
+    rule('Rule 36 — every <script src>/<link href>/<img src> resolves on disk',
+         f'{len(indexable)} pages: every internal CSS/JS/image reference exists',
+         resource_failures)
+
+    # Rule 37 — every internal <a href> resolves to a real .html file
+    # on disk (or a directory that has an index.html). Rule 12 already
+    # covers the indexability angle; this rule is the narrower
+    # "no 404 on click" guarantee.
+    A_HREF_RE = re.compile(r'<a\b[^>]*?\bhref="([^"]+)"', re.I)
+    href_404_failures: list[str] = []
+    for p in indexable:
+        pdir = os.path.dirname(p) or '.'
+        html = open(p, encoding='utf-8').read()
+        for m in A_HREF_RE.finditer(html):
+            href = m.group(1)
+            base = href.split('#')[0].split('?')[0]
+            if not base: continue
+            if base.startswith(('mailto:', 'tel:', 'javascript:', 'data:')): continue
+            if base.startswith(('http://', 'https://', '//')): continue
+            if base in ('.', './'):
+                target = os.path.normpath(os.path.join(pdir, 'index.html'))
+            elif base.startswith('/'):
+                target = base.lstrip('/')
+                if target.endswith('/'):
+                    target += 'index.html'
+            elif base.endswith('/'):
+                target = os.path.normpath(os.path.join(pdir, base, 'index.html'))
+            else:
+                target = os.path.normpath(os.path.join(pdir, base))
+            if target not in on_disk:
+                href_404_failures.append(f'{p}  href="{href}" → missing {target!r}')
+    rule('Rule 37 — every internal <a href> points at a real file',
+         f'{len(indexable)} pages: zero internal click-throughs would 404',
+         href_404_failures)
+
+    # Rule 38 — no trailing slash on a .html file URL. /foo.html/ is
+    # either 404 (most hosts) or a needless 301 (some). Always
+    # bare /foo.html (no trailing slash).
+    HTML_TRAILING_SLASH_RE = re.compile(r'<a\b[^>]*?\bhref="([^"]+\.html/(?:[#?][^"]*)?)"', re.I)
+    html_slash_failures: list[str] = []
+    for p in indexable:
+        html = open(p, encoding='utf-8').read()
+        for m in HTML_TRAILING_SLASH_RE.finditer(html):
+            html_slash_failures.append(f'{p}  href="{m.group(1)}" (drop the trailing slash)')
+    rule('Rule 38 — no trailing slash on a .html file URL',
+         f'{len(indexable)} pages: every .html href is a clean file URL',
+         html_slash_failures)
 
     print('=' * 64)
     if any_fail:
@@ -1158,7 +1257,7 @@ def audit():
         print('To re-inject canonical schema.org JSON-LD on every page:')
         print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all thirty-five content rules satisfied.')
+    print('PASS — all thirty-eight content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
