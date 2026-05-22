@@ -1133,8 +1133,12 @@
       lines.push(pad('  Service type:', modeLabel));
       if (moveDateFmt) {
         lines.push(pad('  Preferred date:', moveDateFmt));
+      } else if (moveFlex === 'Date to be confirmed') {
+        // Customer picked "TBC" without setting a date — surface that
+        // explicitly so the office knows there's nothing pending.
+        lines.push(pad('  Preferred date:', 'To be confirmed'));
       }
-      if (moveFlex) {
+      if (moveFlex && moveFlex !== 'Date to be confirmed') {
         lines.push(pad('  Date flexibility:', moveFlex));
       }
       lines.push('');

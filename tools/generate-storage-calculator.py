@@ -1012,6 +1012,7 @@ def page_html() -> str:
                     <span class="quote-form-label">Flexibility on date</span>
                     <select name="move_date_flex" id="qf-date-flex" autocomplete="off">
                       <option value="">Choose&hellip;</option>
+                      <option value="Date to be confirmed">Date to be confirmed (chain pending, completion not yet set)</option>
                       <option value="Fixed date">Fixed date (chain completion, end of tenancy)</option>
                       <option value="±3 days">&plusmn; 3 days either side</option>
                       <option value="±1 week">&plusmn; 1 week either side</option>
@@ -1140,7 +1141,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260653"></script>
+  <script defer src="../js/storage-calculator.js?v=20260654"></script>
 </body>
 </html>
 """
