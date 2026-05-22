@@ -3103,6 +3103,15 @@ body { padding-top: 78px; }
     font-size: 1rem !important;
     font-weight: 600 !important;
     letter-spacing: 0.04em !important;
+    /* Each nav item gets its own full-width row on mobile. Without this,
+       sequential simple navlinks (HOME, ABOUT US) shrink to content width
+       and pair together via Webflow's default flex layout, leaving any
+       trailing simple navlink (CALCULATOR after the dropdowns) alone in
+       a half-row. Block-level guarantees the same visual treatment for
+       every item — full-width rows top to bottom. */
+    display: block !important;
+    width: 100% !important;
+    flex: 0 0 100% !important;
   }
   .navbar.w-nav .dropdown-toggle.w-dropdown-toggle {
     padding: 0 !important; color: #fff !important;

@@ -27,7 +27,7 @@ import glob, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
-CACHE_VERSION = '20260653'
+CACHE_VERSION = "20260655"
 
 # --- Critical selector patterns ---
 # Each entry is a fragment that we look for INSIDE the selector text.
@@ -184,9 +184,16 @@ def main() -> int:
         f'{SENTINEL_END}'
     )
 
-    # Match the current synchronous <link href="(prefix)css/site.css?v=...">
+    # Match either the synchronous <link> form OR the already-deferred
+    # preload form (we update both — the preload variant just needs its
+    # ?v= cache key refreshed if site.css changed).
     sync_link_re = re.compile(
         r'<link\s+href="((?:\.\./)?css/site\.css)\?v=\d+"\s+rel="stylesheet">',
+        re.I,
+    )
+    deferred_link_re = re.compile(
+        r'<link rel="preload" as="style" href="((?:\.\./)?css/site\.css)\?v=\d+"[^>]*>'
+        r'<noscript><link rel="stylesheet" href="(?:\.\./)?css/site\.css\?v=\d+"></noscript>',
         re.I,
     )
 
@@ -206,16 +213,19 @@ def main() -> int:
             continue
         original = html
 
-        # Strip any prior critical block
+        # Strip any prior critical block (we re-inject the freshly-
+        # extracted version below).
         html = sentinel_re.sub('', html)
 
-        # Replace synchronous CSS link with the deferred variant
+        # Update / replace the CSS link (sync or deferred). Either way
+        # the result is the deferred preload form at the new ?v= key.
         def _link_repl(m):
-            prefix = m.group(1)
-            return deferred_link(prefix)
-        new_html = sync_link_re.sub(_link_repl, html)
-        if new_html == html:
-            continue  # this page doesn't reference site.css; nothing to do
+            return deferred_link(m.group(1))
+        new_html, n = sync_link_re.subn(_link_repl, html, count=1)
+        if not n:
+            new_html, n = deferred_link_re.subn(_link_repl, html, count=1)
+        if not n:
+            continue  # this page doesn't reference site.css
         html = new_html
 
         # Inject the inline critical block right before </head>

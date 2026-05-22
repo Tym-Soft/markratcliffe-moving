@@ -1023,6 +1023,9 @@ text-align: left !important;
 font-size: 1rem !important;
 font-weight: 600 !important;
 letter-spacing: 0.04em !important;
+display: block !important;
+width: 100% !important;
+flex: 0 0 100% !important;
 }
 .navbar.w-nav .dropdown-toggle.w-dropdown-toggle {
 padding: 0 !important; color: #fff !important;
