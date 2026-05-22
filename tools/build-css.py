@@ -24,7 +24,7 @@ SOURCES = [
     'css/new-pages.css',
 ]
 OUT_PATH = 'css/site.css'
-CACHE_VERSION = '20260651'
+CACHE_VERSION = '20260652'
 
 # Each replacement matches BOTH the `css/...` (root pages) and
 # `../css/...` (subdirectory pages) variants. We use re.escape on the
@@ -49,15 +49,37 @@ def minify(css: str) -> str:
     return css.strip()
 
 
-def build_combined_css() -> int:
-    """Concatenate the four sources verbatim.
+def safe_minify(css: str) -> str:
+    """Conservative CSS minifier.
 
-    We deliberately do NOT minify here — the cascade depends on a few
-    nav rules that the minifier mangled (mega-menu wrap regression
-    seen 2026-05-22). CloudFlare Pages / GitHub Pages will gzip the
-    combined file in transit, so the uncompressed size matters less
-    than perfect cascade fidelity.
+    Strips /* … */ comments and collapses excess whitespace, but
+    deliberately DOES NOT touch punctuation, selectors, or rule
+    structure. An earlier aggressive minifier mangled a few nav
+    cascade rules (mega-menu wrap regression, 2026-05-22) by
+    removing spaces around `:` inside @media queries and similar.
+    This version is structural-preserving:
+
+      - removes /* … */ comments
+      - removes blank lines
+      - strips leading whitespace on each line
+      - collapses runs of spaces / tabs to one space
+
+    Keeps newlines intact. Lighthouse's "minify CSS" check passes
+    on this output; the nav cascade stays exactly as written.
     """
+    # 1. Strip /* … */ block comments
+    css = re.sub(r'/\*.*?\*/', '', css, flags=re.S)
+    # 2. Drop blank lines
+    css = re.sub(r'\n\s*\n+', '\n', css)
+    # 3. Strip leading whitespace on each line
+    css = re.sub(r'^[ \t]+', '', css, flags=re.M)
+    # 4. Collapse runs of spaces / tabs (but never newlines)
+    css = re.sub(r'[ \t]+', ' ', css)
+    return css.strip() + '\n'
+
+
+def build_combined_css() -> int:
+    """Concatenate the four sources + apply a safe minifier."""
     chunks = []
     for src in SOURCES:
         try:
@@ -66,8 +88,10 @@ def build_combined_css() -> int:
             print(f'  ! cannot read {src}: {e}', file=sys.stderr)
             return 1
     combined = '\n'.join(chunks)
-    open(OUT_PATH, 'w', encoding='utf-8').write(combined)
-    print(f'  wrote {OUT_PATH}  {len(combined):,} bytes (4 sources concatenated, no minify)')
+    raw_bytes = len(combined)
+    minified = safe_minify(combined)
+    open(OUT_PATH, 'w', encoding='utf-8').write(minified)
+    print(f'  wrote {OUT_PATH}  {len(minified):,} bytes (was {raw_bytes:,} raw — {100 - 100*len(minified)//raw_bytes}% smaller)')
     return 0
 
 
