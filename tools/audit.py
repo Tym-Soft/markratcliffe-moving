@@ -1347,6 +1347,23 @@ def audit():
          f'{len(indexable)} pages: structured data is JSON-LD only',
          microdata_failures)
 
+    # Rule 42 — <h1> text ≤70 characters. Screaming Frog and most SEO
+    # tools flag longer H1s as a soft warning; >70 chars also tends
+    # to wrap awkwardly on mobile heroes. Title (Rule 8) is pixel-
+    # width gated; this rule is the H1 analogue.
+    H1_LEN_RE = re.compile(r'<h1[^>]*>(.*?)</h1>', re.I | re.S)
+    h1_too_long: list[str] = []
+    for p in indexable:
+        html = open(p, encoding='utf-8').read()
+        m = H1_LEN_RE.search(html)
+        if not m: continue
+        text = re.sub(r'\s+', ' ', re.sub(r'&[a-z]+;|&#\d+;', ' ', re.sub(r'<[^>]+>', '', m.group(1)))).strip()
+        if len(text) > 70:
+            h1_too_long.append(f'{p}  {len(text)} chars: "{text[:60]}..."')
+    rule('Rule 42 — <h1> text ≤70 characters',
+         f'{len(indexable)} pages: every H1 is concise (≤70 chars)',
+         h1_too_long)
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -1357,7 +1374,7 @@ def audit():
         print('To re-inject canonical schema.org JSON-LD on every page:')
         print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all forty-one content rules satisfied.')
+    print('PASS — all forty-two content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
