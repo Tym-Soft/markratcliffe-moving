@@ -2,7 +2,7 @@
 """
 markratcliffemoving.co.uk content audit.
 
-Verifies thirty-four build rules:
+Verifies thirty-five build rules:
   1. Blogs are ≥2000 words.
   2. Location pages are ≥1500 words.
   3. Every page has ≥10 distinct in-body internal links.
@@ -88,6 +88,10 @@ Verifies thirty-four build rules:
      JS execution (Screaming Frog, many SERP previews) can't see
      a runtime-created canonical, so it must be hardcoded static
      markup in <head>. Fixed by tools/cleanup-html.py.
+ 35. Internal directory links (e.g. /services, /areas-covered)
+     must carry a trailing slash. GitHub Pages 301-redirects
+     /services → /services/, costing a crawl hop and leaking
+     link equity. Every such href is one redirect we don't need.
 
 Items the user's checklist mentioned that this static audit cannot
 verify (need separate runtime tooling or deployment-level checks):
@@ -1126,6 +1130,24 @@ def audit():
          f'{len(indexable)} pages: every canonical is hardcoded static HTML',
          js_canon_failures)
 
+    # Rule 35 — internal directory links must carry a trailing slash.
+    # GitHub Pages (and most static hosts) 301-redirect /services to
+    # /services/. Every such redirect costs a hop on first crawl and
+    # wastes link equity, so we link to /services/ directly.
+    DIR_NAMES = ('services', 'areas-covered', 'blog', 'resources')
+    BARE_DIR_RE = re.compile(
+        r'<a\b[^>]*?\bhref="(\.\./)?(' + '|'.join(DIR_NAMES) + r')"',
+        re.I,
+    )
+    bare_dir_failures: list[str] = []
+    for p in indexable:
+        html = open(p, encoding='utf-8').read()
+        for m in BARE_DIR_RE.finditer(html):
+            bare_dir_failures.append(f'{p}  href="{m.group(1) or ""}{m.group(2)}" (add trailing slash)')
+    rule('Rule 35 — internal directory links use trailing slash',
+         f'{len(indexable)} pages: no bare directory hrefs that would 301 redirect',
+         bare_dir_failures)
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -1136,7 +1158,7 @@ def audit():
         print('To re-inject canonical schema.org JSON-LD on every page:')
         print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all thirty-four content rules satisfied.')
+    print('PASS — all thirty-five content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
