@@ -1083,6 +1083,19 @@ body[data-calc-mode="storage"] .inventory-prompt { display: none !important; }
 .quote-form-grid textarea { resize: vertical; min-height: 4em; font-family: inherit; }
 .quote-form-full { grid-column: 1 / -1; }
 
+/* Small helper text shown below an input — used for the date picker
+   to explain that an approximate date is acceptable. The form sits on
+   a white card, so the hint reads in a muted navy-grey to match the
+   navy labels above. */
+.quote-form-hint {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #6c5da0;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
 /* Title + first name + last name share a single row across the full
    width of the quote-form-grid. Title is narrower since the dropdown
    only needs to show short honorifics. */

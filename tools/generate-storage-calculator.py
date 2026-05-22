@@ -1003,9 +1003,26 @@ def page_html() -> str:
                     <span class="quote-form-label">Moving TO (postcode)</span>
                     <input type="text" name="to_postcode" id="qf-to" required autocomplete="postal-code" placeholder="TN22 5JD">
                   </label>
+                  <label>
+                    <span class="quote-form-label">Preferred move date</span>
+                    <input type="date" name="move_date" id="qf-date" autocomplete="off">
+                    <span class="quote-form-hint">Approximate is fine &mdash; we&rsquo;ll confirm at survey.</span>
+                  </label>
+                  <label>
+                    <span class="quote-form-label">Flexibility on date</span>
+                    <select name="move_date_flex" id="qf-date-flex" autocomplete="off">
+                      <option value="">Choose&hellip;</option>
+                      <option value="Fixed date">Fixed date (chain completion, end of tenancy)</option>
+                      <option value="±3 days">&plusmn; 3 days either side</option>
+                      <option value="±1 week">&plusmn; 1 week either side</option>
+                      <option value="±2 weeks">&plusmn; 2 weeks either side</option>
+                      <option value="Flexible">Flexible &mdash; whichever works for the crew</option>
+                    </select>
+                    <span class="quote-form-hint">More flexibility usually means a cheaper quote.</span>
+                  </label>
                   <label class="quote-form-full">
                     <span class="quote-form-label">Anything else we should know? (optional)</span>
-                    <textarea name="notes" id="qf-notes" rows="3" placeholder="Preferred move date, access notes, listed property, antiques, etc."></textarea>
+                    <textarea name="notes" id="qf-notes" rows="3" placeholder="Access notes, listed property, antiques, parking restrictions, anything heavy or fragile."></textarea>
                   </label>
                 </div>
                 <div class="quote-form-actions">
@@ -1123,7 +1140,7 @@ __BED_INVENTORY__
   <script defer src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=54f032c21ccd6c2e19dae5a7" crossorigin="anonymous"></script>
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
-  <script defer src="../js/storage-calculator.js?v=20260649"></script>
+  <script defer src="../js/storage-calculator.js?v=20260653"></script>
 </body>
 </html>
 """

@@ -957,6 +957,17 @@
     });
   }
 
+  // Set the date field's minimum to today so users can't pick a date in
+  // the past. Updates once per page load — good enough for a quote form.
+  var dateField = document.getElementById('qf-date');
+  if (dateField) {
+    var today = new Date();
+    var yyyy = today.getFullYear();
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var dd = String(today.getDate()).padStart(2, '0');
+    dateField.min = yyyy + '-' + mm + '-' + dd;
+  }
+
   // STEP 1 → STEP 2: validate contact fields, then reveal the summary.
   if (quoteNextBtn) {
     quoteNextBtn.addEventListener('click', function () {
@@ -1008,6 +1019,19 @@
       var fromPC = document.getElementById('qf-from').value.trim().toUpperCase();
       var toPC   = document.getElementById('qf-to').value.trim().toUpperCase();
       var notes  = document.getElementById('qf-notes').value.trim();
+      var moveDate = (document.getElementById('qf-date') && document.getElementById('qf-date').value) || '';
+      var moveFlex = (document.getElementById('qf-date-flex') && document.getElementById('qf-date-flex').value) || '';
+      // Format the date as "Mon 14 July 2026" if a value is given; mailto strings are
+      // hard to read in ISO form, but the input's value comes out as ISO YYYY-MM-DD.
+      var moveDateFmt = '';
+      if (moveDate) {
+        var d = new Date(moveDate + 'T00:00:00');
+        if (!isNaN(d)) {
+          moveDateFmt = d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+        } else {
+          moveDateFmt = moveDate;
+        }
+      }
       var fullName = [title, first, last].filter(function (p) { return p; }).join(' ');
       var status = document.getElementById('qf-status');
 
@@ -1107,6 +1131,12 @@
       lines.push(pad('  Moving TO:', toPC));
       lines.push(pad('  Round-trip:', miles + ' mile' + (miles === 1 ? '' : 's')));
       lines.push(pad('  Service type:', modeLabel));
+      if (moveDateFmt) {
+        lines.push(pad('  Preferred date:', moveDateFmt));
+      }
+      if (moveFlex) {
+        lines.push(pad('  Date flexibility:', moveFlex));
+      }
       lines.push('');
       lines.push('MOVE OVERVIEW');
       lines.push(pad('  Home size:', bedSelected.label));

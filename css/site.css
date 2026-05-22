@@ -4735,6 +4735,14 @@ border-color: var(--brand-bronze, #C8A876);
 }
 .quote-form-grid textarea { resize: vertical; min-height: 4em; font-family: inherit; }
 .quote-form-full { grid-column: 1 / -1; }
+.quote-form-hint {
+display: block;
+margin-top: 0.35rem;
+font-size: 0.78rem;
+color: #6c5da0;
+font-weight: 400;
+line-height: 1.35;
+}
 .quote-form-name-row {
 grid-column: 1 / -1;
 display: grid;
