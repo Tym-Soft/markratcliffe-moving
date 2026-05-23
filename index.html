@@ -1527,8 +1527,172 @@ content: ""; position: absolute; inset: 0; z-index: -1;
 background: linear-gradient(180deg, rgba(77, 46, 143,0.16) 0%, rgba(77, 46, 143,0.21) 100%);
 }
 .hp-hero-inner {
-max-width: 980px; text-align: center;
-display: flex; flex-direction: column; align-items: center; gap: 1rem;
+max-width: 980px; text-align: center; width: 100%;
+display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .hp-hero-inner {
+    max-width: 1280px;
+    display: grid;
+    grid-template-columns: 1fr 440px;
+    gap: 3rem;
+    text-align: left;
+    align-items: center;
+  }
+  .hp-hero-card { text-align: left; align-items: flex-start; }
+  .hp-hero-card .hp-hero-h1 { max-width: 15ch; }
+  .hp-hero-card .hp-hero-cta { justify-content: flex-start; }
+  .hp-hero-card .hp-trust-strip { justify-content: flex-start; }
+}
+.hp-hero-card { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; }
+
+/* Quick estimate card — compact mirror of the full calculator */
+.hp-hero-quote-card {
+  background: rgba(255,255,255,0.96);
+  border-radius: 14px;
+  padding: 22px 22px 20px;
+  color: #222;
+  box-shadow: 0 16px 50px rgba(0,0,0,0.28);
+  border: 1px solid rgba(200, 168, 118, 0.5);
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  font-family: "Inter", Arial, sans-serif;
+}
+.hpqq-title {
+  margin: 0 0 4px;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: #4d2e8f;
+  letter-spacing: -0.01em;
+}
+.hpqq-hint {
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.45;
+}
+.hpqq-section { margin-bottom: 12px; }
+.hpqq-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #4d2e8f;
+  margin-bottom: 6px;
+}
+.hpqq-beds {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.hpqq-bed {
+  appearance: none;
+  background: #faf6ec;
+  border: 1px solid #e6dec9;
+  color: #3a226d;
+  padding: 8px 4px;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+.hpqq-bed:hover { background: #f1ead1; border-color: #C8A876; }
+.hpqq-bed.is-active {
+  background: #4d2e8f;
+  border-color: #4d2e8f;
+  color: #fff;
+}
+.hpqq-bed.is-active:hover { background: #3a226d; border-color: #3a226d; }
+.hpqq-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+  background: #fff;
+  border: 1px solid #d4cbb5;
+  border-radius: 7px;
+}
+.hpqq-input:focus {
+  outline: 2px solid #C8A876;
+  outline-offset: -1px;
+  border-color: #C8A876;
+}
+.hpqq-mini {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.74rem;
+  color: #777;
+}
+.hpqq-result {
+  background: linear-gradient(180deg, #f4ecda 0%, #ebe0c2 100%);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 14px 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hpqq-result-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #6b4d18;
+}
+.hpqq-result-prices {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.hpqq-net {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: #4d2e8f;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.hpqq-gross {
+  font-size: 0.95rem;
+  color: #3a226d;
+  font-weight: 600;
+}
+.hpqq-gross em { font-style: normal; color: #6b4d18; font-weight: 500; font-size: 0.78rem; letter-spacing: 0.04em; }
+.hpqq-cta {
+  display: block !important;
+  width: 100%;
+  text-align: center;
+  background: #4d2e8f;
+  color: #fff !important;
+  border: 0;
+  padding: 13px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.98rem;
+  letter-spacing: 0.02em;
+  transition: background 0.15s ease, transform 0.1s ease;
+  font-family: "Inter", sans-serif;
+}
+.hpqq-cta:hover, .hpqq-cta:focus {
+  background: #3a226d;
+  outline: none;
+}
+.hpqq-foot {
+  margin: 10px 0 0;
+  font-size: 0.72rem;
+  color: #888;
+  text-align: center;
+  line-height: 1.4;
 }
 .hp-hero-eyebrow {
 font-family: "Inter", sans-serif;
@@ -2159,6 +2323,7 @@ border-color: #fff;
            width="1920" height="1080">
     </picture>
     <div class="hp-hero-inner">
+      <div class="hp-hero-card">
       <p class="hp-hero-eyebrow">Family-Run &middot; BAR Member &middot; Since 1982</p>
       <h1 class="hp-hero-h1">Sussex Removals &amp; Storage Experts Since 1982</h1>
       <p class="hp-hero-sub">Premier Moving &amp; Storage Company serving Eastbourne, Brighton, Hastings, Worthing and all Sussex &mdash; with our signature full pad-wrap, guaranteed move dates and prestige steel storage rooms.</p>
@@ -2178,6 +2343,43 @@ border-color: #fff;
         <span class="hp-trust-sep">|</span>
         <span>APG protected deposits</span>
       </div>
+      </div>
+
+      <!-- Quick Estimate card — compact mirror of the storage calculator. -->
+      <aside class="hp-hero-quote-card" aria-label="Quick estimate">
+        <h2 class="hpqq-title">Get an instant estimate</h2>
+        <p class="hpqq-hint">Pick your home size, add the round-trip miles &mdash; we&rsquo;ll show a figure in real time.</p>
+
+        <div class="hpqq-section">
+          <span class="hpqq-label">Home size</span>
+          <div class="hpqq-beds" role="radiogroup" aria-label="Home size">
+            <button type="button" class="hpqq-bed" data-bed="tiny" data-cuft="300"  aria-pressed="false">Tiny</button>
+            <button type="button" class="hpqq-bed" data-bed="1bed" data-cuft="500"  aria-pressed="false">1-bed</button>
+            <button type="button" class="hpqq-bed" data-bed="2bed" data-cuft="800"  aria-pressed="false">2-bed</button>
+            <button type="button" class="hpqq-bed is-active" data-bed="3bed" data-cuft="1000" aria-pressed="true">3-bed</button>
+            <button type="button" class="hpqq-bed" data-bed="4bed" data-cuft="1800" aria-pressed="false">4-bed</button>
+            <button type="button" class="hpqq-bed" data-bed="5bed" data-cuft="2800" aria-pressed="false">5+ bed</button>
+          </div>
+        </div>
+
+        <div class="hpqq-section">
+          <label class="hpqq-label" for="hpqq-miles">Round-trip miles</label>
+          <input id="hpqq-miles" class="hpqq-input" type="number" min="0" value="30" inputmode="numeric">
+          <span class="hpqq-mini">Depot &rarr; home &rarr; new home &rarr; depot.</span>
+        </div>
+
+        <div class="hpqq-result" role="status" aria-live="polite">
+          <span class="hpqq-result-label">Estimate</span>
+          <div class="hpqq-result-prices">
+            <span class="hpqq-net">&pound;<span id="hpqq-net-amt">&mdash;</span></span>
+            <span class="hpqq-gross">&pound;<span id="hpqq-gross-amt">&mdash;</span> <em>inc. VAT</em></span>
+          </div>
+        </div>
+
+        <a href="resources/storage-calculator.html?bed=3bed&amp;miles=30" id="hpqq-cta" class="hpqq-cta">Refine &amp; send quote &rarr;</a>
+
+        <p class="hpqq-foot">Indicative figure. Final quote after free survey &mdash; pad-wrap, packing materials, access &amp; antiques may adjust the price.</p>
+      </aside>
     </div>
   </section>
 
@@ -2605,6 +2807,7 @@ document.addEventListener("DOMContentLoaded", function() {
 }(document, 'script', 'facebook-jssdk'));</script>
 </div>
   <script defer src="js/mobile-nav.js?v=20260560"></script>
+  <script defer src="js/home-quick-quote.js?v=20260523"></script>
   <a href="mark-ratcliffe-moving-online-removals-quote.html" class="fab-quote" aria-label="Request a free removals quote">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm-9 14-4-4 1.4-1.4L10 14.2l6.6-6.6L18 9l-8 8Z"/></svg>
   <span class="fab-quote-label">Request a Quote</span>

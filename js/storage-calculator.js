@@ -2008,6 +2008,26 @@
     setTimeout(doReload, 6000);
   }
 
+  // Deep-link from the homepage hero quick-quote: pick up ?bed=…&miles=…
+  // and pre-select the matching home-size radio + miles input before the
+  // first recalc, so the customer lands exactly where they left off.
+  try {
+    var qs = new URLSearchParams(window.location.search);
+    var qsBed = qs.get('bed');
+    var qsMiles = qs.get('miles');
+    if (qsBed) {
+      var bedRadio = document.querySelector('input[name="home-size"][value="' + qsBed.replace(/"/g, '') + '"]');
+      if (bedRadio) {
+        bedRadio.checked = true;
+        if (typeof applyHomeSizeDefault === 'function') applyHomeSizeDefault();
+      }
+    }
+    if (qsMiles != null && milesInput) {
+      var m = parseInt(qsMiles, 10);
+      if (!isNaN(m) && m >= 0) milesInput.value = String(m);
+    }
+  } catch (e) { /* URLSearchParams not supported on very old browsers — ignore */ }
+
   recalc();
   // Trigger the inventory auto-fill prompt on first paint (mode permitting).
   if (getCalcMode() !== 'storage') showInventoryPrompt();
