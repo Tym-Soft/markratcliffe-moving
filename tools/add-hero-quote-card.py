@@ -192,7 +192,9 @@ def process_file(path: Path):
         return False, 'already done'
 
     prefix = rel_prefix(path)
-    calc_url = f'{prefix}resources/storage-calculator.html'
+    # Use root-relative for the calculator URL so it works from any page
+    # depth and the JS can safely overwrite it with the same form.
+    calc_url = '/resources/storage-calculator.html'
     css_href = f'{prefix}css/hero-quote-card.css'
     js_src = f'{prefix}js/hero-quote-card.js'
 

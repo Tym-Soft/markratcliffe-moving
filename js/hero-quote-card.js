@@ -83,7 +83,11 @@
     if (netEl)   netEl.textContent   = fmt(net);
     if (grossEl) grossEl.textContent = fmt(gross);
     if (cta) {
-      cta.href = 'resources/storage-calculator.html?bed=' + encodeURIComponent(ab.bed) +
+      // Root-relative so it resolves correctly from any page depth
+      // (homepage, /services/, /areas-covered/, /blog/, /resources/).
+      // Previously used "resources/storage-calculator.html" which is
+      // homepage-relative and 404s from any nested folder.
+      cta.href = '/resources/storage-calculator.html?bed=' + encodeURIComponent(ab.bed) +
                  '&miles=' + encodeURIComponent(miles);
     }
   }
