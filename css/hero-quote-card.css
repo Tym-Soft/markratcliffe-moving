@@ -101,29 +101,48 @@
   margin: 0 auto;
   font-family: "Inter", Arial, sans-serif;
 }
+/* Reset any text-shadow / text-transform inherited from page-level hero
+   styles (some inner pages apply text-shadow to all <p> inside the hero
+   wrapper, which then bleeds into our white card). */
+.hp-hero-quote-card,
+.hp-hero-quote-card * {
+  text-shadow: none !important;
+}
+.hp-hero-quote-card h2,
+.hp-hero-quote-card h3,
+.hp-hero-quote-card p,
+.hp-hero-quote-card span,
+.hp-hero-quote-card label {
+  text-transform: none !important;
+  letter-spacing: normal;
+}
 .hpqq-title {
   margin: 0 0 4px;
   font-family: "Fraunces", Georgia, serif;
   font-size: 1.45rem;
   font-weight: 500;
-  color: #4d2e8f;
-  letter-spacing: -0.01em;
+  color: #4d2e8f !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+  background: transparent !important;
 }
 .hpqq-hint {
   margin: 0 0 14px;
   font-size: 0.85rem;
-  color: #555;
+  color: #555 !important;
   line-height: 1.45;
+  background: transparent !important;
 }
 .hpqq-section { margin-bottom: 12px; }
 .hpqq-label {
   display: block;
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #4d2e8f;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #4d2e8f !important;
   margin-bottom: 6px;
+  background: transparent !important;
 }
 .hpqq-beds {
   display: grid;
@@ -185,9 +204,10 @@
 .hpqq-result-label {
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: #6b4d18;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  color: #6b4d18 !important;
+  background: transparent !important;
 }
 .hpqq-result-prices {
   display: flex;
@@ -238,7 +258,8 @@
 .hpqq-foot {
   margin: 10px 0 0;
   font-size: 0.72rem;
-  color: #888;
+  color: #888 !important;
   text-align: center;
   line-height: 1.4;
+  background: transparent !important;
 }
