@@ -1532,17 +1532,24 @@ display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
 }
 @media (min-width: 1024px) {
   .hp-hero-inner {
-    max-width: 1280px;
+    max-width: 1240px;
     display: grid;
-    grid-template-columns: 1fr 440px;
-    gap: 3rem;
+    grid-template-columns: 1.15fr 420px;
+    gap: 2.5rem;
     text-align: left;
     align-items: center;
   }
   .hp-hero-card { text-align: left; align-items: flex-start; }
-  .hp-hero-card .hp-hero-h1 { max-width: 15ch; }
+  .hp-hero-card .hp-hero-h1 {
+    font-size: clamp(2rem, 3.2vw, 3rem);
+    line-height: 1.08;
+    max-width: none;
+  }
+  .hp-hero-card .hp-hero-sub { max-width: none; }
   .hp-hero-card .hp-hero-cta { justify-content: flex-start; }
   .hp-hero-card .hp-trust-strip { justify-content: flex-start; }
+  /* Make the CTA buttons sit comfortably side-by-side in the narrower column */
+  .hp-hero-card .hp-btn { padding: 0.85rem 1.4rem; font-size: 0.9rem; }
 }
 .hp-hero-card { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; }
 
