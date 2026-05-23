@@ -1428,12 +1428,14 @@
       lines.push('');
 
       if (roomLines.length > 0) {
-        lines.push('INVENTORY  (' + totalItems + ' items · ' + cuft.toLocaleString('en-GB') + ' cu ft)');
+        lines.push('INVENTORY');
+        lines.push(pad('  Items ticked:', totalItems + ' items'));
+        lines.push(pad('  Total volume:', cuft.toLocaleString('en-GB') + ' cu ft'));
+        lines.push('  Full room-by-room list is in the attached estimate PDF.');
         lines.push('');
-        lines = lines.concat(roomLines);
       } else {
         lines.push('INVENTORY');
-        lines.push('  (No specific items ticked — quote calculated from the cu ft figure.)');
+        lines.push('  No specific items ticked — quote calculated from the cu ft figure above.');
         lines.push('');
       }
       if (notes) {
