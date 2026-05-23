@@ -1855,6 +1855,57 @@ border-color: rgba(255,255,255,0.55);
 background: #fff;
 color: #4d2e8f;
 border-color: #fff;
+}
+.np-gallery-strip {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #C8A876 transparent;
+  padding: 6px 4px 16px;
+  margin: 0 -4px;
+}
+.np-gallery-strip::-webkit-scrollbar { height: 8px; }
+.np-gallery-strip::-webkit-scrollbar-track { background: rgba(200,168,118,.15); border-radius: 4px; }
+.np-gallery-strip::-webkit-scrollbar-thumb { background: #C8A876; border-radius: 4px; }
+.np-gallery-strip::-webkit-scrollbar-thumb:hover { background: #D6B274; }
+.np-gallery-strip figure {
+  flex: 0 0 auto;
+  width: 320px;
+  margin: 0;
+  scroll-snap-align: start;
+  background: #fff;
+  border: 1px solid #e6dec9;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.np-gallery-strip figure img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  background: #f1ecdf;
+}
+.np-gallery-strip figure figcaption {
+  padding: 10px 12px 14px;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #3a226d;
+  flex: 1;
+}
+.np-gallery-hint {
+  font-size: .8rem;
+  color: #888;
+  margin: -4px 0 6px;
+  font-style: italic;
+}
+@media (max-width: 600px) {
+  .np-gallery-strip figure { width: 78vw; max-width: 300px; }
+  .np-gallery-strip figure img { height: 200px; }
 }</style>
 <!-- mrm:critical-css:end -->
 </head>
@@ -2146,20 +2197,207 @@ border-color: #fff;
   <section class="np-section np-section-soft">
     <div class="np-inner">
       <h2>Around the depot</h2>
-      
+
         <p>The Lower Dicker depot is where everything starts and ends &mdash; pre-move materials are staged here, the lorries park here overnight, and our steel-strong-room <a href="../services/storage-eastbourne.html">self storage</a> is built into the back of the building. The Bedford lives at the front.</p>
         <p>Visit any time by appointment &mdash; we&rsquo;re at Unit J12 Swallow Business Park, Diamond Drive, Lower Dicker, East Sussex BN27 4EL. A coffee&rsquo;s waiting for anyone considering booking a survey.</p>
-        
+
+    </div>
+  </section>
+
+  <section class="np-section">
+    <div class="np-inner">
+      <h2>More of the fleet</h2>
+      <p>The fleet doesn&rsquo;t stand still &mdash; new vehicles, new liveries and the occasional trade collaboration. Below are recent shots: the residential pantechnicon you&rsquo;ll see on most Sussex driveways, the depot staging area when shipping containers come in, the UK-Thai branded van, and trade lifts shared with partner removers.</p>
+      <p class="np-gallery-hint">Swipe or scroll &rarr; to see more</p>
+      <div class="np-gallery-strip" role="region" aria-label="More of the fleet — scrollable gallery" tabindex="0">
+        <figure>
+          <img src="../images/mark-ratcliffe-removals-fleet-pantechnicon-van-residential.webp" alt="Mark Ratcliffe pantechnicon and Renault Master support van at a residential Sussex removal" width="1600" height="1030" loading="lazy" decoding="async">
+          <figcaption>The pantechnicon and a support van side-by-side at a residential move.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-shipping-containers-international-removals-eastbourne.webp" alt="Two 20ft shipping containers on a low-loader next to a Mark Ratcliffe Eastbourne pantechnicon" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Shipping containers arriving at the Eastbourne depot for an international load-out.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-removal-truck-detached-house-driveway.webp" alt="Mark Ratcliffe Moving truck on the driveway of a red-brick detached house" width="1600" height="1122" loading="lazy" decoding="async">
+          <figcaption>Loading day at a detached family home &mdash; every job photographed for the customer&rsquo;s records.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-uk-thai-movers-branded-van.webp" alt="Mark Ratcliffe UK-Thai Movers branded van with Thailand beach mural on the side" width="1600" height="1664" loading="lazy" decoding="async">
+          <figcaption>The UK-Thai Movers van &mdash; door-to-door, full or part-container shipping to Thailand.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-thai-themed-truck-mural-rear.webp" alt="Hand-painted Thailand longtail-boat mural on the rear doors of a Mark Ratcliffe lorry" width="1600" height="2158" loading="lazy" decoding="async">
+          <figcaption>The hand-painted Thai mural on the rear of the UK-Thai pantechnicon.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-road-train-removal-lorry-elite-moving.webp" alt="A road-train rig from Elite Moving carrying a Mark Ratcliffe removal load" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>A trade road-train lift &mdash; sharing capacity across the south coast.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-matthew-james-trade-shipping-collaboration.webp" alt="Matthew James Global Relocations van and a Mark Ratcliffe pantechnicon loading together" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Shared international load with Matthew James Global Relocations.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="np-section np-section-soft">
+    <div class="np-inner">
+      <h2>UK removals across Sussex and the south</h2>
+      <p>The bread-and-butter work &mdash; families and businesses moving across East Sussex, West Sussex, Surrey, Kent and into Hampshire. Some are short hops between villages; others are long-distance UK moves with the crew on the road well into the evening. A few recent jobs below.</p>
+      <p class="np-gallery-hint">Swipe or scroll &rarr; to see more</p>
+      <div class="np-gallery-strip" role="region" aria-label="UK removals across Sussex and the south — scrollable gallery" tabindex="0">
+        <figure>
+          <img src="../images/mark-ratcliffe-removal-crowborough-east-sussex.webp" alt="Mark Ratcliffe removal lorry on a residential street in Crowborough, East Sussex" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>A Crowborough removal &mdash; typical 3-bed family move in East Sussex.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-hove-to-petersfield-sussex-hampshire-removal.webp" alt="Mark Ratcliffe lorry loaded for a Hove to Petersfield removal" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Moving day from Hove to Petersfield &mdash; Sussex coast to Hampshire countryside.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-sussex-to-ledbury-removal.webp" alt="Mark Ratcliffe lorry on a long-distance Sussex to Ledbury removal" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Sussex to Ledbury &mdash; a long-distance UK move in one of the larger lorries.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-late-night-collection-removals.webp" alt="Mark Ratcliffe crew loading a late-night collection under depot lights" width="1600" height="2134" loading="lazy" decoding="async">
+          <figcaption>Late-night collection &mdash; keys sometimes exchange long after dark.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-movers-packers-shippers-sussex.webp" alt="Mark Ratcliffe Sussex crew on a busy packing and loading day" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Movers, packers and shippers &mdash; Sussex base, national reach.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="np-section">
+    <div class="np-inner">
+      <h2>UK&ndash;Thai shipping &amp; international work</h2>
+      <p>We&rsquo;re one of the few UK removers running regular full-container and groupage shipments between the UK and Thailand &mdash; Bangkok, Hua Hin, Samut Prakan and beyond &mdash; alongside European moves to Copenhagen, Lisbon and other major cities. This is our biggest gallery and the part of the business we&rsquo;re proudest of.</p>
+      <p class="np-gallery-hint">Swipe or scroll &rarr; to see all 16 photos</p>
+      <div class="np-gallery-strip" role="region" aria-label="UK-Thai and international shipping — scrollable gallery" tabindex="0">
+        <figure>
+          <img src="../images/mark-ratcliffe-shipping-bangkok-thailand-removals.webp" alt="Mark Ratcliffe shipment being loaded for Bangkok, Thailand" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Loading a Bangkok-bound shipment at the Eastbourne depot.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-bracknell-to-bangkok-international-removal.webp" alt="Mark Ratcliffe lorry on a Bracknell to Bangkok international removal" width="1600" height="900" loading="lazy" decoding="async">
+          <figcaption>Bracknell to Bangkok &mdash; a full-house international removal.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-cheshire-to-downtown-bangkok-thailand.webp" alt="Mark Ratcliffe lorry collecting in Cheshire for a downtown Bangkok shipment" width="1600" height="1122" loading="lazy" decoding="async">
+          <figcaption>From Cheshire to downtown Bangkok &mdash; long-distance UK collection for the Far East.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-cotswold-collection-thailand-shipping.webp" alt="Mark Ratcliffe Cotswold property collection for a Thailand-bound shipment" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Cotswold collection for a Thailand-bound container.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-europe-removals-copenhagen-lisbon.webp" alt="Mark Ratcliffe lorry en route through Europe to Copenhagen and Lisbon" width="1600" height="2134" loading="lazy" decoding="async">
+          <figcaption>On the road through Europe &mdash; Copenhagen and Lisbon legs.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-export-packing-wrap-international.webp" alt="Mark Ratcliffe export packing and wrap for an international shipment" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Export packing &amp; wrap &mdash; sea-freight standard for international shipments.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-loading-shipping-thailand-international.webp" alt="Mark Ratcliffe crew loading a Thailand-bound shipping container" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Loading a Thailand-bound 20ft container at the depot.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-loading-thailand-shipping-container.webp" alt="Final items going into a Mark Ratcliffe Thailand shipping container before sealing" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Final items into the container before customs sealing.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-thai-shipment-delivery-thailand.webp" alt="Mark Ratcliffe Jr on site delivering a Thai shipment in Thailand" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Delivering a Thai shipment at the destination &mdash; on the ground in Thailand.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-international-shipping-removals.webp" alt="Mark Ratcliffe trucks and trade partners on a multi-vehicle international load" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Multi-vehicle international lift &mdash; our crews and trade partners together.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-shipping-hua-hin-thailand-loading-uk.webp" alt="Mark Ratcliffe vans loading on a UK street for a Hua Hin Thailand shipment" width="1600" height="900" loading="lazy" decoding="async">
+          <figcaption>UK loading day for a Hua Hin-bound shipment.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-thailand-groupage-shared-container.webp" alt="Mark Ratcliffe Thailand groupage shared container loading" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Groupage shipping &mdash; sharing a container reduces the cost for smaller moves.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-shipping-thailand-international-removal.webp" alt="A fully-wrapped 20ft container destined for Thailand at the Mark Ratcliffe depot" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>A 20ft container ready to ship &mdash; fully wrapped, labelled and inventoried.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-croydon-to-thailand-shipment-collection.webp" alt="Mark Ratcliffe Croydon collection for a Thailand-bound shipment" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Croydon collection for a Thailand-bound shipment.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-800-cuft-uplift-samut-prakan-thailand.webp" alt="800 cubic foot uplift heading to Samut Prakan, Thailand" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>An 800 cu ft uplift bound for Samut Prakan, Thailand.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-wimbledon-thai-festival-shipping.webp" alt="Mark Ratcliffe trade work at the Wimbledon Thai Festival" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Trade work at the Wimbledon Thai Festival &mdash; community partnership.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="np-section np-section-soft">
+    <div class="np-inner">
+      <h2>Inside the steel-strong-room storage</h2>
+      <p>Behind the depot, our steel-strong-room self storage holds household belongings between completion dates, during overseas moves, or for long-term storage between properties. Every piece of furniture is individually pad-wrapped and labelled before it goes in. Most rooms hold a 2&ndash;3 bed home; we can combine rooms for larger jobs.</p>
+      <figure class="np-image-block">
+        <img src="../images/mark-ratcliffe-self-storage-room-wrapped-furniture-eastbourne.webp" alt="Inside one of our Eastbourne steel-strong-room storage rooms with pad-wrapped furniture" width="1600" height="2134" loading="lazy" decoding="async">
+        <figcaption>Inside one of the steel storage rooms &mdash; everything pad-wrapped, labelled and stacked safely.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="np-section">
+    <div class="np-inner">
+      <h2>The cartons and packing materials we use</h2>
+      <p>If you&rsquo;re packing yourself, these are the cartons we use on every job and that you can buy from the depot. Each one is sized to a standard cubic-foot volume so the <a href="storage-calculator.html">moving &amp; storage calculator</a> can convert your inventory into vehicle capacity accurately. Mix-and-match by room &mdash; standard cartons for general items, tea cartons for books and heavy goods, wardrobe boxes for hanging clothes, picture boxes for art and mirrors.</p>
+      <p class="np-gallery-hint">Swipe or scroll &rarr; to see all carton types</p>
+      <div class="np-gallery-strip" role="region" aria-label="Cartons and packing materials — scrollable gallery" tabindex="0">
+        <figure>
+          <img src="../images/mark-ratcliffe-removals-carton-3-cuft.webp" alt="Standard Mark Ratcliffe 3 cubic foot removals carton" width="1600" height="2134" loading="lazy" decoding="async">
+          <figcaption>Standard removals carton &mdash; 3 cu ft. The everyday box for kitchenware, ornaments and general household items.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-removals-tea-carton.webp" alt="Mark Ratcliffe tea carton for books and heavy items" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Tea carton &mdash; smaller and denser, ideal for books and heavy items.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-removals-tea-carton-4-cuft.webp" alt="Mark Ratcliffe tea carton in 4 cubic foot size" width="1600" height="2134" loading="lazy" decoding="async">
+          <figcaption>Tea carton, 4 cu ft variant &mdash; for slightly larger but still dense loads.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-removals-long-box-carton-3-75-cuft.webp" alt="Mark Ratcliffe long box carton in 3.75 cubic feet" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Long box, 3.75 cu ft &mdash; awkward items like lamps, golf clubs and skis.</figcaption>
+        </figure>
+        <figure>
+          <img src="../images/mark-ratcliffe-removals-tall-box-carton-5-6-cuft.webp" alt="Mark Ratcliffe tall wardrobe box in 5.6 cubic feet" width="1600" height="2134" loading="lazy" decoding="async">
+          <figcaption>Tall box, 5.6 cu ft &mdash; wardrobe-style carton with internal hanging rail for clothes on hangers.</figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 
   <section class="np-section">
     <div class="np-inner">
       <h2>Customer photos</h2>
-      
+
         <p>Some of our best photos are sent in by customers after their moves &mdash; the lorry parked in front of a country house, the crew on a quayside in Bangkok, the team unloading at a Sussex barn conversion. We&rsquo;re always glad to receive them and (with your permission) we add the best to the gallery.</p>
+        <figure class="np-image-block">
+          <img src="../images/mark-ratcliffe-customer-loaded-boxes-hua-hin-thailand.webp" alt="A Mark Ratcliffe customer with her packed boxes loaded ready for a Hua Hin, Thailand shipment" width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>A customer ahead of her Hua Hin shipment &mdash; her belongings packed, labelled and ready to head to Thailand.</figcaption>
+        </figure>
         <p>If you have a photo from a move with us that you&rsquo;d like to see here, email it to <a href="mailto:office@markratcliffemoving.co.uk">office@markratcliffemoving.co.uk</a> &mdash; we&rsquo;ll credit you (or keep it anonymous, whichever you prefer).</p>
-        
+
     </div>
   </section>
 
