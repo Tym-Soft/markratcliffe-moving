@@ -71,6 +71,15 @@ export default {
       return json({ ok: true }, 200, cors);
     }
 
+    const url = new URL(request.url);
+    if (url.pathname === '/distance') {
+      return handleDistance(body, env, cors);
+    }
+    return handleEmail(body, env, cors);
+  },
+};
+
+async function handleEmail(body, env, cors) {
     const name = strField(body, 'name', 120);
     const email = strField(body, 'email', 200);
     const phone = strField(body, 'phone', 40);
@@ -124,8 +133,74 @@ export default {
     });
 
     return json({ ok: true, customerEmailed: customerResult.ok }, 200, cors);
-  },
-};
+}
+
+// ---------- Distance lookup ---------------------------------------------
+
+async function handleDistance(body, env, cors) {
+  if (!env.GOOGLE_MAPS_API_KEY) {
+    return json({ ok: false, error: 'Distance lookup not configured — please enter miles manually.', detail: 'GOOGLE_MAPS_API_KEY missing' }, 503, cors);
+  }
+  if (!env.DEPOT_ADDRESS) {
+    return json({ ok: false, error: 'Distance lookup not configured — please enter miles manually.', detail: 'DEPOT_ADDRESS missing' }, 503, cors);
+  }
+
+  const from = strField(body, 'from', 250);
+  const to = strField(body, 'to', 250);
+  if (!from) return json({ ok: false, error: 'Please enter the FROM address or postcode.' }, 400, cors);
+  if (!to)   return json({ ok: false, error: 'Please enter the TO address or postcode.' }, 400, cors);
+
+  let res;
+  try {
+    res = await fetch('https://routes.googleapis.com/directions/v2:computeRoutes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': env.GOOGLE_MAPS_API_KEY,
+        'X-Goog-FieldMask': 'routes.distanceMeters,routes.legs.distanceMeters',
+      },
+      body: JSON.stringify({
+        origin:      { address: env.DEPOT_ADDRESS },
+        destination: { address: env.DEPOT_ADDRESS },
+        intermediates: [
+          { address: from },
+          { address: to },
+        ],
+        travelMode: 'DRIVE',
+        routingPreference: 'TRAFFIC_UNAWARE', // distance-only, cheapest SKU
+        units: 'IMPERIAL',
+      }),
+    });
+  } catch (e) {
+    return json({ ok: false, error: 'Could not reach the routing service. Please enter miles manually.', detail: String(e.message || e) }, 502, cors);
+  }
+
+  if (!res.ok) {
+    let detail = '';
+    try { detail = await res.text(); } catch {}
+    const friendly = res.status === 404 || res.status === 400
+      ? 'Couldn\'t find a driving route between those addresses — try just the postcode, or enter miles manually.'
+      : 'Could not calculate distance right now. Please enter miles manually.';
+    return json({ ok: false, error: friendly, detail: `Routes ${res.status}: ${detail || res.statusText}` }, 502, cors);
+  }
+
+  const data = await res.json().catch(() => ({}));
+  const route = data && data.routes && data.routes[0];
+  if (!route || route.distanceMeters == null) {
+    return json({ ok: false, error: 'No driving route found between those addresses.', detail: JSON.stringify(data).slice(0, 200) }, 404, cors);
+  }
+
+  const metersToMiles = (m) => Math.round((Number(m) || 0) * 0.000621371);
+  const totalMiles = metersToMiles(route.distanceMeters);
+  const legs = Array.isArray(route.legs) ? route.legs.map((l) => metersToMiles(l.distanceMeters)) : [];
+
+  // Sanity cap: anything > 2000 mi round-trip is almost certainly a bad geocode.
+  if (totalMiles > 2000) {
+    return json({ ok: false, error: 'That route is unusually long — please double-check the addresses, or enter miles manually.', detail: `Got ${totalMiles} mi` }, 422, cors);
+  }
+
+  return json({ ok: true, miles: totalMiles, legs, depot: env.DEPOT_ADDRESS }, 200, cors);
+}
 
 // ---------- Resend ------------------------------------------------------
 

@@ -4397,6 +4397,127 @@ margin: 0;
   border-bottom: 1px solid rgba(200, 168, 118, 0.35);
 }
 .storage-calc.is-searching .calc-cat-panel:first-of-type .calc-search-room-label { margin-top: 4px; }
+.qc-num-distance { grid-column: 1 / -1; }
+.qc-distance-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+  align-items: end;
+}
+@media (max-width: 720px) {
+  .qc-distance-fields { grid-template-columns: 1fr; }
+}
+.qc-distance-field { display: flex; flex-direction: column; gap: 0.25rem; }
+.qc-distance-field-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #C8A876;
+}
+.qc-distance-field input[type="text"] {
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: #fff;
+  color: #222;
+  font: inherit;
+  font-size: 0.95rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.qc-distance-field input[type="text"]:focus {
+  outline: 2px solid #C8A876;
+  outline-offset: -1px;
+}
+.qc-distance-calc-btn {
+  background: #C8A876;
+  color: #3a226d;
+  border: 0;
+  padding: 0.65rem 1.1rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.15s ease, transform 0.1s ease;
+  white-space: nowrap;
+  height: fit-content;
+}
+.qc-distance-calc-btn:hover,
+.qc-distance-calc-btn:focus {
+  background: #D6B274;
+  outline: none;
+}
+.qc-distance-calc-btn:active { transform: translateY(1px); }
+.qc-distance-calc-btn[disabled] { opacity: 0.6; cursor: default; }
+.qc-distance-status {
+  margin-top: 0.55rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+.qc-distance-status.is-error {
+  background: rgba(244, 67, 54, 0.22);
+  color: #ffe1e1;
+}
+.qc-distance-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.55rem;
+  padding: 0.7rem 0.85rem;
+  background: rgba(200, 168, 118, 0.18);
+  border-left: 3px solid #C8A876;
+  border-radius: 5px;
+}
+.qc-distance-result-miles {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.qc-distance-result-detail {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.45;
+}
+.qc-distance-manual {
+  margin-top: 0.55rem;
+  font-size: 0.85rem;
+}
+.qc-distance-manual summary {
+  cursor: pointer;
+  color: #C8A876;
+  padding: 4px 0;
+  user-select: none;
+  font-weight: 600;
+}
+.qc-distance-manual summary:hover { color: #D6B274; }
+.qc-distance-manual-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.45rem;
+}
+.qc-distance-manual-row span {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.85);
+}
+.qc-distance-manual-row input[type="number"] {
+  padding: 0.5rem 0.7rem;
+  width: 110px;
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: #fff;
+  color: #222;
+  font: inherit;
+  font-size: 0.95rem;
+}
 .storage-calc .calc-actions { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .volume-inputs {
 display: grid;

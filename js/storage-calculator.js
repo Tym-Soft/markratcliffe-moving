@@ -803,6 +803,99 @@
     milesInput.addEventListener('change', recalc);
   }
 
+  // Distance lookup — POST the customer's FROM/TO addresses to the worker,
+  // which calls Google Routes API server-side (depot → from → to → depot)
+  // and returns total round-trip miles. On success we write into the
+  // manual miles input so the existing pricing path stays unchanged.
+  var distFromInput = document.getElementById('dist-from');
+  var distToInput   = document.getElementById('dist-to');
+  var distCalcBtn   = document.getElementById('dist-calc-btn');
+  var distStatus    = document.getElementById('dist-status');
+  var distResult    = document.getElementById('dist-result');
+  var distResultMi  = document.getElementById('dist-result-miles');
+  var distResultDet = document.getElementById('dist-result-detail');
+
+  function setDistStatus(text, isError) {
+    if (!distStatus) return;
+    if (!text) { distStatus.hidden = true; distStatus.textContent = ''; distStatus.classList.remove('is-error'); return; }
+    distStatus.hidden = false;
+    distStatus.textContent = text;
+    distStatus.classList.toggle('is-error', !!isError);
+  }
+
+  if (distCalcBtn && distFromInput && distToInput) {
+    distCalcBtn.addEventListener('click', function () {
+      var fromAddr = distFromInput.value.trim();
+      var toAddr   = distToInput.value.trim();
+      if (!fromAddr || !toAddr) {
+        setDistStatus('Please enter both a FROM and TO postcode (or address).', true);
+        return;
+      }
+
+      setDistStatus('Calculating distance…', false);
+      distCalcBtn.disabled = true;
+      var oldLabel = distCalcBtn.innerHTML;
+      distCalcBtn.textContent = 'Calculating…';
+
+      fetch(WORKER_QUOTE_ENDPOINT + '/distance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from: fromAddr, to: toAddr })
+      }).then(function (r) {
+        return r.json().catch(function () { return { ok: false, error: 'Server error' }; })
+          .then(function (data) { return { httpStatus: r.status, data: data }; });
+      }).then(function (resp) {
+        distCalcBtn.disabled = false;
+        distCalcBtn.innerHTML = oldLabel;
+        if (resp.httpStatus === 200 && resp.data && resp.data.ok) {
+          var miles = resp.data.miles;
+          var legs = resp.data.legs || [];
+          if (milesInput) {
+            milesInput.value = miles;
+            recalc();
+          }
+          if (distResult && distResultMi && distResultDet) {
+            distResult.hidden = false;
+            distResultMi.textContent = miles + ' mile' + (miles === 1 ? '' : 's') + ' round-trip';
+            // Build "depot → from (X mi) → to (Y mi) → depot (Z mi)" if we have 3 legs.
+            var detail;
+            if (legs.length === 3) {
+              detail = 'depot → ' + escapeText(fromAddr) + ' (' + legs[0] + ' mi) → ' +
+                       escapeText(toAddr) + ' (' + legs[1] + ' mi) → depot (' + legs[2] + ' mi)';
+            } else {
+              detail = 'depot → ' + escapeText(fromAddr) + ' → ' + escapeText(toAddr) + ' → depot';
+            }
+            distResultDet.textContent = detail;
+          }
+          setDistStatus('', false);
+          // Mirror into the quote-request form's postcode fields if they're empty.
+          var qfFromEl = document.getElementById('qf-from');
+          var qfToEl   = document.getElementById('qf-to');
+          if (qfFromEl && !qfFromEl.value.trim()) qfFromEl.value = fromAddr.toUpperCase();
+          if (qfToEl   && !qfToEl.value.trim())   qfToEl.value   = toAddr.toUpperCase();
+        } else {
+          var msg = (resp.data && resp.data.error) || 'Could not calculate distance right now.';
+          setDistStatus(msg + ' You can enter miles manually below.', true);
+        }
+      }).catch(function () {
+        distCalcBtn.disabled = false;
+        distCalcBtn.innerHTML = oldLabel;
+        setDistStatus('Network issue — please check your connection or enter miles manually.', true);
+      });
+    });
+
+    // Enter in either field triggers calculation.
+    [distFromInput, distToInput].forEach(function (el) {
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); distCalcBtn.click(); }
+      });
+    });
+  }
+
+  function escapeText(s) {
+    return String(s).replace(/[<>&]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]; });
+  }
+
   // Calculator-mode radios (Removals only / Storage only / Both)
   var calcModeRadios = document.querySelectorAll('input[name="calc-mode"]');
   for (var cm = 0; cm < calcModeRadios.length; cm++) {
