@@ -269,6 +269,7 @@ function strField(obj, key, max) {
 // ---------- Email templates --------------------------------------------
 
 function renderOfficeEmail({ name, email, phone, summary, hasPdf }) {
+  const greeting = `<p style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.55;">Hi ${BRAND.name},</p>`;
   const intro = `<p style="margin:0 0 8px;font-size:14px;color:${BRAND.inkSoft};">A new quote request was submitted via the website's moving calculator.</p>`;
   const contactBlock = `
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;margin:16px 0 8px;">
@@ -291,13 +292,13 @@ function renderOfficeEmail({ name, email, phone, summary, hasPdf }) {
     ${pdfNote}
     <p style="margin:18px 0 0;font-size:13px;color:${BRAND.inkSoft};">Hit <strong>Reply</strong> to respond directly to the customer — Reply-To is set to <strong>${escapeHtml(email)}</strong>.</p>
   `;
-  return wrapEmail({ preheader: `New quote: ${name}`, body: intro + contactBlock + summaryBlock });
+  return wrapEmail({ preheader: `New quote: ${name}`, body: greeting + intro + contactBlock + summaryBlock });
 }
 
 function renderCustomerEmail({ name, email, phone, summary, hasPdf }) {
-  const first = firstName(name);
+  const niceName = (String(name || '').trim()) || 'there';
   const greeting = `
-    <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.55;">Hi ${escapeHtml(first)},</p>
+    <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.55;">Hi ${escapeHtml(niceName)},</p>
     <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.6;">Thank you for using our online moving calculator. We've received the figures below and the office will reply with a formal written quote <strong>within 48 hours</strong> (usually sooner during business hours).</p>
   `;
   const attached = hasPdf
@@ -328,12 +329,13 @@ function renderCustomerEmail({ name, email, phone, summary, hasPdf }) {
     <p style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:17px;color:${BRAND.purple};"><em>The team at ${BRAND.shortName}</em></p>
   `;
   return wrapEmail({
-    preheader: `Thanks ${first} — we'll reply within 48 hours with your written quote.`,
+    preheader: `Thanks ${niceName} — we'll reply within 48 hours with your written quote.`,
     body: greeting + attached + summaryBlock + adjust + trust + signoff,
   });
 }
 
 function renderOfficeContact({ name, email, phone, message }) {
+  const greeting = `<p style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.55;">Hi ${BRAND.name},</p>`;
   const intro = `<p style="margin:0 0 8px;font-size:14px;color:${BRAND.inkSoft};">A new contact message was submitted via the website's contact form.</p>`;
   const contactBlock = `
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;margin:16px 0 8px;">
@@ -352,13 +354,13 @@ function renderOfficeContact({ name, email, phone, message }) {
     <div style="font-family:Arial,Helvetica,sans-serif;white-space:pre-wrap;font-size:14px;line-height:1.6;background:${BRAND.surface};border:1px solid ${BRAND.surfaceBorder};border-left:4px solid ${BRAND.gold};padding:14px 16px;border-radius:6px;color:${BRAND.ink};margin:0;">${escapeHtml(message)}</div>
     <p style="margin:18px 0 0;font-size:13px;color:${BRAND.inkSoft};">Hit <strong>Reply</strong> to respond directly — Reply-To is set to <strong>${escapeHtml(email)}</strong>.</p>
   `;
-  return wrapEmail({ preheader: `New website message: ${name}`, body: intro + contactBlock + messageBlock });
+  return wrapEmail({ preheader: `New website message: ${name}`, body: greeting + intro + contactBlock + messageBlock });
 }
 
 function renderCustomerContact({ name, email, phone, message }) {
-  const first = firstName(name);
+  const niceName = (String(name || '').trim()) || 'there';
   const greeting = `
-    <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.55;">Hi ${escapeHtml(first)},</p>
+    <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.55;">Hi ${escapeHtml(niceName)},</p>
     <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.6;">Thank you for getting in touch. We've received your message and the office will reply <strong>within 1 working day</strong> (usually sooner during business hours).</p>
   `;
   const yourMessage = `
@@ -373,7 +375,7 @@ function renderCustomerContact({ name, email, phone, message }) {
     <p style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:17px;color:${BRAND.purple};"><em>The team at ${BRAND.shortName}</em></p>
   `;
   return wrapEmail({
-    preheader: `Thanks ${first} — we'll reply within 1 working day.`,
+    preheader: `Thanks ${niceName} — we'll reply within 1 working day.`,
     body: greeting + yourMessage + callTo + signoff,
   });
 }
@@ -442,13 +444,6 @@ function wrapEmail({ preheader, body }) {
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
-function firstName(full) {
-  const honorifics = new Set(['mr', 'mrs', 'miss', 'ms', 'mx', 'dr', 'prof']);
-  const parts = String(full).trim().split(/\s+/);
-  if (parts.length > 1 && honorifics.has(parts[0].toLowerCase().replace('.', ''))) return parts[1];
-  return parts[0] || 'there';
 }
 
 function json(body, status, extraHeaders) {
