@@ -73,6 +73,31 @@
   display: none;
 }
 
+/* Trust strip — shown at the bottom of every hero card on every page. */
+.hp-trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: "Inter", Arial, sans-serif;
+}
+@media (min-width: 1024px) {
+  .hp-hero-card .hp-trust-strip,
+  .np-hero-card .hp-trust-strip,
+  .ac-hero-card .hp-trust-strip,
+  .th-hero-card .hp-trust-strip,
+  .lp-hero-cell .hp-trust-strip {
+    justify-content: flex-start;
+  }
+}
+.hp-trust-strip .hp-rating { color: #fff; font-weight: 600; }
+.hp-trust-strip .hp-rating strong { color: #D6B274; font-size: 1.05rem; }
+.hp-trust-strip .hp-trust-sep { color: rgba(255, 255, 255, 0.3); }
+
 /* lp-hero-cell pages: cells with a purple !important background. When
    our quote card is inside one, flatten the wrapper. */
 .lp-hero-cell:has(.hp-hero-quote-card) {
