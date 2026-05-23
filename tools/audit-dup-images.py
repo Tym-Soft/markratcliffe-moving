@@ -36,22 +36,19 @@ def normalise(src: str) -> str:
 
 
 def collect_srcs(html: str):
+    """Count <img src=…> values only.
+
+    srcset variants of the same file are part of normal responsive-image
+    behaviour (one of them is actually rendered) and not a duplicate from
+    the user's point of view. CSS background-image is also excluded —
+    those are decorative and not crawled as indexable images.
+    """
     found = []
     for m in IMG_SRC_RE.finditer(html):
         n = normalise(m.group(1))
         if n:
             found.append(n)
-    for m in SRCSET_RE.finditer(html):
-        # srcset: "url1 1x, url2 2x" → take each url
-        for piece in m.group(1).split(','):
-            piece = piece.strip().split()
-            if piece:
-                n = normalise(piece[0])
-                if n:
-                    found.append(n)
-    # CSS background-image references are intentionally not counted —
-    # they're decorative and not crawled as indexable images. Keeping
-    # the regex around in case we want to surface them as warnings later.
+    _ = SRCSET_RE
     _ = BG_URL_RE
     return found
 
