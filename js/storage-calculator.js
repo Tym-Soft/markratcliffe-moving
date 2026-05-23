@@ -1490,7 +1490,31 @@
         email: email,
         phone: phone,
         subject: subject,
-        summary: lines.join('\n')
+        summary: lines.join('\n'),
+        // Structured data lets the worker render a proper branded HTML
+        // summary card instead of a monospace <pre> block.
+        details: {
+          fromAddr: fromPC,
+          toAddr: toPC,
+          miles: miles,
+          modeLabel: modeLabel,
+          moveDateFmt: moveDateFmt || (moveFlex === 'Date to be confirmed' ? 'To be confirmed' : ''),
+          moveFlex: moveFlex,
+          bedLabel: bedSelected.label,
+          cuft: cuft,
+          cum: cum,
+          storageDays: days,
+          storageRoom: stBits.join(' + '),
+          calcMode: calcMode,
+          removalsNet: rmNett,
+          storageNet: stNett,
+          subtotalNet: subtotalNet,
+          vatRate: EMAIL_VAT_RATE,
+          vatAmount: vatAmount,
+          grossTotal: grossTotal,
+          totalItems: totalItems,
+          notes: notes
+        }
       };
       if (attachments.length > 0) payload.attachments = attachments;
 

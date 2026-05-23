@@ -103,12 +103,14 @@ async function handleEmail(body, env, cors) {
     const attachments = normaliseAttachments(body && body.attachments);
     if (attachments.error) return json({ ok: false, error: attachments.error }, 400, cors);
 
+    const details = (body && body.details && typeof body.details === 'object') ? body.details : null;
+
     const officeHtml = formType === 'contact'
       ? renderOfficeContact({ name, email, phone, message: summary })
-      : renderOfficeEmail({ name, email, phone, summary, hasPdf: attachments.list.length > 0 });
+      : renderOfficeEmail({ name, email, phone, summary, details, hasPdf: attachments.list.length > 0 });
     const customerHtml = formType === 'contact'
       ? renderCustomerContact({ name, email, phone, message: summary })
-      : renderCustomerEmail({ name, email, phone, summary, hasPdf: attachments.list.length > 0 });
+      : renderCustomerEmail({ name, email, phone, summary, details, hasPdf: attachments.list.length > 0 });
 
     const customerSubject = formType === 'contact'
       ? 'We\'ve received your message — ' + BRAND.shortName
@@ -274,7 +276,88 @@ function strField(obj, key, max) {
 
 // ---------- Email templates --------------------------------------------
 
-function renderOfficeEmail({ name, email, phone, summary, hasPdf }) {
+function fmtMoney(n) {
+  return '£' + Number(n || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// Build a branded HTML summary card from the structured details posted by
+// the calculator. Replaces the dated-looking monospace <pre> block.
+function renderSummaryCard(d) {
+  if (!d || typeof d !== 'object') return '';
+  const cellLabel = `padding:8px 16px 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:12.5px;color:${BRAND.inkSoft};vertical-align:top;white-space:nowrap;letter-spacing:0.2px;`;
+  const cellValue = `padding:8px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:${BRAND.ink};line-height:1.45;`;
+
+  const moveRows = [];
+  if (d.fromAddr)                                          moveRows.push(['Moving FROM',  d.fromAddr]);
+  if (d.toAddr)                                            moveRows.push(['Moving TO',    d.toAddr]);
+  if (typeof d.miles === 'number')                         moveRows.push(['Round-trip',   d.miles + ' mile' + (d.miles === 1 ? '' : 's')]);
+  if (d.modeLabel)                                         moveRows.push(['Service',      d.modeLabel]);
+  if (d.moveDateFmt)                                       moveRows.push(['Preferred date', d.moveDateFmt]);
+  if (d.moveFlex && d.moveFlex !== 'Date to be confirmed') moveRows.push(['Flexibility',  d.moveFlex]);
+  if (d.bedLabel)                                          moveRows.push(['Home size',    d.bedLabel]);
+  if (typeof d.cuft === 'number')                          moveRows.push(['Total volume', d.cuft.toLocaleString('en-GB') + ' cu ft  (' + (d.cum || '0') + ' cu m)']);
+  if (d.calcMode !== 'removals' && d.storageDays > 0)      moveRows.push(['Storage duration', d.storageDays + ' day' + (d.storageDays === 1 ? '' : 's')]);
+  if (d.calcMode !== 'removals' && d.storageRoom)          moveRows.push(['Storage room', d.storageRoom]);
+
+  const moveRowsHtml = moveRows.map(([label, value]) => `
+    <tr>
+      <td style="${cellLabel}">${escapeHtml(label)}</td>
+      <td style="${cellValue}">${escapeHtml(String(value))}</td>
+    </tr>
+  `).join('');
+
+  const showRemovals = d.calcMode !== 'storage';
+  const showStorage  = d.calcMode !== 'removals' && Number(d.storageNet || 0) > 0;
+  const subtotal     = Number(d.subtotalNet || 0);
+  const vatPct       = Math.round((Number(d.vatRate || 0.20)) * 100);
+  const vatAmount    = Number(d.vatAmount || 0);
+  const gross        = Number(d.grossTotal || (subtotal + vatAmount));
+
+  const estimateRows = [];
+  if (showRemovals) estimateRows.push([`Removals (net)`, fmtMoney(d.removalsNet), false, false]);
+  if (showStorage)  estimateRows.push([`Storage (net)`,  fmtMoney(d.storageNet),  false, false]);
+  estimateRows.push([`Subtotal (net)`, fmtMoney(subtotal), true,  false]);
+  estimateRows.push([`VAT @ ${vatPct}%`, fmtMoney(vatAmount), true, false]);
+
+  const estimateRowsHtml = estimateRows.map(([label, value, soft, _]) => `
+    <tr>
+      <td style="padding:6px 16px 6px 0;font-family:Arial,Helvetica,sans-serif;font-size:13.5px;color:${soft ? BRAND.inkSoft : BRAND.ink};">${escapeHtml(label)}</td>
+      <td style="padding:6px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:${BRAND.ink};text-align:right;font-variant-numeric:tabular-nums;">${escapeHtml(value)}</td>
+    </tr>
+  `).join('');
+
+  const invSummary = (d.totalItems > 0)
+    ? `${d.totalItems} item${d.totalItems === 1 ? '' : 's'} · ${(Number(d.cuft) || 0).toLocaleString('en-GB')} cu ft <span style="color:${BRAND.inkSoft};font-size:13px;">— full room-by-room list in the attached estimate PDF.</span>`
+    : `No specific items ticked — quote calculated from the cu ft figure above.`;
+
+  const sectionH = `margin:22px 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:17px;color:${BRAND.purple};font-weight:normal;letter-spacing:0.2px;border-bottom:1px solid ${BRAND.surfaceBorder};padding-bottom:6px;`;
+
+  return `
+    <h3 style="${sectionH}">Move overview</h3>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">${moveRowsHtml}</table>
+
+    <h3 style="${sectionH}">Estimate breakdown</h3>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;margin-top:4px;">
+      ${estimateRowsHtml}
+      <tr><td colspan="2" style="padding:4px 0 0;"><div style="border-top:2px solid ${BRAND.purple};height:0;line-height:0;font-size:0;">&nbsp;</div></td></tr>
+      <tr>
+        <td style="padding:10px 16px 6px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:700;color:${BRAND.purple};">TOTAL (inc. VAT)</td>
+        <td style="padding:10px 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:700;color:${BRAND.purple};text-align:right;font-variant-numeric:tabular-nums;">${escapeHtml(fmtMoney(gross))}</td>
+      </tr>
+    </table>
+    <p style="margin:8px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:11.5px;color:${BRAND.inkSoft};line-height:1.55;">Final invoice issued on completion · Estimate valid 30 days · VAT Reg: GB 67 9047 74</p>
+
+    <h3 style="${sectionH}">Inventory</h3>
+    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:${BRAND.ink};line-height:1.55;">${invSummary}</p>
+
+    ${d.notes ? `
+      <h3 style="${sectionH}">Customer notes</h3>
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:${BRAND.ink};line-height:1.55;background:${BRAND.surface};border-left:3px solid ${BRAND.gold};padding:10px 14px;border-radius:4px;white-space:pre-wrap;">${escapeHtml(d.notes)}</div>
+    ` : ''}
+  `;
+}
+
+function renderOfficeEmail({ name, email, phone, summary, details, hasPdf }) {
   const greeting = `<p style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.55;">Hi ${BRAND.name},</p>`;
   const intro = `<p style="margin:0 0 8px;font-size:14px;color:${BRAND.inkSoft};">A new quote request was submitted via the website's moving calculator.</p>`;
   const contactBlock = `
@@ -292,16 +375,18 @@ function renderOfficeEmail({ name, email, phone, summary, hasPdf }) {
   const pdfNote = hasPdf
     ? `<p style="margin:8px 0 0;font-size:13px;color:${BRAND.inkSoft};"><strong>Attached:</strong> formal written estimate (PDF) — itemised lines with VAT @ 20%, valid 30 days.</p>`
     : '';
+  const cardHtml = details
+    ? renderSummaryCard(details)
+    : `<pre style="font-family:ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;font-size:12.5px;line-height:1.55;background:${BRAND.surface};border:1px solid ${BRAND.surfaceBorder};border-left:4px solid ${BRAND.gold};padding:14px 16px;border-radius:6px;color:${BRAND.ink};margin:0;">${escapeHtml(summary)}</pre>`;
   const summaryBlock = `
-    <h3 style="margin:20px 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:${BRAND.purple};font-weight:normal;">Full quote summary</h3>
-    <pre style="font-family:ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;font-size:12.5px;line-height:1.55;background:${BRAND.surface};border:1px solid ${BRAND.surfaceBorder};border-left:4px solid ${BRAND.gold};padding:14px 16px;border-radius:6px;color:${BRAND.ink};margin:0;">${escapeHtml(summary)}</pre>
+    ${cardHtml}
     ${pdfNote}
-    <p style="margin:18px 0 0;font-size:13px;color:${BRAND.inkSoft};">Hit <strong>Reply</strong> to respond directly to the customer — Reply-To is set to <strong>${escapeHtml(email)}</strong>.</p>
+    <p style="margin:18px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:${BRAND.inkSoft};">Hit <strong>Reply</strong> to respond directly to the customer — Reply-To is set to <strong>${escapeHtml(email)}</strong>.</p>
   `;
   return wrapEmail({ preheader: `New quote: ${name}`, body: greeting + intro + contactBlock + summaryBlock });
 }
 
-function renderCustomerEmail({ name, email, phone, summary, hasPdf }) {
+function renderCustomerEmail({ name, email, phone, summary, details, hasPdf }) {
   const niceName = (String(name || '').trim()) || 'there';
   const greeting = `
     <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.55;">Hi ${escapeHtml(niceName)},</p>
@@ -310,9 +395,12 @@ function renderCustomerEmail({ name, email, phone, summary, hasPdf }) {
   const attached = hasPdf
     ? `<p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:${BRAND.ink};line-height:1.55;">📎 Your formal written <strong>estimate (PDF)</strong> is attached — itemised lines, VAT @ 20% breakdown, valid 30 days. This is an estimate, not a tax invoice; the final invoice is issued on completion.</p>`
     : '';
+  const cardHtml = details
+    ? renderSummaryCard(details)
+    : `<pre style="font-family:ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;font-size:12.5px;line-height:1.55;background:${BRAND.surface};border:1px solid ${BRAND.surfaceBorder};border-left:4px solid ${BRAND.gold};padding:14px 16px;border-radius:6px;color:${BRAND.ink};margin:0;">${escapeHtml(summary)}</pre>`;
   const summaryBlock = `
     <h3 style="margin:6px 0 10px;font-family:Georgia,'Times New Roman',serif;font-size:20px;color:${BRAND.purple};font-weight:normal;">Your quote summary</h3>
-    <pre style="font-family:ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;font-size:12.5px;line-height:1.55;background:${BRAND.surface};border:1px solid ${BRAND.surfaceBorder};border-left:4px solid ${BRAND.gold};padding:14px 16px;border-radius:6px;color:${BRAND.ink};margin:0 0 18px;">${escapeHtml(summary)}</pre>
+    ${cardHtml}
   `;
   const adjust = `
     <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:${BRAND.ink};line-height:1.6;">If anything needs adjusting — items, dates, postcodes, access notes — just reply to this email and we'll work from your updated details. Or call us on <a href="tel:${BRAND.phoneHref}" style="color:${BRAND.purple};text-decoration:none;font-weight:bold;">${BRAND.phone}</a>.</p>
