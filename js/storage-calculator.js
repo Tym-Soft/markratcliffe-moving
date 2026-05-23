@@ -425,8 +425,8 @@
                   : 'Removals + Storage';
     var fromInput = document.getElementById('qf-from');
     var toInput   = document.getElementById('qf-to');
-    var fromPC = fromInput ? fromInput.value.trim().toUpperCase() : '';
-    var toPC   = toInput   ? toInput.value.trim().toUpperCase()   : '';
+    var fromPC = fromInput ? tidyAddrValue(fromInput.value) : '';
+    var toPC   = toInput   ? tidyAddrValue(toInput.value)   : '';
     var miles = parseInt((milesInput && milesInput.value) || '0', 10) || 0;
     var days  = parseInt((storageDaysInput && storageDaysInput.value) || '0', 10) || 0;
 
@@ -836,6 +836,49 @@
     s = String(s || '');
     return s.length > 42 ? s.slice(0, 42).replace(/[,\s]+$/, '') + '…' : s;
   }
+  // If the value is bare-UK-postcode shaped, normalise case + spacing
+  // ("bn213ab" → "BN21 3AB"). For full addresses ("47, High Street, …")
+  // leave the user's casing intact — uppercasing the whole thing looks bad.
+  function tidyAddrValue(s) {
+    var v = String(s || '').trim();
+    if (!v) return '';
+    var postcodeShape = /^[A-Za-z]{1,2}\d[A-Za-z\d]?\s*\d[A-Za-z]{2}$/;
+    if (postcodeShape.test(v)) {
+      var compact = v.replace(/\s+/g, '').toUpperCase();
+      return compact.slice(0, -3) + ' ' + compact.slice(-3);
+    }
+    return v;
+  }
+  function flashField(el) {
+    if (!el) return;
+    el.classList.remove('is-autofilled');
+    // Force reflow so the animation restarts even when class is re-added quickly.
+    void el.offsetWidth;
+    el.classList.add('is-autofilled');
+    setTimeout(function () { el.classList.remove('is-autofilled'); }, 900);
+  }
+  function setMirrorValue(el, value) {
+    if (!el) return;
+    if (document.activeElement === el) return; // don't disturb a live edit
+    if (el.value === value) return;
+    el.value = value;
+    if (value) flashField(el);
+  }
+  // Mirror the calculator's address inputs into the quote-form postcode
+  // fields (qf-from / qf-to). Fires on every input/change so the form
+  // stays in sync as the customer edits. The email + PDF read qf-from /
+  // qf-to, so this is what the office sees in their inbox.
+  function mirrorAddrToQf() {
+    var qfFrom = document.getElementById('qf-from');
+    var qfTo   = document.getElementById('qf-to');
+    if (!qfFrom && !qfTo) return;
+    var fh = distFromHouse ? distFromHouse.value : '';
+    var fa = distFromInput ? distFromInput.value : '';
+    var th = distToHouse   ? distToHouse.value   : '';
+    var ta = distToInput   ? distToInput.value   : '';
+    setMirrorValue(qfFrom, tidyAddrValue(combineAddr(fh, fa)));
+    setMirrorValue(qfTo,   tidyAddrValue(combineAddr(th, ta)));
+  }
 
   if (distCalcBtn && distFromInput && distToInput) {
     distCalcBtn.addEventListener('click', function () {
@@ -886,11 +929,9 @@
             distResultDet.textContent = detail;
           }
           setDistStatus('', false);
-          // Mirror into the quote-request form's postcode fields if they're empty.
-          var qfFromEl = document.getElementById('qf-from');
-          var qfToEl   = document.getElementById('qf-to');
-          if (qfFromEl && !qfFromEl.value.trim()) qfFromEl.value = fromAddr.toUpperCase();
-          if (qfToEl   && !qfToEl.value.trim())   qfToEl.value   = toAddr.toUpperCase();
+          // Push the calculator's addresses into the quote-form fields so the
+          // office email + PDF show what the customer actually entered.
+          mirrorAddrToQf();
         } else {
           var msg = (resp.data && resp.data.error) || 'Could not calculate distance right now.';
           setDistStatus(msg + ' You can enter miles manually below.', true);
@@ -907,6 +948,15 @@
       el.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') { e.preventDefault(); distCalcBtn.click(); }
       });
+    });
+
+    // Keep the quote-form postcode fields in sync with every change to
+    // the four distance inputs — input, change, blur all fire mirror.
+    [distFromHouse, distFromInput, distToHouse, distToInput].forEach(function (el) {
+      if (!el) return;
+      el.addEventListener('input',  mirrorAddrToQf);
+      el.addEventListener('change', mirrorAddrToQf);
+      el.addEventListener('blur',   mirrorAddrToQf);
     });
 
     // Google Places Autocomplete — attached when the Maps JS library
@@ -1207,8 +1257,8 @@
       var last   = document.getElementById('qf-last').value.trim();
       var email  = document.getElementById('qf-email').value.trim();
       var phone  = document.getElementById('qf-phone').value.trim();
-      var fromPC = document.getElementById('qf-from').value.trim().toUpperCase();
-      var toPC   = document.getElementById('qf-to').value.trim().toUpperCase();
+      var fromPC = tidyAddrValue(document.getElementById('qf-from').value);
+      var toPC   = tidyAddrValue(document.getElementById('qf-to').value);
       var notes  = document.getElementById('qf-notes').value.trim();
       var moveDate = (document.getElementById('qf-date') && document.getElementById('qf-date').value) || '';
       var moveFlex = (document.getElementById('qf-date-flex') && document.getElementById('qf-date-flex').value) || '';
