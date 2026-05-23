@@ -1435,29 +1435,26 @@
       if (submitBtn) submitBtn.disabled = true;
 
       // Build the branded inventory PDF if the customer ticked items.
+      // Build the formal Estimate PDF for every quote (not just inventory-ticked).
       // PDF generation is best-effort — if jsPDF didn't load (very rare),
       // the email still sends, just without the attachment.
       var attachments = [];
-      if (totalItems > 0) {
-        try {
-          var pdfB64 = buildInventoryPdf({
-            customer:   { name: fullName, email: email, phone: phone },
-            move:       { fromPC: fromPC, toPC: toPC, miles: miles, modeLabel: modeLabel, moveDateFmt: moveDateFmt || (moveFlex === 'Date to be confirmed' ? 'To be confirmed' : ''), moveFlex: moveFlex, notes: notes },
-            property:   { bedLabel: bedSelected.label, cuft: cuft, cum: cum, storageDays: days, storageRoomLabel: stBits.join(' + ') },
-            pricing:    { calcMode: calcMode, removals: rmNett, storage: stNett, total: rmNett + stNett },
-            inventory:  { totalItems: totalItems, rooms: pdfRooms }
+      try {
+        var estimateOut = buildEstimatePdf({
+          customer:   { name: fullName, email: email, phone: phone, fromAddress: fromPC, toAddress: toPC },
+          move:       { fromPC: fromPC, toPC: toPC, miles: miles, modeLabel: modeLabel, moveDateFmt: moveDateFmt || (moveFlex === 'Date to be confirmed' ? 'To be confirmed' : ''), moveFlex: moveFlex, notes: notes },
+          property:   { bedLabel: bedSelected.label, cuft: cuft, cum: cum, storageDays: days, storageRoomLabel: stBits.join(' + ') },
+          pricing:    { calcMode: calcMode, removals: rmNett, storage: stNett, total: rmNett + stNett, vehicle: vehicle },
+          inventory:  { totalItems: totalItems, rooms: pdfRooms }
+        });
+        if (estimateOut && estimateOut.base64) {
+          attachments.push({
+            filename: 'MRM-Estimate-' + estimateOut.reference + '.pdf',
+            contentBase64: estimateOut.base64
           });
-          if (pdfB64) {
-            var safeName = (fullName || 'customer').replace(/[^A-Za-z0-9 _.-]+/g, '').replace(/\s+/g, '-').slice(0, 40) || 'customer';
-            attachments.push({
-              filename: 'MRM-inventory-' + safeName + '.pdf',
-              contentBase64: pdfB64
-            });
-          }
-        } catch (err) {
-          // Soft-fail: log and continue without attachment.
-          if (window.console && console.warn) console.warn('PDF generation failed:', err);
         }
+      } catch (err) {
+        if (window.console && console.warn) console.warn('Estimate PDF generation failed:', err);
       }
 
       var payload = {
@@ -1498,9 +1495,13 @@
     });
   }
 
-  // Build a branded A4 PDF of the customer's inventory + quote summary.
-  // Returns base64-encoded PDF (no data: prefix), or null if jsPDF isn't loaded.
-  function buildInventoryPdf(data) {
+  // Build a branded A4 ESTIMATE PDF for the office + customer. This is a
+  // formal written estimate (not a tax invoice) — clearly labelled as such,
+  // with full supplier identification, VAT registration, customer block,
+  // itemised lines, VAT @ 20% breakdown, terms, and a unique reference.
+  //
+  // Returns { base64, reference } or null if jsPDF isn't loaded.
+  function buildEstimatePdf(data) {
     if (!window.jspdf || !window.jspdf.jsPDF) return null;
     var doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4', compress: true });
 
@@ -1510,168 +1511,288 @@
     var PURPLE = [77, 46, 143];
     var GOLD = [200, 168, 118];
     var GOLD_LIGHT = [230, 222, 201];
+    var GOLD_FAINT = [243, 235, 215];
     var INK = [34, 34, 34];
     var INK_SOFT = [85, 85, 85];
     var SURFACE = [250, 248, 243];
 
+    // Supplier (us)
+    var BIZ = {
+      legalName: 'EMV London Ltd',
+      tradingAs: 'Mark Ratcliffe Moving & Storage',
+      addr1: 'Unit J12 Swallow Business Park',
+      addr2: 'Diamond Drive, Lower Dicker',
+      addr3: 'East Sussex BN27 4EL',
+      phone: '01323 848 008',
+      email: 'office@markratcliffemoving.co.uk',
+      web:   'markratcliffemoving.co.uk',
+      vatNo: 'GB 67 9047 74',
+      founded: '1982'
+    };
+
+    // VAT — UK standard 20%
+    var VAT_RATE = 0.20;
+
+    // Reference: MRM-YYMMDD-HHMM (unique per minute; client-generated).
+    var now = new Date();
+    function pad2(n) { return ('0' + n).slice(-2); }
+    var ymd = String(now.getFullYear()).slice(-2) + pad2(now.getMonth() + 1) + pad2(now.getDate());
+    var hm = pad2(now.getHours()) + pad2(now.getMinutes());
+    var REF = 'MRM-' + ymd + '-' + hm;
+    var ISSUE = now.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+    var VALID_UNTIL = new Date(now.getTime() + 30 * 86400000)
+      .toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+
+    function fp(n) {
+      return '£' + Number(n || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function rgb(c) { doc.setTextColor(c[0], c[1], c[2]); }
+    function fill(c) { doc.setFillColor(c[0], c[1], c[2]); }
+    function stroke(c) { doc.setDrawColor(c[0], c[1], c[2]); }
+
     var y = 0;
 
-    function header() {
-      doc.setFillColor(PURPLE[0], PURPLE[1], PURPLE[2]);
-      doc.rect(0, 0, PW, 72, 'F');
-      doc.setFillColor(GOLD[0], GOLD[1], GOLD[2]);
-      doc.rect(0, 72, PW, 4, 'F');
+    function pageHeader() {
+      fill(PURPLE); doc.rect(0, 0, PW, 92, 'F');
+      fill(GOLD);   doc.rect(0, 92, PW, 4, 'F');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(22);
+      rgb(GOLD); doc.text('Mark Ratcliffe', MX, 42);
+      var w = doc.getTextWidth('Mark Ratcliffe');
+      doc.setFont('helvetica', 'normal');
+      rgb([255, 255, 255]); doc.text(' Moving & Storage', MX + w, 42);
+
+      doc.setFontSize(8.5);
+      rgb(GOLD_LIGHT);
+      doc.text('Family-run removals & storage in East Sussex since ' + BIZ.founded, MX, 60);
+      doc.text('VAT Reg: ' + BIZ.vatNo, MX, 76);
+
+      // Right block: ESTIMATE + ref + dates
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(20);
+      rgb([255, 255, 255]);
+      doc.text('ESTIMATE', PW - MX, 32, { align: 'right' });
 
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(18);
-      doc.setTextColor(GOLD[0], GOLD[1], GOLD[2]);
-      doc.text('Mark Ratcliffe', MX, 38);
-      var w = doc.getTextWidth('Mark Ratcliffe');
-      doc.setTextColor(255, 255, 255);
-      doc.text(' Moving & Storage', MX + w, 38);
+      doc.setFontSize(9);
+      rgb(GOLD_LIGHT);
+      doc.text('Ref:  ' + REF, PW - MX, 50, { align: 'right' });
+      doc.text('Issued:  ' + ISSUE, PW - MX, 64, { align: 'right' });
+      doc.text('Valid until:  ' + VALID_UNTIL, PW - MX, 78, { align: 'right' });
 
-      doc.setFontSize(8.5);
-      doc.setTextColor(GOLD_LIGHT[0], GOLD_LIGHT[1], GOLD_LIGHT[2]);
-      doc.text('Family-run removals & storage in East Sussex since 1982', MX, 56);
-
-      doc.setFontSize(11);
-      doc.setTextColor(255, 255, 255);
-      doc.text('Inventory & Quote Summary', PW - MX, 38, { align: 'right' });
-      doc.setFontSize(8.5);
-      doc.setTextColor(GOLD_LIGHT[0], GOLD_LIGHT[1], GOLD_LIGHT[2]);
-      var today = new Date();
-      var dateStr = today.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
-      doc.text('Generated ' + dateStr, PW - MX, 56, { align: 'right' });
-
-      y = 96;
+      y = 116;
     }
 
-    function footer() {
+    function pageFooter() {
       var fy = PH - 36;
-      doc.setDrawColor(GOLD[0], GOLD[1], GOLD[2]);
-      doc.setLineWidth(0.6);
-      doc.line(MX, fy - 12, PW - MX, fy - 12);
+      stroke(GOLD); doc.setLineWidth(0.6);
+      doc.line(MX, fy - 14, PW - MX, fy - 14);
+
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
-      doc.text('Mark Ratcliffe Moving & Storage  ·  01323 848 008  ·  office@markratcliffemoving.co.uk  ·  markratcliffemoving.co.uk', PW / 2, fy - 2, { align: 'center' });
-      doc.setTextColor(150, 150, 150);
-      doc.text('Unit J12 Swallow Business Park, Diamond Drive, Lower Dicker, BN27 4EL  ·  EMV London Ltd  ·  Family-run since 1982', PW / 2, fy + 10, { align: 'center' });
-      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
-      doc.text('Page ' + doc.internal.getNumberOfPages(), PW - MX, fy - 2, { align: 'right' });
+      doc.setFontSize(7.5);
+      rgb(INK_SOFT);
+      doc.text(BIZ.legalName + ' t/a ' + BIZ.tradingAs + '  ·  VAT Reg ' + BIZ.vatNo + '  ·  ' + BIZ.addr1 + ', ' + BIZ.addr2 + ', ' + BIZ.addr3, PW / 2, fy - 4, { align: 'center' });
+      doc.text(BIZ.phone + '  ·  ' + BIZ.email + '  ·  ' + BIZ.web, PW / 2, fy + 6, { align: 'center' });
+
+      var pageNum = doc.internal.getCurrentPageInfo
+        ? doc.internal.getCurrentPageInfo().pageNumber
+        : doc.internal.getNumberOfPages();
+      rgb([150, 150, 150]); doc.setFontSize(7);
+      doc.text('Ref ' + REF, MX, fy + 16);
+      doc.text('Page ' + pageNum, PW - MX, fy + 16, { align: 'right' });
     }
 
     function ensureSpace(n) {
-      if (y + n > PH - 60) {
-        footer();
+      if (y + n > PH - 68) {
+        pageFooter();
         doc.addPage();
-        header();
+        pageHeader();
       }
     }
 
     function sectionTitle(text) {
       ensureSpace(28);
-      y += 4;
+      y += 6;
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10);
-      doc.setTextColor(PURPLE[0], PURPLE[1], PURPLE[2]);
+      rgb(PURPLE);
       doc.text(String(text).toUpperCase(), MX, y);
-      doc.setDrawColor(GOLD[0], GOLD[1], GOLD[2]);
-      doc.setLineWidth(1);
-      doc.line(MX, y + 4, MX + 36, y + 4);
+      stroke(GOLD); doc.setLineWidth(1);
+      doc.line(MX, y + 4, MX + 44, y + 4);
       y += 16;
     }
 
-    function kvRow(label, value) {
+    function kvRow(label, value, leftX, labelW, valueW) {
+      leftX = leftX || MX; labelW = labelW || 110; valueW = valueW || (PW - MX - leftX - labelW - 4);
       ensureSpace(14);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
-      doc.text(label, MX, y);
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+      rgb(INK_SOFT); doc.text(label, leftX, y);
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(INK[0], INK[1], INK[2]);
+      rgb(INK);
       var v = (value == null || value === '') ? '—' : String(value);
-      var wrapped = doc.splitTextToSize(v, PW - MX - 130);
-      doc.text(wrapped, MX + 110, y);
+      var wrapped = doc.splitTextToSize(v, valueW);
+      doc.text(wrapped, leftX + labelW, y);
       y += 13 * Math.max(1, wrapped.length);
     }
 
-    function fp(n) {
-      return '£' + Number(n || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
     // --- Render ---
-    header();
+    pageHeader();
 
-    sectionTitle('Customer');
-    kvRow('Name', data.customer.name);
-    kvRow('Email', data.customer.email);
-    kvRow('Phone', data.customer.phone);
-    y += 2;
+    // FROM / TO blocks
+    var colW = (PW - 2 * MX - 16) / 2;
+    var fromX = MX;
+    var toX = MX + colW + 16;
+    var blockTop = y;
 
-    sectionTitle('Move overview');
-    kvRow('From', data.move.fromPC);
-    kvRow('To', data.move.toPC);
-    kvRow('Distance', (data.move.miles || 0) + ' mile' + ((data.move.miles === 1) ? '' : 's') + ' round-trip');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5);
+    rgb(PURPLE); doc.text('FROM', fromX, blockTop);
+    doc.text('TO  (CUSTOMER)', toX, blockTop);
+
+    // Left col — supplier
+    var ly = blockTop + 14;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+    rgb(INK); doc.text(BIZ.legalName, fromX, ly); ly += 13;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    rgb(INK_SOFT); doc.text('t/a ' + BIZ.tradingAs, fromX, ly); ly += 12;
+    rgb(INK);
+    doc.text(BIZ.addr1, fromX, ly); ly += 11;
+    doc.text(BIZ.addr2, fromX, ly); ly += 11;
+    doc.text(BIZ.addr3, fromX, ly); ly += 11;
+    rgb(INK_SOFT); doc.setFontSize(8.5);
+    doc.text(BIZ.phone + '  ·  ' + BIZ.email, fromX, ly); ly += 11;
+    doc.text('VAT Reg: ' + BIZ.vatNo, fromX, ly); ly += 11;
+    var leftBottom = ly;
+
+    // Right col — customer
+    var ry = blockTop + 14;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+    rgb(INK); doc.text(String(data.customer.name || '—'), toX, ry); ry += 13;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    rgb(INK);
+    var pickupLines = doc.splitTextToSize('Pickup: ' + String(data.customer.fromAddress || data.move.fromPC || '—'), colW);
+    doc.text(pickupLines, toX, ry); ry += 11 * pickupLines.length;
+    var deliveryLines = doc.splitTextToSize('Delivery: ' + String(data.customer.toAddress || data.move.toPC || '—'), colW);
+    doc.text(deliveryLines, toX, ry); ry += 11 * deliveryLines.length;
+    rgb(INK_SOFT); doc.setFontSize(8.5);
+    doc.text(String(data.customer.email || ''), toX, ry); ry += 11;
+    doc.text(String(data.customer.phone || ''), toX, ry); ry += 11;
+    var rightBottom = ry;
+
+    y = Math.max(leftBottom, rightBottom) + 8;
+
+    // Move details
+    sectionTitle('Move details');
     kvRow('Service', data.move.modeLabel);
-    if (data.move.moveDateFmt) kvRow('Preferred date', data.move.moveDateFmt);
-    if (data.move.moveFlex && data.move.moveFlex !== 'Date to be confirmed') kvRow('Flexibility', data.move.moveFlex);
+    kvRow('Distance (round-trip)', (data.move.miles || 0) + ' mile' + ((data.move.miles === 1) ? '' : 's'));
+    kvRow('Volume', (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft  (' + data.property.cum + ' cu m)');
     kvRow('Home size', data.property.bedLabel);
-    kvRow('Total volume', (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft  (' + data.property.cum + ' cu m)');
+    if (data.move.moveDateFmt) kvRow('Preferred move date', data.move.moveDateFmt);
+    if (data.move.moveFlex && data.move.moveFlex !== 'Date to be confirmed') kvRow('Date flexibility', data.move.moveFlex);
     if (data.pricing.calcMode !== 'removals' && data.property.storageDays > 0) {
       kvRow('Storage duration', data.property.storageDays + ' day' + (data.property.storageDays === 1 ? '' : 's'));
       if (data.property.storageRoomLabel) kvRow('Storage room', data.property.storageRoomLabel);
     }
-    y += 2;
 
-    sectionTitle('Estimate (nett — + VAT at booking)');
-    if (data.pricing.calcMode !== 'storage') kvRow('Removals', fp(data.pricing.removals));
-    if (data.pricing.calcMode !== 'removals') kvRow('Storage', fp(data.pricing.storage));
-    ensureSpace(20);
-    doc.setDrawColor(GOLD_LIGHT[0], GOLD_LIGHT[1], GOLD_LIGHT[2]);
-    doc.setLineWidth(0.5);
-    doc.line(MX, y - 2, MX + 260, y - 2);
-    y += 6;
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(PURPLE[0], PURPLE[1], PURPLE[2]);
-    doc.text('TOTAL nett', MX, y);
-    doc.text(fp(data.pricing.total) + '   (+ VAT)', MX + 110, y);
-    y += 16;
+    // Estimate breakdown — itemised lines + VAT
+    sectionTitle('Estimate breakdown');
 
-    sectionTitle('Inventory  (' + data.inventory.totalItems + ' items  ·  ' + (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft)');
-    for (var i = 0; i < data.inventory.rooms.length; i++) {
-      var room = data.inventory.rooms[i];
-      ensureSpace(26);
-      doc.setFillColor(SURFACE[0], SURFACE[1], SURFACE[2]);
-      doc.rect(MX - 4, y - 10, PW - 2 * MX + 8, 17, 'F');
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(PURPLE[0], PURPLE[1], PURPLE[2]);
-      doc.text(room.name, MX, y + 2);
+    // Table header
+    ensureSpace(24);
+    fill(GOLD_FAINT); doc.rect(MX - 4, y - 11, PW - 2 * MX + 8, 18, 'F');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+    rgb(PURPLE);
+    doc.text('Description', MX, y + 1);
+    doc.text('Net (£)', PW - MX, y + 1, { align: 'right' });
+    y += 18;
+
+    // Line items
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); rgb(INK);
+    if (data.pricing.calcMode !== 'storage') {
+      ensureSpace(28);
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
-      doc.text(room.cuft + ' cu ft', PW - MX, y + 2, { align: 'right' });
-      y += 16;
-
-      doc.setFontSize(9.5);
-      doc.setTextColor(INK[0], INK[1], INK[2]);
-      for (var j = 0; j < room.items.length; j++) {
-        var it = room.items[j];
-        ensureSpace(12);
-        doc.setFont('helvetica', 'normal');
-        doc.text(it.qty + ' × ' + it.name, MX + 10, y);
-        y += 12;
-      }
-      y += 6;
+      doc.text('Removals service', MX, y);
+      doc.text(fp(data.pricing.removals).replace('£', ''), PW - MX, y, { align: 'right' });
+      doc.setFontSize(8); rgb(INK_SOFT);
+      var rmDesc = 'Pad-wrap, load, transport and unload · ' +
+        (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft · ' +
+        (data.move.miles || 0) + ' mi round-trip';
+      doc.text(doc.splitTextToSize(rmDesc, PW - 2 * MX - 80), MX, y + 11);
+      doc.setFontSize(9.5); rgb(INK);
+      y += 26;
+    }
+    if (data.pricing.calcMode !== 'removals' && (data.pricing.storage || 0) > 0) {
+      ensureSpace(28);
+      doc.text('Self-storage', MX, y);
+      doc.text(fp(data.pricing.storage).replace('£', ''), PW - MX, y, { align: 'right' });
+      doc.setFontSize(8); rgb(INK_SOFT);
+      var stDesc = 'Steel strong-room' + (data.property.storageRoomLabel ? ' (' + data.property.storageRoomLabel + ')' : '') +
+        ' · ' + (data.property.storageDays || 0) + ' day' + (data.property.storageDays === 1 ? '' : 's');
+      doc.text(doc.splitTextToSize(stDesc, PW - 2 * MX - 80), MX, y + 11);
+      doc.setFontSize(9.5); rgb(INK);
+      y += 26;
     }
 
+    // Subtotal / VAT / Total
+    var subtotal = (data.pricing.total || 0);
+    var vat = subtotal * VAT_RATE;
+    var gross = subtotal + vat;
+
+    ensureSpace(60);
+    stroke(GOLD_LIGHT); doc.setLineWidth(0.5);
+    doc.line(MX + (PW - 2 * MX) * 0.45, y, PW - MX, y);
+    y += 10;
+
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+    rgb(INK_SOFT);
+    doc.text('Subtotal (net)', PW - MX - 110, y);
+    rgb(INK);
+    doc.text(fp(subtotal).replace('£', ''), PW - MX, y, { align: 'right' });
+    y += 14;
+    rgb(INK_SOFT);
+    doc.text('VAT @ ' + (VAT_RATE * 100) + '%', PW - MX - 110, y);
+    rgb(INK);
+    doc.text(fp(vat).replace('£', ''), PW - MX, y, { align: 'right' });
+    y += 8;
+
+    stroke(PURPLE); doc.setLineWidth(1.2);
+    doc.line(MX + (PW - 2 * MX) * 0.45, y, PW - MX, y);
+    y += 14;
+
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
+    rgb(PURPLE);
+    doc.text('TOTAL  (inc. VAT)', PW - MX - 110, y);
+    doc.text(fp(gross), PW - MX, y, { align: 'right' });
+    y += 18;
+
+    // Inventory — only show section if items present
+    if (data.inventory && data.inventory.rooms && data.inventory.rooms.length > 0) {
+      sectionTitle('Inventory  (' + data.inventory.totalItems + ' items  ·  ' + (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft)');
+      for (var i = 0; i < data.inventory.rooms.length; i++) {
+        var room = data.inventory.rooms[i];
+        ensureSpace(26);
+        fill(SURFACE); doc.rect(MX - 4, y - 10, PW - 2 * MX + 8, 17, 'F');
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+        rgb(PURPLE); doc.text(room.name, MX, y + 2);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        rgb(INK_SOFT); doc.text(room.cuft + ' cu ft', PW - MX, y + 2, { align: 'right' });
+        y += 16;
+
+        doc.setFontSize(9.5); rgb(INK);
+        for (var j = 0; j < room.items.length; j++) {
+          var it = room.items[j];
+          ensureSpace(12);
+          doc.text(it.qty + ' × ' + it.name, MX + 10, y);
+          y += 12;
+        }
+        y += 6;
+      }
+    }
+
+    // Customer notes
     if (data.move.notes) {
       sectionTitle('Customer notes');
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9.5);
-      doc.setTextColor(INK[0], INK[1], INK[2]);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); rgb(INK);
       var noteLines = doc.splitTextToSize(String(data.move.notes), PW - 2 * MX);
       for (var k = 0; k < noteLines.length; k++) {
         ensureSpace(12);
@@ -1680,11 +1801,30 @@
       }
     }
 
-    footer();
+    // Terms & notes
+    sectionTitle('Terms and notes');
+    var terms = [
+      'This document is an estimate, not a tax invoice. A formal VAT invoice will be issued on completion of the work.',
+      'Prices shown are estimates only. The final figure may change after a free survey, or if access conditions, volume or items differ from those listed above.',
+      'This estimate is valid for 30 days from the issue date (' + ISSUE + ').',
+      'Booking is confirmed with a 20% deposit; the balance is payable on completion of the move.',
+      'All work is carried out under our published Terms & Conditions: ' + BIZ.web + '/terms-conditions-and-insurance-details.html',
+      'Goods in Transit and Public Liability cover apply. Specific limits available on request.'
+    ];
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); rgb(INK);
+    for (var t = 0; t < terms.length; t++) {
+      ensureSpace(20);
+      var bulletLines = doc.splitTextToSize('•  ' + terms[t], PW - 2 * MX - 6);
+      doc.text(bulletLines, MX + 4, y);
+      y += 11 * bulletLines.length + 3;
+    }
+
+    pageFooter();
 
     var dataUri = doc.output('datauristring');
     var idx = dataUri.indexOf(',');
-    return idx >= 0 ? dataUri.substring(idx + 1) : null;
+    var base64 = idx >= 0 ? dataUri.substring(idx + 1) : null;
+    return base64 ? { base64: base64, reference: REF } : null;
   }
 
   recalc();
