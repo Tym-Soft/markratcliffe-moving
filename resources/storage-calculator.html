@@ -16,7 +16,7 @@
   <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://cdn.yoshki.com" crossorigin>
-  <link rel="preload" as="style" href="../css/site.css?v=20260665" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="../css/site.css?v=20260665"></noscript>
+  <link rel="preload" as="style" href="../css/site.css?v=20260666" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="../css/site.css?v=20260666"></noscript>
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -2147,17 +2147,30 @@ border-color: #fff;
                   <div class="qc-distance-row">
                     <span class="qc-distance-field-label">Moving FROM</span>
                     <div class="qc-distance-row-inputs">
-                      <input type="text" id="dist-from-no" class="qc-distance-house" placeholder="No / name" aria-label="House number or name (FROM)" autocomplete="off">
-                      <input type="text" id="dist-from"    class="qc-distance-address" placeholder="Postcode (e.g. BN21 3AB) or street" aria-label="FROM postcode or street" autocomplete="off" spellcheck="false">
+                      <label class="qc-distance-input-wrap">
+                        <span class="qc-distance-input-label">House number or name</span>
+                        <input type="text" id="dist-from-no" class="qc-distance-house" placeholder="e.g. 47 or Rose Cottage" autocomplete="off">
+                      </label>
+                      <label class="qc-distance-input-wrap">
+                        <span class="qc-distance-input-label">Postcode or full address</span>
+                        <input type="text" id="dist-from" class="qc-distance-address" placeholder="e.g. BN21 3AB or 47 High Street, Eastbourne" autocomplete="off" spellcheck="false">
+                      </label>
                     </div>
                   </div>
                   <div class="qc-distance-row">
                     <span class="qc-distance-field-label">Moving TO</span>
                     <div class="qc-distance-row-inputs">
-                      <input type="text" id="dist-to-no" class="qc-distance-house" placeholder="No / name" aria-label="House number or name (TO)" autocomplete="off">
-                      <input type="text" id="dist-to"    class="qc-distance-address" placeholder="Postcode or street" aria-label="TO postcode or street" autocomplete="off" spellcheck="false">
+                      <label class="qc-distance-input-wrap">
+                        <span class="qc-distance-input-label">House number or name</span>
+                        <input type="text" id="dist-to-no" class="qc-distance-house" placeholder="e.g. 12 or The Old Vicarage" autocomplete="off">
+                      </label>
+                      <label class="qc-distance-input-wrap">
+                        <span class="qc-distance-input-label">Postcode or full address</span>
+                        <input type="text" id="dist-to" class="qc-distance-address" placeholder="e.g. TN22 5JD or 12 Old Road, Uckfield" autocomplete="off" spellcheck="false">
+                      </label>
                     </div>
                   </div>
+                  <p class="qc-distance-hint">Start typing and pick from the dropdown — works with a postcode, a street name, or a full address.</p>
                   <button type="button" id="dist-calc-btn" class="qc-distance-calc-btn">Calculate distance &rarr;</button>
                 </div>
                 <div class="qc-distance-status" id="dist-status" role="status" aria-live="polite" hidden></div>
