@@ -5888,6 +5888,19 @@ font-variant-numeric: tabular-nums;
 outline: none;
 }
 .qc-num input:disabled { opacity: 0.55; cursor: not-allowed; }
+#cost-manual-cuft {
+  background: #fff;
+  color: #222;
+  padding: 0.6rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-sizing: border-box;
+  width: auto;
+  min-width: 120px;
+  max-width: 200px;
+}
+#cost-manual-cuft:focus { outline: 2px solid #C8A876; outline-offset: -1px; }
+#cost-manual-cuft:disabled { background: #f1ecdf; color: #555; }
 @keyframes qcNumAttention {
 0%, 100% {
 border-color: rgba(255,255,255,0.18);
