@@ -1410,11 +1410,21 @@
         lines.push(pad('  Storage duration:', days + ' day' + (days === 1 ? '' : 's') + '  (~' + (days / 7).toFixed(days % 7 === 0 ? 0 : 1) + ' weeks)'));
       }
       lines.push('');
-      lines.push('QUOTE (nett — VAT added at booking)');
-      if (calcMode !== 'storage') lines.push(pad('  Removals:', fp(rmNett)));
-      if (calcMode !== 'removals') lines.push(pad('  Storage:',  fp(stNett)));
+      var EMAIL_VAT_RATE = 0.20;
+      var subtotalNet = rmNett + stNett;
+      var vatAmount  = subtotalNet * EMAIL_VAT_RATE;
+      var grossTotal = subtotalNet + vatAmount;
+      lines.push('ESTIMATE');
+      if (calcMode !== 'storage') lines.push(pad('  Removals (net):', fp(rmNett)));
+      if (calcMode !== 'removals') lines.push(pad('  Storage (net):',  fp(stNett)));
       lines.push('  ──────────────────────────────────────────────');
-      lines.push(pad('  TOTAL nett:', fp(rmNett + stNett) + '  (+ VAT at booking)'));
+      lines.push(pad('  Subtotal (net):', fp(subtotalNet)));
+      lines.push(pad('  VAT @ 20%:',      fp(vatAmount)));
+      lines.push('  ──────────────────────────────────────────────');
+      lines.push(pad('  TOTAL (inc. VAT):', fp(grossTotal)));
+      lines.push('');
+      lines.push('  Final invoice issued on completion. Estimate valid 30 days.');
+      lines.push('  VAT Reg: GB 67 9047 74');
       lines.push('');
 
       if (roomLines.length > 0) {
@@ -1783,79 +1793,6 @@
     doc.text(fp(gross), TOT_VALUE_X, y, { align: 'right' });
     y += 22;
 
-    // Inventory — 2-column flow. Rooms are placed into whichever column
-    // is currently shorter (greedy bin-pack). When both columns reach
-    // the page bottom we start a fresh page.
-    if (data.inventory && data.inventory.rooms && data.inventory.rooms.length > 0) {
-      sectionTitle('Inventory  (' + data.inventory.totalItems + ' items  ·  ' + (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft)');
-
-      var COL_GAP = 16;
-      var INV_COL_W = (PW - 2 * MX - COL_GAP) / 2;
-      var col1X = MX;
-      var col2X = MX + INV_COL_W + COL_GAP;
-      var pageBottom = PH - 78;
-      var col1Y = y;
-      var col2Y = y;
-
-      function measureRoom(room) {
-        // Header bar (16) + each item (~11) + bottom gap (8).
-        // Use splitTextToSize to count wrapped lines per item.
-        var itemsHeight = 0;
-        doc.setFontSize(9);
-        for (var jj = 0; jj < room.items.length; jj++) {
-          var label = room.items[jj].qty + ' × ' + room.items[jj].name;
-          var lines = doc.splitTextToSize(label, INV_COL_W - 12);
-          itemsHeight += lines.length * 11;
-        }
-        return 16 + itemsHeight + 8;
-      }
-
-      function drawRoom(room, colX, startY) {
-        var ty = startY;
-        // Room header
-        fill(SURFACE); doc.rect(colX - 4, ty - 10, INV_COL_W + 8, 16, 'F');
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5);
-        rgb(PURPLE); doc.text(room.name, colX, ty + 1);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5);
-        rgb(INK_SOFT); doc.text(room.cuft + ' cu ft', colX + INV_COL_W, ty + 1, { align: 'right' });
-        ty += 14;
-
-        // Items
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(9); rgb(INK);
-        for (var jj = 0; jj < room.items.length; jj++) {
-          var label = room.items[jj].qty + ' × ' + room.items[jj].name;
-          var lines = doc.splitTextToSize(label, INV_COL_W - 12);
-          doc.text(lines, colX + 8, ty);
-          ty += 11 * lines.length;
-        }
-        return ty + 6;
-      }
-
-      for (var i = 0; i < data.inventory.rooms.length; i++) {
-        var room = data.inventory.rooms[i];
-        var h = measureRoom(room);
-
-        // If neither column has room for this whole room, finish the page.
-        if (Math.min(col1Y, col2Y) + h > pageBottom) {
-          pageFooter();
-          doc.addPage();
-          pageHeader();
-          col1Y = y;
-          col2Y = y;
-        }
-
-        // Place into the shorter column (greedy balance).
-        var useCol1 = col1Y <= col2Y;
-        if (useCol1) {
-          col1Y = drawRoom(room, col1X, col1Y);
-        } else {
-          col2Y = drawRoom(room, col2X, col2Y);
-        }
-      }
-
-      y = Math.max(col1Y, col2Y) + 4;
-    }
-
     // Customer notes
     if (data.move.notes) {
       sectionTitle('Customer notes');
@@ -1884,6 +1821,73 @@
       var bulletLines = doc.splitTextToSize('•  ' + terms[t], PW - 2 * MX - 6);
       doc.text(bulletLines, MX + 4, y);
       y += 11 * bulletLines.length + 3;
+    }
+
+    // Inventory — ALWAYS on a fresh page (page 2+), so the main estimate
+    // document on page 1 (header, customer, breakdown, VAT, notes, terms)
+    // stays clean and reads end-to-end without scrolling past a list of
+    // items. 2-column flow with greedy bin-packing for balance.
+    if (data.inventory && data.inventory.rooms && data.inventory.rooms.length > 0) {
+      pageFooter();
+      doc.addPage();
+      pageHeader();
+      sectionTitle('Inventory  (' + data.inventory.totalItems + ' items  ·  ' + (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft)');
+
+      var COL_GAP = 16;
+      var INV_COL_W = (PW - 2 * MX - COL_GAP) / 2;
+      var col1X = MX;
+      var col2X = MX + INV_COL_W + COL_GAP;
+      var pageBottom = PH - 78;
+      var col1Y = y;
+      var col2Y = y;
+
+      function measureRoom(room) {
+        var itemsHeight = 0;
+        doc.setFontSize(9);
+        for (var jj = 0; jj < room.items.length; jj++) {
+          var label = room.items[jj].qty + ' × ' + room.items[jj].name;
+          var lines = doc.splitTextToSize(label, INV_COL_W - 12);
+          itemsHeight += lines.length * 11;
+        }
+        return 16 + itemsHeight + 8;
+      }
+
+      function drawRoom(room, colX, startY) {
+        var ty = startY;
+        fill(SURFACE); doc.rect(colX - 4, ty - 10, INV_COL_W + 8, 16, 'F');
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5);
+        rgb(PURPLE); doc.text(room.name, colX, ty + 1);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5);
+        rgb(INK_SOFT); doc.text(room.cuft + ' cu ft', colX + INV_COL_W, ty + 1, { align: 'right' });
+        ty += 14;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9); rgb(INK);
+        for (var jj = 0; jj < room.items.length; jj++) {
+          var label = room.items[jj].qty + ' × ' + room.items[jj].name;
+          var lines = doc.splitTextToSize(label, INV_COL_W - 12);
+          doc.text(lines, colX + 8, ty);
+          ty += 11 * lines.length;
+        }
+        return ty + 6;
+      }
+
+      for (var i = 0; i < data.inventory.rooms.length; i++) {
+        var room = data.inventory.rooms[i];
+        var h = measureRoom(room);
+        if (Math.min(col1Y, col2Y) + h > pageBottom) {
+          pageFooter();
+          doc.addPage();
+          pageHeader();
+          col1Y = y;
+          col2Y = y;
+        }
+        if (col1Y <= col2Y) {
+          col1Y = drawRoom(room, col1X, col1Y);
+        } else {
+          col2Y = drawRoom(room, col2X, col2Y);
+        }
+      }
+
+      y = Math.max(col1Y, col2Y) + 4;
     }
 
     pageFooter();
