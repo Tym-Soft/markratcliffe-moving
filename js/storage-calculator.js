@@ -836,18 +836,25 @@
     s = String(s || '');
     return s.length > 42 ? s.slice(0, 42).replace(/[,\s]+$/, '') + '…' : s;
   }
-  // If the value is bare-UK-postcode shaped, normalise case + spacing
-  // ("bn213ab" → "BN21 3AB"). For full addresses ("47, High Street, …")
-  // leave the user's casing intact — uppercasing the whole thing looks bad.
+  // Normalise UK postcode formatting wherever it appears in the string.
+  // "bn213ab" → "BN21 3AB"; "123, pe210ea" → "123, PE21 0EA";
+  // "47 High Street, eastbourne bn21 3ab" → "47 High Street, eastbourne BN21 3AB".
+  // The rest of the address is left as the user typed it (UPPER-CASING a
+  // full address looks bad).
   function tidyAddrValue(s) {
     var v = String(s || '').trim();
     if (!v) return '';
-    var postcodeShape = /^[A-Za-z]{1,2}\d[A-Za-z\d]?\s*\d[A-Za-z]{2}$/;
-    if (postcodeShape.test(v)) {
-      var compact = v.replace(/\s+/g, '').toUpperCase();
-      return compact.slice(0, -3) + ' ' + compact.slice(-3);
+    // Standalone bare postcode → uppercase + standard spacing.
+    var bare = /^[A-Za-z]{1,2}\d[A-Za-z\d]?\s*\d[A-Za-z]{2}$/;
+    if (bare.test(v)) {
+      var c = v.replace(/\s+/g, '').toUpperCase();
+      return c.slice(0, -3) + ' ' + c.slice(-3);
     }
-    return v;
+    // Embedded postcode → uppercase + ensure single space before the last 3 chars.
+    var embedded = /\b([A-Za-z]{1,2}\d[A-Za-z\d]?)\s*(\d[A-Za-z]{2})\b/g;
+    return v.replace(embedded, function (_, a, b) {
+      return (a + ' ' + b).toUpperCase();
+    });
   }
   function flashField(el) {
     if (!el) return;
@@ -980,11 +987,19 @@
 
       fromAc.addListener('place_changed', function () {
         var p = fromAc.getPlace();
-        if (p && p.formatted_address) distFromInput.value = p.formatted_address;
+        if (p && p.formatted_address) {
+          distFromInput.value = p.formatted_address;
+          // Google's value update doesn't reliably fire 'input', so push the
+          // new full address into the quote form immediately.
+          mirrorAddrToQf();
+        }
       });
       toAc.addListener('place_changed', function () {
         var p = toAc.getPlace();
-        if (p && p.formatted_address) distToInput.value = p.formatted_address;
+        if (p && p.formatted_address) {
+          distToInput.value = p.formatted_address;
+          mirrorAddrToQf();
+        }
       });
     };
   }
