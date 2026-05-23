@@ -1005,8 +1005,11 @@
     if (el) el.addEventListener('input', recalc);
   });
 
-  // Quote request form — build a pre-filled mailto: with all the
-  // calculator output + the customer's contact details.
+  // Quote request form — POSTs the calculator output + customer details
+  // to the Cloudflare Worker, which forwards both emails via Resend.
+  // The Resend API key never touches client JS; see /worker/ for the relay.
+  var WORKER_QUOTE_ENDPOINT = 'https://mrm-quote.YOUR-SUBDOMAIN.workers.dev';
+
   var quoteForm = document.getElementById('quote-request-form');
   if (quoteForm) {
     quoteForm.addEventListener('submit', function (e) {
@@ -1181,17 +1184,45 @@
         ' · ' + (fromPC || 'FROM') + ' → ' + (toPC || 'TO') + ' · ' +
         cuft.toLocaleString('en-GB') + ' cu ft · ' + fp(totalNett) + ' nett';
 
-      // Send only to office — the customer's email is already in the body
-      // (so office can reply to it). No CC means the customer's inbox
-      // doesn't get a copy of the internal calculation details.
-      var mailto = 'mailto:office@markratcliffemoving.co.uk?' +
-        'subject=' + encodeURIComponent(subject) +
-        '&body='  + encodeURIComponent(lines.join('\n'));
+      // Honeypot — bots tend to fill every field; humans leave this blank.
+      var hpField = document.getElementById('qf-hp');
+      var submitBtn = quoteForm.querySelector('button[type="submit"]');
 
-      if (status) {
-        status.textContent = 'Opening your email app… we send to office@markratcliffemoving.co.uk and they reply within 48 hours. If nothing happens, email office@markratcliffemoving.co.uk directly with the figures from the preview above.';
-      }
-      window.location.href = mailto;
+      if (status) status.textContent = 'Sending your quote request…';
+      if (submitBtn) submitBtn.disabled = true;
+
+      fetch(WORKER_QUOTE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          hp: hpField ? hpField.value : '',
+          name: fullName,
+          email: email,
+          phone: phone,
+          subject: subject,
+          summary: lines.join('\n')
+        })
+      }).then(function (r) {
+        return r.json().catch(function () { return { ok: false, error: 'Server error' }; })
+          .then(function (data) { return { httpStatus: r.status, data: data }; });
+      }).then(function (resp) {
+        if (resp.httpStatus === 200 && resp.data && resp.data.ok) {
+          if (status) {
+            status.textContent = 'Thanks — we’ve received your quote request. A copy has been emailed to ' + email + ' and the office will reply within 48 hours.';
+          }
+          quoteForm.reset();
+        } else {
+          var msg = (resp.data && resp.data.error) ||
+            'Could not send your request right now — please call 01323 848008 or email office@markratcliffemoving.co.uk.';
+          if (status) status.textContent = msg;
+        }
+      }).catch(function () {
+        if (status) {
+          status.textContent = 'Network issue — please check your connection, or email office@markratcliffemoving.co.uk directly with the figures from the preview above.';
+        }
+      }).then(function () {
+        if (submitBtn) submitBtn.disabled = false;
+      });
     });
   }
 

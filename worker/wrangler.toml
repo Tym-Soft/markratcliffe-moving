@@ -1,0 +1,30 @@
+name = "mrm-quote"
+main = "src/index.js"
+compatibility_date = "2024-09-01"
+
+# ------------------------------------------------------------------
+# Non-secret config. Safe to commit. Update FROM_EMAIL once you've
+# verified markratcliffemoving.co.uk in the Resend dashboard.
+# ------------------------------------------------------------------
+[vars]
+OFFICE_EMAIL = "office@markratcliffemoving.co.uk"
+
+# Until the domain is verified in Resend, use the sandbox sender below.
+# After verification, switch to e.g. "Mark Ratcliffe Moving <quotes@markratcliffemoving.co.uk>".
+FROM_EMAIL = "Mark Ratcliffe Moving <onboarding@resend.dev>"
+
+# Comma-separated list of permitted CORS origins. Add any extra
+# preview/test origins you need.
+ALLOWED_ORIGINS = "https://www.markratcliffemoving.co.uk,https://markratcliffemoving.co.uk,http://localhost:8000,http://127.0.0.1:8000"
+
+# ------------------------------------------------------------------
+# Secrets — NEVER commit. Set via wrangler:
+#
+#   cd worker
+#   wrangler secret put RESEND_API_KEY
+#   # paste the key when prompted
+#
+# For local `wrangler dev`, create worker/.dev.vars with:
+#   RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# (.dev.vars is gitignored.)
+# ------------------------------------------------------------------
