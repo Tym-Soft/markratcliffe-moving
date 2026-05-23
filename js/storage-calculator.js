@@ -919,7 +919,7 @@
       var acOpts = {
         componentRestrictions: { country: ['gb'] },
         fields: ['formatted_address', 'place_id'],
-        types: ['address'] // street addresses only — no postcode areas / landmarks
+        types: ['geocode'] // postcodes + addresses; landmarks naturally drop off once query is specific
       };
       // Browser autofill competes with Places dropdown — disable it.
       distFromInput.setAttribute('autocomplete', 'off');
