@@ -1491,10 +1491,9 @@
           .then(function (data) { return { httpStatus: r.status, data: data }; });
       }).then(function (resp) {
         if (resp.httpStatus === 200 && resp.data && resp.data.ok) {
-          if (status) {
-            status.textContent = 'Thanks — we’ve received your quote request. A copy has been emailed to ' + email + ' and the office will reply within 48 hours.';
-          }
           quoteForm.reset();
+          showQuoteThanksModal(email);
+          return; // skip the re-enable in finally — page is about to reload
         } else {
           var msg = (resp.data && resp.data.error) ||
             'Could not send your request right now — please call 01323 848008 or email office@markratcliffemoving.co.uk.';
@@ -1893,6 +1892,90 @@
     var idx = dataUri.indexOf(',');
     var base64 = idx >= 0 ? dataUri.substring(idx + 1) : null;
     return base64 ? { base64: base64, reference: REF } : null;
+  }
+
+  // Branded thank-you modal shown on successful quote send. Closes the
+  // quote form, gives the customer a clear "it's gone" confirmation, then
+  // reloads the page so the calculator returns to a clean state.
+  function showQuoteThanksModal(toEmail) {
+    if (document.getElementById('mrm-thanks-overlay')) return;
+
+    // Close the quote dropdown if it's still open.
+    var qd = document.getElementById('quote-dropdown');
+    if (qd) qd.hidden = true;
+
+    var overlay = document.createElement('div');
+    overlay.id = 'mrm-thanks-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'mrm-thanks-title');
+    overlay.innerHTML =
+      '<style>' +
+        '#mrm-thanks-overlay{position:fixed;inset:0;z-index:100000;background:rgba(15,8,33,0.78);' +
+          '-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;' +
+          'justify-content:center;padding:20px;animation:mrmThanksFade 0.22s ease-out;}' +
+        '@keyframes mrmThanksFade{from{opacity:0;}to{opacity:1;}}' +
+        '@keyframes mrmThanksCard{from{transform:translateY(16px) scale(0.98);opacity:0;}' +
+          'to{transform:translateY(0) scale(1);opacity:1;}}' +
+        '@keyframes mrmThanksTick{0%{transform:scale(0.4) rotate(-15deg);opacity:0;}' +
+          '60%{transform:scale(1.15) rotate(0);opacity:1;}100%{transform:scale(1) rotate(0);opacity:1;}}' +
+        '#mrm-thanks-card{background:#fff;border-radius:16px;max-width:500px;width:100%;' +
+          'box-shadow:0 28px 70px rgba(77,46,143,0.55);overflow:hidden;font-family:Arial,Helvetica,sans-serif;' +
+          'animation:mrmThanksCard 0.32s ease-out 0.05s both;}' +
+        '#mrm-thanks-banner{background:#4d2e8f;padding:28px 28px 22px;text-align:center;color:#fff;' +
+          'position:relative;}' +
+        '#mrm-thanks-banner:after{content:"";display:block;position:absolute;left:0;right:0;bottom:0;' +
+          'height:4px;background:#C8A876;}' +
+        '#mrm-thanks-icon{width:68px;height:68px;border-radius:50%;background:#C8A876;margin:0 auto 14px;' +
+          'display:flex;align-items:center;justify-content:center;color:#3a226d;font-size:34px;' +
+          'font-weight:bold;line-height:1;animation:mrmThanksTick 0.45s cubic-bezier(0.3,1.4,0.5,1) both;}' +
+        '#mrm-thanks-title{font-family:Georgia,"Times New Roman",serif;font-size:26px;margin:0;' +
+          'font-weight:normal;color:#fff;letter-spacing:0.3px;}' +
+        '#mrm-thanks-sub{margin:6px 0 0;color:#e6dec9;font-size:13px;letter-spacing:0.4px;text-transform:uppercase;}' +
+        '#mrm-thanks-body{padding:22px 28px 26px;text-align:center;color:#222;}' +
+        '#mrm-thanks-body p{margin:0 0 12px;line-height:1.55;font-size:15px;}' +
+        '#mrm-thanks-body p.lead{font-size:16px;color:#3a226d;}' +
+        '#mrm-thanks-email{color:#4d2e8f;font-weight:700;word-break:break-all;}' +
+        '#mrm-thanks-actions{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap;}' +
+        '#mrm-thanks-close{background:#C8A876;color:#3a226d;border:0;padding:12px 28px;border-radius:8px;' +
+          'cursor:pointer;font-size:15px;font-weight:700;letter-spacing:0.3px;transition:background 0.15s ease;}' +
+        '#mrm-thanks-close:hover,#mrm-thanks-close:focus{background:#D6B274;outline:none;}' +
+        '#mrm-thanks-foot{font-size:11.5px;color:#888;margin-top:14px;font-style:italic;}' +
+      '</style>' +
+      '<div id="mrm-thanks-card">' +
+        '<div id="mrm-thanks-banner">' +
+          '<div id="mrm-thanks-icon">✓</div>' +
+          '<h2 id="mrm-thanks-title">Thank you</h2>' +
+          '<p id="mrm-thanks-sub">Quote request received</p>' +
+        '</div>' +
+        '<div id="mrm-thanks-body">' +
+          '<p class="lead">Your quote request has been sent to the office.</p>' +
+          '<p>A copy of your formal written estimate is on its way to ' +
+            '<span id="mrm-thanks-email"></span>.</p>' +
+          '<p>The office will reply within <strong>48 hours</strong> — usually sooner during business hours (Mon–Fri 08:00–17:30, Sat 09:00–13:00).</p>' +
+          '<div id="mrm-thanks-actions">' +
+            '<button type="button" id="mrm-thanks-close">Close &amp; refresh</button>' +
+          '</div>' +
+          '<div id="mrm-thanks-foot">This page will refresh automatically in a moment.</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    // Safe text injection for the email.
+    var emailSpan = document.getElementById('mrm-thanks-email');
+    if (emailSpan) emailSpan.textContent = String(toEmail || 'your email');
+
+    // Prevent scroll on the background while modal is up.
+    document.documentElement.style.overflow = 'hidden';
+
+    function doReload() { window.location.reload(); }
+    var closeBtn = document.getElementById('mrm-thanks-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', doReload);
+      closeBtn.focus();
+    }
+    // Auto-refresh after 6 seconds.
+    setTimeout(doReload, 6000);
   }
 
   recalc();
