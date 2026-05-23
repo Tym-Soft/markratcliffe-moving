@@ -1552,6 +1552,10 @@ display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
   .hp-hero-card .hp-btn { padding: 0.85rem 1.4rem; font-size: 0.9rem; }
 }
 .hp-hero-card { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; }
+/* Mobile: hide the hero CTA buttons — Quick Estimate card below already provides the conversion path. */
+@media (max-width: 1023px) {
+  .hp-hero-card .hp-hero-cta { display: none; }
+}
 
 /* Quick estimate card — compact mirror of the full calculator */
 .hp-hero-quote-card {
