@@ -823,10 +823,26 @@
     distStatus.classList.toggle('is-error', !!isError);
   }
 
+  var distFromHouse = document.getElementById('dist-from-no');
+  var distToHouse   = document.getElementById('dist-to-no');
+
+  function combineAddr(house, addr) {
+    house = (house || '').trim();
+    addr  = (addr  || '').trim();
+    if (!addr) return '';
+    return house ? house + ', ' + addr : addr;
+  }
+  function shortAddr(s) {
+    s = String(s || '');
+    return s.length > 42 ? s.slice(0, 42).replace(/[,\s]+$/, '') + '…' : s;
+  }
+
   if (distCalcBtn && distFromInput && distToInput) {
     distCalcBtn.addEventListener('click', function () {
-      var fromAddr = distFromInput.value.trim();
-      var toAddr   = distToInput.value.trim();
+      var fromHouse = distFromHouse ? distFromHouse.value.trim() : '';
+      var toHouse   = distToHouse   ? distToHouse.value.trim()   : '';
+      var fromAddr  = combineAddr(fromHouse, distFromInput.value);
+      var toAddr    = combineAddr(toHouse,   distToInput.value);
       if (!fromAddr || !toAddr) {
         setDistStatus('Please enter both a FROM and TO postcode (or address).', true);
         return;
@@ -858,12 +874,14 @@
             distResult.hidden = false;
             distResultMi.textContent = miles + ' mile' + (miles === 1 ? '' : 's') + ' round-trip';
             // Build "depot → from (X mi) → to (Y mi) → depot (Z mi)" if we have 3 legs.
+            var fromShort = shortAddr(fromAddr);
+            var toShort   = shortAddr(toAddr);
             var detail;
             if (legs.length === 3) {
-              detail = 'depot → ' + escapeText(fromAddr) + ' (' + legs[0] + ' mi) → ' +
-                       escapeText(toAddr) + ' (' + legs[1] + ' mi) → depot (' + legs[2] + ' mi)';
+              detail = 'depot → ' + fromShort + ' (' + legs[0] + ' mi) → ' +
+                       toShort + ' (' + legs[1] + ' mi) → depot (' + legs[2] + ' mi)';
             } else {
-              detail = 'depot → ' + escapeText(fromAddr) + ' → ' + escapeText(toAddr) + ' → depot';
+              detail = 'depot → ' + fromShort + ' → ' + toShort + ' → depot';
             }
             distResultDet.textContent = detail;
           }

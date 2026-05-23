@@ -4400,16 +4400,20 @@ margin: 0;
 .qc-num-distance,
 .qc-num-row .qc-num-attention { grid-column: 1 / -1; }
 .qc-distance-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
   margin-top: 0.35rem;
-  align-items: end;
 }
-@media (max-width: 720px) {
-  .qc-distance-fields { grid-template-columns: 1fr; }
+.qc-distance-row { display: flex; flex-direction: column; gap: 0.3rem; }
+.qc-distance-row-inputs {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 0.5rem;
 }
-.qc-distance-field { display: flex; flex-direction: column; gap: 0.25rem; }
+@media (max-width: 560px) {
+  .qc-distance-row-inputs { grid-template-columns: 1fr; }
+}
 .qc-distance-field-label {
   font-size: 0.72rem;
   font-weight: 700;
@@ -4417,8 +4421,9 @@ margin: 0;
   text-transform: uppercase;
   color: #C8A876;
 }
-.qc-distance-field input[type="text"] {
-  padding: 0.6rem 0.75rem;
+.qc-distance-house,
+.qc-distance-address {
+  padding: 0.65rem 0.8rem;
   border-radius: 6px;
   border: 1px solid rgba(255,255,255,0.18);
   background: #fff;
@@ -4428,23 +4433,27 @@ margin: 0;
   width: 100%;
   box-sizing: border-box;
 }
-.qc-distance-field input[type="text"]:focus {
+.qc-distance-house:focus,
+.qc-distance-address:focus {
   outline: 2px solid #C8A876;
   outline-offset: -1px;
 }
+.qc-distance-house::placeholder,
+.qc-distance-address::placeholder { color: #8a8a8a; }
 .qc-distance-calc-btn {
   background: #C8A876;
   color: #3a226d;
   border: 0;
-  padding: 0.65rem 1.1rem;
+  padding: 0.75rem 1.25rem;
   border-radius: 6px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   cursor: pointer;
   letter-spacing: 0.3px;
   transition: background 0.15s ease, transform 0.1s ease;
   white-space: nowrap;
-  height: fit-content;
+  align-self: flex-start;
+  margin-top: 0.25rem;
 }
 .qc-distance-calc-btn:hover,
 .qc-distance-calc-btn:focus {
