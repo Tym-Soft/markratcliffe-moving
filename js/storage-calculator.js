@@ -890,6 +890,35 @@
         if (e.key === 'Enter') { e.preventDefault(); distCalcBtn.click(); }
       });
     });
+
+    // Google Places Autocomplete — attached when the Maps JS library
+    // finishes loading. The library calls window.initPlacesAutocomplete
+    // (set up by the loader in storage-calculator.html). If the key
+    // hasn't been replaced yet, this never runs and the inputs work as
+    // plain text fields — calculator still functional.
+    window.initPlacesAutocomplete = function () {
+      if (!window.google || !google.maps || !google.maps.places) return;
+      var acOpts = {
+        componentRestrictions: { country: ['gb'] },
+        fields: ['formatted_address', 'place_id'],
+        types: ['geocode'] // postcodes + addresses
+      };
+      // Browser autofill competes with Places dropdown — disable it.
+      distFromInput.setAttribute('autocomplete', 'off');
+      distToInput.setAttribute('autocomplete', 'off');
+
+      var fromAc = new google.maps.places.Autocomplete(distFromInput, acOpts);
+      var toAc   = new google.maps.places.Autocomplete(distToInput, acOpts);
+
+      fromAc.addListener('place_changed', function () {
+        var p = fromAc.getPlace();
+        if (p && p.formatted_address) distFromInput.value = p.formatted_address;
+      });
+      toAc.addListener('place_changed', function () {
+        var p = toAc.getPlace();
+        if (p && p.formatted_address) distToInput.value = p.formatted_address;
+      });
+    };
   }
 
   function escapeText(s) {

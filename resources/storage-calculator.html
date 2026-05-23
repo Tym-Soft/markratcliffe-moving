@@ -16,7 +16,7 @@
   <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://cdn.yoshki.com" crossorigin>
-  <link rel="preload" as="style" href="../css/site.css?v=20260662" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="../css/site.css?v=20260662"></noscript>
+  <link rel="preload" as="style" href="../css/site.css?v=20260663" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="../css/site.css?v=20260663"></noscript>
   <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script async src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
@@ -29,7 +29,7 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Mark Ratcliffe Storage Calculator", "applicationCategory": "UtilityApplication", "operatingSystem": "All", "description": "Free volume and weight calculator using BAR-style item inventory volumes used by Sussex removals crews since 1982.", "url": "https://www.markratcliffemoving.co.uk/resources/storage-calculator.html", "publisher": {"@type": "Organization", "@id": "https://www.markratcliffemoving.co.uk/#organization"}, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "GBP"}}</script>
   <link rel="canonical" href="https://www.markratcliffemoving.co.uk/resources/storage-calculator.html">
   <meta property="og:url" content="https://www.markratcliffemoving.co.uk/resources/storage-calculator.html">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.yoshki.com https://yoshki.com https://d3e54v103j8qbb.cloudfront.net https://www.cognitoforms.com https://services.cognitoforms.com https://app.i-mve.com https://i-mve.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ajax.googleapis.com https://www.cognitoforms.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com data:; frame-src https://www.google.com https://yoshki.com https://www.cognitoforms.com https://services.cognitoforms.com https://app.i-mve.com https://i-mve.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://www.cognitoforms.com https://services.cognitoforms.com https://app.i-mve.com https://i-mve.com https://*.workers.dev; object-src 'none'; base-uri 'self'; form-action 'self' https://www.cognitoforms.com https://services.cognitoforms.com https://app.i-mve.com https://i-mve.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://ajax.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.yoshki.com https://yoshki.com https://d3e54v103j8qbb.cloudfront.net https://www.cognitoforms.com https://services.cognitoforms.com https://app.i-mve.com https://i-mve.com https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ajax.googleapis.com https://www.cognitoforms.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com data:; frame-src https://www.google.com https://yoshki.com https://www.cognitoforms.com https://services.cognitoforms.com https://app.i-mve.com https://i-mve.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://www.cognitoforms.com https://services.cognitoforms.com https://app.i-mve.com https://i-mve.com https://*.workers.dev https://maps.googleapis.com; object-src 'none'; base-uri 'self'; form-action 'self' https://www.cognitoforms.com https://services.cognitoforms.com https://app.i-mve.com https://i-mve.com">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <!-- mrm-schema:org:start -->
@@ -5315,7 +5315,25 @@ border-color: #fff;
   <script defer src="../js/mark-ratcliffe-moving.js?v=20260558"></script>
   <script defer src="../js/mobile-nav.js?v=20260560"></script>
   <script defer src="../js/lib/jspdf.umd.min.js?v=20260523"></script>
-  <script defer src="../js/storage-calculator.js?v=20260660"></script>
+
+  <!-- Google Places Autocomplete loader.
+       Replace YOUR_PLACES_API_KEY below with a Places-only key restricted by
+       HTTP referrer to markratcliffemoving.co.uk. This is intentionally a
+       separate key from the Routes API key (which lives on the worker).
+       While the placeholder is here, the script is not loaded — the address
+       inputs still work as plain text fields, just without dropdown suggestions. -->
+  <script>
+    (function () {
+      var key = 'YOUR_PLACES_API_KEY';
+      if (!key || key === 'YOUR_PLACES_API_KEY') return;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(key) + '&libraries=places&loading=async&v=weekly&callback=initPlacesAutocomplete';
+      document.head.appendChild(s);
+    })();
+  </script>
+
+  <script defer src="../js/storage-calculator.js?v=20260661"></script>
   <script defer src="../js/contact-modal.js?v=20260524"></script>
 </body>
 </html>
