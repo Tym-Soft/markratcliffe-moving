@@ -837,7 +837,7 @@
       var oldLabel = distCalcBtn.innerHTML;
       distCalcBtn.textContent = 'Calculating…';
 
-      fetch(WORKER_QUOTE_ENDPOINT + '/distance', {
+      fetch(WORKER_DISTANCE_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ from: fromAddr, to: toAddr })
@@ -1147,6 +1147,9 @@
   // to the Cloudflare Worker, which forwards both emails via Resend.
   // The Resend API key never touches client JS; see /worker/ for the relay.
   var WORKER_QUOTE_ENDPOINT = 'https://markratcliffe-moving.vandymanservices.workers.dev';
+  // Distance lookup runs on a separate worker that holds the Google Maps
+  // API key. Same source code, different env / secrets per worker.
+  var WORKER_DISTANCE_ENDPOINT = 'https://markratcliffe-moving-routes-api.vandymanservices.workers.dev/distance';
 
   var quoteForm = document.getElementById('quote-request-form');
   if (quoteForm) {
