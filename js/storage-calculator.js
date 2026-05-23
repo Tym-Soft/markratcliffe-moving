@@ -503,8 +503,7 @@
         roomCuft += itemCuft;
         roomCount += qty;
         roomHtml +=
-          '<div class="qp-inv-row"><span class="qp-inv-name">' + qty + ' × ' + escapeHtml(name) + '</span>' +
-          '<span class="qp-inv-cuft">' + Math.round(itemCuft) + ' cu ft</span></div>';
+          '<div class="qp-inv-row"><span class="qp-inv-name">' + qty + ' × ' + escapeHtml(name) + '</span></div>';
       }
       if (roomCount > 0) {
         totalItems += roomCount;
