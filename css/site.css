@@ -4476,6 +4476,8 @@ margin: 0;
   border-left: 3px solid #C8A876;
   border-radius: 5px;
 }
+.qc-distance-result[hidden],
+.qc-distance-status[hidden] { display: none; }
 .qc-distance-result-miles {
   font-size: 1.45rem;
   font-weight: 700;
