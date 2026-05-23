@@ -346,11 +346,16 @@
   function recalc() {
     var invCuft = 0, invCum = 0, invKg = 0;
     for (var i = 0; i < inputs.length; i++) {
-      var q = parseInt(inputs[i].value, 10);
-      if (!q || q < 0) continue;
-      invCuft += q * parseFloat(inputs[i].dataset.cuft);
-      invCum  += q * parseFloat(inputs[i].dataset.cum);
-      invKg   += q * parseFloat(inputs[i].dataset.kg);
+      var q = parseInt(inputs[i].value, 10) || 0;
+      // Branded background when an item is selected; default white at 0.
+      if (q > 0) {
+        inputs[i].classList.add('is-active');
+        invCuft += q * parseFloat(inputs[i].dataset.cuft);
+        invCum  += q * parseFloat(inputs[i].dataset.cum);
+        invKg   += q * parseFloat(inputs[i].dataset.kg);
+      } else {
+        inputs[i].classList.remove('is-active');
+      }
     }
     var hasInventory = invCuft > 0;
     var manualCuft = 0;
@@ -678,14 +683,55 @@
 
   function filterItems(query) {
     var q = query.trim().toLowerCase();
-    var activePanel = root.querySelector('.calc-cat-panel.active');
-    if (!activePanel) return;
-    var items = activePanel.querySelectorAll('.calc-item');
-    for (var i = 0; i < items.length; i++) {
-      var nameEl = items[i].querySelector('.calc-item-name');
-      var name   = nameEl ? nameEl.textContent.toLowerCase() : '';
-      var match  = !q || name.indexOf(q) !== -1;
-      items[i].style.display = match ? '' : 'none';
+    var isSearching = q.length > 0;
+    root.classList.toggle('is-searching', isSearching);
+
+    for (var p = 0; p < panels.length; p++) {
+      var panel = panels[p];
+      var items = panel.querySelectorAll('.calc-item');
+      var anyMatch = false;
+
+      if (!isSearching) {
+        // Empty query → restore: every item visible, no per-panel label.
+        for (var i = 0; i < items.length; i++) items[i].style.display = '';
+        var existingLabel = panel.querySelector('.calc-search-room-label');
+        if (existingLabel) existingLabel.remove();
+        delete panel.dataset.searchHidden;
+        continue;
+      }
+
+      for (var j = 0; j < items.length; j++) {
+        var nameEl = items[j].querySelector('.calc-item-name');
+        var name = nameEl ? nameEl.textContent.toLowerCase() : '';
+        var match = name.indexOf(q) !== -1;
+        items[j].style.display = match ? '' : 'none';
+        if (match) anyMatch = true;
+      }
+
+      if (anyMatch) {
+        // Inject a room label so cross-room results are still grouped + labelled.
+        var label = panel.querySelector('.calc-search-room-label');
+        if (!label) {
+          var roomName = '';
+          for (var t = 0; t < tabs.length; t++) {
+            if (tabs[t].dataset.target === panel.id) {
+              var lab = tabs[t].querySelector('.calc-tab-label');
+              roomName = lab ? lab.textContent : '';
+              break;
+            }
+          }
+          label = document.createElement('div');
+          label.className = 'calc-search-room-label';
+          label.textContent = roomName;
+          panel.insertBefore(label, panel.firstChild);
+        }
+        delete panel.dataset.searchHidden;
+      } else {
+        // Hide whole panel if nothing matches in it.
+        panel.dataset.searchHidden = '1';
+        var emptyLabel = panel.querySelector('.calc-search-room-label');
+        if (emptyLabel) emptyLabel.remove();
+      }
     }
   }
 
