@@ -53,15 +53,13 @@
   width: 100%;
 }
 
-/* Mobile: hide the duplicate "Get a Free Quote" / "Call" buttons inside the
-   hero — the Quick Estimate card stacked below already provides the same
-   conversion paths (its CTA → calculator, plus a tap-to-call link in the
-   sticky nav / footer). Keeps the hero compact on small screens. */
-@media (max-width: 1023px) {
-  .hp-hero-card .hp-hero-cta,
-  .np-hero-card .np-hero-cta {
-    display: none;
-  }
+/* Hide the duplicate "Get a Free Quote" / "Call" buttons inside the hero
+   at all sizes — the Quick Estimate card next to (or below) the brand
+   card already provides the same conversion paths (its CTA → calculator,
+   plus tap-to-call in the sticky nav / footer). */
+.hp-hero-card .hp-hero-cta,
+.np-hero-card .np-hero-cta {
+  display: none;
 }
 
 /* ---- Quote card itself (white card with purple/gold accents) ---- */
