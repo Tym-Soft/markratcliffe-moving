@@ -1073,8 +1073,10 @@
       function fp(n) { return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
       function pad(label, val) { while (label.length < 22) label += ' '; return label + val; }
 
-      // Items grouped by room
+      // Items grouped by room — collect both a flat text list (for the
+      // email body) and a structured list (for the PDF generator).
       var roomLines = [];
+      var pdfRooms = [];
       var totalItems = 0;
       for (var p = 0; p < panels.length; p++) {
         var panel = panels[p];
@@ -1088,6 +1090,7 @@
         }
         var items = panel.querySelectorAll('.calc-item');
         var rows = [];
+        var structuredRows = [];
         var roomCuft = 0;
         var roomCount = 0;
         for (var ii = 0; ii < items.length; ii++) {
@@ -1101,13 +1104,15 @@
           var itemCuft = qty * cuftPer;
           roomCuft += itemCuft;
           roomCount += qty;
-          rows.push('    ' + qty + ' × ' + name + ' — ' + Math.round(itemCuft) + ' cu ft');
+          rows.push('    ' + qty + ' × ' + name);
+          structuredRows.push({ qty: qty, name: name, cuft: Math.round(itemCuft) });
         }
         if (roomCount > 0) {
           totalItems += roomCount;
           roomLines.push('  ' + roomLabel + ' (' + Math.round(roomCuft) + ' cu ft)');
           roomLines = roomLines.concat(rows);
           roomLines.push('');
+          pdfRooms.push({ name: roomLabel, cuft: Math.round(roomCuft), items: structuredRows });
         }
       }
 
@@ -1191,17 +1196,46 @@
       if (status) status.textContent = 'Sending your quote request…';
       if (submitBtn) submitBtn.disabled = true;
 
+      // Build the branded inventory PDF if the customer ticked items.
+      // PDF generation is best-effort — if jsPDF didn't load (very rare),
+      // the email still sends, just without the attachment.
+      var attachments = [];
+      if (totalItems > 0) {
+        try {
+          var pdfB64 = buildInventoryPdf({
+            customer:   { name: fullName, email: email, phone: phone },
+            move:       { fromPC: fromPC, toPC: toPC, miles: miles, modeLabel: modeLabel, moveDateFmt: moveDateFmt || (moveFlex === 'Date to be confirmed' ? 'To be confirmed' : ''), moveFlex: moveFlex, notes: notes },
+            property:   { bedLabel: bedSelected.label, cuft: cuft, cum: cum, storageDays: days, storageRoomLabel: stBits.join(' + ') },
+            pricing:    { calcMode: calcMode, removals: rmNett, storage: stNett, total: rmNett + stNett },
+            inventory:  { totalItems: totalItems, rooms: pdfRooms }
+          });
+          if (pdfB64) {
+            var safeName = (fullName || 'customer').replace(/[^A-Za-z0-9 _.-]+/g, '').replace(/\s+/g, '-').slice(0, 40) || 'customer';
+            attachments.push({
+              filename: 'MRM-inventory-' + safeName + '.pdf',
+              contentBase64: pdfB64
+            });
+          }
+        } catch (err) {
+          // Soft-fail: log and continue without attachment.
+          if (window.console && console.warn) console.warn('PDF generation failed:', err);
+        }
+      }
+
+      var payload = {
+        hp: hpField ? hpField.value : '',
+        name: fullName,
+        email: email,
+        phone: phone,
+        subject: subject,
+        summary: lines.join('\n')
+      };
+      if (attachments.length > 0) payload.attachments = attachments;
+
       fetch(WORKER_QUOTE_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          hp: hpField ? hpField.value : '',
-          name: fullName,
-          email: email,
-          phone: phone,
-          subject: subject,
-          summary: lines.join('\n')
-        })
+        body: JSON.stringify(payload)
       }).then(function (r) {
         return r.json().catch(function () { return { ok: false, error: 'Server error' }; })
           .then(function (data) { return { httpStatus: r.status, data: data }; });
@@ -1224,6 +1258,198 @@
         if (submitBtn) submitBtn.disabled = false;
       });
     });
+  }
+
+  // Build a branded A4 PDF of the customer's inventory + quote summary.
+  // Returns base64-encoded PDF (no data: prefix), or null if jsPDF isn't loaded.
+  function buildInventoryPdf(data) {
+    if (!window.jspdf || !window.jspdf.jsPDF) return null;
+    var doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4', compress: true });
+
+    var PW = doc.internal.pageSize.getWidth();
+    var PH = doc.internal.pageSize.getHeight();
+    var MX = 40;
+    var PURPLE = [77, 46, 143];
+    var GOLD = [200, 168, 118];
+    var GOLD_LIGHT = [230, 222, 201];
+    var INK = [34, 34, 34];
+    var INK_SOFT = [85, 85, 85];
+    var SURFACE = [250, 248, 243];
+
+    var y = 0;
+
+    function header() {
+      doc.setFillColor(PURPLE[0], PURPLE[1], PURPLE[2]);
+      doc.rect(0, 0, PW, 72, 'F');
+      doc.setFillColor(GOLD[0], GOLD[1], GOLD[2]);
+      doc.rect(0, 72, PW, 4, 'F');
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(18);
+      doc.setTextColor(GOLD[0], GOLD[1], GOLD[2]);
+      doc.text('Mark Ratcliffe', MX, 38);
+      var w = doc.getTextWidth('Mark Ratcliffe');
+      doc.setTextColor(255, 255, 255);
+      doc.text(' Moving & Storage', MX + w, 38);
+
+      doc.setFontSize(8.5);
+      doc.setTextColor(GOLD_LIGHT[0], GOLD_LIGHT[1], GOLD_LIGHT[2]);
+      doc.text('Family-run removals & storage in East Sussex since 1982', MX, 56);
+
+      doc.setFontSize(11);
+      doc.setTextColor(255, 255, 255);
+      doc.text('Inventory & Quote Summary', PW - MX, 38, { align: 'right' });
+      doc.setFontSize(8.5);
+      doc.setTextColor(GOLD_LIGHT[0], GOLD_LIGHT[1], GOLD_LIGHT[2]);
+      var today = new Date();
+      var dateStr = today.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+      doc.text('Generated ' + dateStr, PW - MX, 56, { align: 'right' });
+
+      y = 96;
+    }
+
+    function footer() {
+      var fy = PH - 36;
+      doc.setDrawColor(GOLD[0], GOLD[1], GOLD[2]);
+      doc.setLineWidth(0.6);
+      doc.line(MX, fy - 12, PW - MX, fy - 12);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+      doc.text('Mark Ratcliffe Moving & Storage  ·  01323 848 008  ·  office@markratcliffemoving.co.uk  ·  markratcliffemoving.co.uk', PW / 2, fy - 2, { align: 'center' });
+      doc.setTextColor(150, 150, 150);
+      doc.text('Unit J12 Swallow Business Park, Diamond Drive, Lower Dicker, BN27 4EL  ·  EMV London Ltd  ·  Family-run since 1982', PW / 2, fy + 10, { align: 'center' });
+      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+      doc.text('Page ' + doc.internal.getNumberOfPages(), PW - MX, fy - 2, { align: 'right' });
+    }
+
+    function ensureSpace(n) {
+      if (y + n > PH - 60) {
+        footer();
+        doc.addPage();
+        header();
+      }
+    }
+
+    function sectionTitle(text) {
+      ensureSpace(28);
+      y += 4;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(PURPLE[0], PURPLE[1], PURPLE[2]);
+      doc.text(String(text).toUpperCase(), MX, y);
+      doc.setDrawColor(GOLD[0], GOLD[1], GOLD[2]);
+      doc.setLineWidth(1);
+      doc.line(MX, y + 4, MX + 36, y + 4);
+      y += 16;
+    }
+
+    function kvRow(label, value) {
+      ensureSpace(14);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+      doc.text(label, MX, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+      var v = (value == null || value === '') ? '—' : String(value);
+      var wrapped = doc.splitTextToSize(v, PW - MX - 130);
+      doc.text(wrapped, MX + 110, y);
+      y += 13 * Math.max(1, wrapped.length);
+    }
+
+    function fp(n) {
+      return '£' + Number(n || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // --- Render ---
+    header();
+
+    sectionTitle('Customer');
+    kvRow('Name', data.customer.name);
+    kvRow('Email', data.customer.email);
+    kvRow('Phone', data.customer.phone);
+    y += 2;
+
+    sectionTitle('Move overview');
+    kvRow('From', data.move.fromPC);
+    kvRow('To', data.move.toPC);
+    kvRow('Distance', (data.move.miles || 0) + ' mile' + ((data.move.miles === 1) ? '' : 's') + ' round-trip');
+    kvRow('Service', data.move.modeLabel);
+    if (data.move.moveDateFmt) kvRow('Preferred date', data.move.moveDateFmt);
+    if (data.move.moveFlex && data.move.moveFlex !== 'Date to be confirmed') kvRow('Flexibility', data.move.moveFlex);
+    kvRow('Home size', data.property.bedLabel);
+    kvRow('Total volume', (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft  (' + data.property.cum + ' cu m)');
+    if (data.pricing.calcMode !== 'removals' && data.property.storageDays > 0) {
+      kvRow('Storage duration', data.property.storageDays + ' day' + (data.property.storageDays === 1 ? '' : 's'));
+      if (data.property.storageRoomLabel) kvRow('Storage room', data.property.storageRoomLabel);
+    }
+    y += 2;
+
+    sectionTitle('Estimate (nett — + VAT at booking)');
+    if (data.pricing.calcMode !== 'storage') kvRow('Removals', fp(data.pricing.removals));
+    if (data.pricing.calcMode !== 'removals') kvRow('Storage', fp(data.pricing.storage));
+    ensureSpace(20);
+    doc.setDrawColor(GOLD_LIGHT[0], GOLD_LIGHT[1], GOLD_LIGHT[2]);
+    doc.setLineWidth(0.5);
+    doc.line(MX, y - 2, MX + 260, y - 2);
+    y += 6;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(PURPLE[0], PURPLE[1], PURPLE[2]);
+    doc.text('TOTAL nett', MX, y);
+    doc.text(fp(data.pricing.total) + '   (+ VAT)', MX + 110, y);
+    y += 16;
+
+    sectionTitle('Inventory  (' + data.inventory.totalItems + ' items  ·  ' + (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft)');
+    for (var i = 0; i < data.inventory.rooms.length; i++) {
+      var room = data.inventory.rooms[i];
+      ensureSpace(26);
+      doc.setFillColor(SURFACE[0], SURFACE[1], SURFACE[2]);
+      doc.rect(MX - 4, y - 10, PW - 2 * MX + 8, 17, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(PURPLE[0], PURPLE[1], PURPLE[2]);
+      doc.text(room.name, MX, y + 2);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+      doc.text(room.cuft + ' cu ft', PW - MX, y + 2, { align: 'right' });
+      y += 16;
+
+      doc.setFontSize(9.5);
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+      for (var j = 0; j < room.items.length; j++) {
+        var it = room.items[j];
+        ensureSpace(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text(it.qty + ' × ' + it.name, MX + 10, y);
+        doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
+        doc.text(it.cuft + ' cu ft', PW - MX, y, { align: 'right' });
+        doc.setTextColor(INK[0], INK[1], INK[2]);
+        y += 12;
+      }
+      y += 6;
+    }
+
+    if (data.move.notes) {
+      sectionTitle('Customer notes');
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9.5);
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+      var noteLines = doc.splitTextToSize(String(data.move.notes), PW - 2 * MX);
+      for (var k = 0; k < noteLines.length; k++) {
+        ensureSpace(12);
+        doc.text(noteLines[k], MX, y);
+        y += 12;
+      }
+    }
+
+    footer();
+
+    var dataUri = doc.output('datauristring');
+    var idx = dataUri.indexOf(',');
+    return idx >= 0 ? dataUri.substring(idx + 1) : null;
   }
 
   recalc();
