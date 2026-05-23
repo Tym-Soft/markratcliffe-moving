@@ -1,10 +1,11 @@
 /* ===========================================================
    Hero quick-quote card
    -----------------------------------------------------------
-   Lives inside .hp-hero-inner (homepage) or .np-hero-inner
-   (inner-page heroes). Turns the hero into a 2-column layout
-   on >=1024px with the existing brand card on the left and
-   the quick-quote card on the right. Stacks vertically below.
+   Lives inside .hp-hero-inner (homepage) or .np-hero-inner /
+   .ac-hero-inner / .th-hero-inner / .lp-hero-cell on other
+   pages. Every rule scoped by `.hp-hero-quote-card …` so
+   page-level styles (text-shadow / colour / text-align / etc.)
+   can't bleed in.
    =========================================================== */
 
 /* ---- Layout: 2-column on desktop, stacked on mobile ---- */
@@ -64,20 +65,16 @@
   width: 100%;
 }
 
-/* Hide the duplicate "Get a Free Quote" / "Call" buttons inside the hero
-   at all sizes — the Quick Estimate card next to (or below) the brand
-   card already provides the same conversion paths (its CTA → calculator,
-   plus tap-to-call in the sticky nav / footer). */
+/* Hide hero "Get a Free Quote" / "Call" buttons sitewide — the
+   Quick Estimate card already covers conversion. */
 .hp-hero-card .hp-hero-cta,
 .np-hero-card .np-hero-cta,
 .th-hero-card .th-hero-cta {
   display: none;
 }
 
-/* lp-hero-cell pages (areas-covered + man-and-van) have a purple
-   background applied to every .lp-hero-cell with !important. When our
-   quote card is inside one of those cells we don't want the purple
-   frame around it — flatten the wrapper so the white card stands alone. */
+/* lp-hero-cell pages: cells with a purple !important background. When
+   our quote card is inside one, flatten the wrapper. */
 .lp-hero-cell:has(.hp-hero-quote-card) {
   background: transparent !important;
   backdrop-filter: none !important;
@@ -88,178 +85,226 @@
   box-shadow: none !important;
 }
 
-/* ---- Quote card itself (white card with purple/gold accents) ---- */
+/* ---- The card itself ---- */
 .hp-hero-quote-card {
-  background: rgba(255,255,255,0.96);
-  border-radius: 14px;
-  padding: 22px 22px 20px;
-  color: #222;
-  box-shadow: 0 16px 50px rgba(0,0,0,0.28);
-  border: 1px solid rgba(200, 168, 118, 0.5);
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  font-family: "Inter", Arial, sans-serif;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-radius: 14px !important;
+  padding: 22px 22px 20px !important;
+  color: #222 !important;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.28) !important;
+  border: 1px solid rgba(200, 168, 118, 0.5) !important;
+  width: 100% !important;
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  font-family: "Inter", Arial, sans-serif !important;
+  text-align: left !important;
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
-/* Reset any text-shadow / text-transform inherited from page-level hero
-   styles (some inner pages apply text-shadow to all <p> inside the hero
-   wrapper, which then bleeds into our white card). */
+
+/* Reset inherited effects on every descendant — no text-shadow, no
+   inherited weird colours from the page hero wrapper. */
 .hp-hero-quote-card,
 .hp-hero-quote-card * {
   text-shadow: none !important;
 }
-.hp-hero-quote-card h2,
-.hp-hero-quote-card h3,
-.hp-hero-quote-card p,
-.hp-hero-quote-card span,
-.hp-hero-quote-card label {
-  text-transform: none !important;
-  letter-spacing: normal;
-}
-.hpqq-title {
-  margin: 0 0 4px;
-  font-family: "Fraunces", Georgia, serif;
-  font-size: 1.45rem;
-  font-weight: 500;
+
+/* Title: serif, dark purple, sentence case. */
+.hp-hero-quote-card .hpqq-title {
+  margin: 0 0 4px !important;
+  font-family: "Fraunces", Georgia, serif !important;
+  font-size: 1.45rem !important;
+  font-weight: 500 !important;
   color: #4d2e8f !important;
   letter-spacing: -0.01em !important;
   text-transform: none !important;
   background: transparent !important;
+  text-align: left !important;
 }
-.hpqq-hint {
-  margin: 0 0 14px;
-  font-size: 0.85rem;
+.hp-hero-quote-card .hpqq-hint {
+  margin: 0 0 14px !important;
+  font-size: 0.85rem !important;
   color: #555 !important;
-  line-height: 1.45;
+  line-height: 1.45 !important;
   background: transparent !important;
+  text-align: left !important;
+  text-transform: none !important;
+  font-family: inherit !important;
+  font-weight: 400 !important;
 }
-.hpqq-section { margin-bottom: 12px; }
-.hpqq-label {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 700;
+.hp-hero-quote-card .hpqq-section { margin-bottom: 12px !important; }
+
+/* Labels: small, uppercase, bold purple. */
+.hp-hero-quote-card .hpqq-label {
+  display: block !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
   color: #4d2e8f !important;
-  margin-bottom: 6px;
+  margin-bottom: 6px !important;
   background: transparent !important;
+  text-align: left !important;
+  font-family: "Inter", Arial, sans-serif !important;
 }
-.hpqq-beds {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+
+/* Bed pills. */
+.hp-hero-quote-card .hpqq-beds {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 6px !important;
 }
-.hpqq-bed {
-  appearance: none;
-  background: #faf6ec;
-  border: 1px solid #e6dec9;
-  color: #3a226d;
-  padding: 8px 4px;
-  border-radius: 7px;
-  font: inherit;
-  font-size: 0.84rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+.hp-hero-quote-card .hpqq-bed {
+  appearance: none !important;
+  background: #faf6ec !important;
+  border: 1px solid #e6dec9 !important;
+  color: #3a226d !important;
+  padding: 8px 4px !important;
+  border-radius: 7px !important;
+  font: inherit !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background 0.15s ease, border-color 0.15s ease !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  text-shadow: none !important;
 }
-.hpqq-bed:hover { background: #f1ead1; border-color: #C8A876; }
-.hpqq-bed.is-active {
-  background: #4d2e8f;
-  border-color: #4d2e8f;
-  color: #fff;
+.hp-hero-quote-card .hpqq-bed:hover {
+  background: #f1ead1 !important;
+  border-color: #C8A876 !important;
 }
-.hpqq-bed.is-active:hover { background: #3a226d; border-color: #3a226d; }
-.hpqq-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 12px;
-  font: inherit;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #222;
-  background: #fff;
-  border: 1px solid #d4cbb5;
-  border-radius: 7px;
+.hp-hero-quote-card .hpqq-bed.is-active {
+  background: #4d2e8f !important;
+  border-color: #4d2e8f !important;
+  color: #fff !important;
 }
-.hpqq-input:focus {
-  outline: 2px solid #C8A876;
-  outline-offset: -1px;
-  border-color: #C8A876;
+.hp-hero-quote-card .hpqq-bed.is-active:hover {
+  background: #3a226d !important;
+  border-color: #3a226d !important;
 }
-.hpqq-mini {
-  display: block;
-  margin-top: 4px;
-  font-size: 0.74rem;
-  color: #777;
+
+/* Miles input. */
+.hp-hero-quote-card .hpqq-input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 10px 12px !important;
+  font: inherit !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #222 !important;
+  background: #fff !important;
+  border: 1px solid #d4cbb5 !important;
+  border-radius: 7px !important;
+  text-shadow: none !important;
 }
-.hpqq-result {
-  background: linear-gradient(180deg, #f4ecda 0%, #ebe0c2 100%);
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin: 14px 0 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.hp-hero-quote-card .hpqq-input:focus {
+  outline: 2px solid #C8A876 !important;
+  outline-offset: -1px !important;
+  border-color: #C8A876 !important;
 }
-.hpqq-result-label {
-  font-size: 0.72rem;
-  font-weight: 700;
+.hp-hero-quote-card .hpqq-mini {
+  display: block !important;
+  margin-top: 4px !important;
+  font-size: 0.74rem !important;
+  color: #777 !important;
+  text-transform: none !important;
+  text-align: left !important;
+  background: transparent !important;
+  font-family: inherit !important;
+}
+
+/* Result panel. */
+.hp-hero-quote-card .hpqq-result {
+  background: linear-gradient(180deg, #f4ecda 0%, #ebe0c2 100%) !important;
+  border-radius: 10px !important;
+  padding: 12px 14px !important;
+  margin: 14px 0 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  text-align: left !important;
+}
+.hp-hero-quote-card .hpqq-result-label {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
   letter-spacing: 0.07em !important;
   text-transform: uppercase !important;
   color: #6b4d18 !important;
   background: transparent !important;
+  text-align: left !important;
+  font-family: "Inter", Arial, sans-serif !important;
 }
-.hpqq-result-prices {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  flex-wrap: wrap;
+.hp-hero-quote-card .hpqq-result-prices {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 14px !important;
+  flex-wrap: wrap !important;
 }
-.hpqq-net {
-  font-family: "Fraunces", Georgia, serif;
-  font-size: 1.85rem;
-  font-weight: 600;
-  color: #4d2e8f;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-.hpqq-gross {
-  font-size: 0.95rem;
-  color: #3a226d;
-  font-weight: 600;
-}
-.hpqq-gross em {
-  font-style: normal;
-  color: #6b4d18;
-  font-weight: 500;
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-}
-.hpqq-cta {
-  display: block !important;
-  width: 100%;
-  text-align: center;
-  background: #4d2e8f;
-  color: #fff !important;
-  border: 0;
-  padding: 13px 18px;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.98rem;
-  letter-spacing: 0.02em;
-  transition: background 0.15s ease, transform 0.1s ease;
-  font-family: "Inter", sans-serif;
-}
-.hpqq-cta:hover, .hpqq-cta:focus {
-  background: #3a226d;
-  outline: none;
-}
-.hpqq-foot {
-  margin: 10px 0 0;
-  font-size: 0.72rem;
-  color: #888 !important;
-  text-align: center;
-  line-height: 1.4;
+.hp-hero-quote-card .hpqq-net {
+  font-family: "Fraunces", Georgia, serif !important;
+  font-size: 1.85rem !important;
+  font-weight: 600 !important;
+  color: #4d2e8f !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1 !important;
+  text-transform: none !important;
   background: transparent !important;
+}
+.hp-hero-quote-card .hpqq-gross {
+  font-size: 0.95rem !important;
+  color: #3a226d !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  background: transparent !important;
+  font-family: "Inter", Arial, sans-serif !important;
+}
+.hp-hero-quote-card .hpqq-gross em {
+  font-style: normal !important;
+  color: #6b4d18 !important;
+  font-weight: 500 !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.04em !important;
+  text-transform: none !important;
+}
+
+/* CTA button. */
+.hp-hero-quote-card .hpqq-cta {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  background: #4d2e8f !important;
+  color: #fff !important;
+  border: 0 !important;
+  padding: 13px 18px !important;
+  border-radius: 999px !important;
+  text-decoration: none !important;
+  font-weight: 700 !important;
+  font-size: 0.98rem !important;
+  letter-spacing: 0.02em !important;
+  transition: background 0.15s ease !important;
+  font-family: "Inter", Arial, sans-serif !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+.hp-hero-quote-card .hpqq-cta:hover,
+.hp-hero-quote-card .hpqq-cta:focus {
+  background: #3a226d !important;
+  color: #fff !important;
+  outline: none !important;
+}
+
+/* Foot line. */
+.hp-hero-quote-card .hpqq-foot {
+  margin: 10px 0 0 !important;
+  font-size: 0.72rem !important;
+  color: #888 !important;
+  text-align: center !important;
+  line-height: 1.4 !important;
+  background: transparent !important;
+  text-transform: none !important;
+  font-family: "Inter", Arial, sans-serif !important;
+  font-weight: 400 !important;
 }
