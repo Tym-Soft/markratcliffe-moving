@@ -41,7 +41,7 @@ JS_VERSION = '20260523'
 
 QUOTE_CARD_HTML = '''
       <aside class="hp-hero-quote-card" aria-label="Quick estimate">
-        <h2 class="hpqq-title">Get an instant estimate</h2>
+        <div class="hpqq-title" role="heading" aria-level="2">Get an instant estimate</div>
         <p class="hpqq-hint">Pick your home size, add the round-trip miles &mdash; we&rsquo;ll show a figure in real time.</p>
 
         <div class="hpqq-section">
