@@ -2011,11 +2011,15 @@
   // Deep-link from the homepage hero quick-quote: pick up ?bed=…&miles=…
   // and pre-select the matching home-size radio + miles input before the
   // first recalc, so the customer lands exactly where they left off.
+  // Also scroll quickly down to the "Send these figures for a quote"
+  // button so the customer can continue without hunting.
+  var arrivedFromHero = false;
   try {
     var qs = new URLSearchParams(window.location.search);
     var qsBed = qs.get('bed');
     var qsMiles = qs.get('miles');
     if (qsBed) {
+      arrivedFromHero = true;
       var bedRadio = document.querySelector('input[name="home-size"][value="' + qsBed.replace(/"/g, '') + '"]');
       if (bedRadio) {
         bedRadio.checked = true;
@@ -2023,10 +2027,23 @@
       }
     }
     if (qsMiles != null && milesInput) {
+      arrivedFromHero = true;
       var m = parseInt(qsMiles, 10);
       if (!isNaN(m) && m >= 0) milesInput.value = String(m);
     }
   } catch (e) { /* URLSearchParams not supported on very old browsers — ignore */ }
+
+  // If the customer arrived via the hero quick-quote deep-link, scroll
+  // straight down to the "Send these figures for a quote" CTA so they
+  // can go directly to entering contact details.
+  if (arrivedFromHero) {
+    setTimeout(function () {
+      var target = document.getElementById('quote-cta-toggle');
+      if (target && target.scrollIntoView) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 150);
+  }
 
   recalc();
   // Trigger the inventory auto-fill prompt on first paint (mode permitting).
