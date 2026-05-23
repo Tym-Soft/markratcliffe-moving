@@ -4464,7 +4464,7 @@ margin: 0;
 .qc-distance-hint {
   margin: 0.15rem 0 0;
   font-size: 0.78rem;
-  color: rgba(255,255,255,0.72);
+  color: #fff;
   line-height: 1.45;
   font-style: italic;
 }
