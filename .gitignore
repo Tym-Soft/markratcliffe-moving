@@ -31,3 +31,9 @@ ADMIN_CREDENTIALS.txt
 
 # OS-generated thumbnails
 Thumbs.db
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
