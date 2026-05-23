@@ -128,10 +128,25 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* Reset inherited effects on every descendant — no text-shadow, no
-   inherited weird colours from the page hero wrapper. */
+/* Reset inherited text-shadow on every descendant — the universal
+   selector has 0 specificity so it loses to page rules like
+   ".hp-header p { text-shadow: …!important }". We need element-class
+   selectors of matching specificity (and the file is loaded after the
+   inline page styles so we win on load order). */
 .hp-hero-quote-card,
-.hp-hero-quote-card * {
+.hp-hero-quote-card p,
+.hp-hero-quote-card h1,
+.hp-hero-quote-card h2,
+.hp-hero-quote-card h3,
+.hp-hero-quote-card h4,
+.hp-hero-quote-card span,
+.hp-hero-quote-card label,
+.hp-hero-quote-card div,
+.hp-hero-quote-card button,
+.hp-hero-quote-card a,
+.hp-hero-quote-card input,
+.hp-hero-quote-card em,
+.hp-hero-quote-card strong {
   text-shadow: none !important;
 }
 
@@ -150,13 +165,14 @@
 .hp-hero-quote-card .hpqq-hint {
   margin: 0 0 14px !important;
   font-size: 0.85rem !important;
-  color: #555 !important;
+  color: #1a1a1a !important;
   line-height: 1.45 !important;
   background: transparent !important;
   text-align: left !important;
   text-transform: none !important;
-  font-family: inherit !important;
+  font-family: "Inter", Arial, sans-serif !important;
   font-weight: 400 !important;
+  text-shadow: none !important;
 }
 .hp-hero-quote-card .hpqq-section { margin-bottom: 12px !important; }
 
@@ -324,12 +340,13 @@
 /* Foot line. */
 .hp-hero-quote-card .hpqq-foot {
   margin: 10px 0 0 !important;
-  font-size: 0.72rem !important;
-  color: #888 !important;
+  font-size: 0.74rem !important;
+  color: #1a1a1a !important;
   text-align: center !important;
   line-height: 1.4 !important;
   background: transparent !important;
   text-transform: none !important;
   font-family: "Inter", Arial, sans-serif !important;
   font-weight: 400 !important;
+  text-shadow: none !important;
 }
