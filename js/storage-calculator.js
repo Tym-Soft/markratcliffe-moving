@@ -1424,9 +1424,6 @@
         ensureSpace(12);
         doc.setFont('helvetica', 'normal');
         doc.text(it.qty + ' × ' + it.name, MX + 10, y);
-        doc.setTextColor(INK_SOFT[0], INK_SOFT[1], INK_SOFT[2]);
-        doc.text(it.cuft + ' cu ft', PW - MX, y, { align: 'right' });
-        doc.setTextColor(INK[0], INK[1], INK[2]);
         y += 12;
       }
       y += 6;
