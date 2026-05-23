@@ -75,7 +75,11 @@ export default {
     const email = strField(body, 'email', 200);
     const phone = strField(body, 'phone', 40);
     const summary = strField(body, 'summary', 20_000);
-    const subject = strField(body, 'subject', 250) || `Quote request — ${name || 'Customer'}`;
+    const formType = strField(body, 'formType', 20).toLowerCase() === 'contact' ? 'contact' : 'quote';
+    const defaultSubject = formType === 'contact'
+      ? `Website contact — ${name || 'Customer'}`
+      : `Quote request — ${name || 'Customer'}`;
+    const subject = strField(body, 'subject', 250) || defaultSubject;
 
     if (!name) return json({ ok: false, error: 'Name is required' }, 400, cors);
     if (!email) return json({ ok: false, error: 'Email is required' }, 400, cors);
@@ -83,13 +87,19 @@ export default {
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
       return json({ ok: false, error: 'That email address looks invalid' }, 400, cors);
     }
-    if (!summary) return json({ ok: false, error: 'Quote summary missing' }, 400, cors);
+    if (!summary) {
+      return json({ ok: false, error: formType === 'contact' ? 'Please include a message' : 'Quote summary missing' }, 400, cors);
+    }
 
     const attachments = normaliseAttachments(body && body.attachments);
     if (attachments.error) return json({ ok: false, error: attachments.error }, 400, cors);
 
-    const officeHtml = renderOfficeEmail({ name, email, phone, summary, hasPdf: attachments.list.length > 0 });
-    const customerHtml = renderCustomerEmail({ name, email, phone, summary, hasPdf: attachments.list.length > 0 });
+    const officeHtml = formType === 'contact'
+      ? renderOfficeContact({ name, email, phone, message: summary })
+      : renderOfficeEmail({ name, email, phone, summary, hasPdf: attachments.list.length > 0 });
+    const customerHtml = formType === 'contact'
+      ? renderCustomerContact({ name, email, phone, message: summary })
+      : renderCustomerEmail({ name, email, phone, summary, hasPdf: attachments.list.length > 0 });
 
     const officeResult = await sendEmail(env, {
       to: env.OFFICE_EMAIL,
@@ -99,13 +109,16 @@ export default {
       attachments: attachments.list,
     });
     if (!officeResult.ok) {
-      return json({ ok: false, error: 'Could not send quote — please call ' + BRAND.phone + '.', detail: officeResult.error }, 502, cors);
+      return json({ ok: false, error: 'Could not send message — please call ' + BRAND.phone + '.', detail: officeResult.error }, 502, cors);
     }
 
+    const customerSubject = formType === 'contact'
+      ? 'We\'ve received your message — ' + BRAND.shortName
+      : 'Your quote request — ' + BRAND.shortName;
     const customerResult = await sendEmail(env, {
       to: email,
       replyTo: env.OFFICE_EMAIL,
-      subject: 'Your quote request — ' + BRAND.shortName,
+      subject: customerSubject,
       html: customerHtml,
       attachments: attachments.list,
     });
@@ -242,6 +255,51 @@ function renderCustomerEmail({ name, email, phone, summary, hasPdf }) {
   return wrapEmail({
     preheader: `Thanks ${first} — we'll reply within 48 hours with your written quote.`,
     body: greeting + attached + summaryBlock + adjust + trust + signoff,
+  });
+}
+
+function renderOfficeContact({ name, email, phone, message }) {
+  const intro = `<p style="margin:0 0 8px;font-size:14px;color:${BRAND.inkSoft};">A new contact message was submitted via the website's contact form.</p>`;
+  const contactBlock = `
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;margin:16px 0 8px;">
+      <tr>
+        <td style="padding:10px 14px;background:${BRAND.surface};border:1px solid ${BRAND.surfaceBorder};border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:${BRAND.ink};line-height:1.55;">
+          <strong style="color:${BRAND.purple};">From</strong><br>
+          ${escapeHtml(name)}<br>
+          <a href="mailto:${escapeHtml(email)}" style="color:${BRAND.purple};text-decoration:none;">${escapeHtml(email)}</a><br>
+          <a href="tel:${escapeHtml(phone)}" style="color:${BRAND.purple};text-decoration:none;">${escapeHtml(phone)}</a>
+        </td>
+      </tr>
+    </table>
+  `;
+  const messageBlock = `
+    <h3 style="margin:20px 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:${BRAND.purple};font-weight:normal;">Message</h3>
+    <div style="font-family:Arial,Helvetica,sans-serif;white-space:pre-wrap;font-size:14px;line-height:1.6;background:${BRAND.surface};border:1px solid ${BRAND.surfaceBorder};border-left:4px solid ${BRAND.gold};padding:14px 16px;border-radius:6px;color:${BRAND.ink};margin:0;">${escapeHtml(message)}</div>
+    <p style="margin:18px 0 0;font-size:13px;color:${BRAND.inkSoft};">Hit <strong>Reply</strong> to respond directly — Reply-To is set to <strong>${escapeHtml(email)}</strong>.</p>
+  `;
+  return wrapEmail({ preheader: `New website message: ${name}`, body: intro + contactBlock + messageBlock });
+}
+
+function renderCustomerContact({ name, email, phone, message }) {
+  const first = firstName(name);
+  const greeting = `
+    <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.55;">Hi ${escapeHtml(first)},</p>
+    <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;color:${BRAND.ink};line-height:1.6;">Thank you for getting in touch. We've received your message and the office will reply <strong>within 1 working day</strong> (usually sooner during business hours).</p>
+  `;
+  const yourMessage = `
+    <h3 style="margin:6px 0 10px;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:${BRAND.purple};font-weight:normal;">Your message to us</h3>
+    <div style="font-family:Arial,Helvetica,sans-serif;white-space:pre-wrap;font-size:14px;line-height:1.6;background:${BRAND.surface};border:1px solid ${BRAND.surfaceBorder};border-left:4px solid ${BRAND.gold};padding:14px 16px;border-radius:6px;color:${BRAND.ink};margin:0 0 18px;">${escapeHtml(message)}</div>
+  `;
+  const callTo = `
+    <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:${BRAND.ink};line-height:1.6;">Need to reach us sooner? Call <a href="tel:${BRAND.phoneHref}" style="color:${BRAND.purple};text-decoration:none;font-weight:bold;">${BRAND.phone}</a> — we're open ${BRAND.hours}.</p>
+  `;
+  const signoff = `
+    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:${BRAND.ink};">Kind regards,</p>
+    <p style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:17px;color:${BRAND.purple};"><em>The team at ${BRAND.shortName}</em></p>
+  `;
+  return wrapEmail({
+    preheader: `Thanks ${first} — we'll reply within 1 working day.`,
+    body: greeting + yourMessage + callTo + signoff,
   });
 }
 
