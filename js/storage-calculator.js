@@ -1008,7 +1008,7 @@
   // Quote request form — POSTs the calculator output + customer details
   // to the Cloudflare Worker, which forwards both emails via Resend.
   // The Resend API key never touches client JS; see /worker/ for the relay.
-  var WORKER_QUOTE_ENDPOINT = 'https://mrm-quote.YOUR-SUBDOMAIN.workers.dev';
+  var WORKER_QUOTE_ENDPOINT = 'https://markratcliffe-moving.vandymanservices.workers.dev';
 
   var quoteForm = document.getElementById('quote-request-form');
   if (quoteForm) {
