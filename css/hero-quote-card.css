@@ -10,7 +10,9 @@
 /* ---- Layout: 2-column on desktop, stacked on mobile ---- */
 @media (min-width: 1024px) {
   .hp-hero-inner,
-  .np-hero-inner {
+  .np-hero-inner,
+  .ac-hero-inner.has-quote-card,
+  .th-hero-inner.has-quote-card {
     max-width: 1240px;
     display: grid;
     grid-template-columns: 1.15fr 420px;
@@ -19,22 +21,29 @@
     align-items: center;
   }
   .hp-hero-card,
-  .np-hero-card {
+  .np-hero-card,
+  .ac-hero-card,
+  .th-hero-card {
     text-align: left;
     align-items: flex-start;
   }
   .hp-hero-card .hp-hero-h1,
-  .np-hero-card h1 {
+  .np-hero-card h1,
+  .ac-hero-card h1,
+  .th-hero-card h1 {
     font-size: clamp(2rem, 3.2vw, 3rem);
     line-height: 1.08;
     max-width: none;
   }
   .hp-hero-card .hp-hero-sub,
-  .np-hero-card .np-hero-sub {
+  .np-hero-card .np-hero-sub,
+  .ac-hero-card .ac-sub,
+  .th-hero-card .th-hero-sub {
     max-width: none;
   }
   .hp-hero-card .hp-hero-cta,
-  .np-hero-card .np-hero-cta {
+  .np-hero-card .np-hero-cta,
+  .th-hero-card .th-hero-cta {
     justify-content: flex-start;
   }
   .hp-hero-card .hp-trust-strip { justify-content: flex-start; }
@@ -45,7 +54,9 @@
   }
 }
 .hp-hero-card,
-.np-hero-card {
+.np-hero-card,
+.ac-hero-card,
+.th-hero-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -58,7 +69,8 @@
    card already provides the same conversion paths (its CTA → calculator,
    plus tap-to-call in the sticky nav / footer). */
 .hp-hero-card .hp-hero-cta,
-.np-hero-card .np-hero-cta {
+.np-hero-card .np-hero-cta,
+.th-hero-card .th-hero-cta {
   display: none;
 }
 

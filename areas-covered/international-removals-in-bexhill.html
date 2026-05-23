@@ -1901,6 +1901,8 @@ color: #4d2e8f;
 border-color: #fff;
 }</style>
 <!-- mrm:critical-css:end -->
+  <link rel="stylesheet" href="../css/hero-quote-card.css?v=20260523">
+
 </head>
 <body>
   <div class="mobile-contct">
@@ -2113,13 +2115,42 @@ border-color: #fff;
           <p class="lp-h3 white">Mark Ratcliffe Moving are a dependable removals firm based in East Sussex who can move you abroad safely and efficiently.</p>
         </div>
         <div class="lp-hero-cell">
-          <h2 class="lp-h5">How we can help with International Removals in Bexhill</h2>
-          <div class="form-wrapper lp-pages">
-            <div class="w-embed w-script">
-              <script defer src="https://www.cognitoforms.com/f/seamless.js" data-key="nWkLD9pR5kWtM52tph2Vpw" data-form="390"></script>
-            </div>
+
+      <aside class="hp-hero-quote-card" aria-label="Quick estimate">
+        <h2 class="hpqq-title">Get an instant estimate</h2>
+        <p class="hpqq-hint">Pick your home size, add the round-trip miles &mdash; we&rsquo;ll show a figure in real time.</p>
+
+        <div class="hpqq-section">
+          <span class="hpqq-label">Home size</span>
+          <div class="hpqq-beds" role="radiogroup" aria-label="Home size">
+            <button type="button" class="hpqq-bed" data-bed="tiny" data-cuft="300"  aria-pressed="false">Tiny</button>
+            <button type="button" class="hpqq-bed" data-bed="1bed" data-cuft="500"  aria-pressed="false">1-bed</button>
+            <button type="button" class="hpqq-bed" data-bed="2bed" data-cuft="800"  aria-pressed="false">2-bed</button>
+            <button type="button" class="hpqq-bed is-active" data-bed="3bed" data-cuft="1000" aria-pressed="true">3-bed</button>
+            <button type="button" class="hpqq-bed" data-bed="4bed" data-cuft="1800" aria-pressed="false">4-bed</button>
+            <button type="button" class="hpqq-bed" data-bed="5bed" data-cuft="2800" aria-pressed="false">5+ bed</button>
           </div>
         </div>
+
+        <div class="hpqq-section">
+          <label class="hpqq-label" for="hpqq-miles">Round-trip miles</label>
+          <input id="hpqq-miles" class="hpqq-input" type="number" min="0" value="0" inputmode="numeric">
+          <span class="hpqq-mini">Depot &rarr; home &rarr; new home &rarr; depot.</span>
+        </div>
+
+        <div class="hpqq-result" role="status" aria-live="polite">
+          <span class="hpqq-result-label">Estimate</span>
+          <div class="hpqq-result-prices">
+            <span class="hpqq-net">&pound;<span id="hpqq-net-amt">&mdash;</span></span>
+            <span class="hpqq-gross">&pound;<span id="hpqq-gross-amt">&mdash;</span> <em>inc. VAT</em></span>
+          </div>
+        </div>
+
+        <a href="../resources/storage-calculator.html?bed=3bed&amp;miles=0" id="hpqq-cta" class="hpqq-cta">Refine &amp; send quote &rarr;</a>
+
+        <p class="hpqq-foot">Indicative figure. Final quote after free survey &mdash; pad-wrap, packing materials, access &amp; antiques may adjust the price.</p>
+      </aside>
+          </div>
       </div>
     </div>
   </div>
@@ -2311,5 +2342,7 @@ document.addEventListener("DOMContentLoaded", function() {
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.59l2.2-2.2a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1Z"/></svg>
   <span class="fab-call-label">Call Now</span>
 </a>
+  <script defer src="../js/hero-quote-card.js?v=20260523"></script>
+
 </body>
 </html>

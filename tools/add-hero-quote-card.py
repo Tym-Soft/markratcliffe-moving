@@ -88,6 +88,23 @@ NP_HERO_INNER_CLOSE_RE = re.compile(
     re.IGNORECASE | re.DOTALL
 )
 
+# Alternative hero pattern (areas-covered + man-and-van pages):
+#   <div class="hp-header inner ...">
+#     <div class="_1200-wrapper">
+#       <div class="lp-hero-flex">
+#         <div class="lp-hero-cell">...title+copy...</div>
+#         <div class="lp-hero-cell">
+#           <h2>How we can help...</h2>
+#           <div class="form-wrapper..."><script src="cognitoforms..."></script></div>
+#         </div>
+#       </div>
+#   ...
+# We swap the second cell's content for the quick-quote card.
+LP_SECOND_CELL_RE = re.compile(
+    r'<div class="lp-hero-cell">\s*<h2[^>]*>[^<]*</h2>\s*<div class="form-wrapper[^"]*">\s*<div class="w-embed[^"]*">\s*<script[^>]*cognitoforms[^>]*></script>\s*</div>\s*</div>\s*</div>',
+    re.IGNORECASE | re.DOTALL
+)
+
 CSS_LINK_TOKEN = 'hero-quote-card.css'
 JS_SRC_TOKEN = 'hero-quote-card.js'
 
@@ -166,8 +183,10 @@ def process_file(path: Path):
     except Exception as e:
         return False, f'read error: {e}'
 
-    if '<header class="np-hero"' not in html and '<header class=\'np-hero\'' not in html:
-        return False, 'no np-hero'
+    has_np_hero = '<header class="np-hero"' in html or "<header class='np-hero'" in html
+    has_lp_flex = 'class="lp-hero-flex"' in html and 'cognitoforms' in html.lower()
+    if not has_np_hero and not has_lp_flex:
+        return False, 'no hero pattern recognised'
 
     if already_done(html):
         return False, 'already done'
@@ -177,9 +196,18 @@ def process_file(path: Path):
     css_href = f'{prefix}css/hero-quote-card.css'
     js_src = f'{prefix}js/hero-quote-card.js'
 
-    new_html = inject_card(html, calc_url)
-    if new_html == html:
-        return False, 'card injection failed (np-hero markup unexpected)'
+    new_html = html
+    if has_np_hero:
+        new_html = inject_card(new_html, calc_url)
+        if new_html == html:
+            return False, 'card injection failed (np-hero markup unexpected)'
+    elif has_lp_flex:
+        # Build the card wrapped in lp-hero-cell so it sits in the existing flex layout.
+        card_for_cell = '<div class="lp-hero-cell">\n' + QUOTE_CARD_HTML.format(calc_url=calc_url) + '          </div>'
+        new_html, n = LP_SECOND_CELL_RE.subn(card_for_cell, new_html, count=1)
+        if n == 0:
+            return False, 'lp-hero-flex: second cell not matched'
+
     new_html = inject_css_link(new_html, css_href)
     new_html = inject_js_script(new_html, js_src)
 
