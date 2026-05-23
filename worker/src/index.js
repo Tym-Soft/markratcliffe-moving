@@ -110,27 +110,33 @@ async function handleEmail(body, env, cors) {
       ? renderCustomerContact({ name, email, phone, message: summary })
       : renderCustomerEmail({ name, email, phone, summary, hasPdf: attachments.list.length > 0 });
 
-    const officeResult = await sendEmail(env, {
-      to: env.OFFICE_EMAIL,
-      replyTo: email,
-      subject,
-      html: officeHtml,
-      attachments: attachments.list,
-    });
-    if (!officeResult.ok) {
-      return json({ ok: false, error: 'Could not send message — please call ' + BRAND.phone + '.', detail: officeResult.error }, 502, cors);
-    }
-
     const customerSubject = formType === 'contact'
       ? 'We\'ve received your message — ' + BRAND.shortName
       : 'Your quote request — ' + BRAND.shortName;
-    const customerResult = await sendEmail(env, {
-      to: email,
-      replyTo: env.OFFICE_EMAIL,
-      subject: customerSubject,
-      html: customerHtml,
-      attachments: attachments.list,
-    });
+
+    // Send both emails in parallel — the customer no longer has to wait
+    // for the office send to complete before their own kicks off. Saves
+    // ~0.5-1.5s of perceived latency depending on Resend response times.
+    const [officeResult, customerResult] = await Promise.all([
+      sendEmail(env, {
+        to: env.OFFICE_EMAIL,
+        replyTo: email,
+        subject,
+        html: officeHtml,
+        attachments: attachments.list,
+      }),
+      sendEmail(env, {
+        to: email,
+        replyTo: env.OFFICE_EMAIL,
+        subject: customerSubject,
+        html: customerHtml,
+        attachments: attachments.list,
+      }),
+    ]);
+
+    if (!officeResult.ok) {
+      return json({ ok: false, error: 'Could not send message — please call ' + BRAND.phone + '.', detail: officeResult.error, customerEmailed: customerResult.ok }, 502, cors);
+    }
 
     return json({ ok: true, customerEmailed: customerResult.ok }, 200, cors);
 }
