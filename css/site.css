@@ -4421,25 +4421,34 @@ margin: 0;
   text-transform: uppercase;
   color: #C8A876;
 }
-.qc-distance-house,
-.qc-distance-address {
-  padding: 0.65rem 0.8rem;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.18);
+.qc-num-distance input.qc-distance-house,
+.qc-num-distance input.qc-distance-address {
+  padding: 0.7rem 0.85rem;
+  border-radius: 7px;
+  border: 1px solid rgba(255,255,255,0.22);
   background: #fff;
-  color: #222;
-  font: inherit;
+  color: #1a1a1a;
+  font-family: "Inter", Arial, sans-serif;
   font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
   width: 100%;
   box-sizing: border-box;
+  height: 44px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.qc-distance-house:focus,
-.qc-distance-address:focus {
-  outline: 2px solid #C8A876;
-  outline-offset: -1px;
+.qc-num-distance input.qc-distance-house:focus,
+.qc-num-distance input.qc-distance-address:focus {
+  outline: none;
+  border-color: #C8A876;
+  box-shadow: 0 0 0 2px rgba(200,168,118,0.35);
 }
-.qc-distance-house::placeholder,
-.qc-distance-address::placeholder { color: #8a8a8a; }
+.qc-num-distance input.qc-distance-house::placeholder,
+.qc-num-distance input.qc-distance-address::placeholder {
+  color: #9a9a9a;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
 .qc-distance-calc-btn {
   background: #C8A876;
   color: #3a226d;
