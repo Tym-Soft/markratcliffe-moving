@@ -74,6 +74,20 @@
   display: none;
 }
 
+/* lp-hero-cell pages (areas-covered + man-and-van) have a purple
+   background applied to every .lp-hero-cell with !important. When our
+   quote card is inside one of those cells we don't want the purple
+   frame around it — flatten the wrapper so the white card stands alone. */
+.lp-hero-cell:has(.hp-hero-quote-card) {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
 /* ---- Quote card itself (white card with purple/gold accents) ---- */
 .hp-hero-quote-card {
   background: rgba(255,255,255,0.96);
