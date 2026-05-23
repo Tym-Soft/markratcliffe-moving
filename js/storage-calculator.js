@@ -1753,55 +1753,108 @@
     var vat = subtotal * VAT_RATE;
     var gross = subtotal + vat;
 
-    ensureSpace(60);
+    // Label/value columns — generous so 12pt bold TOTAL has breathing room.
+    var TOT_LABEL_X = PW - MX - 220;
+    var TOT_VALUE_X = PW - MX;
+
+    ensureSpace(72);
     stroke(GOLD_LIGHT); doc.setLineWidth(0.5);
     doc.line(MX + (PW - 2 * MX) * 0.45, y, PW - MX, y);
+    y += 12;
+
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+    rgb(INK_SOFT);
+    doc.text('Subtotal (net)', TOT_LABEL_X, y);
+    rgb(INK);
+    doc.text(fp(subtotal), TOT_VALUE_X, y, { align: 'right' });
+    y += 15;
+    rgb(INK_SOFT);
+    doc.text('VAT @ ' + (VAT_RATE * 100) + '%', TOT_LABEL_X, y);
+    rgb(INK);
+    doc.text(fp(vat), TOT_VALUE_X, y, { align: 'right' });
     y += 10;
 
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
-    rgb(INK_SOFT);
-    doc.text('Subtotal (net)', PW - MX - 110, y);
-    rgb(INK);
-    doc.text(fp(subtotal).replace('£', ''), PW - MX, y, { align: 'right' });
-    y += 14;
-    rgb(INK_SOFT);
-    doc.text('VAT @ ' + (VAT_RATE * 100) + '%', PW - MX - 110, y);
-    rgb(INK);
-    doc.text(fp(vat).replace('£', ''), PW - MX, y, { align: 'right' });
-    y += 8;
-
     stroke(PURPLE); doc.setLineWidth(1.2);
-    doc.line(MX + (PW - 2 * MX) * 0.45, y, PW - MX, y);
-    y += 14;
+    doc.line(TOT_LABEL_X, y, PW - MX, y);
+    y += 16;
 
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
     rgb(PURPLE);
-    doc.text('TOTAL  (inc. VAT)', PW - MX - 110, y);
-    doc.text(fp(gross), PW - MX, y, { align: 'right' });
-    y += 18;
+    doc.text('TOTAL  (inc. VAT)', TOT_LABEL_X, y);
+    doc.text(fp(gross), TOT_VALUE_X, y, { align: 'right' });
+    y += 22;
 
-    // Inventory — only show section if items present
+    // Inventory — 2-column flow. Rooms are placed into whichever column
+    // is currently shorter (greedy bin-pack). When both columns reach
+    // the page bottom we start a fresh page.
     if (data.inventory && data.inventory.rooms && data.inventory.rooms.length > 0) {
       sectionTitle('Inventory  (' + data.inventory.totalItems + ' items  ·  ' + (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft)');
+
+      var COL_GAP = 16;
+      var INV_COL_W = (PW - 2 * MX - COL_GAP) / 2;
+      var col1X = MX;
+      var col2X = MX + INV_COL_W + COL_GAP;
+      var pageBottom = PH - 78;
+      var col1Y = y;
+      var col2Y = y;
+
+      function measureRoom(room) {
+        // Header bar (16) + each item (~11) + bottom gap (8).
+        // Use splitTextToSize to count wrapped lines per item.
+        var itemsHeight = 0;
+        doc.setFontSize(9);
+        for (var jj = 0; jj < room.items.length; jj++) {
+          var label = room.items[jj].qty + ' × ' + room.items[jj].name;
+          var lines = doc.splitTextToSize(label, INV_COL_W - 12);
+          itemsHeight += lines.length * 11;
+        }
+        return 16 + itemsHeight + 8;
+      }
+
+      function drawRoom(room, colX, startY) {
+        var ty = startY;
+        // Room header
+        fill(SURFACE); doc.rect(colX - 4, ty - 10, INV_COL_W + 8, 16, 'F');
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5);
+        rgb(PURPLE); doc.text(room.name, colX, ty + 1);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5);
+        rgb(INK_SOFT); doc.text(room.cuft + ' cu ft', colX + INV_COL_W, ty + 1, { align: 'right' });
+        ty += 14;
+
+        // Items
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9); rgb(INK);
+        for (var jj = 0; jj < room.items.length; jj++) {
+          var label = room.items[jj].qty + ' × ' + room.items[jj].name;
+          var lines = doc.splitTextToSize(label, INV_COL_W - 12);
+          doc.text(lines, colX + 8, ty);
+          ty += 11 * lines.length;
+        }
+        return ty + 6;
+      }
+
       for (var i = 0; i < data.inventory.rooms.length; i++) {
         var room = data.inventory.rooms[i];
-        ensureSpace(26);
-        fill(SURFACE); doc.rect(MX - 4, y - 10, PW - 2 * MX + 8, 17, 'F');
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
-        rgb(PURPLE); doc.text(room.name, MX, y + 2);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
-        rgb(INK_SOFT); doc.text(room.cuft + ' cu ft', PW - MX, y + 2, { align: 'right' });
-        y += 16;
+        var h = measureRoom(room);
 
-        doc.setFontSize(9.5); rgb(INK);
-        for (var j = 0; j < room.items.length; j++) {
-          var it = room.items[j];
-          ensureSpace(12);
-          doc.text(it.qty + ' × ' + it.name, MX + 10, y);
-          y += 12;
+        // If neither column has room for this whole room, finish the page.
+        if (Math.min(col1Y, col2Y) + h > pageBottom) {
+          pageFooter();
+          doc.addPage();
+          pageHeader();
+          col1Y = y;
+          col2Y = y;
         }
-        y += 6;
+
+        // Place into the shorter column (greedy balance).
+        var useCol1 = col1Y <= col2Y;
+        if (useCol1) {
+          col1Y = drawRoom(room, col1X, col1Y);
+        } else {
+          col2Y = drawRoom(room, col2X, col2Y);
+        }
       }
+
+      y = Math.max(col1Y, col2Y) + 4;
     }
 
     // Customer notes
