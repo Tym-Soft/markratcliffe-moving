@@ -8733,3 +8733,7 @@ border-color: #fff;
     #A51931 83.333%, #A51931 100%
   );
 }
+
+/* Hide the AREAS COVERED top-nav dropdown (per user request).
+   Single point of revert: delete this rule to restore the menu item. */
+.nav-menu .mega-areas { display: none !important; }
