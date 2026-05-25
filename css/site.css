@@ -8786,3 +8786,26 @@ border-color: #fff;
 .np-section.np-section-dark a:hover {
   text-decoration-color: #ffffff;
 }
+
+/* ============================================================
+   Refined border for white/off-white cards (.np-card)
+   ============================================================
+   Cards previously used a near-invisible rgba(19,7,98,0.08) border.
+   This upgrades the look with:
+     - a visible thin navy outline (0.18 opacity)
+     - a 3 px bronze (#C8A876) top accent — brand cue
+     - a softer, deeper drop shadow for depth
+   Hover slightly intensifies all three.                          */
+.np-card {
+  border: 1px solid rgba(19, 7, 98, 0.18) !important;
+  border-top: 3px solid #C8A876 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 18px -10px rgba(19, 7, 98, 0.18);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.np-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(19, 7, 98, 0.30) !important;
+  border-top-color: #C8A876 !important;
+  box-shadow: 0 14px 36px -14px rgba(19, 7, 98, 0.32);
+}
