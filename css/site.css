@@ -8788,24 +8788,36 @@ border-color: #fff;
 }
 
 /* ============================================================
-   Refined border for white/off-white cards (.np-card)
+   Refined border for ALL white/off-white cards
    ============================================================
-   Cards previously used a near-invisible rgba(19,7,98,0.08) border.
-   This upgrades the look with:
-     - a visible thin navy outline (0.18 opacity)
-     - a 3 px bronze (#C8A876) top accent — brand cue
-     - a softer, deeper drop shadow for depth
-   Hover slightly intensifies all three.                          */
-.np-card {
-  border: 1px solid rgba(19, 7, 98, 0.18) !important;
-  border-top: 3px solid #C8A876 !important;
+   Targets every card class with a light background:
+     .np-card     - services / areas / resources / FAQs grids
+     .np-blog-card - blog-index cards on np pages
+     .hp-usp      - home-page "Six reasons" grid
+     .hp-blog-card - home-page blog strip
+   Treatment:
+     - thicker, more visible navy outline (rgba 0.22)
+     - 4 px bronze (#C8A876) top accent — brand cue
+     - soft drop shadow for depth
+   Hover intensifies all three.                                   */
+.np-card,
+.np-blog-card,
+.hp-usp,
+.hp-blog-card {
+  border: 1.5px solid rgba(19, 7, 98, 0.22) !important;
+  border-top: 4px solid #C8A876 !important;
   border-radius: 12px !important;
-  box-shadow: 0 6px 18px -10px rgba(19, 7, 98, 0.18);
+  box-shadow: 0 8px 22px -12px rgba(19, 7, 98, 0.22) !important;
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
-.np-card:hover {
+.np-card:hover,
+.np-blog-card:hover,
+.hp-blog-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(19, 7, 98, 0.30) !important;
+  border-color: rgba(19, 7, 98, 0.35) !important;
   border-top-color: #C8A876 !important;
-  box-shadow: 0 14px 36px -14px rgba(19, 7, 98, 0.32);
+  box-shadow: 0 16px 38px -16px rgba(19, 7, 98, 0.36) !important;
 }
+/* .hp-usp has a built-in hover that swaps to dark navy bg — keep that
+   behaviour but make sure the bronze top accent stays visible. */
+.hp-usp:hover { border-top-color: #C8A876 !important; }
