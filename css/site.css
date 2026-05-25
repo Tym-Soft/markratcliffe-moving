@@ -8718,3 +8718,18 @@ background: #fff;
 color: #130762;
 border-color: #fff;
 }
+
+/* -------- Thai-flag stripe band above the top nav (UK ↔ Thailand brand cue) -------- */
+.thai-stripe {
+  display: block;
+  width: 100%;
+  height: 12px;
+  background: linear-gradient(
+    to bottom,
+    #A51931 0,      #A51931 16.667%,
+    #F4F5F8 16.667%, #F4F5F8 33.333%,
+    #2D2A4A 33.333%, #2D2A4A 66.667%,
+    #F4F5F8 66.667%, #F4F5F8 83.333%,
+    #A51931 83.333%, #A51931 100%
+  );
+}
