@@ -8737,3 +8737,48 @@ border-color: #fff;
 /* Hide the AREAS COVERED top-nav dropdown (per user request).
    Single point of revert: delete this rule to restore the menu item. */
 .nav-menu .mega-areas { display: none !important; }
+
+/* ============================================================
+   Thai-flag concentric rings around the home-page hero card
+   ============================================================
+   5 stacked box-shadows give 5 nested colour rings (red / white /
+   blue / white / red, inside→outside) following the Thai flag's
+   1:1:2:1:1 proportion. Total frame thickness 12 px to match the
+   header stripe.                                                 */
+.hp-hero-card {
+  border-radius: 14px;
+  box-shadow:
+    0 0 0  2px #A51931,   /* red — innermost ring */
+    0 0 0  4px #F4F5F8,   /* white */
+    0 0 0  8px #2D2A4A,   /* blue (4 px wide for 1:1:2:1:1 ratio) */
+    0 0 0 10px #F4F5F8,   /* white */
+    0 0 0 12px #A51931;   /* red — outermost ring */
+  /* Reserve outer space so the rings don't get clipped by the
+     parent hero or by the right-side Quick-Estimate card. */
+  margin: 12px;
+}
+
+/* ============================================================
+   White links on dark-navy backgrounds (legibility)
+   ============================================================ */
+.hp-hero a,
+.hp-hero-card a,
+.hp-process a,
+.np-hero a,
+.np-hero-card a,
+.np-section.np-cta-band a,
+.np-section.np-cta-block a,
+.np-section.np-section-dark a {
+  color: #ffffff !important;
+  text-decoration-color: rgba(255, 255, 255, 0.55);
+}
+.hp-hero a:hover,
+.hp-hero-card a:hover,
+.hp-process a:hover,
+.np-hero a:hover,
+.np-hero-card a:hover,
+.np-section.np-cta-band a:hover,
+.np-section.np-cta-block a:hover,
+.np-section.np-section-dark a:hover {
+  text-decoration-color: #ffffff;
+}
