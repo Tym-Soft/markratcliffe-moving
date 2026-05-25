@@ -1364,6 +1364,28 @@ def audit():
          f'{len(indexable)} pages: every H1 is concise (≤70 chars)',
          h1_too_long)
 
+    # Rule 43 — llms.txt covers every indexable page. Mirrors Rule 5 for the
+    # Answer.AI llms.txt standard (https://llmstxt.org). Source of truth is
+    # tools/build-llms-txt.py — never hand-edit llms.txt.
+    llms_failures: list[str] = []
+    try:
+        llms_text = open('llms.txt', encoding='utf-8').read()
+    except OSError:
+        llms_failures.append('llms.txt missing at site root — run: python3 tools/build-llms-txt.py')
+        llms_text = ''
+    llms_urls = set(re.findall(r'\((https?://[^)\s]+)\)', llms_text))
+    expected_urls = {expected_loc(p) for p in indexable}
+    for p in indexable:
+        loc = expected_loc(p)
+        if loc not in llms_urls:
+            llms_failures.append(f'missing from llms.txt: {p} ({loc}) — run: python3 tools/build-llms-txt.py')
+    for url in llms_urls:
+        if url not in expected_urls and url.startswith(BASE_URL):
+            llms_failures.append(f'orphan link in llms.txt: {url} — run: python3 tools/build-llms-txt.py')
+    rule('Rule 43 — llms.txt covers every indexable page',
+         f'{len(indexable)} indexable pages all listed in llms.txt',
+         llms_failures)
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -1371,10 +1393,12 @@ def audit():
         print('    python3 tools/build-blog-index.py')
         print('To regenerate the sitemap after adding/removing pages:')
         print('    python3 tools/build-sitemap.py')
+        print('To regenerate llms.txt after adding/removing pages:')
+        print('    python3 tools/build-llms-txt.py')
         print('To re-inject canonical schema.org JSON-LD on every page:')
         print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all forty-two content rules satisfied.')
+    print('PASS — all forty-three content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
