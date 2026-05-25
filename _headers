@@ -21,3 +21,11 @@
 # HTML pages must always revalidate so content updates show up quickly.
 /*.html
   Cache-Control: public, max-age=300, must-revalidate
+
+# Downloadable contract/insurance PDFs — companions to the HTML T&Cs page.
+# Keep them downloadable but out of the index so the HTML page is the
+# single canonical SEO target (fixes GSC "Duplicate without user-selected
+# canonical" on /documents/*.pdf).
+/documents/*
+  X-Robots-Tag: noindex, follow
+  Cache-Control: public, max-age=2592000
