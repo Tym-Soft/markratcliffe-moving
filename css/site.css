@@ -8745,7 +8745,7 @@ border-color: #fff;
    blue / white / red, inside→outside) following the Thai flag's
    1:1:2:1:1 proportion. Total frame thickness 12 px to match the
    header stripe.                                                 */
-.hp-hero-card {
+.hp-hero-inner {
   border-radius: 14px;
   box-shadow:
     0 0 0  2px #A51931,   /* red — innermost ring */
@@ -8753,9 +8753,9 @@ border-color: #fff;
     0 0 0  8px #2D2A4A,   /* blue (4 px wide for 1:1:2:1:1 ratio) */
     0 0 0 10px #F4F5F8,   /* white */
     0 0 0 12px #A51931;   /* red — outermost ring */
-  /* Reserve outer space so the rings don't get clipped by the
-     parent hero or by the right-side Quick-Estimate card. */
-  margin: 12px;
+  /* Reserve outer space so the rings aren't clipped by the
+     containing .hp-hero section padding. */
+  margin: 12px auto;
 }
 
 /* ============================================================
