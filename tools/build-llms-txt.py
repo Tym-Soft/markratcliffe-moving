@@ -115,12 +115,12 @@ def main() -> int:
     lines: list[str] = []
     lines.append('# Mark Ratcliffe Moving & Storage')
     lines.append('')
-    lines.append('> Family-run removals and storage company established 1982, '
-                 'serving Eastbourne, Brighton, Hastings, Worthing and the '
-                 'wider Sussex / Surrey / Kent area. Full-service house and '
-                 'office moves, international (UK ↔ Thailand) removals, '
-                 'packing, prestige steel storage rooms, antique and fine-art '
-                 'handling.')
+    lines.append('> Independent Sussex removals and storage company '
+                 'established 2017, serving Eastbourne, Brighton, Hastings, '
+                 'Worthing and the wider Sussex / Surrey / Kent area. '
+                 'Full-service house and office moves, international '
+                 '(UK ↔ Thailand) removals, packing, prestige steel storage '
+                 'rooms, antique and fine-art handling. BS 8564 accredited.')
     lines.append('')
     lines.append('This file lists every indexable page on '
                  'https://www.markratcliffemoving.co.uk and is regenerated '

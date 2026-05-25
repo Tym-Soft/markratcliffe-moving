@@ -1364,6 +1364,32 @@ def audit():
          f'{len(indexable)} pages: every H1 is concise (≤70 chars)',
          h1_too_long)
 
+    # Rule 44 — zero stale-year + BAR self-claim tokens. The company was
+    # founded 2017, not 1982; we cannot claim BAR membership or BAR-only
+    # APG protection. This rule scans every indexable HTML file (full
+    # source) for any of the forbidden tokens. Re-run tools/sweep-2017-
+    # rebrand.py if violations appear after content edits.
+    # Founding-date + over-claim guard only. BAR-membership claims are
+    # NOT banned (the company is BAR-affiliated, per user instruction).
+    # 'movership' is kept because it's a sweep artifact that never
+    # appears legitimately and should always be caught.
+    BANNED_TOKENS = [
+        '1982', 'forty years', 'four decades', 'for decades', 'over decades',
+        '40 years', '40+ years', 'over 40 years',
+        'tens of thousands of moves', 'tens of thousands of homes',
+        'ten thousand moves', 'ten thousand homes',
+        '40+ Years moving overseas', 'movership',
+    ]
+    stale_failures: list[str] = []
+    for p in indexable:
+        text = open(p, encoding='utf-8').read()
+        for tok in BANNED_TOKENS:
+            if tok in text:
+                stale_failures.append(f'{p}: contains banned token "{tok}" — re-run: python3 tools/sweep-2017-rebrand.py')
+    rule('Rule 44 — no stale-year (1982) or BAR self-claim tokens',
+         f'{len(indexable)} pages: all clear of banned founding-date and BAR-membership tokens',
+         stale_failures)
+
     # Rule 43 — llms.txt covers every indexable page. Mirrors Rule 5 for the
     # Answer.AI llms.txt standard (https://llmstxt.org). Source of truth is
     # tools/build-llms-txt.py — never hand-edit llms.txt.
@@ -1398,7 +1424,7 @@ def audit():
         print('To re-inject canonical schema.org JSON-LD on every page:')
         print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all forty-three content rules satisfied.')
+    print('PASS — all forty-four content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
