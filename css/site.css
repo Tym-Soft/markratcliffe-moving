@@ -8831,7 +8831,7 @@ border-color: #fff;
 .hp-service-card:not(.hp-service-card-cta),
 .hp-area-region {
   border: 1.5px solid rgba(19, 7, 98, 0.22) !important;
-  border-top: 4px solid #C8A876 !important;
+  border-top: 4px solid #bd2b70 !important;
   border-radius: 12px !important;
   box-shadow: 0 8px 22px -12px rgba(19, 7, 98, 0.22) !important;
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
@@ -8843,7 +8843,7 @@ border-color: #fff;
 .hp-area-region:hover {
   transform: translateY(-2px);
   border-color: rgba(19, 7, 98, 0.35) !important;
-  border-top-color: #C8A876 !important;
+  border-top-color: #bd2b70 !important;
   box-shadow: 0 16px 38px -16px rgba(19, 7, 98, 0.36) !important;
 }
 /* .hp-usp has a built-in hover that swaps to dark navy bg — keep that
