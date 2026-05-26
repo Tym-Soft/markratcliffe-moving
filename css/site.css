@@ -8865,3 +8865,11 @@ border-color: #fff;
   .hp-trust-badge-big { width: 126px; height: 126px; flex-basis: 126px; }
   .hp-trust-block { gap: 0.75rem; }
 }
+
+/* Trust-block left-align modifier. Used where the hero centers its
+   content (default) but the BAR badge + credentials should hug the
+   left edge of the card instead — see About-Us hero. */
+.hp-trust-block-left {
+  align-self: flex-start;
+  margin-right: auto;
+}
