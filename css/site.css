@@ -8957,3 +8957,35 @@ border-color: #fff;
   line-height: 1.7;
   color: #1f1f1f;
 }
+
+/* ============================================================
+   Magenta button colour override (#bd2b70)
+   ============================================================
+   Replaces the bronze (#C8A876) on action buttons with brand
+   magenta. Scoped to button-like elements only — eyebrow accents,
+   top-bar background, callout left-borders, etc. keep using
+   bronze. Hover: slightly darker #a52461. */
+.button,
+.fab-call,
+.fab-quote,
+.mob-con-1,
+.mob-menu-contact a.is-call,
+.mob-menu-contact a.is-quote,
+.qc-distance-calc-btn,
+button.qc-distance-calc-btn {
+  background: #bd2b70 !important;
+  background-color: #bd2b70 !important;
+  border-color: #bd2b70 !important;
+  color: #fff !important;
+}
+.button:hover,
+.fab-call:hover, .fab-call:focus,
+.fab-quote:hover, .fab-quote:focus,
+.mob-con-1:hover,
+.mob-menu-contact a.is-call:hover,
+.mob-menu-contact a.is-quote:hover,
+.qc-distance-calc-btn:hover {
+  background: #a52461 !important;
+  background-color: #a52461 !important;
+  border-color: #a52461 !important;
+}
