@@ -8859,6 +8859,10 @@ border-color: #fff;
   gap: 0.25rem;
 }
 .hp-trust-block .hp-trust-strip .hp-trust-sep { display: none; }
+/* Each credential stays on its own single line — never wraps mid-phrase
+   ("APG protected deposits" used to break to "APG protected / deposits"
+   on narrower viewports). */
+.hp-trust-block .hp-trust-strip > span { white-space: nowrap; }
 @media (max-width: 540px) {
   .hp-trust-badge-big { width: 126px; height: 126px; flex-basis: 126px; }
   .hp-trust-block { gap: 0.75rem; }
