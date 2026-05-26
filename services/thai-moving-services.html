@@ -2235,7 +2235,7 @@ border-color: #fff;
   </section>
 
   <!-- Brochure -->
-  <section class="th-section th-section-light">
+  <section class="th-section th-section-light th-section-center">
     <div class="th-wide">
       <p class="th-eyebrow-dark">Information</p>
       <h2>Brochure.</h2>
@@ -2691,8 +2691,34 @@ border-color: #fff;
        bookend; subsequent paragraphs unchanged. */
     .th-prose-lead { font-weight: 500 !important; color: #130762 !important; }
 
-    /* Brochure section heading — drop the trailing period for cleaner read,
-       handled in HTML if needed. */
+    /* Center-modifier for section headers (e.g. the Brochure block).
+       Eyebrow gets symmetric bars (matching .th-case-header), H2 and
+       any body text centre-align. Tightens vertical spacing too. */
+    .th-section-center { text-align: center; padding: 2.5rem 1.5rem; }
+    .th-section-center .th-eyebrow,
+    .th-section-center .th-eyebrow-dark { justify-content: center; }
+    .th-section-center .th-eyebrow::before,
+    .th-section-center .th-eyebrow-dark::before {
+      content: ''; display: inline-block;
+      width: 48px; height: 2px;
+      background: #C8A876; border-radius: 2px; flex: 0 0 48px;
+    }
+    .th-section-center .th-eyebrow::before { background: #FFC107; }
+    .th-section-center h2 { margin-top: 0.4rem; }
+    .th-section-center p {
+      max-width: 640px; margin-left: auto; margin-right: auto;
+    }
+
+    /* Tighten vertical whitespace around all section headers.
+       Eyebrow/H2/sub all sit closer together for a more refined cadence.*/
+    .th-eyebrow,
+    .th-eyebrow-dark { margin: 0 0 0.35rem !important; }
+    .th-section h2 { margin: 0.2rem 0 0.75rem !important; }
+    .th-case-header { margin-bottom: 1.6rem !important; }
+    .th-case-sub { margin-top: 0.3rem !important; max-width: 720px; }
+    .th-section { padding: 3rem 1.5rem; }
+    .th-process-strip { padding: 3rem 1.5rem; }
+    .th-process-strip h2 { margin-bottom: 1.6rem !important; }
 
     /* ====================================================================
        FULL GALLERY — Thai moves photo slider
