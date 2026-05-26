@@ -2513,22 +2513,30 @@ border-color: #fff;
        same <style> block.
        ==================================================================== */
 
-    /* Section H2s — small bronze accent bar above the heading for editorial
-       polish. Centred where the section is centred, left-aligned otherwise. */
-    .th-section h2 { position: relative; }
-    .th-section h2::before,
-    .th-process-strip > .th-narrow h2::before,
-    .th-case-header h2::before {
-      content: '';
-      display: block;
-      width: 48px;
-      height: 3px;
-      background: #C8A876;
-      margin: 0 0 0.9rem;
-      border-radius: 2px;
+    /* Eyebrow + bronze accent bar INLINE on the same row, then the H2
+       below. Replaces the previous treatment where the bar sat on its
+       own line between the eyebrow text and the heading. */
+    .th-eyebrow,
+    .th-eyebrow-dark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
     }
-    .th-process-strip > .th-narrow h2::before,
-    .th-case-header h2::before { margin-left: auto; margin-right: auto; }
+    .th-eyebrow::after,
+    .th-eyebrow-dark::after {
+      content: '';
+      display: inline-block;
+      width: 48px;
+      height: 2px;
+      background: #C8A876;
+      border-radius: 2px;
+      flex: 0 0 48px;
+    }
+    .th-eyebrow::after { background: #FFC107; }
+    /* In sections that centre their content, wrap the eyebrow in the
+       centred flow so its inline bar stays alongside the text. */
+    .th-process-strip > .th-narrow .th-eyebrow,
+    .th-case-header .th-eyebrow-dark { justify-content: center; }
 
     /* Step cards (01-04) and the trust aside get the sitewide refined-card
        treatment — visible navy outline + 4 px bronze top accent + shadow,
