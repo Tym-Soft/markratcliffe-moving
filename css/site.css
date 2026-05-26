@@ -8831,3 +8831,15 @@ border-color: #fff;
 /* .hp-usp has a built-in hover that swaps to dark navy bg — keep that
    behaviour but make sure the bronze top accent stays visible. */
 .hp-usp:hover { border-top-color: #C8A876 !important; }
+
+/* Hero trust-strip BAR badge — small inline logo beside "BAR member".
+   Source asset is 200×199 px; rendered ~24 px for crisp retina display
+   without bloat. vertical-align middle keeps the badge centred with
+   the adjacent text on its baseline. */
+.hp-trust-bar { display: inline-flex; align-items: center; gap: 0.4rem; }
+.hp-trust-badge {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex: 0 0 24px;
+}
