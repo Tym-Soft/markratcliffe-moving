@@ -7904,8 +7904,8 @@ text-decoration: none;
   text-decoration-color: #fff !important;
 }
 
-/* Final-CTA buttons: white pill at rest (high contrast against the
-   bronze gradient background), flip to brand navy on hover/focus. */
+/* Final-CTA buttons: white pill at rest, flip to brand MAGENTA on
+   hover/focus (matches the sitewide magenta action accent). */
 .hp-cta-final .hp-btn-primary,
 .hp-cta-final .hp-btn-secondary-dark {
   background: #fff !important;
@@ -7917,9 +7917,9 @@ text-decoration: none;
 .hp-cta-final .hp-btn-secondary-dark:hover,
 .hp-cta-final .hp-btn-primary:focus-visible,
 .hp-cta-final .hp-btn-secondary-dark:focus-visible {
-  background: var(--brand-navy) !important;
+  background: #bd2b70 !important;
   color: #fff !important;
-  border-color: var(--brand-navy) !important;
+  border-color: #bd2b70 !important;
 }
 .hp-usp-grid { grid-template-columns: repeat(3, 1fr) !important; }
 .hp-services-grid { grid-template-columns: repeat(4, 1fr) !important; }
@@ -9001,4 +9001,75 @@ button.qc-distance-calc-btn {
   background: #a52461 !important;
   background-color: #a52461 !important;
   border-color: #a52461 !important;
+}
+
+/* ============================================================
+   Magenta accent rollout (#bd2b70) — selection states + hovers
+   ============================================================
+   Pushes the magenta brand colour into:
+     • storage-calculator selection cards (mode + bed) when active
+     • "Send these figures for a quote" CTA (.hpqq-cta)
+     • main nav menu hover + active state (was bronze)
+     • footer link hover state
+   Existing magenta rules (FAB, .button, mob CTAs, .fab-quote)
+   stay in place. */
+
+/* Storage calculator: mode + bed cards turn magenta when checked */
+.qc-mode-card:has(input:checked),
+.qc-bed-card:has(input:checked) {
+  background: #bd2b70 !important;
+  border-color: #bd2b70 !important;
+  box-shadow: inset 0 2px 0 #bd2b70 !important;
+  color: #fff !important;
+}
+.qc-mode-card:focus-within,
+.qc-bed-card:focus-within {
+  outline-color: #bd2b70 !important;
+}
+.qc-bed-card:has(input:checked) .qc-bed-icon,
+.qc-mode-card:has(input:checked) .qc-mode-icon {
+  color: #fff !important;
+}
+
+/* "Send these figures for a quote" CTA in the storage calculator */
+.hpqq-cta {
+  background: #bd2b70 !important;
+  color: #fff !important;
+  border-color: #bd2b70 !important;
+}
+.hpqq-cta:hover,
+.hpqq-cta:focus-visible {
+  background: #a52461 !important;
+  border-color: #a52461 !important;
+  color: #fff !important;
+}
+
+/* Top nav menu: hover + active wording → magenta (was bronze) */
+.navbar .navlink.w-nav-link:hover,
+.navbar .navlink.w-nav-link.w--current,
+.navbar .navlink.is-active,
+.navbar .navlink:hover,
+.navlink:hover,
+.navlink.w--current {
+  color: #bd2b70 !important;
+}
+.navbar .navlink.is-active::after {
+  background: #bd2b70 !important;
+}
+
+/* Dropdown navlinks: hover + active → magenta */
+.dropdown-navlink:hover,
+.dropdown-navlink.w--current,
+.navbar .dropdown-list a.is-active,
+.navbar .mega-menu a.is-active,
+.navbar .mega-col a.is-active {
+  color: #bd2b70 !important;
+}
+
+/* Footer links: hover → magenta */
+.mr-footer a:hover,
+.mr-footer-bottom a:hover,
+.ftr-link:hover,
+.ftr-link.is-active {
+  color: #bd2b70 !important;
 }
