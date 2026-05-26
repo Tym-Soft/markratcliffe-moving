@@ -43,7 +43,7 @@ CANONICAL_ORG: dict = {
     "url": "https://www.markratcliffemoving.co.uk/",
     "logo": {
         "@type": "ImageObject",
-        "url": "https://www.markratcliffemoving.co.uk/images/Mark-Ratcliffe.svg",
+        "url": "https://www.markratcliffemoving.co.uk/images/mark-ratcliffe-moving-and-storage-logo.webp",
         "width": 180,
         "height": 60
     },

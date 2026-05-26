@@ -8526,16 +8526,14 @@ color: #C8A876;
 margin-bottom: 0.65rem;
 }
 .np-hero .np-hero-sub,
-.np-hero-sub {
+.np-hero-sub,
+.hp-hero-sub {
 font-family: "Inter", sans-serif;
-font-size: 1.15rem;
-line-height: 1.55;
+font-size: clamp(1.05rem, 1.4vw, 1.18rem);
+line-height: 1.6;
 color: rgba(255,255,255,0.92);
 max-width: 640px;
 margin: 0.75rem 0 1.5rem;
-}
-@media (max-width: 600px) {
-.np-hero-sub { font-size: 1.02rem; line-height: 1.5; }
 }
 .np-split {
 display: grid;

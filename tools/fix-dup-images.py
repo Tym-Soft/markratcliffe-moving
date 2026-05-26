@@ -31,7 +31,7 @@ EXCLUDE_FROM_REPLACE = {
     'uk-thai-movers-group-logo.webp',
     'fhio-accredited-member-logo.webp',
     'acrobat_pdf.svg',
-    'Mark-Ratcliffe.svg',
+    'mark-ratcliffe-moving-and-storage-logo.webp',
 }
 
 REPLACEMENTS = {
