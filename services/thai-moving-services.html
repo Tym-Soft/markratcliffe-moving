@@ -2288,11 +2288,81 @@ border-color: #fff;
     </div>
   </section>
 
-  <!-- Full Gallery placeholder -->
-  <section class="th-section th-section-light">
-    <div class="th-narrow">
-      <p class="th-eyebrow-dark">Photo collection</p>
-      <h2>Full Gallery.</h2>
+  <!-- =================================================================
+       FULL GALLERY — Thai moves photo slider
+       =================================================================
+       Each <figure class="th-slide"> is one slide. To add a new photo
+       to the gallery, drop another <figure class="th-slide"> block
+       anywhere inside .th-slider-track with the standard structure:
+         <figure class="th-slide">
+           <img src="../images/<filename>.webp"
+                alt="<descriptive alt>"
+                loading="lazy" width="1600" height="1200">
+         </figure>
+       The slider auto-scales (1-up mobile / 2-up tablet / 3-up desktop)
+       and prev/next buttons work out of the box. -->
+  <section class="th-section th-section-light th-gallery-section">
+    <div class="th-wide">
+      <header class="th-case-header">
+        <p class="th-eyebrow-dark">Photo collection</p>
+        <h2>Full Gallery.</h2>
+        <p class="th-case-sub">A selection of recent UK ↔ Thailand moves &mdash; from Cotswold collections to Bangkok deliveries.</p>
+      </header>
+
+      <div class="th-slider" data-slider>
+        <button class="th-slider-btn th-slider-prev" type="button" aria-label="Previous photo">‹</button>
+        <button class="th-slider-btn th-slider-next" type="button" aria-label="Next photo">›</button>
+        <div class="th-slider-track" data-slider-track tabindex="0" aria-label="Photo gallery, scrollable">
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-uk-thai-movers-branded-van.webp" alt="Mark Ratcliffe UK-Thai Movers branded van" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-thai-themed-truck-mural-rear.webp" alt="Mark Ratcliffe truck with Thai-themed mural on the rear" loading="lazy" width="1600" height="2158">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-loading-shipping-thailand-international.webp" alt="Loading a Thailand-bound international shipment in the UK" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-loading-thailand-shipping-container.webp" alt="Loading a Thailand shipping container" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-cotswold-collection-thailand-shipping.webp" alt="Cotswold collection for a Thailand shipping job" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-croydon-to-thailand-shipment-collection.webp" alt="Croydon shipment collection bound for Thailand" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-bracknell-to-bangkok-international-removal.webp" alt="Bracknell-to-Bangkok international removal" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-cheshire-to-downtown-bangkok-thailand.webp" alt="Cheshire to downtown Bangkok household move" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-shipping-thailand-international-removal.webp" alt="Mark Ratcliffe shipping a household to Thailand" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-shipping-bangkok-thailand-removals.webp" alt="Bangkok delivery shipping with Mark Ratcliffe" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-customer-loaded-boxes-hua-hin-thailand.webp" alt="Customer-loaded boxes bound for Hua Hin, Thailand" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-800-cuft-uplift-samut-prakan-thailand.webp" alt="800 cubic-foot uplift bound for Samut Prakan, Thailand" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-shipping-hua-hin-thailand-loading-uk.webp" alt="Hua Hin Thailand shipment loading in the UK" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-thai-shipment-delivery-thailand.webp" alt="Mark Ratcliffe Thai shipment delivery in Thailand" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-thailand-groupage-shared-container.webp" alt="Mark Ratcliffe Thailand groupage shared container" loading="lazy" width="1600" height="1200">
+          </figure>
+          <figure class="th-slide">
+            <img src="../images/mark-ratcliffe-wimbledon-thai-festival-shipping.webp" alt="Wimbledon Thai festival shipping with Mark Ratcliffe" loading="lazy" width="1600" height="1200">
+          </figure>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2601,7 +2671,113 @@ border-color: #fff;
 
     /* Brochure section heading — drop the trailing period for cleaner read,
        handled in HTML if needed. */
+
+    /* ====================================================================
+       FULL GALLERY — Thai moves photo slider
+       ====================================================================
+       Pure CSS scroll-snap carousel: native swipe/scroll on touch, plus
+       small JS for the prev/next buttons. 3-up desktop, 2-up tablet,
+       1-up mobile. Slides crop to a uniform 4:3 via object-fit:cover. */
+    .th-gallery-section .th-slider {
+      position: relative;
+      margin-top: 2.5rem;
+    }
+    .th-slider-track {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 6px 6px;            /* room so the slide box-shadow isn't clipped */
+      scrollbar-width: none;       /* Firefox */
+      -ms-overflow-style: none;    /* Edge / IE */
+    }
+    .th-slider-track::-webkit-scrollbar { display: none; }
+    .th-slide {
+      flex: 0 0 calc((100% - 2rem) / 3);
+      scroll-snap-align: start;
+      margin: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      box-shadow: 0 8px 22px -12px rgba(19, 7, 98, 0.25);
+      transition: transform .25s ease, box-shadow .25s ease;
+      background: #f3eee5;
+    }
+    .th-slide:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 38px -16px rgba(19, 7, 98, 0.36);
+    }
+    .th-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    @media (max-width: 1000px) {
+      .th-slide { flex-basis: calc((100% - 1rem) / 2); }
+    }
+    @media (max-width: 600px) {
+      .th-slide { flex-basis: 100%; }
+    }
+    /* Prev / next buttons */
+    .th-slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px; height: 44px;
+      border: none; border-radius: 50%;
+      background: #130762;
+      color: #fff;
+      font-size: 1.8rem; line-height: 1; font-weight: 300;
+      cursor: pointer;
+      z-index: 2;
+      box-shadow: 0 8px 22px -10px rgba(19, 7, 98, 0.55);
+      transition: background .2s ease, transform .2s ease;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0;
+    }
+    .th-slider-btn:hover {
+      background: #C8A876;
+      transform: translateY(-50%) scale(1.06);
+    }
+    .th-slider-btn:focus-visible {
+      outline: 3px solid #C8A876;
+      outline-offset: 2px;
+    }
+    .th-slider-prev { left: -14px; }
+    .th-slider-next { right: -14px; }
+    @media (max-width: 700px) {
+      .th-slider-prev { left: 4px; }
+      .th-slider-next { right: 4px; }
+    }
   </style>
+
+  <script>
+    // Tiny vanilla-JS slider controller: prev/next buttons scroll the
+    // track by exactly one slide width (plus the gap) for smooth paging.
+    (function () {
+      document.querySelectorAll('[data-slider]').forEach(function (slider) {
+        var track = slider.querySelector('[data-slider-track]');
+        if (!track) return;
+        function stepPx() {
+          var s = track.querySelector('.th-slide');
+          if (!s) return 320;
+          var style = getComputedStyle(track);
+          var gap = parseFloat(style.columnGap || style.gap || '0') || 0;
+          return s.getBoundingClientRect().width + gap;
+        }
+        var prev = slider.querySelector('.th-slider-prev');
+        var next = slider.querySelector('.th-slider-next');
+        if (prev) prev.addEventListener('click', function () {
+          track.scrollBy({ left: -stepPx(), behavior: 'smooth' });
+        });
+        if (next) next.addEventListener('click', function () {
+          track.scrollBy({ left: stepPx(), behavior: 'smooth' });
+        });
+      });
+    })();
+  </script>
 
   <section class="np-section">
     <div class="np-inner">
