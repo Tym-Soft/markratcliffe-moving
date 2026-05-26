@@ -9169,3 +9169,21 @@ a.top-bar-quote:hover {
   border-color: #bd2b70 !important;
   color: #fff !important;
 }
+
+/* Nav menu wording at REST → magenta (matches site brand accent).
+   Hover/active stay magenta too — the colour just darkens slightly
+   on interaction so the state change is still felt. */
+.navbar .navlink.w-nav-link,
+.navbar .nav-menu .w-nav-link,
+.navbar .dropdown.w-dropdown,
+.navbar .dropdown-toggle.w-dropdown-toggle,
+.navbar .dropdown-toggle.w-dropdown-toggle > div,
+.navbar .w-icon-dropdown-toggle {
+  color: #bd2b70 !important;
+}
+.navbar .navlink.w-nav-link:hover,
+.navbar .nav-menu .w-nav-link:hover,
+.navbar .dropdown-toggle.w-dropdown-toggle:hover,
+.navbar .dropdown-toggle.w-dropdown-toggle:hover > div {
+  color: #a52461 !important;
+}
