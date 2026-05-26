@@ -6,11 +6,11 @@
 	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#FBFFFF;}
 	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#AA9312;}
 	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#E30B94;}
-	.st3{fill-rule:evenodd;clip-rule:evenodd;fill:#2F0163;}
+	.st3{fill-rule:evenodd;clip-rule:evenodd;fill:#130762;}
 	.st4{fill:#DDDDDD;}
-	.st5{fill:none;stroke:#2F0163;stroke-width:0.5795;stroke-miterlimit:22.9256;}
+	.st5{fill:none;stroke:#130762;stroke-width:0.5795;stroke-miterlimit:22.9256;}
 	.st6{fill:#AA930C;}
-	.st7{fill:none;stroke:#2F0163;stroke-width:0.5794;stroke-miterlimit:22.9256;}
+	.st7{fill:none;stroke:#130762;stroke-width:0.5794;stroke-miterlimit:22.9256;}
 </style>
 <path class="st0" d="M297.78,0c164.46,0,297.78,55.96,297.78,124.98S462.24,249.96,297.78,249.96C133.32,249.96,0,194,0,124.98
 	S133.32,0,297.78,0"/>
