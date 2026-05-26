@@ -8883,11 +8883,22 @@ border-color: #fff;
   margin-right: auto;
 }
 
-/* Home-page trust strip: match the .hp-hero-sub paragraph size so the
-   credentials read at the same visual weight as the hero subtitle.
-   Scoped to .hp-hero so other pages keep their current trust-strip
-   size until the user confirms this should go sitewide. */
-.hp-hero .hp-trust-strip {
+/* Trust strip text: match the hero-sub paragraph size on every page
+   so the credentials read at the same visual weight as the hero
+   subtitle above them. Was previously scoped to .hp-hero; rolled out
+   sitewide once the home-page design was confirmed. */
+.hp-trust-block .hp-trust-strip {
   font-size: clamp(1.05rem, 1.4vw, 1.18rem);
   line-height: 1.6;
 }
+
+/* Top-bar text + icons → navy on bronze background (was white on
+   bronze — low contrast). Uses the same #130762 brand navy as the
+   site primary, and swaps the phone/mobile/email icon SVGs to navy
+   variants so the icons match the new text colour. */
+.top-bar-wrapper { color: #130762 !important; }
+.tb-link { color: #130762 !important; background-image: url('../images/phone-navy.svg') !important; }
+.tb-link.mob { background-image: url('../images/mobile-navy.svg') !important; }
+.tb-link.email { background-image: url('../images/email-navy.svg') !important; }
+.tb-link:hover { color: #3a226d !important; }
+.banner-script { color: #130762 !important; }
