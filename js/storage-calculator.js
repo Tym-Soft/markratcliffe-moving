@@ -195,14 +195,16 @@
   //     typical volume. Between adjacent anchors the cost ramps linearly,
   //     so every additional cu ft changes the total — no plateau zones.
   //   • Anchor prices match the marketed tier costs at typical volumes.
+  //   • Any cu ft BELOW the smallest anchor (Tiny @ 300) is clamped to
+  //     the Tiny price — we never send out a crew + Luton for less than
+  //     the Tiny minimum, even if the inventory is light.
   //   • Above the highest anchor, the slope of the last segment extends.
   //   • Vehicle is auto-picked by cu ft for the mileage rate only.
   //   • Nett total  = volume cost + miles × picked-vehicle mile rate
   //   • VAT         = nett × 20%
   //   • Inc-VAT     = nett × 1.20 (storage rates already include VAT)
   var PRICE_ANCHORS = [
-    [0,       0],
-    [300,   300],   // tiny move
+    [300,   300],   // tiny move — also acts as the volume-floor
     [500,   500],   // 1-bed flat / studio
     [800,   650],   // 2-bed home
     [1000,  900],   // 3-bed home
