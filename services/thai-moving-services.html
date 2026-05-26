@@ -2506,6 +2506,93 @@ border-color: #fff;
       aspect-ratio: 4/5;
     }
     .th-pair img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    /* ====================================================================
+       2026 design-refresh layer — content unchanged, visual polish only.
+       Each rule is additive / overrides earlier defaults higher in this
+       same <style> block.
+       ==================================================================== */
+
+    /* Section H2s — small bronze accent bar above the heading for editorial
+       polish. Centred where the section is centred, left-aligned otherwise. */
+    .th-section h2 { position: relative; }
+    .th-section h2::before,
+    .th-process-strip > .th-narrow h2::before,
+    .th-case-header h2::before {
+      content: '';
+      display: block;
+      width: 48px;
+      height: 3px;
+      background: #C8A876;
+      margin: 0 0 0.9rem;
+      border-radius: 2px;
+    }
+    .th-process-strip > .th-narrow h2::before,
+    .th-case-header h2::before { margin-left: auto; margin-right: auto; }
+
+    /* Step cards (01-04) and the trust aside get the sitewide refined-card
+       treatment — visible navy outline + 4 px bronze top accent + shadow,
+       hover-lifted. */
+    .th-process-step,
+    .th-aside {
+      border: 1.5px solid rgba(19, 7, 98, 0.22) !important;
+      border-top: 4px solid #C8A876 !important;
+      border-radius: 12px !important;
+      box-shadow: 0 8px 22px -12px rgba(19, 7, 98, 0.22) !important;
+    }
+    .th-process-step:hover {
+      transform: translateY(-3px);
+      border-color: rgba(19, 7, 98, 0.35) !important;
+      border-top-color: #C8A876 !important;
+      box-shadow: 0 16px 38px -16px rgba(19, 7, 98, 0.36) !important;
+    }
+
+    /* Stats strip — subtle vertical dividers between stats on desktop for
+       a more refined dashboard feel. Collapses on tablet to avoid clutter. */
+    @media (min-width: 701px) {
+      .th-stat + .th-stat {
+        border-left: 1px solid rgba(255, 255, 255, 0.12);
+      }
+    }
+
+    /* Hero gets the Thai-flag concentric border (mirrors home page; doubly
+       on-brand for the Thai-specialism page). Override the hero's own
+       overflow:hidden so the rings render. */
+    .th-hero { overflow: visible !important; }
+    .th-hero-inner {
+      border-radius: 14px;
+      box-shadow:
+        0 0 0  2px #A51931,   /* red — innermost ring */
+        0 0 0  4px #F4F5F8,   /* white */
+        0 0 0  8px #2D2A4A,   /* blue (4 px wide for 1:1:2:1:1 ratio) */
+        0 0 0 10px #F4F5F8,   /* white */
+        0 0 0 12px #A51931;   /* red — outermost ring */
+      margin: 12px auto;
+    }
+
+    /* Callout — strengthen the bronze tint + accent bar, refine padding. */
+    .th-callout {
+      background: rgba(200, 168, 118, 0.14) !important;
+      border-left: 4px solid #C8A876 !important;
+      padding: 1.1rem 1.4rem !important;
+      border-radius: 6px !important;
+      color: #1f1f1f;
+    }
+    .th-callout strong { color: #130762; }
+
+    /* Feature image caption — refine padding & spacing for editorial feel. */
+    .th-feature-image figcaption {
+      padding: 1rem 1.4rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.005em;
+    }
+
+    /* Body text leading paragraphs feel more "lead" — heavier weight, dark
+       bookend; subsequent paragraphs unchanged. */
+    .th-prose-lead { font-weight: 500 !important; color: #130762 !important; }
+
+    /* Brochure section heading — drop the trailing period for cleaner read,
+       handled in HTML if needed. */
   </style>
 
   <section class="np-section">
