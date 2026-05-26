@@ -2631,7 +2631,9 @@ border-color: #fff;
 
     /* Hero gets the Thai-flag concentric border (mirrors home page; doubly
        on-brand for the Thai-specialism page). Override the hero's own
-       overflow:hidden so the rings render. */
+       overflow:hidden so the rings render. Internal padding keeps text
+       from touching the rings. Force centred alignment so the H1 +
+       trust block hug the centre of the framed card. */
     .th-hero { overflow: visible !important; }
     .th-hero-inner {
       border-radius: 14px;
@@ -2642,6 +2644,25 @@ border-color: #fff;
         0 0 0 10px #F4F5F8,   /* white */
         0 0 0 12px #A51931;   /* red — outermost ring */
       margin: 12px auto;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .th-hero-card,
+    .th-hero-card .th-hero-cta {
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+    }
+    .th-hero h1 { text-align: center; }
+    /* Override the global .hp-trust-block-left modifier inside the
+       Thai hero so the BAR badge + credentials centre with the rest
+       of the hero content. */
+    .th-hero .hp-trust-block,
+    .th-hero .hp-trust-block-left {
+      align-self: center !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      justify-content: center;
     }
 
     /* Callout — strengthen the bronze tint + accent bar, refine padding. */
