@@ -8871,3 +8871,12 @@ border-color: #fff;
   align-self: flex-start;
   margin-right: auto;
 }
+
+/* Home-page trust strip: match the .hp-hero-sub paragraph size so the
+   credentials read at the same visual weight as the hero subtitle.
+   Scoped to .hp-hero so other pages keep their current trust-strip
+   size until the user confirms this should go sitewide. */
+.hp-hero .hp-trust-strip {
+  font-size: clamp(1.05rem, 1.4vw, 1.18rem);
+  line-height: 1.6;
+}
