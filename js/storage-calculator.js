@@ -1764,7 +1764,7 @@
       doc.text('Removals service', MX, y);
       doc.text(fp(data.pricing.removals).replace('£', ''), PW - MX, y, { align: 'right' });
       doc.setFontSize(8); rgb(INK_SOFT);
-      var rmDesc = 'Pad-wrap, load, transport and unload · ' +
+      var rmDesc = 'Blanket wrap, load, transport and unload · ' +
         (data.property.cuft || 0).toLocaleString('en-GB') + ' cu ft · ' +
         (data.move.miles || 0) + ' mi round-trip';
       doc.text(doc.splitTextToSize(rmDesc, PW - 2 * MX - 80), MX, y + 11);
