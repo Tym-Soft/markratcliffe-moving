@@ -9073,3 +9073,99 @@ button.qc-distance-calc-btn {
 .ftr-link.is-active {
   color: #bd2b70 !important;
 }
+
+/* ============================================================
+   Magenta accent — completion pass
+   ============================================================
+   Catches the buttons missed in earlier rounds:
+     • .np-cta-block / .np-cta-band primary button (was navy on
+       navy = invisible) → white pill at rest, magenta on hover
+     • .hpqq-bed.is-active (home Quick Estimate active state)
+       → magenta fill (matches the storage-calculator selectors)
+     • .top-bar-quote → magenta (was bronze)
+     • Generic hover-magenta for every primary CTA class so all
+       page heroes hover-flip consistently (hp/np/th/ac/tm/cu)
+*/
+
+/* Fix the invisible white-on-navy primary button on np-cta-block /
+   np-cta-band sections (e.g. "Get a Free Quote" on the storage
+   calculator). White pill at rest, magenta on hover. */
+.np-section.np-cta-block .np-btn-primary,
+.np-section.np-cta-band .np-btn-primary {
+  background: #fff !important;
+  color: var(--brand-navy) !important;
+  border-color: #fff !important;
+}
+.np-section.np-cta-block .np-btn-primary:hover,
+.np-section.np-cta-block .np-btn-primary:focus-visible,
+.np-section.np-cta-band .np-btn-primary:hover,
+.np-section.np-cta-band .np-btn-primary:focus-visible {
+  background: #bd2b70 !important;
+  color: #fff !important;
+  border-color: #bd2b70 !important;
+}
+/* Outline-secondary CTA on dark sections: hover → magenta fill */
+.np-section.np-cta-block .np-btn-secondary:hover,
+.np-section.np-cta-band .np-btn-secondary:hover {
+  background: #bd2b70 !important;
+  border-color: #bd2b70 !important;
+  color: #fff !important;
+}
+
+/* Home Quick Estimate bed selector — active state magenta */
+.hpqq-bed.is-active,
+.hpqq-bed[aria-pressed="true"] {
+  background: #bd2b70 !important;
+  color: #fff !important;
+  border-color: #bd2b70 !important;
+}
+.hpqq-bed.is-active:hover,
+.hpqq-bed[aria-pressed="true"]:hover {
+  background: #a52461 !important;
+  border-color: #a52461 !important;
+}
+
+/* Top-bar "REQUEST A QUOTE" pill: was bronze, now magenta */
+.top-bar-quote,
+a.top-bar-quote {
+  background: #bd2b70 !important;
+  color: #fff !important;
+  border-color: #bd2b70 !important;
+}
+.top-bar-quote:hover,
+a.top-bar-quote:hover {
+  background: #a52461 !important;
+  border-color: #a52461 !important;
+  color: #fff !important;
+}
+
+/* Hover-flip every other primary CTA across the site to magenta —
+   covers hp-btn-primary (home hero), np-btn-primary (np pages),
+   th-btn-primary (Thai page), tm-btn-primary, ac-btn-primary,
+   cu-submit (contact form) and the generic .np-btn / .hp-btn /
+   .button at rest stays navy/bronze, but every hover flips to
+   magenta for sitewide consistency. */
+.hp-btn-primary:hover,
+.np-btn-primary:hover,
+.th-btn-primary:hover,
+.tm-btn-primary:hover,
+.ac-btn-primary:hover,
+.cu-btn-primary:hover,
+.cu-submit:hover,
+.mr-btn-primary:hover,
+.ac-srv-btn:hover {
+  background: #bd2b70 !important;
+  border-color: #bd2b70 !important;
+  color: #fff !important;
+}
+.hp-btn-secondary:hover,
+.np-btn-secondary:hover,
+.th-btn-ghost:hover,
+.hp-btn-ghost-light:hover,
+.np-btn-ghost:hover,
+.mr-btn-secondary:hover,
+.cu-btn-secondary:hover {
+  background: #bd2b70 !important;
+  border-color: #bd2b70 !important;
+  color: #fff !important;
+}
