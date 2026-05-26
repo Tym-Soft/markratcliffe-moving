@@ -8895,10 +8895,18 @@ border-color: #fff;
 /* Top-bar text + icons → navy on bronze background (was white on
    bronze — low contrast). Uses the same #130762 brand navy as the
    site primary, and swaps the phone/mobile/email icon SVGs to navy
-   variants so the icons match the new text colour. */
-.top-bar-wrapper { color: #130762 !important; }
-.tb-link { color: #130762 !important; background-image: url('../images/phone-navy.svg') !important; }
-.tb-link.mob { background-image: url('../images/mobile-navy.svg') !important; }
-.tb-link.email { background-image: url('../images/email-navy.svg') !important; }
-.tb-link:hover { color: #3a226d !important; }
-.banner-script { color: #130762 !important; }
+   variants so the icons match the new text colour.
+   Selectors deliberately match the specificity of the earlier
+   "all white" rule (line 6981) — same number of classes, later in
+   file, so cascade favours these. text-shadow nulled too. */
+.top-bar-wrapper,
+.top-bar-wrapper .tb-link,
+.top-bar-wrapper .tb-link div,
+.top-bar-wrapper .banner-script {
+  color: #130762 !important;
+  text-shadow: none !important;
+}
+.top-bar-wrapper .tb-link { background-image: url('../images/phone-navy.svg') !important; }
+.top-bar-wrapper .tb-link.mob { background-image: url('../images/mobile-navy.svg') !important; }
+.top-bar-wrapper .tb-link.email { background-image: url('../images/email-navy.svg') !important; }
+.top-bar-wrapper .tb-link:hover { color: #3a226d !important; }
