@@ -8910,3 +8910,50 @@ border-color: #fff;
 .top-bar-wrapper .tb-link.mob { background-image: url('../images/mobile-navy.svg') !important; }
 .top-bar-wrapper .tb-link.email { background-image: url('../images/email-navy.svg') !important; }
 .top-bar-wrapper .tb-link:hover { color: #3a226d !important; }
+
+/* ============================================================
+   Bare <details>/<summary> FAQ blocks — size + style parity
+   ============================================================
+   FAQ sections that use raw <details> elements (not the older
+   .np-faq wrapper) were rendering at browser-default size, which
+   reads tiny next to the surrounding body copy. This rule lifts
+   them to match the body paragraph size on every page that uses
+   .np-section so the FAQ summaries read at the same weight as
+   their surroundings. Adds +/− toggle indicator and a soft
+   bottom-border to separate items. */
+.np-section details {
+  border-bottom: 1px solid rgba(19, 7, 98, 0.10);
+  padding: 0.75rem 0;
+  margin: 0;
+}
+.np-section details:last-of-type { border-bottom: none; }
+.np-section details > summary {
+  font-family: "Inter", sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--brand-navy);
+  cursor: pointer;
+  list-style: none;          /* Firefox */
+  padding-right: 1.75rem;    /* room for +/− indicator */
+  position: relative;
+}
+.np-section details > summary::-webkit-details-marker { display: none; }
+.np-section details > summary::after {
+  content: "+";
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  font-weight: 400;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--brand-bronze, #C8A876);
+}
+.np-section details[open] > summary::after { content: "−"; }
+.np-section details > p,
+.np-section details > div {
+  margin-top: 0.6rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #1f1f1f;
+}
