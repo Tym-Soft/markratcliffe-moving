@@ -232,21 +232,50 @@
     '5bed': { label: '5+ bed / antiques / country',  typicalCuft: 2800 }
   };
 
-  // Piecewise-linear volume cost. `bed` is accepted for backwards
-  // compatibility but ignored — price is purely a function of cu ft.
-  function computeVolumeCost(cuft /*, bed */) {
-    if (cuft <= PRICE_ANCHORS[0][0]) return PRICE_ANCHORS[0][1];
-    for (var i = 1; i < PRICE_ANCHORS.length; i++) {
-      var x1 = PRICE_ANCHORS[i - 1][0], y1 = PRICE_ANCHORS[i - 1][1];
-      var x2 = PRICE_ANCHORS[i][0],     y2 = PRICE_ANCHORS[i][1];
-      if (cuft <= x2) {
-        return y1 + (cuft - x1) * (y2 - y1) / (x2 - x1);
+  // Returns the £ floor for a given bed tier. Looks up the matching
+  // anchor in PRICE_ANCHORS by tier.typicalCuft. Volume pricing for
+  // a tier never drops below this figure even if the inventory comes
+  // in light (e.g. a 2-bed customer with sparse rooms still pays the
+  // 2-bed minimum of £650, plus mileage). Mileage is added separately
+  // by callers and is not affected by this floor.
+  function bedFloorPrice(bedKey) {
+    var bed = BED_DEFAULTS[bedKey];
+    if (!bed) return 0;
+    for (var i = 0; i < PRICE_ANCHORS.length; i++) {
+      if (PRICE_ANCHORS[i][0] === bed.typicalCuft) return PRICE_ANCHORS[i][1];
+    }
+    return 0;
+  }
+
+  // Piecewise-linear volume cost. Optional `bedKey` applies the
+  // bed-tier floor: a customer who picked "2-bed" never gets below
+  // £650 for the volume leg even if their ticked inventory is light.
+  function computeVolumeCost(cuft, bedKey) {
+    var base;
+    if (cuft <= PRICE_ANCHORS[0][0]) {
+      base = PRICE_ANCHORS[0][1];
+    } else {
+      base = null;
+      for (var i = 1; i < PRICE_ANCHORS.length; i++) {
+        var x1 = PRICE_ANCHORS[i - 1][0], y1 = PRICE_ANCHORS[i - 1][1];
+        var x2 = PRICE_ANCHORS[i][0],     y2 = PRICE_ANCHORS[i][1];
+        if (cuft <= x2) {
+          base = y1 + (cuft - x1) * (y2 - y1) / (x2 - x1);
+          break;
+        }
+      }
+      if (base === null) {
+        var last = PRICE_ANCHORS[PRICE_ANCHORS.length - 1];
+        var prev = PRICE_ANCHORS[PRICE_ANCHORS.length - 2];
+        var slope = (last[1] - prev[1]) / (last[0] - prev[0]);
+        base = last[1] + (cuft - last[0]) * slope;
       }
     }
-    var last = PRICE_ANCHORS[PRICE_ANCHORS.length - 1];
-    var prev = PRICE_ANCHORS[PRICE_ANCHORS.length - 2];
-    var slope = (last[1] - prev[1]) / (last[0] - prev[0]);
-    return last[1] + (cuft - last[0]) * slope;
+    if (bedKey) {
+      var floor = bedFloorPrice(bedKey);
+      if (base < floor) base = floor;
+    }
+    return base;
   }
 
   // Display label only — picks the tier whose typical cu ft is closest
@@ -465,7 +494,8 @@
     setText('qp-storage-room', roomBits.join(' + '));
 
     // Pricing (nett) — piecewise-linear volume cost from PRICE_ANCHORS
-    var rmVolCost  = computeVolumeCost(cuft);
+    // with the customer's selected bed tier applied as a floor.
+    var rmVolCost  = computeVolumeCost(cuft, getHomeSize());
     var rmMileCost = miles * vehicle.mileRate;
     var rmNett = (mode === 'storage') ? 0 : rmVolCost + rmMileCost;
     var stPerDay = 0;
@@ -540,7 +570,7 @@
     var headlineLabel = document.getElementById('cost-headline-label');
 
     // --- REMOVALS leg ---
-    var volCost    = computeVolumeCost(cuft);
+    var volCost    = computeVolumeCost(cuft, getHomeSize());
     var mileCost   = miles * vehicle.mileRate;
     var removalsNett = (mode === 'storage') ? 0 : (volCost + mileCost);
     var removalsVAT  = removalsNett * VAT_RATE;
@@ -1309,7 +1339,7 @@
       var vehicle = pickVehicle(cuft);
 
       // Removals pricing (nett — VAT added at booking)
-      var rmVolCost  = computeVolumeCost(cuft);
+      var rmVolCost  = computeVolumeCost(cuft, getHomeSize());
       var rmMileCost = miles * vehicle.mileRate;
       var rmNett     = (calcMode === 'storage') ? 0 : rmVolCost + rmMileCost;
 
