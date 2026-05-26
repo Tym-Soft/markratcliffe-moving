@@ -8843,17 +8843,25 @@ border-color: #fff;
   margin-top: 0.6rem;
 }
 .hp-trust-badge-big {
-  width: 108px;
-  height: 108px;
+  width: 162px;
+  height: 162px;
   object-fit: contain;
-  flex: 0 0 108px;
+  flex: 0 0 162px;
 }
 .hp-trust-block .hp-trust-strip {
   margin-top: 0;
   flex: 1 1 auto;
   min-width: 0;
+  /* Inside the trust-block, stack each credential on its own line
+     (rating, BAR member, BS 8564, APG) and hide the pipe separators
+     so wrapping doesn't leave leading "|" characters on new lines. */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
 }
+.hp-trust-block .hp-trust-strip .hp-trust-sep { display: none; }
 @media (max-width: 540px) {
-  .hp-trust-badge-big { width: 84px; height: 84px; flex-basis: 84px; }
+  .hp-trust-badge-big { width: 126px; height: 126px; flex-basis: 126px; }
   .hp-trust-block { gap: 0.75rem; }
 }
