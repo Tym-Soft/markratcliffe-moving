@@ -2436,7 +2436,11 @@ border-color: #fff;
     /* Intro grid — body + aside */
     .th-grid {
       max-width: 1100px; margin: 0 auto;
-      display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 3rem; align-items: start;
+      /* aside column width matches the step-card width in
+         .th-process-row (4-col grid of 1100 px minus 3×1.25rem gaps
+         ≈ 260 px), so the trust-aside lines up visually with the
+         cards in the section below it. */
+      display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 3rem; align-items: start;
     }
     @media (max-width: 900px) { .th-grid { grid-template-columns: 1fr; gap: 2rem; } }
     .th-prose p { font-size: 1.05rem; line-height: 1.75; }

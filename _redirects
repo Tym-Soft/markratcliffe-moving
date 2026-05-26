@@ -1,4 +1,34 @@
-# User explicitly chose no redirects after the 2026-05-20 URL
-# restructure. Old root-level service / location URLs no longer
-# exist; every internal link points at the new path directly.
-# This file is intentionally empty of redirect mappings.
+# =====================================================
+#  Mark Ratcliffe Moving — Cloudflare Pages redirects
+# =====================================================
+# No URL redirects after the 2026-05-20 restructure — every internal
+# link already points at the new path directly.
+#
+# The rules below 404 internal tooling, build scripts, internal docs
+# and credentials so they can't be downloaded by anyone visiting the
+# deployed site. The audit / sweep rule lists, deploy docs, and admin
+# credentials are intentionally hidden from public access.
+
+# Credentials — must never be downloadable
+/ADMIN_CREDENTIALS.txt          /404.html   404
+
+# Internal build / audit / sweep scripts (the "rules" files)
+/tools/*                        /404.html   404
+/audit_a11y.py                  /404.html   404
+/audit_orphans.py               /404.html   404
+/audit_schema.py                /404.html   404
+/preflight_qa.py                /404.html   404
+
+# Internal docs (deploy guide, GSC notes, READMEs)
+/DEPLOY.md                      /404.html   404
+/README.md                      /404.html   404
+/GSC_PRIORITY_INDEXING.md       /404.html   404
+/worker/README.md               /404.html   404
+
+# Server-side config and worker source
+/.htaccess                      /404.html   404
+/wrangler.jsonc                 /404.html   404
+/worker/*                       /404.html   404
+
+# Local data store (JSON content, user list, redirect rules)
+/data/*                         /404.html   404
