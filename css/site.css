@@ -9188,37 +9188,61 @@ a.top-bar-quote:hover {
   color: #a52461 !important;
 }
 
-/* Card hover background: navy → magenta (matches the magenta top
-   accent border). Covers every card class that flips to a solid bg
-   on hover. White/light text inside is preserved by existing rules
-   and contrast comfortably on the magenta #bd2b70. */
+/* Card hover background: EVERY white/off-white card flips to magenta
+   #bd2b70 on hover (matches the top-accent border). Text inside
+   stays readable via the colour overrides below. */
 .hp-usp:hover,
 .hp-service-card:not(.hp-service-card-cta):hover,
+.hp-blog-card:hover,
+.hp-area-region:hover,
 .np-card:hover,
+.np-blog-card:hover,
 .np-section .np-card:hover,
 .np-section.np-section-soft .np-card:hover,
-.np-inner .np-card:hover {
+.np-inner .np-card:hover,
+.th-process-step:hover,
+.th-aside:hover {
   background: #bd2b70 !important;
   background-color: #bd2b70 !important;
   border-color: #bd2b70 !important;
   border-top-color: #bd2b70 !important;
   box-shadow: 0 18px 40px -22px rgba(189, 43, 112, 0.55) !important;
 }
-/* Heading + body text inside hovered cards stays light on magenta */
+/* Headings inside hovered cards → white */
 .hp-usp:hover h3,
 .hp-service-card:not(.hp-service-card-cta):hover h3,
-.np-card:hover h3 {
+.hp-blog-card:hover h3,
+.hp-area-region:hover h3,
+.hp-area-region:hover h3 a,
+.np-card:hover h3,
+.np-blog-card:hover h3,
+.np-blog-card:hover h3 a,
+.th-process-step:hover h3,
+.th-aside:hover .th-aside-eyebrow {
   color: #fff !important;
 }
+/* Body / paragraph / list / meta / link text inside hovered cards */
 .hp-usp:hover p,
 .hp-service-card:not(.hp-service-card-cta):hover p,
+.hp-blog-card:hover p,
+.hp-area-region:hover p,
+.hp-area-region:hover .hp-area-link,
 .np-card:hover p,
-.np-card:hover li {
+.np-card:hover li,
+.np-blog-card:hover p,
+.np-blog-card:hover .np-blog-card-meta,
+.th-process-step:hover p,
+.th-aside:hover .th-aside-note {
   color: rgba(255,255,255,0.95) !important;
 }
-/* Icon swatch inside hovered hp-usp / hp-service tile */
+/* Icon swatch / arrows / numbered badges flip to translucent-white */
 .hp-usp:hover .hp-usp-icon,
-.hp-service-card:not(.hp-service-card-cta):hover .hp-arrow {
+.hp-service-card:not(.hp-service-card-cta):hover .hp-arrow,
+.hp-blog-card:hover .hp-blog-readmore,
+.th-process-step:hover .th-step-num {
   background: rgba(255,255,255,0.18) !important;
   color: #fff !important;
 }
+/* th-aside has a small brand image — fade it so it doesn't fight
+   the magenta on hover. */
+.th-aside:hover .th-aside-brand { opacity: 0.55; filter: brightness(2) grayscale(0.4); }
