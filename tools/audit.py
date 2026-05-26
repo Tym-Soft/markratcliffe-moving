@@ -1412,6 +1412,48 @@ def audit():
          f'{len(indexable)} indexable pages all listed in llms.txt',
          llms_failures)
 
+    # Rule 45 — og:image / twitter:image must match the page's hero
+    # (the <link rel="preload" as="image" fetchpriority="high">). This
+    # ensures the social-share preview matches what the visitor will
+    # actually see at the top of the page, and that the OG image lives
+    # on our own domain (no external CDN dependency).
+    # Attribute order in source HTML varies: handle both
+    #   content="X" property="og:image"
+    #   property="og:image" content="X"
+    def _meta_content(html, prop):
+        for pat in (
+            r'<meta\s+content="([^"]+)"\s+property="' + re.escape(prop) + r'"',
+            r'<meta\s+property="' + re.escape(prop) + r'"\s+content="([^"]+)"',
+        ):
+            m = re.search(pat, html, re.I)
+            if m: return m.group(1)
+        return None
+    PRE_RE  = re.compile(r'<link\s+rel="preload"\s+as="image"\s+href="([^"]+)"', re.I)
+    og_failures: list[str] = []
+    for p in indexable:
+        html = open(p, encoding='utf-8').read()
+        og_val = _meta_content(html, 'og:image')
+        tw_val = _meta_content(html, 'twitter:image')
+        m_pre = PRE_RE.search(html)
+        if not og_val:
+            og_failures.append(f'{p}: missing og:image meta tag')
+            continue
+        # Must live on our own domain, not an external CDN.
+        if not og_val.startswith(BASE_URL):
+            og_failures.append(f'{p}: og:image points off-domain ({og_val})')
+            continue
+        # Twitter image must equal OG image.
+        if tw_val and tw_val != og_val:
+            og_failures.append(f'{p}: twitter:image differs from og:image')
+        # If a preload hero exists, og:image must reference the same file.
+        if m_pre:
+            hero = os.path.basename(m_pre.group(1))
+            if os.path.basename(og_val) != hero:
+                og_failures.append(f'{p}: og:image does not match hero preload ({os.path.basename(og_val)} vs {hero})')
+    rule('Rule 45 — og:image matches page hero (on-domain)',
+         f'{len(indexable)} pages: every social-share image matches the page\'s own hero',
+         og_failures)
+
     print('=' * 64)
     if any_fail:
         print('FAIL — one or more rules violated. See list above.')
@@ -1424,7 +1466,7 @@ def audit():
         print('To re-inject canonical schema.org JSON-LD on every page:')
         print('    python3 tools/build-schema.py')
         return 1
-    print('PASS — all forty-four content rules satisfied.')
+    print('PASS — all forty-five content rules satisfied.')
     return 0
 
 if __name__ == '__main__':
