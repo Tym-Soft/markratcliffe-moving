@@ -7891,6 +7891,19 @@ text-underline-offset: 3px;
 .hp-cta-final .hp-hero-cta a {
 text-decoration: none;
 }
+/* Final-CTA section: text + links all white on bronze gradient. */
+.hp-cta-final h2,
+.hp-cta-final p,
+.hp-cta-final a {
+  color: #fff !important;
+}
+.hp-cta-final a {
+  text-decoration-color: rgba(255, 255, 255, 0.6) !important;
+}
+.hp-cta-final a:hover {
+  text-decoration-color: #fff !important;
+}
+
 /* Final-CTA buttons: white pill at rest (high contrast against the
    bronze gradient background), flip to brand navy on hover/focus. */
 .hp-cta-final .hp-btn-primary,
