@@ -2574,15 +2574,17 @@ border-color: #fff;
        same <style> block.
        ==================================================================== */
 
-    /* Eyebrow + bronze accent bar INLINE on the same row, then the H2
-       below. Replaces the previous treatment where the bar sat on its
-       own line between the eyebrow text and the heading. */
+    /* Eyebrow + bronze accent bar(s) on the same row as the eyebrow.
+       LEFT-aligned sections get a single bar on the right (typographic
+       flourish). CENTERED sections get a bar on BOTH sides so the
+       eyebrow's visual centre matches the H2 centre below it. */
     .th-eyebrow,
     .th-eyebrow-dark {
       display: inline-flex;
       align-items: center;
       gap: 0.75rem;
     }
+    /* Right-side bar (always) */
     .th-eyebrow::after,
     .th-eyebrow-dark::after {
       content: '';
@@ -2594,10 +2596,32 @@ border-color: #fff;
       flex: 0 0 48px;
     }
     .th-eyebrow::after { background: #FFC107; }
-    /* In sections that centre their content, wrap the eyebrow in the
-       centred flow so its inline bar stays alongside the text. */
+
+    /* Centered contexts — add a matching left-side bar for symmetry so
+       the eyebrow's visual centre aligns with the centered H2 below. */
+    .th-hero .th-eyebrow,
     .th-process-strip > .th-narrow .th-eyebrow,
-    .th-case-header .th-eyebrow-dark { justify-content: center; }
+    .th-process-strip > .th-narrow .th-eyebrow-dark,
+    .th-case-header .th-eyebrow,
+    .th-case-header .th-eyebrow-dark,
+    .th-gallery-section .th-case-header .th-eyebrow-dark {
+      justify-content: center;
+    }
+    .th-hero .th-eyebrow::before,
+    .th-process-strip > .th-narrow .th-eyebrow::before,
+    .th-process-strip > .th-narrow .th-eyebrow-dark::before,
+    .th-case-header .th-eyebrow::before,
+    .th-case-header .th-eyebrow-dark::before,
+    .th-gallery-section .th-case-header .th-eyebrow-dark::before {
+      content: '';
+      display: inline-block;
+      width: 48px;
+      height: 2px;
+      background: #C8A876;
+      border-radius: 2px;
+      flex: 0 0 48px;
+    }
+    .th-hero .th-eyebrow::before { background: #FFC107; }
 
     /* Step cards (01-04) and the trust aside get the sitewide refined-card
        treatment — visible navy outline + 4 px bronze top accent + shadow,
