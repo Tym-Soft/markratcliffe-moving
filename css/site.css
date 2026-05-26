@@ -8788,22 +8788,30 @@ border-color: #fff;
 }
 
 /* ============================================================
-   Refined border for ALL white/off-white cards
+   Refined border for EVERY white/off-white card class sitewide
    ============================================================
-   Targets every card class with a light background:
-     .np-card     - services / areas / resources / FAQs grids
-     .np-blog-card - blog-index cards on np pages
-     .hp-usp      - home-page "Six reasons" grid
-     .hp-blog-card - home-page blog strip
-   Treatment:
-     - thicker, more visible navy outline (rgba 0.22)
-     - 4 px bronze (#C8A876) top accent — brand cue
-     - soft drop shadow for depth
-   Hover intensifies all three.                                   */
+   Confirmed white-bg card classes (via grep of CSS + HTML):
+     .np-card                  services / areas / resources / FAQs
+     .np-blog-card             blog-index cards on np pages
+     .hp-usp                   home-page "Six reasons" grid
+     .hp-blog-card             home-page blog strip
+     .hp-service-card          home-page services grid (7 white cards)
+     .hp-area-region           home-page regions grid (E Sussex, etc.)
+   Explicitly EXCLUDED:
+     .hp-service-card-cta      dark navy "All Services" CTA
+     .hp-hero-card / .np-hero-card / .ac-hero-card / .th-hero-card
+                               (dark hero cards — own treatment)
+     .qc-bed-card / .qc-mode-card
+                               (pill-button options inside calc — too
+                                small for a 4 px top accent)
+   Treatment: thicker visible navy outline (0.22) + 4 px bronze top
+   accent (#C8A876) + soft drop shadow. Hover intensifies all three. */
 .np-card,
 .np-blog-card,
 .hp-usp,
-.hp-blog-card {
+.hp-blog-card,
+.hp-service-card:not(.hp-service-card-cta),
+.hp-area-region {
   border: 1.5px solid rgba(19, 7, 98, 0.22) !important;
   border-top: 4px solid #C8A876 !important;
   border-radius: 12px !important;
@@ -8812,7 +8820,9 @@ border-color: #fff;
 }
 .np-card:hover,
 .np-blog-card:hover,
-.hp-blog-card:hover {
+.hp-blog-card:hover,
+.hp-service-card:not(.hp-service-card-cta):hover,
+.hp-area-region:hover {
   transform: translateY(-2px);
   border-color: rgba(19, 7, 98, 0.35) !important;
   border-top-color: #C8A876 !important;
