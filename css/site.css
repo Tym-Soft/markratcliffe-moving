@@ -9776,3 +9776,42 @@ body .np-breadcrumb { display: none !important; }
     line-height: 1.55 !important;
   }
 }
+
+/* Mobile menu — stronger-specificity white override.
+   An earlier rule (line ~6767) used .navbar.w-nav .nav-menu.w-nav-menu
+   (4 classes) with a navy linear-gradient !important, which beat
+   my .w-nav-overlay-scoped override. Match the same selector
+   shape so the white wins. */
+@media (max-width: 991px) {
+  body .navbar.w-nav .nav-menu.w-nav-menu,
+  body .navbar .nav-menu.w-nav-menu,
+  body .navbar.w-nav .w-nav-overlay,
+  body .navbar.w-nav .w-nav-overlay .nav-menu.w-nav-menu {
+    background: #fff !important;
+    background-color: #fff !important;
+    color: #130762 !important;
+  }
+  /* Dropdown rows inside the white overlay */
+  body .navbar.w-nav .nav-menu .navlink,
+  body .navbar.w-nav .nav-menu .navlink.w-nav-link,
+  body .navbar.w-nav .nav-menu .dropdown-toggle.w-dropdown-toggle,
+  body .navbar.w-nav .nav-menu .dropdown-toggle.w-dropdown-toggle > div,
+  body .navbar.w-nav .nav-menu .w-icon-dropdown-toggle {
+    color: #130762 !important;
+  }
+  body .navbar.w-nav .nav-menu .navlink:hover,
+  body .navbar.w-nav .nav-menu .dropdown-toggle.w-dropdown-toggle:hover,
+  body .navbar.w-nav .nav-menu .dropdown-toggle.w-dropdown-toggle:hover > div,
+  body .navbar.w-nav .nav-menu .dropdown.w-dropdown.w--open .dropdown-toggle,
+  body .navbar.w-nav .nav-menu .dropdown.w-dropdown.w--open .dropdown-toggle > div,
+  body .navbar.w-nav .nav-menu .dropdown.w-dropdown.w--open .w-icon-dropdown-toggle {
+    color: #bd2b70 !important;
+  }
+  /* Mobile hamburger icon — navy on white nav */
+  body .menu-button.w-nav-button .w-icon-nav-menu {
+    color: #130762 !important;
+  }
+  body .menu-button.w-nav-button.w--open .w-icon-nav-menu {
+    color: #bd2b70 !important;
+  }
+}
