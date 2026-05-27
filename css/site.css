@@ -9527,15 +9527,29 @@ body .navbar.w-nav {
   background-color: #fff !important;
 }
 
-/* Logo container — WHITE (per explicit user request 2026-05-27).
-   The chroma-keyed transparent navy ring + decorative arc render
-   as white; the bronze outer ring, magenta line, bronze "Mark
-   Ratcliffe" script + "MOVING AND STORAGE" wordmark continue to
-   carry the brand mark on the white field. */
+/* Logo container — fully flush, no padding, no margin. The .brand
+   bg colour is now irrelevant (the logo image covers the entire
+   container) but keep it white as a defensive baseline. The IMG
+   gets display:block so the inline-image baseline gap disappears,
+   and stretches to the navbar's height so nav-link padding never
+   forces white space above/below the logo. */
 body .brand,
 body .brand.w-nav-brand {
   background-color: #fff !important;
   background-image: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  align-self: stretch !important;
+  display: flex !important;
+  align-items: center !important;
+}
+body .brand .logo-img,
+body .brand img {
+  display: block !important;
+  height: auto !important;
+  max-height: 100% !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
 }
 
 /* Top-bar: phone/email contacts removed sitewide. Give the BAR
