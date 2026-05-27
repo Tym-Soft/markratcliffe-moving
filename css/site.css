@@ -9496,22 +9496,30 @@ body .hp-hero-quote-card .hpqq-foot {
      "Nav menu wording at REST → magenta" block at line ~9176.
    ============================================================ */
 
-/* Outer fixed wrapper */
+/* Outer fixed wrapper — neutral soft grey shadow, NO navy border /
+   navy shadow tint (those read as a blue underline on white).
+   Also kill the ::after gradient bar so no coloured underline
+   appears at rest or on scroll. */
 body .nav-section {
   background: #fff !important;
-  border-bottom: 1px solid rgba(19, 7, 98, 0.10) !important;
-  box-shadow: 0 1px 0 rgba(19, 7, 98, 0.06),
-              0 4px 14px rgba(19, 7, 98, 0.08) !important;
+  border-bottom: 0 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
 }
 body .nav-section.is-scrolled {
-  box-shadow: 0 6px 20px rgba(19, 7, 98, 0.14),
-              0 1px 0 rgba(19, 7, 98, 0.10) !important;
-  border-bottom-color: rgba(19, 7, 98, 0.18) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10) !important;
+  border-bottom: 0 !important;
 }
-body .nav-section::after {
-  background: linear-gradient(90deg, transparent 0%, #bd2b70 35%,
-                              #bd2b70 65%, transparent 100%) !important;
+body .nav-section::after,
+body .nav-section.is-scrolled::after {
+  display: none !important;
+  background: transparent !important;
+  opacity: 0 !important;
 }
+
+/* Thai-stripe element removed from the DOM sitewide (was the
+   12px multi-colour band between top-bar and navbar). Hide the
+   CSS rule's effect defensively in case any page still ships it. */
+body .thai-stripe { display: none !important; }
 
 /* Nav bar itself — white */
 body .navbar,
