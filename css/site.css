@@ -9246,3 +9246,25 @@ a.top-bar-quote:hover {
 /* th-aside has a small brand image — fade it so it doesn't fight
    the magenta on hover. */
 .th-aside:hover .th-aside-brand { opacity: 0.55; filter: brightness(2) grayscale(0.4); }
+
+/* Alternate card hover colour: every second card in a grid hovers
+   to navy #130762 instead of magenta — visual rhythm across the
+   grid. Magenta + navy alternate naturally because each card type
+   sits as a sibling inside a grid container, so :nth-child works
+   per-grid. */
+.hp-usp:nth-child(even):hover,
+.hp-service-card:nth-child(even):not(.hp-service-card-cta):hover,
+.hp-blog-card:nth-child(even):hover,
+.hp-area-region:nth-child(even):hover,
+.np-card:nth-child(even):hover,
+.np-blog-card:nth-child(even):hover,
+.np-section .np-card:nth-child(even):hover,
+.np-section.np-section-soft .np-card:nth-child(even):hover,
+.np-inner .np-card:nth-child(even):hover,
+.th-process-step:nth-child(even):hover {
+  background: #130762 !important;
+  background-color: #130762 !important;
+  border-color: #130762 !important;
+  border-top-color: #130762 !important;
+  box-shadow: 0 18px 40px -22px rgba(19, 7, 98, 0.55) !important;
+}
