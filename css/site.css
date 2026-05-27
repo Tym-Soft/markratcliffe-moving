@@ -10023,3 +10023,15 @@ body .np-breadcrumb { display: none !important; }
   box-shadow: 0 14px 30px -16px rgba(189, 43, 112, 0.45) !important;
   outline: none;
 }
+
+/* Per user 2026-05-27: flip the cream/bronze USP icon containers
+   to magenta. The .hp-usp-icon is the 52px rounded square with
+   the inline SVG icon inside (star, shield, etc.). Container bg
+   moves from 12% bronze tint to 10% magenta tint; icon foreground
+   from bronze to brand magenta #bd2b70. The hover state (icon
+   flips to translucent-white when card hovers) is already handled
+   earlier in this file. */
+body .hp-usp-icon {
+  background: rgba(189, 43, 112, 0.10) !important;
+  color: #bd2b70 !important;
+}
