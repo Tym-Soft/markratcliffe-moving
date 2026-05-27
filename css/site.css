@@ -9923,3 +9923,38 @@ body .np-breadcrumb { display: none !important; }
     color: #D6B274 !important;
   }
 }
+
+/* Mobile: tighten section padding sitewide.
+   All home-page sections (.hp-*) used 5rem top/bottom = 80px ×2 per
+   section boundary, producing ~160px of empty space between
+   consecutive sections on phones. Cap to 2rem (32px), and tighten
+   the .hp-section-head bottom margin from 3rem (48px) to 1.25rem. */
+@media (max-width: 768px) {
+  .hp-usps,
+  .hp-process,
+  .hp-services,
+  .hp-areas,
+  .hp-fleet,
+  .hp-blog-strip,
+  .hp-testimonials,
+  .hp-expertise,
+  .hp-cta,
+  .hp-about,
+  .hp-signature,
+  .hp-insurance,
+  .hp-stats,
+  .hp-trust,
+  .hp-story,
+  .hp-final-cta {
+    padding: 2rem 1.25rem !important;
+  }
+  .hp-section-head {
+    margin: 0 auto 1.25rem !important;
+  }
+  .hp-section-sub {
+    margin-top: 0.6rem !important;
+  }
+  /* Also rein in any np-section / th-section that defaulted higher */
+  .np-section { padding: 2rem 1.25rem !important; }
+  .th-section { padding: 2rem 1.25rem !important; }
+}
