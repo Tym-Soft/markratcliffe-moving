@@ -10090,3 +10090,13 @@ body .np-section.np-cta-band .np-btn-secondary:focus-visible {
   color: #fff !important;
   border-color: #bd2b70 !important;
 }
+
+/* Per user 2026-05-27: FAQ "+" / "−" disclosure markers sitewide
+   flip from bronze to brand magenta. Covers both selector patterns
+   used in the codebase: .np-section details > summary::after
+   (newer pages) and .np-faq / .np-faq-item summary::after (legacy). */
+body .np-section details > summary::after,
+body .np-faq summary::after,
+body .np-faq-item > summary::after {
+  color: #bd2b70 !important;
+}
