@@ -9815,3 +9815,98 @@ body .np-breadcrumb { display: none !important; }
     color: #bd2b70 !important;
   }
 }
+
+/* ============================================================
+   MOBILE menu: revert to navy gradient + white text
+   (user 2026-05-27: "menu background white when it should of
+   been this color" — the screenshot showed the original navy).
+   Desktop nav stays white. This block APPENDS after the earlier
+   white-mobile overrides so it wins on equal-specificity ties
+   via source order.
+   ============================================================ */
+@media (max-width: 991px) {
+  /* Drawer background — navy gradient */
+  body .navbar.w-nav .nav-menu.w-nav-menu,
+  body .navbar .nav-menu.w-nav-menu,
+  body .navbar.w-nav .w-nav-overlay,
+  body .navbar.w-nav .w-nav-overlay .nav-menu.w-nav-menu,
+  body .navbar .w-nav-overlay,
+  body .navbar .w-nav-overlay .w-nav-menu {
+    background: linear-gradient(180deg, #130762 0%, #3a226d 100%) !important;
+    background-color: #130762 !important;
+    color: #fff !important;
+  }
+
+  /* Top-level nav links + dropdown toggles → WHITE rest */
+  body .navbar.w-nav .nav-menu .navlink,
+  body .navbar.w-nav .nav-menu .navlink.w-nav-link,
+  body .navbar.w-nav .nav-menu .dropdown-toggle.w-dropdown-toggle,
+  body .navbar.w-nav .nav-menu .dropdown-toggle.w-dropdown-toggle > div,
+  body .navbar.w-nav .nav-menu .w-icon-dropdown-toggle {
+    color: #fff !important;
+  }
+  /* Hover / open → bronze (matches the contrast standard on navy) */
+  body .navbar.w-nav .nav-menu .navlink:hover,
+  body .navbar.w-nav .nav-menu .navlink.w-nav-link:hover,
+  body .navbar.w-nav .nav-menu .dropdown-toggle.w-dropdown-toggle:hover,
+  body .navbar.w-nav .nav-menu .dropdown-toggle.w-dropdown-toggle:hover > div,
+  body .navbar.w-nav .nav-menu .dropdown.w-dropdown.w--open .dropdown-toggle,
+  body .navbar.w-nav .nav-menu .dropdown.w-dropdown.w--open .dropdown-toggle > div,
+  body .navbar.w-nav .nav-menu .dropdown.w-dropdown.w--open .w-icon-dropdown-toggle {
+    color: #D6B274 !important;
+  }
+  body .navbar.w-nav .nav-menu .navlink.w--current,
+  body .navbar.w-nav .nav-menu .navlink.w-nav-link.w--current {
+    color: #D6B274 !important;
+  }
+
+  /* Row dividers — subtle white */
+  body .navbar .nav-menu .navlink,
+  body .navbar .nav-menu .navlink.dropdown.w-dropdown,
+  body .navbar .nav-menu .dropdown.w-dropdown {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+  }
+
+  /* Sub-dropdown drawer (services / areas) — slightly darker navy */
+  body .navbar .nav-menu .dropdown-list.w-dropdown-list,
+  body .navbar .nav-menu .dropdown.mega-areas .dropdown-list.mega-menu,
+  body .navbar .nav-menu .dropdown.mega-services .dropdown-list.mega-menu {
+    background: rgba(0, 0, 0, 0.18) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+  }
+  body .navbar .nav-menu .mega-col .mega-h,
+  body .navbar .nav-menu .mega-col a.mega-h {
+    color: #D6B274 !important;
+    border-bottom-color: rgba(255, 255, 255, 0.18) !important;
+  }
+  body .navbar .nav-menu .mega-col a {
+    color: rgba(255, 255, 255, 0.92) !important;
+  }
+  body .navbar .nav-menu .mega-col a:hover {
+    color: #D6B274 !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+  }
+  body .navbar .nav-menu .dropdown-navlink.w-dropdown-link {
+    color: rgba(255, 255, 255, 0.92) !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+  body .navbar .nav-menu .dropdown-navlink.w-dropdown-link:hover {
+    color: #D6B274 !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  /* Hamburger icon → white at rest, bronze on open */
+  body .menu-button.w-nav-button .w-icon-nav-menu {
+    color: #fff !important;
+  }
+  body .menu-button.w-nav-button.w--open .w-icon-nav-menu {
+    color: #D6B274 !important;
+  }
+  body .menu-button.w-nav-button:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
+  }
+}
