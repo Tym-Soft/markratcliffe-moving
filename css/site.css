@@ -9268,3 +9268,31 @@ a.top-bar-quote:hover {
   border-top-color: #130762 !important;
   box-shadow: 0 18px 40px -22px rgba(19, 7, 98, 0.55) !important;
 }
+
+/* np-kicker pill ("Established 2017 · Independent Business · BS 8564
+   Accredited") — flip the bronze tint to magenta tint sitewide. */
+.np-kicker {
+  background: rgba(189, 43, 112, 0.18) !important;
+  border-color: rgba(189, 43, 112, 0.55) !important;
+  color: #f6cfe0 !important;
+}
+
+/* Quick-Estimate result box (.hpqq-result) — bronze tint → magenta
+   tint with navy text inside (label/prices stay legible). */
+.hpqq-result {
+  background: linear-gradient(180deg,
+                rgba(189, 43, 112, 0.18) 0%,
+                rgba(189, 43, 112, 0.30) 100%) !important;
+  border: 1px solid rgba(189, 43, 112, 0.35);
+}
+.hpqq-result .hpqq-result-label { color: #6b1a3a !important; }
+
+/* Belt-and-braces for the top-bar text colour: re-state the override
+   at the very end of site.css so it lands last in cascade order. */
+.top-bar-wrapper,
+.top-bar-wrapper .tb-link,
+.top-bar-wrapper .tb-link div,
+.top-bar-wrapper .banner-script {
+  color: #130762 !important;
+  text-shadow: none !important;
+}
