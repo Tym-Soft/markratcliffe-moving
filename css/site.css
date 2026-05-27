@@ -9730,3 +9730,13 @@ body .navbar .dropdown-navlink.w-dropdown-link.w--current {
    structured-data breadcrumb. Single point of revert: delete
    this rule. */
 body .np-breadcrumb { display: none !important; }
+
+/* Mobile: hide the entire top-bar (was just the REQUEST A QUOTE
+   CTA after contacts + banner were already hidden on small screens).
+   Desktop top-bar still shows banner + CTA. */
+@media (max-width: 991px) {
+  body .top-bar-wrapper,
+  body .top-bar-wrapper.w-hidden-small.w-hidden-tiny {
+    display: none !important;
+  }
+}
