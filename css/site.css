@@ -10069,3 +10069,24 @@ body .th-aside:hover .th-aside-brand {
   opacity: 0.85 !important;
   filter: none !important;
 }
+
+/* Fix: invisible white-on-white secondary button in .np-cta-block
+   sections. An earlier !important rule on .np-btn-secondary forces
+   background to #fff, but the higher-specificity np-cta-block rule
+   was setting color to #fff — collapsing both to white-on-white.
+   Pin the secondary to white pill + navy text at rest (matching the
+   primary in the same CTA block). Hover magenta-fill remains. */
+body .np-section.np-cta-block .np-btn-secondary,
+body .np-section.np-cta-band .np-btn-secondary {
+  background: #fff !important;
+  color: var(--brand-navy, #130762) !important;
+  border-color: #fff !important;
+}
+body .np-section.np-cta-block .np-btn-secondary:hover,
+body .np-section.np-cta-block .np-btn-secondary:focus-visible,
+body .np-section.np-cta-band .np-btn-secondary:hover,
+body .np-section.np-cta-band .np-btn-secondary:focus-visible {
+  background: #bd2b70 !important;
+  color: #fff !important;
+  border-color: #bd2b70 !important;
+}
