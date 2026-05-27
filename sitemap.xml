@@ -49,7 +49,7 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  <!-- services (23 URLs) -->
+  <!-- services (25 URLs) -->
   <url>
     <loc>https://www.markratcliffemoving.co.uk/services/antiques-moving.html</loc>
     <lastmod>2026-05-27</lastmod>
@@ -64,6 +64,18 @@
   </url>
   <url>
     <loc>https://www.markratcliffemoving.co.uk/services/european-removals-eastbourne.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.markratcliffemoving.co.uk/services/export-packing-and-crating.html</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.markratcliffemoving.co.uk/services/fragile-only-packing.html</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
