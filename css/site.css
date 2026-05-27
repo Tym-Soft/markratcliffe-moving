@@ -9960,3 +9960,40 @@ body .np-breadcrumb { display: none !important; }
   .np-section { padding: 2rem 1.25rem !important; }
   .th-section { padding: 2rem 1.25rem !important; }
 }
+
+/* Mobile: kill all whitespace immediately below the nav.
+   Three layered fixes:
+   1. Hero sections (.hp-hero, .np-hero, .th-hero, .tm-hero) had
+      5rem top padding = 80px between navbar bottom and hero content.
+      Cap to 1rem on mobile.
+   2. Body padding-top trimmed to 67px exactly = logo height.
+   3. .brand container forced to logo's exact height with overflow
+      hidden so any sub-pixel rounding can't show a white strip. */
+@media (max-width: 991px) {
+  body { padding-top: 67px !important; }
+  body .brand,
+  body .brand.w-nav-brand {
+    height: 67px !important;
+    max-height: 67px !important;
+    overflow: hidden !important;
+  }
+  body .navbar,
+  body .navbar.w-nav {
+    min-height: 67px !important;
+    max-height: 67px !important;
+    overflow: visible !important;
+  }
+}
+@media (max-width: 768px) {
+  .hp-hero,
+  .np-hero,
+  .th-hero,
+  .tm-hero {
+    padding-top: 1rem !important;
+    min-height: 0 !important;
+  }
+  .hp-hero { padding-bottom: 2rem !important; }
+  .np-hero,
+  .th-hero,
+  .tm-hero { padding-bottom: 2rem !important; }
+}
