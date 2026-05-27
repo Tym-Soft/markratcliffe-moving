@@ -9898,15 +9898,28 @@ body .np-breadcrumb { display: none !important; }
     background: rgba(255, 255, 255, 0.06) !important;
   }
 
-  /* Hamburger icon → white at rest, bronze on open */
+  /* Hamburger button — navy on the white navbar at rest, bronze
+     when the drawer is open (so it pops against the navy gradient
+     overlay). */
+  body .menu-button.w-nav-button {
+    background: transparent !important;
+    color: #130762 !important;
+  }
   body .menu-button.w-nav-button .w-icon-nav-menu {
-    color: #fff !important;
+    color: #130762 !important;
+  }
+  body .menu-button.w-nav-button:hover {
+    background: rgba(189, 43, 112, 0.10) !important;
+    color: #bd2b70 !important;
+  }
+  body .menu-button.w-nav-button:hover .w-icon-nav-menu {
+    color: #bd2b70 !important;
+  }
+  body .menu-button.w-nav-button.w--open {
+    background: transparent !important;
+    color: #D6B274 !important;
   }
   body .menu-button.w-nav-button.w--open .w-icon-nav-menu {
     color: #D6B274 !important;
-  }
-  body .menu-button.w-nav-button:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    color: #fff !important;
   }
 }
