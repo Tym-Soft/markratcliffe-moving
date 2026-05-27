@@ -10035,3 +10035,17 @@ body .hp-usp-icon {
   background: rgba(189, 43, 112, 0.10) !important;
   color: #bd2b70 !important;
 }
+
+/* Per user 2026-05-27: flip bronze arrows / read-more links on
+   white-bg cards to magenta. Three components at rest state:
+   - .hp-arrow (bottom-right arrow on service cards)
+   - .hp-area-link ("→" on area-region cards)
+   - .hp-blog-readmore ("Read more →" on blog cards)
+   All three pick up the same brand magenta. Hover states (white
+   on navy/magenta hovered cards) are handled by the earlier
+   card-hover override block and stay correct. */
+body .hp-arrow,
+body .hp-area-link,
+body .hp-blog-readmore {
+  color: #bd2b70 !important;
+}
