@@ -10100,3 +10100,70 @@ body .np-faq summary::after,
 body .np-faq-item > summary::after {
   color: #bd2b70 !important;
 }
+
+/* Per user 2026-05-27: any in-body link on a navy or magenta
+   background needs to be WHITE so it's legible. Covers:
+   1. Hovered cards (flip to navy or magenta — see card-hover block
+      earlier in this file). Links inside <p>, <li>, <strong>.
+   2. Permanently navy sections — hero (.np-hero), CTA bands
+      (.np-cta-block, .np-cta-band), process strip (.hp-process),
+      final CTA (.hp-cta-final), home hero (.hp-hero).
+   Excludes button-style links (.np-btn, .hp-btn-*, .button, .top-bar-quote)
+   via the `:not(.np-btn):not(.np-btn-primary)...` chain so they
+   keep their own pill styling. */
+
+/* Hovered card state — links go white with subtle white underline */
+body .hp-usp:hover p a,
+body .hp-usp:hover li a,
+body .hp-service-card:not(.hp-service-card-cta):hover p a,
+body .hp-service-card:not(.hp-service-card-cta):hover li a,
+body .hp-blog-card:hover p a,
+body .hp-area-region:hover p a,
+body .np-card:hover p a,
+body .np-card:hover li a,
+body .np-blog-card:hover p a,
+body .th-process-step:hover p a,
+body .th-process-step:hover li a {
+  color: #fff !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(255, 255, 255, 0.45) !important;
+  text-underline-offset: 0.18em;
+}
+
+/* Permanently dark-bg sections — in-body links white. Scope to
+   <p>, <li>, <strong>, <em> so anchor BUTTONS (.np-btn etc.)
+   placed directly inside the section are not affected. */
+body .np-hero p a,
+body .np-hero li a,
+body .np-hero-card p a,
+body .np-hero-card li a,
+body .np-cta-block p a,
+body .np-cta-block li a,
+body .np-cta-band p a,
+body .np-cta-band li a,
+body .hp-process p a,
+body .hp-process li a,
+body .hp-cta-final p a,
+body .hp-cta-final li a,
+body .hp-hero p a,
+body .hp-hero li a,
+body .hp-section-head-light p a {
+  color: #fff !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(255, 255, 255, 0.45) !important;
+  text-underline-offset: 0.18em;
+}
+
+/* Hover state for the same dark-bg links — keep white, tighten
+   the underline to full opacity. */
+body .hp-usp:hover p a:hover,
+body .np-card:hover p a:hover,
+body .np-hero p a:hover,
+body .np-cta-block p a:hover,
+body .np-cta-band p a:hover,
+body .hp-process p a:hover,
+body .hp-cta-final p a:hover,
+body .hp-hero p a:hover {
+  color: #fff !important;
+  text-decoration-color: #fff !important;
+}
