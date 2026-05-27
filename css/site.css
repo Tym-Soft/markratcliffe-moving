@@ -9347,3 +9347,14 @@ body .top-bar-wrapper a.top-bar-quote:hover {
   background-color: #a52461 !important;
   border-color: #a52461 !important;
 }
+
+/* Top-bar icons rendered as solid navy blocks once the SVG fills
+   went navy-on-bronze (the white inner details that gave the icon
+   silhouette were lost). Hide them — phone number / email text
+   stand on their own. */
+body .top-bar-wrapper .tb-link,
+body .top-bar-wrapper .tb-link.mob,
+body .top-bar-wrapper .tb-link.email {
+  background-image: none !important;
+  padding-left: 0 !important;
+}
