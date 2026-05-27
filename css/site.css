@@ -9296,3 +9296,54 @@ a.top-bar-quote:hover {
   color: #130762 !important;
   text-shadow: none !important;
 }
+
+/* SLEDGEHAMMER: body-prefixed specificity boost so these always win
+   no matter what inline rules a page is shipping. */
+body .hpqq-cta,
+html .hpqq-cta {
+  background: #bd2b70 !important;
+  color: #fff !important;
+  border-color: #bd2b70 !important;
+}
+body .hpqq-cta:hover,
+body .hpqq-cta:focus,
+body .hpqq-cta:focus-visible {
+  background: #a52461 !important;
+  border-color: #a52461 !important;
+}
+body .hpqq-bed.is-active,
+body .hpqq-bed[aria-pressed="true"],
+html .hpqq-bed.is-active {
+  background: #bd2b70 !important;
+  border-color: #bd2b70 !important;
+  color: #fff !important;
+}
+body .hpqq-result {
+  background: linear-gradient(180deg,
+              rgba(189, 43, 112, 0.18) 0%,
+              rgba(189, 43, 112, 0.30) 100%) !important;
+}
+body .hpqq-result-label,
+body .hpqq-gross em { color: #6b1a3a !important; }
+
+/* Top-bar belt: even higher specificity to guarantee win */
+body .top-bar-wrapper,
+body .top-bar-wrapper .tb-link,
+body .top-bar-wrapper .tb-link div,
+body .top-bar-wrapper .banner-script {
+  color: #130762 !important;
+  text-shadow: none !important;
+}
+body .top-bar-wrapper .top-bar-quote,
+body .top-bar-wrapper a.top-bar-quote {
+  background: #bd2b70 !important;
+  background-color: #bd2b70 !important;
+  color: #fff !important;
+  border-color: #bd2b70 !important;
+}
+body .top-bar-wrapper .top-bar-quote:hover,
+body .top-bar-wrapper a.top-bar-quote:hover {
+  background: #a52461 !important;
+  background-color: #a52461 !important;
+  border-color: #a52461 !important;
+}
