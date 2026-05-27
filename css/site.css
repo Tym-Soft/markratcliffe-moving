@@ -10049,3 +10049,23 @@ body .hp-area-link,
 body .hp-blog-readmore {
   color: #bd2b70 !important;
 }
+
+/* Per user 2026-05-27: the Quality & Standards .th-aside on the
+   Thai page should not have a rollover effect. Earlier card-hover
+   block flipped it to magenta which the user doesn't want here.
+   Pin every aspect of the hover state to the rest values. */
+body .th-aside:hover {
+  background: #fff !important;
+  background-color: #fff !important;
+  border: 1px solid #e0dceb !important;
+  border-color: #e0dceb !important;
+  border-top-color: #e0dceb !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+body .th-aside:hover .th-aside-eyebrow { color: #130762 !important; }
+body .th-aside:hover .th-aside-note { color: #5a5a6a !important; }
+body .th-aside:hover .th-aside-brand {
+  opacity: 0.85 !important;
+  filter: none !important;
+}
