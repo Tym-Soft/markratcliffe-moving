@@ -9519,11 +9519,27 @@ body .navbar.w-nav {
   background-color: #fff !important;
 }
 
-/* Logo container — KEEP navy (chroma-keyed logo needs this) */
+/* Logo container — WHITE (per explicit user request 2026-05-27).
+   The chroma-keyed transparent navy ring + decorative arc render
+   as white; the bronze outer ring, magenta line, bronze "Mark
+   Ratcliffe" script + "MOVING AND STORAGE" wordmark continue to
+   carry the brand mark on the white field. */
 body .brand,
 body .brand.w-nav-brand {
-  background-color: #130762 !important;
+  background-color: #fff !important;
   background-image: none !important;
+}
+
+/* Top-bar: phone/email contacts removed sitewide. Give the BAR
+   membership cursive line flex:1 so it fills the gap between the
+   logo and the right-aligned QUOTE CTA. */
+body .top-bar-wrapper .banner-script {
+  flex: 1 1 auto !important;
+  text-align: center !important;
+  margin-left: 0 !important;
+}
+body .top-bar-wrapper .top-bar-quote {
+  flex: 0 0 auto !important;
 }
 
 /* Top-level nav links: NAVY rest, MAGENTA hover/current */
