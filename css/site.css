@@ -9740,3 +9740,39 @@ body .np-breadcrumb { display: none !important; }
     display: none !important;
   }
 }
+
+/* Mobile fix for .hp-process-steps (home page "How a move unfolds").
+   Desktop layout uses flex-row: num | h3 | p — on phones each item
+   gets a narrow slice and text wraps one-word-per-line, producing
+   excessive vertical scroll. Switch to a 2-column grid: number on
+   the left spanning the full step height, title + body stacked
+   right at full width. */
+@media (max-width: 768px) {
+  .hp-process-steps li {
+    display: grid !important;
+    grid-template-columns: 52px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 1rem;
+    row-gap: 0.35rem;
+    align-items: start;
+  }
+  .hp-process-steps .hp-step-num {
+    width: auto !important;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    font-size: 1.9rem;
+    align-self: start;
+    padding-top: 0.15rem;
+  }
+  .hp-process-steps h3 {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 1.15rem !important;
+  }
+  .hp-process-steps p {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 0.95rem !important;
+    line-height: 1.55 !important;
+  }
+}
