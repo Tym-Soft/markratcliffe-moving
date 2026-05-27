@@ -6595,7 +6595,9 @@ pointer-events: none;
 transition: opacity 0.3s ease;
 }
 .nav-section.is-scrolled::after { opacity: 0.65; }
-body { padding-top: 78px; }
+/* Body offset to clear the fixed nav. Mobile: top-bar hidden,
+   navbar = logo height (67px) only. Desktop: top-bar + navbar. */
+body { padding-top: 68px; }
 @media (min-width: 992px) { body { padding-top: 116px; } }
 .navbar.w-nav,
 .navbar {
