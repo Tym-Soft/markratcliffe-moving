@@ -10167,3 +10167,25 @@ body .hp-hero p a:hover {
   color: #fff !important;
   text-decoration-color: #fff !important;
 }
+
+/* Per user 2026-05-27: the bronze-gradient .hp-cta-final section
+   had H2/p/a all forced white — low contrast on bronze. Flip the
+   text + inline links to brand navy #130762 for legibility. The
+   white-pill buttons inside keep their navy text + magenta hover. */
+body .hp-cta-final h2,
+body .hp-cta-final p,
+body .hp-cta-final p a,
+body .hp-cta-final li a {
+  color: #130762 !important;
+}
+body .hp-cta-final p a,
+body .hp-cta-final li a {
+  text-decoration: underline !important;
+  text-decoration-color: rgba(19, 7, 98, 0.5) !important;
+  text-underline-offset: 0.18em;
+}
+body .hp-cta-final p a:hover,
+body .hp-cta-final li a:hover {
+  color: #130762 !important;
+  text-decoration-color: #130762 !important;
+}
