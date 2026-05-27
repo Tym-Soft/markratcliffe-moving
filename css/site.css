@@ -9482,3 +9482,205 @@ body .hp-hero-quote-card .hpqq-cta:focus {
 body .hp-hero-quote-card .hpqq-foot {
   color: #8a8499 !important;
 }
+
+/* ============================================================
+   Nav-bar restyle: WHITE background, NAVY text, MAGENTA hover
+   (2026-05-27).
+   - .brand stays navy so the chroma-keyed logo's transparent
+     navy ring + decorative arc still read against a navy field
+     (logo becomes a navy "plate" on the left of a white nav).
+   - Everything else (navbar, nav-menu, mega-menu panels, mobile
+     overlay) goes white; text in #130762 navy at rest, #bd2b70
+     magenta on hover / open / current.
+   - body-prefixed !important to win against the earlier
+     "Nav menu wording at REST → magenta" block at line ~9176.
+   ============================================================ */
+
+/* Outer fixed wrapper */
+body .nav-section {
+  background: #fff !important;
+  border-bottom: 1px solid rgba(19, 7, 98, 0.10) !important;
+  box-shadow: 0 1px 0 rgba(19, 7, 98, 0.06),
+              0 4px 14px rgba(19, 7, 98, 0.08) !important;
+}
+body .nav-section.is-scrolled {
+  box-shadow: 0 6px 20px rgba(19, 7, 98, 0.14),
+              0 1px 0 rgba(19, 7, 98, 0.10) !important;
+  border-bottom-color: rgba(19, 7, 98, 0.18) !important;
+}
+body .nav-section::after {
+  background: linear-gradient(90deg, transparent 0%, #bd2b70 35%,
+                              #bd2b70 65%, transparent 100%) !important;
+}
+
+/* Nav bar itself — white */
+body .navbar,
+body .navbar.w-nav {
+  background-color: #fff !important;
+}
+
+/* Logo container — KEEP navy (chroma-keyed logo needs this) */
+body .brand,
+body .brand.w-nav-brand {
+  background-color: #130762 !important;
+  background-image: none !important;
+}
+
+/* Top-level nav links: NAVY rest, MAGENTA hover/current */
+body .navbar .navlink,
+body .navbar .navlink.w-nav-link,
+body .navbar .nav-menu .w-nav-link,
+body .navbar .navlink.dropdown.w-dropdown,
+body .navbar .dropdown.w-dropdown,
+body .navbar .dropdown-toggle.w-dropdown-toggle,
+body .navbar .dropdown-toggle.w-dropdown-toggle > div,
+body .navbar .w-icon-dropdown-toggle {
+  color: #130762 !important;
+}
+body .navbar .navlink:hover,
+body .navbar .navlink.w-nav-link:hover,
+body .navbar .nav-menu .w-nav-link:hover,
+body .navbar .dropdown-toggle.w-dropdown-toggle:hover,
+body .navbar .dropdown-toggle.w-dropdown-toggle:hover > div,
+body .navbar .dropdown.w-dropdown:hover .dropdown-toggle,
+body .navbar .dropdown.w-dropdown:hover .dropdown-toggle > div,
+body .navbar .dropdown.w-dropdown:hover .w-icon-dropdown-toggle,
+body .navbar .dropdown.w-dropdown.w--open .dropdown-toggle,
+body .navbar .dropdown.w-dropdown.w--open .dropdown-toggle > div,
+body .navbar .dropdown.w-dropdown.w--open .w-icon-dropdown-toggle {
+  color: #bd2b70 !important;
+}
+body .navbar .navlink.w--current,
+body .navbar .navlink.w-nav-link.w--current {
+  color: #bd2b70 !important;
+}
+
+/* Desktop mega-menu panel — white card with navy hairline + shadow */
+body .navbar .dropdown-list.w-dropdown-list,
+body .navbar .dropdown.mega-areas .dropdown-list.mega-menu,
+body .navbar .dropdown.mega-services .dropdown-list.mega-menu {
+  background: #fff !important;
+  border: 1px solid rgba(19, 7, 98, 0.12) !important;
+  box-shadow: 0 14px 40px rgba(19, 7, 98, 0.18) !important;
+}
+
+/* Mega-column headers: navy with subtle divider */
+body .navbar .mega-col .mega-h,
+body .navbar .mega-col a.mega-h {
+  color: #130762 !important;
+  border-bottom: 1px solid rgba(19, 7, 98, 0.12) !important;
+}
+body .navbar .mega-col a.mega-h:hover {
+  color: #bd2b70 !important;
+}
+
+/* Mega-column links: navy rest, magenta hover w/ tint bg + bar */
+body .navbar .mega-col a {
+  color: #130762 !important;
+  border-left: 2px solid transparent !important;
+}
+body .navbar .mega-col a:hover {
+  color: #bd2b70 !important;
+  border-left-color: #bd2b70 !important;
+  background: rgba(189, 43, 112, 0.07) !important;
+}
+
+/* Standard dropdown-navlink (simple dropdowns) */
+body .navbar .dropdown-navlink.w-dropdown-link {
+  color: #130762 !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(19, 7, 98, 0.08) !important;
+}
+body .navbar .dropdown-navlink.w-dropdown-link:hover,
+body .navbar .dropdown-navlink.w-dropdown-link:focus {
+  color: #bd2b70 !important;
+  background: rgba(189, 43, 112, 0.07) !important;
+}
+body .navbar .dropdown-navlink.w-dropdown-link:hover::before,
+body .navbar .dropdown-navlink.w-dropdown-link:focus::before {
+  background: #bd2b70 !important;
+}
+body .navbar .dropdown-navlink.w-dropdown-link.w--current {
+  background: rgba(189, 43, 112, 0.10) !important;
+  color: #bd2b70 !important;
+}
+
+/* Mobile menu — hamburger + full-screen overlay */
+@media (max-width: 991px) {
+  body .menu-button.w-nav-button {
+    background: transparent !important;
+    color: #130762 !important;
+  }
+  body .menu-button.w-nav-button .w-icon-nav-menu {
+    color: #130762 !important;
+  }
+  body .menu-button.w-nav-button:hover {
+    background: rgba(189, 43, 112, 0.08) !important;
+    color: #bd2b70 !important;
+  }
+  body .menu-button.w-nav-button:hover .w-icon-nav-menu {
+    color: #bd2b70 !important;
+  }
+  body .menu-button.w-nav-button.w--open {
+    background: rgba(189, 43, 112, 0.12) !important;
+    color: #bd2b70 !important;
+  }
+  body .menu-button.w-nav-button.w--open .w-icon-nav-menu {
+    color: #bd2b70 !important;
+  }
+
+  /* Mobile overlay panel */
+  body .navbar .nav-menu.w-nav-menu,
+  body .navbar .w-nav-overlay,
+  body .navbar .w-nav-overlay .w-nav-menu,
+  body .navbar.w-nav .w-nav-overlay,
+  body .navbar.w-nav .w-nav-overlay .w-nav-menu {
+    background-color: #fff !important;
+    color: #130762 !important;
+    border-top: 1px solid rgba(19, 7, 98, 0.10) !important;
+  }
+
+  /* Mobile dropdown rows + dividers */
+  body .navbar .navlink.dropdown.w-dropdown,
+  body .navbar .dropdown.w-dropdown {
+    border-bottom: 1px solid rgba(19, 7, 98, 0.10) !important;
+  }
+  body .navbar .navlink.w-nav-link {
+    border-bottom: 1px solid rgba(19, 7, 98, 0.10) !important;
+  }
+  body .navbar .dropdown-toggle.w-dropdown-toggle,
+  body .navbar .dropdown-toggle.w-dropdown-toggle > div {
+    color: #130762 !important;
+  }
+  body .navbar .dropdown-toggle.w-dropdown-toggle .w-icon-dropdown-toggle {
+    color: #130762 !important;
+  }
+  body .navbar .dropdown.w-dropdown.w--open .dropdown-toggle,
+  body .navbar .dropdown.w-dropdown.w--open .dropdown-toggle > div,
+  body .navbar .dropdown.w-dropdown.w--open .w-icon-dropdown-toggle {
+    color: #bd2b70 !important;
+  }
+
+  /* Mobile mega-menu drawer */
+  body .navbar .dropdown-list.w-dropdown-list,
+  body .navbar .dropdown.mega-areas .dropdown-list.mega-menu,
+  body .navbar .dropdown.mega-services .dropdown-list.mega-menu {
+    background: #faf7fb !important;
+    border: 0 !important;
+    border-top: 1px solid rgba(19, 7, 98, 0.10) !important;
+    box-shadow: none !important;
+  }
+  body .navbar .mega-col .mega-h,
+  body .navbar .mega-col a.mega-h {
+    color: #130762 !important;
+    border-bottom-color: rgba(19, 7, 98, 0.12) !important;
+  }
+  body .navbar .mega-col a {
+    color: #130762 !important;
+  }
+  body .navbar .mega-col a:hover,
+  body .navbar .mega-col a:focus {
+    color: #bd2b70 !important;
+    background: rgba(189, 43, 112, 0.07) !important;
+  }
+}
