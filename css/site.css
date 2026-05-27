@@ -9722,3 +9722,11 @@ body .navbar .dropdown-navlink.w-dropdown-link.w--current {
     background: rgba(189, 43, 112, 0.07) !important;
   }
 }
+
+/* Hide the visible breadcrumb bar sitewide (user 2026-05-27).
+   "Home › PageName" duplicated the current-page indicator already
+   highlighted in the main nav. JSON-LD BreadcrumbList schema in
+   each page <head> is untouched, so Google still gets the
+   structured-data breadcrumb. Single point of revert: delete
+   this rule. */
+body .np-breadcrumb { display: none !important; }
