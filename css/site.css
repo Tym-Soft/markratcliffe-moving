@@ -4573,12 +4573,12 @@ margin: 0;
 }
 .qc-distance-manual summary {
   cursor: pointer;
-  color: #C8A876;
+  color: #fff !important;
   padding: 4px 0;
   user-select: none;
   font-weight: 600;
 }
-.qc-distance-manual summary:hover { color: #D6B274; }
+.qc-distance-manual summary:hover { color: #D6B274 !important; }
 .qc-distance-manual-row {
   display: flex;
   align-items: center;
