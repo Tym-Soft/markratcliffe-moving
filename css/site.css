@@ -10556,3 +10556,17 @@ body[data-page="careers"] .job-application-form > p {
   .brochure-flipbook-btn { padding: 0.45rem 0.9rem; font-size: 0.82rem; }
   .brochure-flipbook-indicator { font-size: 0.82rem; min-width: 90px; }
 }
+
+/* When the flipbook is in portrait (single-page) mode, centre the
+   visible page in the container. StPageFlip adds the .--portrait
+   class to its parent in that mode. */
+.brochure-flipbook .stf__parent.--portrait {
+  margin: 0 auto !important;
+}
+.brochure-flipbook .stf__parent.--portrait .stf__block,
+.brochure-flipbook .stf__parent.--portrait > div {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* General centring fallback */
+.brochure-flipbook .stf__parent { margin: 0 auto !important; }

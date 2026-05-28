@@ -39,7 +39,7 @@
     startZIndex: 0,
     autoSize: true,
     maxShadowOpacity: 0.4,
-    showCover: true,
+    showCover: false,
     mobileScrollSupport: false,
     swipeDistance: 30,
     showPageCorners: true,
