@@ -14,7 +14,7 @@
   <meta property="og:type" content="website">
   <meta content="summary_large_image" name="twitter:card">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <link rel="preload" as="style" href="../css/site.css?v=20260795" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="../css/site.css?v=20260795"></noscript>
+  <link rel="preload" as="style" href="../css/site.css?v=20260796" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="../css/site.css?v=20260796"></noscript>
 <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script defer src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
@@ -2198,18 +2198,17 @@ border-color: #fff;
       <h2>Brochure.</h2>
       <p>Read our 10-page overseas moving brochure below for tips, customs guidance, realistic timelines and a step-by-step look at how the procedure works.</p>
 
-      <div class="brochure-embed-wrap">
-        <object data="../downloads/mark-ratcliffe-overseas-moving-brochure.pdf#view=FitH&amp;toolbar=1&amp;navpanes=0"
-                type="application/pdf"
-                class="brochure-embed"
-                aria-label="Mark Ratcliffe Moving — Overseas Moving Brochure (10 pages, PDF)">
-          <iframe src="../downloads/mark-ratcliffe-overseas-moving-brochure.pdf#view=FitH"
-                  class="brochure-embed"
-                  title="Mark Ratcliffe Moving — Overseas Moving Brochure (10 pages, PDF)">
-            <p style="padding:1rem;">Your browser cannot display the brochure inline. <a href="../downloads/mark-ratcliffe-overseas-moving-brochure.pdf">Open the PDF directly</a>.</p>
-          </iframe>
-        </object>
+      <div class="brochure-flipbook-wrap">
+        <div id="brochure-flipbook" class="brochure-flipbook" aria-label="Mark Ratcliffe Moving — Overseas Moving Brochure (12 pages). Flick left or right to turn the page."></div>
+        <div class="brochure-flipbook-controls">
+          <button type="button" id="brochure-prev" class="brochure-flipbook-btn" aria-label="Previous page">&larr; Prev</button>
+          <span id="brochure-page-indicator" class="brochure-flipbook-indicator">Page 1 of 12</span>
+          <button type="button" id="brochure-next" class="brochure-flipbook-btn" aria-label="Next page">Next &rarr;</button>
+        </div>
+        <p class="brochure-flipbook-hint">Click or swipe the page corners to turn &mdash; a soft page-turn sound plays as you flick.</p>
       </div>
+      <script defer src="../js/vendor/page-flip.browser.js?v=20260795"></script>
+      <script defer src="../js/brochure-flipbook.js?v=20260795"></script>
 
       <a href="../downloads/mark-ratcliffe-overseas-moving-brochure.pdf" class="brochure-download-btn" download="Mark-Ratcliffe-Moving-Overseas-Brochure.pdf" aria-label="Download the Mark Ratcliffe Moving overseas brochure as a PDF (10 pages, 27KB)">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="vertical-align:middle;margin-right:0.5rem;"><path fill="currentColor" d="M12 16l-5-5h3V4h4v7h3l-5 5zm-7 4v-2h14v2H5z"/></svg>
