@@ -1,0 +1,16 @@
+{
+  "name": "markratcliffe-careers",
+  "version": "1.0.0",
+  "description": "Job application worker — PDF + dual Resend email",
+  "main": "careers-application.js",
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "login": "wrangler login"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  }
+}

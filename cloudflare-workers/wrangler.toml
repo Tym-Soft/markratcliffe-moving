@@ -1,0 +1,20 @@
+name = "markratcliffe-careers"
+main = "careers-application.js"
+compatibility_date = "2026-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+# After deploy, the worker is reachable at:
+#   https://markratcliffe-careers.<your-cf-subdomain>.workers.dev/api/careers
+#
+# If you want a custom domain like https://api.markratcliffemoving.co.uk/careers,
+# uncomment and configure routes (requires the apex domain on Cloudflare):
+#
+# [[routes]]
+# pattern = "api.markratcliffemoving.co.uk/*"
+# zone_name = "markratcliffemoving.co.uk"
+
+# Secrets are NOT stored in this file. Set them with:
+#   npx wrangler secret put RESEND_API_KEY
+#   npx wrangler secret put OWNER_EMAIL
+#   npx wrangler secret put FROM_EMAIL
+#   npx wrangler secret put ALLOWED_ORIGIN
