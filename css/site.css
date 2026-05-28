@@ -10304,3 +10304,40 @@ body .hp-cta-final li a:hover {
   .cf-fieldset { padding: 1rem; }
   .cf-submit { width: 100%; }
 }
+
+/* Careers page tweaks (2026-05-28):
+   1. Hero used a 2-column layout (text card + calculator aside). With
+      the calculator removed, the text card sat left with empty navy
+      on the right. Force-center everything in the .np-hero-inner on
+      careers.html only, and centre the trust-strip too.
+   2. The application form was capped at 760px max-width — narrower
+      than the body content (1100px). Match the body width so the
+      form fills the same column the prose below it uses. */
+/* Careers-only: centre the hero card and trust strip. No calculator
+   aside on this page so the previously-left text card now sits
+   centred. Scoped to body[data-page="careers"] so all other
+   np-hero pages keep their existing layout. */
+body[data-page="careers"] .np-hero .np-hero-card {
+  text-align: center;
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+body[data-page="careers"] .np-hero .hp-trust-block-left {
+  align-items: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+body[data-page="careers"] .np-hero .hp-trust-block-left .hp-trust-strip {
+  justify-content: center !important;
+}
+body[data-page="careers"] .np-hero .np-hero-cta {
+  justify-content: center !important;
+}
+
+/* Wider application form — match the prose width below it */
+body .job-application-form .cf-form,
+body .cf-form {
+  max-width: 1100px;
+  margin: 0 auto;
+}
