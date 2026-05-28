@@ -10484,14 +10484,14 @@ body[data-page="careers"] .job-application-form > p {
    with page-turn sound. Replaces the old <object> PDF embed.
    ============================================================ */
 .brochure-flipbook-wrap {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 1.75rem auto;
   text-align: center;
 }
 .brochure-flipbook {
   margin: 0 auto;
   width: 100%;
-  max-width: 980px;
+  max-width: 1100px;
   min-height: 650px;
   background: linear-gradient(180deg, #f4f1f8 0%, #e7e2f0 100%);
   border-radius: 12px;
