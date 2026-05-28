@@ -14,7 +14,7 @@
   <meta content="summary_large_image" name="twitter:card">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <link rel="preload" as="image" href="images/business-people-shaking-hands-meeting-room.webp" fetchpriority="high">
-  <link rel="preload" as="style" href="css/site.css?v=20260770" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260770"></noscript>
+  <link rel="preload" as="style" href="css/site.css?v=20260771" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="css/site.css?v=20260771"></noscript>
 <link rel="preconnect" href="https://ajax.googleapis.com" crossorigin>
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <script defer src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
@@ -2067,7 +2067,7 @@ border-color: #fff;
           </nav>
         </div>
         <a href="services/thai-moving-services.html" class="navlink w-nav-link">UK-THAI MOVES</a>
-        <a href="resources/storage-calculator.html" class="navlink w-nav-link">MOVING &amp; STORAGE CALCULATOR</a><div class="mob-menu-contact" aria-label="Quick contact">
+        <a href="resources/storage-calculator.html" class="navlink w-nav-link">MOVING &amp; STORAGE CALCULATOR</a><a href="careers.html" class="navlink w-nav-link">CAREERS</a><div class="mob-menu-contact" aria-label="Quick contact">
           <a href="tel:01323848008" class="is-call" aria-label="Call us on 01323 848 008">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.59l2.2-2.2a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1Z"/></svg>
             <span>Call us</span>
@@ -2213,10 +2213,141 @@ border-color: #fff;
       <div id="apply" class="hidden-anchor"></div>
       <div class="job-application-form">
         <h2 class="centre">Job Application Form</h2>
-        <div class="application-form w-embed w-script">
-          <script defer src="https://www.cognitoforms.com/f/seamless.js" data-key="nWkLD9pR5kWtM52tph2Vpw" data-form="584"></script>
-        </div>
+        <p style="text-align:center;color:#5a5570;margin-bottom:2rem;">Fill in the form below. When you submit, you&rsquo;ll get an automatic email confirmation with a PDF copy of your application, and Mark will get a notification with the same PDF. We aim to reply within 5 working days.</p>
+
+        <form id="careers-application-form" class="cf-form" novalidate>
+          <!-- Honeypot: hidden anti-spam field. Real users can't see this; bots fill it. -->
+          <div class="cf-honeypot" aria-hidden="true">
+            <label>Website (leave blank)<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          </div>
+
+          <fieldset class="cf-fieldset">
+            <legend>Your details</legend>
+            <div class="cf-row">
+              <label class="cf-field"><span>First name <em>*</em></span><input type="text" name="firstName" required autocomplete="given-name"></label>
+              <label class="cf-field"><span>Last name <em>*</em></span><input type="text" name="lastName" required autocomplete="family-name"></label>
+            </div>
+            <div class="cf-row">
+              <label class="cf-field"><span>Email <em>*</em></span><input type="email" name="email" required autocomplete="email"></label>
+              <label class="cf-field"><span>Phone <em>*</em></span><input type="tel" name="phone" required autocomplete="tel"></label>
+            </div>
+            <div class="cf-row">
+              <label class="cf-field cf-field-wide"><span>Street address</span><input type="text" name="address" autocomplete="street-address"></label>
+            </div>
+            <div class="cf-row">
+              <label class="cf-field"><span>Town / city</span><input type="text" name="town" autocomplete="address-level2"></label>
+              <label class="cf-field"><span>Postcode <em>*</em></span><input type="text" name="postcode" required autocomplete="postal-code"></label>
+            </div>
+            <div class="cf-row">
+              <label class="cf-field"><span>Date of birth</span><input type="date" name="dob" autocomplete="bday"></label>
+              <label class="cf-field"><span>Right to work in the UK <em>*</em></span>
+                <select name="rightToWork" required>
+                  <option value="">— select —</option>
+                  <option value="Yes — UK / Irish citizen">Yes &mdash; UK / Irish citizen</option>
+                  <option value="Yes — settled / pre-settled status">Yes &mdash; settled / pre-settled status</option>
+                  <option value="Yes — visa with right to work">Yes &mdash; visa with right to work</option>
+                  <option value="No / unsure">No / unsure</option>
+                </select>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="cf-fieldset">
+            <legend>The role</legend>
+            <div class="cf-row">
+              <label class="cf-field cf-field-wide"><span>Position applied for <em>*</em></span>
+                <select name="position" required>
+                  <option value="">— select —</option>
+                  <option>Summer staff (May&ndash;September)</option>
+                  <option>Office Administrator</option>
+                  <option>Driver &mdash; LGV</option>
+                  <option>Driver &mdash; non-LGV / 3.5t</option>
+                  <option>Packer / Porter</option>
+                  <option>Self-employed mover</option>
+                  <option>Other</option>
+                </select>
+              </label>
+            </div>
+            <div class="cf-row">
+              <label class="cf-field cf-field-wide"><span>If &ldquo;Other&rdquo;, please specify</span><input type="text" name="positionOther"></label>
+            </div>
+            <div class="cf-row">
+              <label class="cf-field"><span>Availability</span>
+                <select name="availability">
+                  <option value="">— select —</option>
+                  <option>Full-time</option>
+                  <option>Part-time</option>
+                  <option>Flexible / either</option>
+                  <option>Seasonal only</option>
+                </select>
+              </label>
+              <label class="cf-field"><span>Earliest start date</span><input type="date" name="startDate"></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="cf-fieldset">
+            <legend>Driving</legend>
+            <div class="cf-row">
+              <label class="cf-field"><span>Do you hold a driving licence?</span>
+                <select name="licence">
+                  <option value="">— select —</option>
+                  <option>Yes &mdash; full UK</option>
+                  <option>Yes &mdash; full EU/EEA</option>
+                  <option>Yes &mdash; provisional</option>
+                  <option>No</option>
+                </select>
+              </label>
+              <label class="cf-field"><span>Years driving</span><input type="number" name="yearsDriving" min="0" max="60" inputmode="numeric"></label>
+            </div>
+            <fieldset class="cf-checkgroup">
+              <legend>Licence categories (tick all that apply)</legend>
+              <label><input type="checkbox" name="licenceCats" value="B"> B (car)</label>
+              <label><input type="checkbox" name="licenceCats" value="BE"> BE (car + trailer)</label>
+              <label><input type="checkbox" name="licenceCats" value="C1"> C1 (3.5t&ndash;7.5t)</label>
+              <label><input type="checkbox" name="licenceCats" value="C1E"> C1E (C1 + trailer)</label>
+              <label><input type="checkbox" name="licenceCats" value="C"> C (rigid LGV)</label>
+              <label><input type="checkbox" name="licenceCats" value="CE"> CE (artic LGV)</label>
+              <label><input type="checkbox" name="licenceCats" value="D1"> D1 (minibus)</label>
+              <label><input type="checkbox" name="licenceCats" value="D"> D (bus)</label>
+              <label><input type="checkbox" name="licenceCats" value="CPC"> Driver CPC</label>
+              <label><input type="checkbox" name="licenceCats" value="ADR"> ADR (hazardous)</label>
+            </fieldset>
+          </fieldset>
+
+          <fieldset class="cf-fieldset">
+            <legend>Experience</legend>
+            <div class="cf-row">
+              <label class="cf-field"><span>Years in removals / moving industry</span><input type="number" name="yearsRemovals" min="0" max="60" inputmode="numeric"></label>
+            </div>
+            <div class="cf-row">
+              <label class="cf-field cf-field-wide"><span>Previous experience &mdash; companies, roles, dates</span>
+                <textarea name="experience" rows="4" placeholder="Most recent employer first. Include dates if you can."></textarea>
+              </label>
+            </div>
+            <div class="cf-row">
+              <label class="cf-field cf-field-wide"><span>Why this role &mdash; what attracts you to working with us?</span>
+                <textarea name="whyRole" rows="4" placeholder="Optional — but it really helps."></textarea>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="cf-fieldset">
+            <legend>Consents</legend>
+            <label class="cf-check"><input type="checkbox" name="gdprConsent" required>
+              <span>I consent to Mark Ratcliffe Moving &amp; Storage storing the information in this application to process my job enquiry. I understand my data is held under <a href="privacy-policy.html">the privacy policy</a> and I can request deletion at any time. <em>*</em></span>
+            </label>
+            <label class="cf-check"><input type="checkbox" name="marketingOptIn">
+              <span>Optional &mdash; let me know if other roles open up in future that match my profile.</span>
+            </label>
+          </fieldset>
+
+          <div class="cf-submit-row">
+            <button type="submit" class="np-btn np-btn-primary cf-submit">Submit application</button>
+            <div id="careers-form-status" class="careers-form-status" role="status" aria-live="polite" style="display:none;"></div>
+          </div>
+        </form>
       </div>
+      <script defer src="js/careers-form.js?v=20260770"></script>
     </div>
   </div>
 
