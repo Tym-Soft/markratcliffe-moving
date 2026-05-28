@@ -10424,3 +10424,33 @@ body[data-page="careers"] .job-application-form > p {
   .careers-header h1 { font-size: 1.5rem; }
   .careers-trust { flex-direction: column; gap: 0.6rem; }
 }
+
+/* Brochure download button (used on Thai page + any page that links
+   the overseas brochure PDF). Magenta pill with downward arrow. */
+.brochure-download-btn {
+  display: inline-flex;
+  align-items: center;
+  background: #bd2b70;
+  color: #fff !important;
+  text-decoration: none !important;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  margin: 1rem auto 0.5rem;
+  box-shadow: 0 8px 22px -10px rgba(189, 43, 112, 0.55);
+  transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+.brochure-download-btn:hover,
+.brochure-download-btn:focus-visible {
+  background: #a52461;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -8px rgba(189, 43, 112, 0.65);
+  outline: none;
+}
+.brochure-download-meta {
+  font-size: 0.82rem !important;
+  color: #777 !important;
+  margin: 0.5rem auto 0 !important;
+}
