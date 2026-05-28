@@ -11,7 +11,7 @@
   if (!container || !window.St || !window.St.PageFlip) return;
 
   // Build page elements
-  var TOTAL = 12;
+  var TOTAL = 8;
   for (var i = 1; i <= TOTAL; i++) {
     var pn = String(i).padStart(2, '0');
     var pg = document.createElement('div');
@@ -22,17 +22,17 @@
     container.appendChild(pg);
   }
 
-  // Aspect ratio of the brochure pages (A4 portrait → 1:√2 ≈ 1:1.414)
-  // Per-page width 460px → height 650px on desktop. StPageFlip auto-handles
-  // single page on small screens.
+  // Tall narrow leaflet pages: 280pt × 595pt source → aspect 2.12 (h/w).
+  // 320px wide × 678px tall on desktop. StPageFlip auto-handles single
+  // page on small screens via usePortrait.
   var flip = new St.PageFlip(container, {
-    width: 460,
-    height: 650,
+    width: 320,
+    height: 678,
     size: 'stretch',
-    minWidth: 280,
-    maxWidth: 600,
-    minHeight: 400,
-    maxHeight: 850,
+    minWidth: 220,
+    maxWidth: 440,
+    minHeight: 460,
+    maxHeight: 920,
     drawShadow: true,
     flippingTime: 600,
     usePortrait: true,
