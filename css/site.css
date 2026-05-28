@@ -10305,35 +10305,7 @@ body .hp-cta-final li a:hover {
   .cf-submit { width: 100%; }
 }
 
-/* Careers page tweaks (2026-05-28):
-   1. Hero used a 2-column layout (text card + calculator aside). With
-      the calculator removed, the text card sat left with empty navy
-      on the right. Force-center everything in the .np-hero-inner on
-      careers.html only, and centre the trust-strip too.
-   2. The application form was capped at 760px max-width — narrower
-      than the body content (1100px). Match the body width so the
-      form fills the same column the prose below it uses. */
-/* Careers-only: centre the hero card and trust strip. No calculator
-   aside on this page so the previously-left text card now sits
-   centred. Scoped to body[data-page="careers"] so all other
-   np-hero pages keep their existing layout. */
-body[data-page="careers"] .np-hero .np-hero-card {
-  text-align: center;
-  max-width: 780px;
-  margin-left: auto;
-  margin-right: auto;
-}
-body[data-page="careers"] .np-hero .hp-trust-block-left {
-  align-items: center !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-body[data-page="careers"] .np-hero .hp-trust-block-left .hp-trust-strip {
-  justify-content: center !important;
-}
-body[data-page="careers"] .np-hero .np-hero-cta {
-  justify-content: center !important;
-}
+
 
 /* Wider application form — match the prose width below it */
 body .job-application-form .cf-form,
@@ -10342,44 +10314,6 @@ body .cf-form {
   margin: 0 auto;
 }
 
-/* Careers page only: shrink the oversized hero (was 78vh min-height
-   + 5rem padding) by ~50% on desktop, and 30%+ on mobile. Scoped
-   to body[data-page="careers"] so other np-hero pages keep their
-   immersive hero. */
-body[data-page="careers"] .np-hero {
-  min-height: 0 !important;
-  padding: 2.5rem 1.5rem 2rem !important;
-}
-body[data-page="careers"] .np-hero h1 {
-  font-size: clamp(1.9rem, 4vw, 3rem) !important;
-  margin: 0.4rem 0 0.6rem !important;
-  line-height: 1.15 !important;
-}
-body[data-page="careers"] .np-hero .np-kicker {
-  margin-bottom: 0.4rem !important;
-}
-body[data-page="careers"] .np-hero .np-hero-sub {
-  font-size: 1rem !important;
-  margin-top: 0.4rem !important;
-}
-body[data-page="careers"] .np-hero .np-hero-cta {
-  margin-top: 1rem !important;
-}
-body[data-page="careers"] .np-hero .hp-trust-block {
-  margin-top: 1.25rem !important;
-}
-body[data-page="careers"] .np-hero .hp-trust-badge-big {
-  max-width: 90px !important;
-  height: auto !important;
-}
-@media (max-width: 600px) {
-  body[data-page="careers"] .np-hero {
-    padding: 1.5rem 1rem !important;
-  }
-  body[data-page="careers"] .np-hero h1 {
-    font-size: 1.7rem !important;
-  }
-}
 
 /* Form intro paragraph: match the body section paragraph size (1.05rem)
    so it doesn't look smaller than the prose below the form. */
@@ -10388,88 +10322,105 @@ body[data-page="careers"] .job-application-form > p {
   line-height: 1.6 !important;
 }
 
-/* Careers hero: constrain width so it sits as a contained box, not
-   full viewport. Matches the form/content width below it (~1100px). */
-body[data-page="careers"] .np-hero {
-  max-width: 1100px !important;
-  margin: 0 auto !important;
-  border-radius: 18px !important;
-  overflow: hidden !important;
-}
 
-/* Careers hero — aggressive shrink. Was 1100px box with content
-   occupying ~50%. Now hugs the content tightly. */
-body[data-page="careers"] .np-hero {
-  max-width: 720px !important;
-  margin: 1rem auto !important;
-  padding: 1.5rem 1.25rem 1.75rem !important;
-  border-radius: 16px !important;
+
+/* ============================================================
+   CAREERS HEADER — fresh redesign (2026-05-28)
+   Replaces the old .np-hero on careers.html only. Simple, compact,
+   focused: no full-bleed background image, no oversized empty navy.
+   Just a tight branded header that lets the form below take focus.
+   ============================================================ */
+.careers-header {
+  background: linear-gradient(135deg, #130762 0%, #3a226d 100%);
+  color: #fff;
+  padding: 2rem 1.5rem 2.25rem;
+  margin: 0 auto 1.5rem;
+  max-width: 1100px;
+  border-radius: 18px;
+  text-align: center;
 }
-body[data-page="careers"] .np-hero-inner {
-  max-width: 100% !important;
-  gap: 0.6rem !important;
+.careers-header-inner {
+  max-width: 720px;
+  margin: 0 auto;
 }
-body[data-page="careers"] .np-hero .np-hero-card {
-  max-width: 100% !important;
-  text-align: center !important;
-  margin: 0 !important;
+.careers-kicker {
+  display: inline-block;
+  font-family: "Inter", sans-serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #D6B274;
+  background: rgba(200, 168, 118, 0.16);
+  border: 1px solid rgba(200, 168, 118, 0.45);
+  padding: 0.32rem 0.85rem;
+  border-radius: 999px;
+  font-weight: 600;
+  margin: 0 0 0.85rem;
 }
-body[data-page="careers"] .np-hero h1 {
-  font-size: clamp(1.5rem, 3.2vw, 2.1rem) !important;
-  margin: 0.3rem 0 0.4rem !important;
-  line-height: 1.15 !important;
+.careers-kicker a {
+  color: #D6B274 !important;
+  text-decoration: underline;
+  text-decoration-color: rgba(214, 178, 116, 0.4);
 }
-body[data-page="careers"] .np-hero .np-kicker {
-  font-size: 0.68rem !important;
-  padding: 0.3rem 0.8rem !important;
-  margin: 0 0 0.3rem !important;
+.careers-kicker a:hover { color: #fff !important; }
+.careers-header h1 {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin: 0 0 0.7rem;
+  color: #fff;
 }
-body[data-page="careers"] .np-hero .np-hero-sub {
+.careers-sub {
+  font-family: "Inter", sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0 auto 1.1rem;
+  max-width: 560px;
+}
+.careers-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 0 auto 1.25rem;
+}
+.careers-cta .np-btn {
   font-size: 0.92rem !important;
-  margin: 0 auto 0.3rem !important;
-  max-width: 520px !important;
+  padding: 0.55rem 1.2rem !important;
 }
-body[data-page="careers"] .np-hero .np-hero-cta {
-  margin-top: 0.4rem !important;
-  gap: 0.5rem !important;
+.careers-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
 }
-body[data-page="careers"] .np-hero .np-hero-cta .np-btn {
-  font-size: 0.92rem !important;
-  padding: 0.55rem 1.1rem !important;
+.careers-trust img {
+  width: 48px;
+  height: auto;
+  display: block;
 }
-body[data-page="careers"] .np-hero .hp-trust-block-left {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.75rem !important;
-  margin: 0.6rem auto 0 !important;
-  max-width: 600px !important;
+.careers-trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.86);
+  font-family: "Inter", sans-serif;
 }
-body[data-page="careers"] .np-hero .hp-trust-badge-big {
-  max-width: 52px !important;
-  height: auto !important;
-}
-body[data-page="careers"] .np-hero .hp-trust-strip {
-  font-size: 0.78rem !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  gap: 0.35rem 0.6rem !important;
-}
-body[data-page="careers"] .np-hero .hp-trust-strip > span {
-  white-space: nowrap;
-}
+.careers-trust-strip span { white-space: nowrap; }
+.careers-trust-strip strong { color: #D6B274; }
 @media (max-width: 600px) {
-  body[data-page="careers"] .np-hero {
-    max-width: calc(100% - 1.5rem) !important;
-    padding: 1.25rem 1rem !important;
+  .careers-header {
+    margin: 0.5rem 0.75rem 1rem;
+    padding: 1.5rem 1rem 1.75rem;
+    border-radius: 14px;
   }
-  body[data-page="careers"] .np-hero h1 {
-    font-size: 1.4rem !important;
-  }
-  body[data-page="careers"] .np-hero .hp-trust-block-left {
-    flex-direction: column !important;
-    gap: 0.5rem !important;
-  }
+  .careers-header h1 { font-size: 1.5rem; }
+  .careers-trust { flex-direction: column; gap: 0.6rem; }
 }
