@@ -10226,7 +10226,7 @@ body .hp-cta-final li a:hover {
   font: inherit;
   font-size: 0.98rem;
   padding: 0.6rem 0.75rem;
-  border: 1.5px solid #bd2b70;
+  border: 1px solid rgba(120, 120, 120, 0.5);
   border-radius: 6px;
   background: #fff;
   color: #130762;
@@ -10386,4 +10386,13 @@ body[data-page="careers"] .np-hero .hp-trust-badge-big {
 body[data-page="careers"] .job-application-form > p {
   font-size: 1.05rem !important;
   line-height: 1.6 !important;
+}
+
+/* Careers hero: constrain width so it sits as a contained box, not
+   full viewport. Matches the form/content width below it (~1100px). */
+body[data-page="careers"] .np-hero {
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
 }
