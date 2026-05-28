@@ -1,60 +1,27 @@
 /**
  * Brochure viewer — Thai page.
  *
- * - Desktop / tablet (≥769px): StPageFlip flipbook with page-turn
- *   sound + prev/next controls + corner-flip interaction.
- * - Mobile (≤768px): simple vertical stack of the 8 page images.
- *   The flipbook's tiny pages and corner-flip UX don't work well
- *   on a phone screen, so we render the brochure as readable
- *   full-width images you can scroll and pinch-zoom.
+ * Flipbook on all devices. On mobile, swipe + corner-grab + click-to-flip
+ * are all disabled — navigation is exclusively via the Prev/Next buttons.
+ * Desktop keeps full corner-flip interaction.
  */
 (function () {
   'use strict';
 
   var container = document.getElementById('brochure-flipbook');
-  if (!container) return;
+  if (!container || !window.St || !window.St.PageFlip) return;
 
   var TOTAL = 8;
   var isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-  // --------------------------------------------------------------
-  // Mobile path: simple vertical stack
-  // --------------------------------------------------------------
-  if (isMobile) {
-    container.classList.add('brochure-mobile-stack');
-    container.innerHTML = '';
-    for (var i = 1; i <= TOTAL; i++) {
-      var pn = String(i).padStart(2, '0');
-      var fig = document.createElement('figure');
-      fig.className = 'brochure-mobile-page';
-      fig.innerHTML =
-        '<img src="../images/brochure-pages/page-' + pn + '.jpg" ' +
-        'alt="Brochure page ' + i + ' of ' + TOTAL + '" ' +
-        'loading="' + (i <= 2 ? 'eager' : 'lazy') + '">' +
-        '<figcaption>Page ' + i + ' of ' + TOTAL + '</figcaption>';
-      container.appendChild(fig);
-    }
-    // Hide the flipbook prev/next controls + indicator on mobile;
-    // the page-count is now per-image and scroll is the navigation.
-    var ctl = document.querySelector('.brochure-flipbook-controls');
-    var hint = document.querySelector('.brochure-flipbook-hint');
-    if (ctl) ctl.style.display = 'none';
-    if (hint) hint.textContent = 'Scroll to read · pinch to zoom · download button below for the full PDF';
-    return;
-  }
-
-  // --------------------------------------------------------------
-  // Desktop / tablet path: StPageFlip flipbook
-  // --------------------------------------------------------------
-  if (!window.St || !window.St.PageFlip) return;
-
-  for (var j = 1; j <= TOTAL; j++) {
-    var pnj = String(j).padStart(2, '0');
+  // Build page elements
+  for (var i = 1; i <= TOTAL; i++) {
+    var pn = String(i).padStart(2, '0');
     var pg = document.createElement('div');
     pg.className = 'brochure-page';
-    pg.innerHTML = '<img src="../images/brochure-pages/page-' + pnj + '.jpg" ' +
-                   'alt="Brochure page ' + j + ' of ' + TOTAL + '" ' +
-                   'loading="' + (j <= 2 ? 'eager' : 'lazy') + '">';
+    pg.innerHTML = '<img src="../images/brochure-pages/page-' + pn + '.jpg" ' +
+                   'alt="Brochure page ' + i + ' of ' + TOTAL + '" ' +
+                   'loading="' + (i <= 2 ? 'eager' : 'lazy') + '">';
     container.appendChild(pg);
   }
 
@@ -73,14 +40,17 @@
     autoSize: true,
     maxShadowOpacity: 0.4,
     showCover: false,
-    mobileScrollSupport: false,
-    swipeDistance: 30,
-    showPageCorners: true,
-    disableFlipByClick: false,
+    mobileScrollSupport: true,
+    // Mobile: lock out all user-gesture flipping (only Prev/Next buttons work).
+    // Desktop: keep corner-grab + click-to-flip.
+    swipeDistance: isMobile ? 99999 : 30,
+    showPageCorners: !isMobile,
+    disableFlipByClick: isMobile,
+    useMouseEvents: !isMobile,
   });
   flip.loadFromHTML(container.querySelectorAll('.brochure-page'));
 
-  // Synthesised page-turn sound
+  // Page-turn sound (Web Audio API — synthesised paper rustle)
   var AudioCtx = window.AudioContext || window.webkitAudioContext;
   var audioCtx = null;
   function ensureAudio() {
@@ -116,7 +86,7 @@
   container.addEventListener('click', ensureAudio, { once: true });
   container.addEventListener('touchstart', ensureAudio, { once: true, passive: true });
 
-  // Prev/Next + page indicator
+  // Prev/Next buttons + page indicator
   var prevBtn = document.getElementById('brochure-prev');
   var nextBtn = document.getElementById('brochure-next');
   var pageInd = document.getElementById('brochure-page-indicator');
@@ -129,4 +99,12 @@
   }
   flip.on('flip', updateIndicator);
   updateIndicator();
+
+  // Update the hint text per device
+  var hint = document.querySelector('.brochure-flipbook-hint');
+  if (hint) {
+    hint.textContent = isMobile
+      ? 'Use the Prev / Next buttons to turn the page.'
+      : 'Click or grab the page corners to turn — a soft page-turn sound plays as you flick.';
+  }
 })();

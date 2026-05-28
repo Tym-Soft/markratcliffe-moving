@@ -10571,38 +10571,3 @@ body[data-page="careers"] .job-application-form > p {
 /* General centring fallback */
 .brochure-flipbook .stf__parent { margin: 0 auto !important; }
 
-/* Mobile brochure: vertical scroll-stack of page images instead
-   of the desktop flipbook (which feels cramped on phone screens). */
-.brochure-flipbook.brochure-mobile-stack {
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  min-height: 0 !important;
-  border-radius: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 1rem !important;
-  max-width: 480px !important;
-}
-.brochure-mobile-page {
-  margin: 0;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 8px 24px -10px rgba(19, 7, 98, 0.28);
-  overflow: hidden;
-}
-.brochure-mobile-page img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.brochure-mobile-page figcaption {
-  text-align: center;
-  font-size: 0.78rem;
-  color: #777;
-  padding: 0.5rem;
-  background: #f4f1f8;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
