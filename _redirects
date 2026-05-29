@@ -38,3 +38,10 @@
 /testimonials.html              /reviews.html                                    301
 /packaging-shop.html            /resources/buy-packing-materials-eastbourne.html 301
 /contact-us.html                /mark-ratcliffe-moving-online-removals-quote.html 301
+
+# Belt-and-braces: /index.html serves the same file as / on
+# Cloudflare Pages. Canonical already tells Google to use /,
+# but adding a hard 301 stops the duplicate showing in GSC as
+# "Alternate page with proper canonical tag" (informational, not
+# an error — but cleaner with the redirect in place).
+/index.html                     /                                                301
