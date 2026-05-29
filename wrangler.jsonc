@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "markratcliffe-placesapi2",
+  "name": "markratcliffe-moving-routes-api",
   "main": "worker/src/index.js",
   "compatibility_date": "2026-05-23",
   "observability": {
