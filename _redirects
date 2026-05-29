@@ -32,3 +32,9 @@
 
 # Local data store (JSON content, user list, redirect rules)
 /data/*                         /404.html   404
+
+# Forward-compatibility redirects (legacy URLs from old site →
+# current canonical pages). User-requested 2026-05-29.
+/testimonials.html              /reviews.html                                    301
+/packaging-shop.html            /resources/buy-packing-materials-eastbourne.html 301
+/contact-us.html                /mark-ratcliffe-moving-online-removals-quote.html 301
